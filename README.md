@@ -1,2 +1,2 @@
-# BFB_CS
-Big Fxxcking Book ComputerScience
+# BFB_of_CS
+Big Fxxcking Book of ComputerScience
