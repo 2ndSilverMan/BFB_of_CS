@@ -1,2 +1,2 @@
-# B_F_CS_D
-Big Fxxcking ComputerScience Dictionary
+# BFB_CS
+Big Fxxcking Book ComputerScience
