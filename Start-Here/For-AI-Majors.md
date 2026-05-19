@@ -1,0 +1,20 @@
+# AI 전공자용 경로 (For AI Majors)
+
+> AI 전공 지식을 체계적으로 공부하려는 사람을 위한 경로.
+
+## Path
+
+1. [AI를 위한 수학 (Math for AI)](../AI/Math-for-AI/)
+2. [최적화 이론 (Optimization Theory)](../AI/Optimization-Theory/)
+3. [머신러닝 (Machine Learning)](../AI/Machine-Learning/)
+4. [이론적 머신러닝 (Theoretical ML)](../AI/Theoretical-ML/)
+5. [확률 그래프 모델 (Probabilistic Graphical Models)](../AI/Probabilistic-Graphical-Models/)
+6. [딥러닝 (Deep Learning)](../AI/Deep-Learning/)
+7. [생성 모델 (Generative Models)](../AI/Generative-Models/)
+8. [자연어 처리 (NLP)](../AI/NLP/)
+9. [컴퓨터 비전 (Computer Vision)](../AI/Computer-Vision/)
+10. [대규모 언어 모델 (Large Language Models)](../AI/Large-Language-Models/)
+11. [강화학습 (Reinforcement Learning)](../AI/Reinforcement-Learning/)
+12. [인과 추론 (Causal Inference)](../AI/Causal-Inference/)
+13. [AI 안전성 (AI Safety)](../AI/AI-Safety/)
+14. [머신러닝 운영 (MLOps)](../AI/MLOps/)

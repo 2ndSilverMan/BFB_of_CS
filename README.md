@@ -1,66 +1,101 @@
 # Big F**king Book of Computer Science
 
-> CS와 AI에 대한 모든 전공 지식을 담은 레포지토리.
-> 학부 입문부터 대학원·연구자 수준까지, 이 레포 하나로 컴퓨터공학과 AI 전공 지식 전체를 습득하는 것이 목표다.
->
-> **읽는 순서:** 선수 지식 의존 관계 → 같은 레벨 내에서 난이도 순으로 정렬되어 있다.
->
-> 각 문서는 **개념 → 원리 → 복잡도 분석 → 구현(Python/C++/Java) → 응용 사례** 형식으로 작성된다.
+> 입문자부터 전문가까지 사용할 수 있는 컴퓨터공학과 AI 전공 지식 저장고.
+
+이 레포는 단순한 목차 모음이 아니라, **배우는 사람**, **찾는 사람**, **정리하는 사람**이 모두 사용할 수 있는 지식 베이스를 목표로 한다.
+
+핵심 구조는 세 층이다.
+
+1. **학습 진입점**: 처음 온 사람이 어디서 시작해야 하는지 안내한다.
+2. **분야별 지식 본문**: Foundations, CS, AI, Engineering으로 지식을 분류한다.
+3. **검색/참조 계층**: 용어, 표기법, 복잡도, 논문, 책, 강의 등을 빠르게 찾게 한다.
 
 ---
 
-## Computer Science
+## 처음 시작하기 (Start Here)
 
-> 위에서 아래로 읽을수록 선수 지식이 쌓인다.
-
-| # | 주제 | 핵심 선수 지식 | 내용 |
-|---|------|--------------|------|
-| 1 | [자료구조 (Data Structures)](CS/Data-Structures/) | 없음 | 배열, 연결리스트, 트리, 그래프, 고급 자료구조 등 |
-| 2 | [알고리즘 (Algorithms)](CS/Algorithms/) | 자료구조 | 정렬, DP, 그래프, 네트워크 플로우, 근사/랜덤 알고리즘 등 |
-| 3 | [컴퓨터 구조 (Computer Architecture)](CS/Computer-Architecture/) | 없음 | CPU, 파이프라이닝, 메모리 계층, SIMD, GPU 아키텍처 등 |
-| 4 | [운영체제 (Operating Systems)](CS/Operating-Systems/) | 컴퓨터 구조 | 프로세스, 스레드, 메모리 관리, 가상화, 실시간 OS 등 |
-| 5 | [컴퓨터 네트워크 (Computer Networks)](CS/Computer-Networks/) | 운영체제 | OSI, TCP/IP, HTTP, DNS, 라우팅, 혼잡 제어 등 |
-| 6 | [데이터베이스 (Databases)](CS/Databases/) | 알고리즘, 운영체제 | SQL, 트랜잭션, 인덱싱, 쿼리 최적화, NoSQL 등 |
-| 7 | [계산이론 (Theory of Computation)](CS/Theory-of-Computation/) | 이산수학 | 오토마타, 튜링 기계, 계산 가능성, 복잡도, P vs NP 등 |
-| 8 | [프로그래밍 언어론 (Programming Languages)](CS/Programming-Languages/) | 계산이론 | 타입 이론, 람다 계산법, 형식 의미론, 의존 타입 등 |
-| 9 | [컴파일러 (Compilers)](CS/Compilers/) | 계산이론, 언어론, 알고리즘 | 어휘/구문/의미 분석, IR, 최적화, JIT 등 |
-| 10 | [소프트웨어 공학 (Software Engineering)](CS/Software-Engineering/) | 1~9 전반 | 디자인 패턴, SOLID, 아키텍처, 형식 검증, 테스팅 등 |
-| 11 | [수치해석 (Numerical Methods)](CS/Numerical-Methods/) | 선형대수, 미적분 | 부동소수점, 선형계, 고유값, ODE/PDE, 최적화 등 |
-| 12 | [병렬 컴퓨팅 (Parallel Computing)](CS/Parallel-Computing/) | 컴퓨터 구조, 운영체제, 알고리즘 | PRAM, OpenMP, MPI, CUDA, 병렬 알고리즘 등 |
-| 13 | [분산 시스템 (Distributed Systems)](CS/Distributed-Systems/) | 운영체제, 네트워크, 데이터베이스 | CAP, Paxos, Raft, 분산 DB, 합의 알고리즘 등 |
-| 14 | [암호학 & 보안 (Cryptography & Security)](CS/Cryptography-and-Security/) | 알고리즘, 네트워크, 계산이론 | 대칭/공개키 암호, 영지식 증명, 동형암호, 양자 후 암호화 등 |
-| 15 | [양자 컴퓨팅 (Quantum Computing)](CS/Quantum-Computing/) | 선형대수, 계산이론, 물리학 기초 | 큐비트, 양자 게이트, Shor/Grover 알고리즘, 오류 정정 등 |
+| 목적 | 위치 |
+|---|---|
+| 처음 방문한 사람을 위한 안내 | [처음 시작하기 (Start Here)](Start-Here/) |
+| 레포 사용법 | [사용법 (How to Use)](Start-Here/How-to-Use.md) |
+| 완전 입문자용 경로 | [입문자용 경로 (For Beginners)](Start-Here/For-Beginners.md) |
+| CS 전공자용 경로 | [CS 전공자용 경로 (For CS Majors)](Start-Here/For-CS-Majors.md) |
+| AI 전공자용 경로 | [AI 전공자용 경로 (For AI Majors)](Start-Here/For-AI-Majors.md) |
+| 연구자용 경로 | [연구자용 경로 (For Researchers)](Start-Here/For-Researchers.md) |
 
 ---
 
-## Artificial Intelligence
+## 주요 영역 (Main Areas)
 
-> 위에서 아래로 읽을수록 선수 지식이 쌓인다.
-
-| # | 주제 | 핵심 선수 지식 | 내용 |
-|---|------|--------------|------|
-| 1 | [수학 기초 (Math Foundations)](AI/Math-Foundations/) | 없음 | 선형대수, 확률통계, 미적분, 측도론, 정보이론 등 |
-| 2 | [최적화 이론 (Optimization Theory)](AI/Optimization-Theory/) | 수학 기초 | 볼록 최적화, KKT, 경사하강법, SGD 변형, 비볼록 최적화 등 |
-| 3 | [머신러닝 (Machine Learning)](AI/Machine-Learning/) | 수학 기초, 최적화 | 지도/비지도학습, SVM, 트리, 앙상블, 차원 축소 등 |
-| 4 | [확률적 그래피컬 모델 (PGM)](AI/Probabilistic-Graphical-Models/) | 확률론, 머신러닝 | 베이지안 네트워크, MRF, HMM, 변분 추론, MCMC 등 |
-| 5 | [이론적 머신러닝 (Theoretical ML)](AI/Theoretical-ML/) | 확률론, 머신러닝 | PAC 학습, VC 차원, Rademacher, 온라인 학습, 밴딧 등 |
-| 6 | [딥러닝 (Deep Learning)](AI/Deep-Learning/) | 머신러닝, 최적화, 선형대수 | 신경망, CNN, RNN, Transformer, GAN, Diffusion 등 |
-| 7 | [자연어처리 (NLP)](AI/NLP/) | 딥러닝 (특히 Transformer) | 임베딩, BERT, GPT, 기계 번역, 정보 추출 등 |
-| 8 | [컴퓨터 비전 (Computer Vision)](AI/Computer-Vision/) | 딥러닝 (특히 CNN) | 합성곱, 객체 탐지, 세그멘테이션, 3D 비전 등 |
-| 9 | [강화학습 (Reinforcement Learning)](AI/Reinforcement-Learning/) | 머신러닝, 최적화, 확률론 | MDP, Q-Learning, PPO, Actor-Critic, MARL 등 |
-| 10 | [인과 추론 (Causal Inference)](AI/Causal-Inference/) | 확률론, 통계, 머신러닝 | 잠재적 결과, DAG, do-계산법, 처치 효과 추정 등 |
-| 11 | [최신 연구 동향 (Advanced Topics)](AI/Advanced-Topics/) | 딥러닝, NLP/CV/RL | LLM, Diffusion, 멀티모달, 메타 학습, AI 안전성 등 |
+| 영역 | 역할 |
+|---|---|
+| [기초 지식 (Foundations)](Foundations/) | CS와 AI를 배우기 위한 프로그래밍, 수학, 계산 기초 |
+| [컴퓨터공학 (Computer Science)](CS/) | 컴퓨터공학 핵심 전공 지식 |
+| [인공지능 (Artificial Intelligence)](AI/) | 인공지능, 머신러닝, 딥러닝, 생성 모델, AI 시스템 지식 |
+| [실무 공학 (Engineering)](Engineering/) | Git, 테스트, 디버깅, 시스템 설계, 성능, 클라우드 등 실무 공학 지식 |
 
 ---
 
-## 문서 구성 형식
+## 학습 로드맵 (Learning Roadmaps)
 
+| 로드맵 | 대상 |
+|---|---|
+| [완전 입문자 (Absolute Beginner)](Roadmaps/Absolute-Beginner.md) | 프로그래밍과 CS를 처음 시작하는 사람 |
+| [CS 핵심 (CS Core)](Roadmaps/CS-Core.md) | 컴퓨터공학 전공 핵심을 체계적으로 공부하려는 사람 |
+| [AI 핵심 (AI Core)](Roadmaps/AI-Core.md) | AI/ML 전공 지식을 순서대로 공부하려는 사람 |
+| [시스템 엔지니어 (Systems Engineer)](Roadmaps/Systems-Engineer.md) | OS, 네트워크, DB, 분산 시스템 중심 학습자 |
+| [ML 엔지니어 (ML Engineer)](Roadmaps/ML-Engineer.md) | 모델 학습부터 배포까지 다루려는 학습자 |
+| [연구자 (Researcher)](Roadmaps/Researcher.md) | 논문과 이론 중심으로 깊게 들어가려는 학습자 |
+
+전체 목록은 [Roadmaps/](Roadmaps/)에서 관리한다.
+
+---
+
+## 참조 자료 (Reference)
+
+| 자료 | 위치 |
+|---|---|
+| 용어 사전 | [용어 사전 (Glossary)](Reference/Glossary.md) |
+| 전체 주제 색인 | [전체 주제 색인 (Topic Index)](Reference/Topic-Index.md) |
+| 선수지식 그래프 | [선수지식 그래프 (Prerequisite Graph)](Reference/Prerequisite-Graph.md) |
+| 작성 상태판 | [작성 상태판 (Status Board)](Reference/Status-Board.md) |
+| 수학/알고리즘 표기법 | [표기법 (Notation)](Reference/Notation.md) |
+| 복잡도 치트시트 | [복잡도 치트시트 (Complexity Cheat Sheet)](Reference/Complexity-Cheat-Sheet.md) |
+| 알고리즘 색인 | [알고리즘 색인 (Algorithms Index)](Reference/Algorithms-Index.md) |
+| 자료구조 색인 | [자료구조 색인 (Data Structures Index)](Reference/Data-Structures-Index.md) |
+| 추천 논문 | [논문 목록 (Papers)](Reference/Papers.md) |
+| 추천 도서 | [도서 목록 (Books)](Reference/Books.md) |
+| 추천 강의 | [강의 목록 (Courses)](Reference/Courses.md) |
+
+---
+
+## Document Standard
+
+각 주제 문서는 [주제 문서 템플릿 (Topic Template)](Templates/Topic-Template.md)을 원본으로 삼는다.
+
+```md
+# 주제명 (Topic Name)
+
+- Level:
+- Prerequisites:
+- Related Topics:
+- Tags:
+- Status: Stub / Draft / Review / Complete
+
+## Concept
+## Intuition
+## Theory
+## Implementation
+## Complexity
+## Applications
+## Common Misunderstandings
+## References
 ```
-# 주제명
 
-## 개념 (Concept)
-## 원리 및 동작 방식 (How It Works)
-## 복잡도 분석 (Complexity)
-## 구현 (Implementation) — Python / C++ / Java
-## 응용 사례 (Applications)
-```
+영역 README와 추가 템플릿은 [템플릿 (Templates)](Templates/)에서 관리한다.
+
+---
+
+## Status
+
+현재 단계는 **구조 설계 및 목차 구축 단계**다. 세부 본문은 이후 각 주제 문서에 순차적으로 추가한다.

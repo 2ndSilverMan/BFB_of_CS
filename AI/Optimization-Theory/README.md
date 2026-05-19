@@ -1,5 +1,10 @@
 # 최적화 이론 (Optimization Theory)
 
+> **레벨:** 대학원 이론 — 볼록 해석학, 쌍대 이론, 수렴 속도 증명, 비볼록 최적화 분석까지 다룬다.
+> **선수 지식:** [Foundations/Optimization](../../Foundations/Optimization/) — 기초 경사하강법, KKT 조건 개요
+>
+> 기초 최적화의 직관과 핵심 알고리즘은 [최적화 (Optimization)](../../Foundations/Optimization/)에서 관리하고, 이 폴더는 ML/AI 연구에 필요한 이론 분석을 담당한다.
+
 ## 볼록 최적화 (Convex Optimization)
 
 | 주제 | 파일 |
