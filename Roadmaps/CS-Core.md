@@ -1,13 +1,35 @@
 # CS 핵심 로드맵 (CS Core Roadmap)
 
-1. [기초 지식 (Foundations)](../Foundations/)
-2. [자료구조 (Data Structures)](../CS/Data-Structures/)
-3. [알고리즘 (Algorithms)](../CS/Algorithms/)
-4. [컴퓨터 구조 (Computer Architecture)](../CS/Computer-Architecture/)
-5. [운영체제 (Operating Systems)](../CS/Operating-Systems/)
-6. [컴퓨터 네트워크 (Computer Networks)](../CS/Computer-Networks/)
-7. [데이터베이스 (Databases)](../CS/Databases/)
-8. [계산 이론 (Theory of Computation)](../CS/Theory-of-Computation/)
-9. [프로그래밍 언어론 (Programming Languages)](../CS/Programming-Languages/)
-10. [컴파일러 (Compilers)](../CS/Compilers/)
-11. [소프트웨어 공학 (Software Engineering)](../CS/Software-Engineering/)
+> 컴퓨터공학 전공 핵심을 체계적으로 공부하려는 사람을 위한 순서.
+
+---
+
+### 기초
+
+1. [프로그래밍 기초](../Programming/)
+2. [이산수학](../Math/Discrete/)
+3. [선형대수](../Math/Linear-Algebra/)
+4. [확률과 통계](../Math/Probability-Statistics/)
+
+### 자료구조 & 알고리즘
+
+5. [자료구조](../Data-Structures/)
+6. [알고리즘](../Algorithms/)
+
+### 시스템
+
+7. [컴퓨터 구조](../Systems/Computer-Architecture/)
+8. [운영체제](../Systems/Operating-Systems/)
+9. [컴퓨터 네트워크](../Systems/Networks/)
+10. [데이터베이스](../Systems/Databases/)
+11. [분산 시스템](../Systems/Distributed-Systems/)
+
+### 이론
+
+12. [계산 이론](../CS-Theory/Computation-Theory/)
+13. [프로그래밍 언어론](../CS-Theory/Programming-Languages/)
+14. [컴파일러](../CS-Theory/Compilers/)
+
+### 보안
+
+15. [보안과 암호학](../Engineering/Security/)

@@ -1,23 +1,43 @@
 # 주제명 (Topic Name)
 
-- Level:
+- Level: Beginner / Intermediate / Advanced
 - Prerequisites:
-- Related Topics:
-- Tags:
 - Status: Stub / Draft / Review / Complete
 
-## Concept
+---
 
-## Intuition
+## 개념 (Concept)
 
-## Theory
+한 문단으로 핵심 개념 설명.
 
-## Implementation
+## 직관 (Intuition)
 
-## Complexity
+왜 이런 구조/방법이 필요한지, 어떤 문제를 해결하는지.
 
-## Applications
+## 이론 (Theory)
 
-## Common Misunderstandings
+수식, 증명, 정의 등 엄밀한 설명.
 
-## References
+## 구현 (Implementation)
+
+```python
+# 핵심 구현 예시
+```
+
+## 복잡도 (Complexity)
+
+| | 시간 | 공간 |
+|---|---|---|
+| 최선 | | |
+| 평균 | | |
+| 최악 | | |
+
+## 응용 (Applications)
+
+실제로 어디서 쓰이는가.
+
+## 흔한 오해 (Common Misunderstandings)
+
+## 참조 (References)
+
+- 책/논문/강의 링크

@@ -1,11 +1,15 @@
 # 연구자 로드맵 (Researcher Roadmap)
 
-1. [실해석학 (Real Analysis)](../Foundations/Real-Analysis/)
-2. [확률과 통계 (Probability and Statistics)](../Foundations/Probability-and-Statistics/)
-3. [최적화 (Optimization)](../Foundations/Optimization/)
-4. [계산 이론 (Theory of Computation)](../CS/Theory-of-Computation/)
-5. [이론적 머신러닝 (Theoretical ML)](../AI/Theoretical-ML/)
-6. [확률 그래프 모델 (Probabilistic Graphical Models)](../AI/Probabilistic-Graphical-Models/)
-7. [인과 추론 (Causal Inference)](../AI/Causal-Inference/)
-8. [AI 안전성 (AI Safety)](../AI/AI-Safety/)
-9. [논문 목록 (Papers)](../Reference/Papers.md)
+> 논문과 이론 중심으로 깊게 들어가려는 학습자를 위한 순서.
+
+---
+
+1. [실해석학](../Math/Real-Analysis/)
+2. [확률과 통계](../Math/Probability-Statistics/)
+3. [최적화](../Math/Optimization/)
+4. [계산 이론](../CS-Theory/Computation-Theory/)
+5. [이론적 머신러닝](../AI/Theoretical-ML/)
+6. [확률 그래프 모델](../AI/PGMs/)
+7. [인과 추론](../AI/Causal-Inference/)
+8. [AI 안전성](../AI/AI-Safety/)
+9. [추천 논문 목록](../Reference/Papers.md)

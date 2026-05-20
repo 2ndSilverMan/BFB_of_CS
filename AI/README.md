@@ -1,35 +1,66 @@
 # 인공지능 (Artificial Intelligence)
 
-> 인공지능, 머신러닝, 딥러닝, 생성 모델, AI 시스템 지식.
+> 데이터에서 패턴을 학습하고, 추론하고, 생성하는 시스템.
 
-`AI`는 수학적 기초에서 시작해 고전 머신러닝, 딥러닝, 확률 모델, 강화학습, 생성 모델, LLM, 안전성, 배포까지 이어지는 전공 지식을 다룬다.
+**선수지식**: [Math/Linear-Algebra/](../Math/Linear-Algebra/), [Math/Probability-Statistics/](../Math/Probability-Statistics/), [Math/Calculus/](../Math/Calculus/), [Programming/](../Programming/)
 
 ---
 
-## Recommended Order
+## 서브섹션
 
-| # | 주제 | 선수 지식 |
+### 핵심
+
+| 서브섹션 | 내용 |
+|---|---|
+| [Optimization/](../Math/Optimization/) | 경사 하강법, Adam, 2차 방법 → Math 섹션 |
+| [Machine-Learning/](Machine-Learning/) | 지도학습, 비지도학습, 모델 평가, 정규화 |
+| [Deep-Learning/](Deep-Learning/) | 신경망, 역전파, CNN, RNN, Transformer 기초 |
+
+### 응용 분야
+
+| 서브섹션 | 내용 | 선수지식 |
 |---|---|---|
-| 1 | [AI를 위한 수학 (Math for AI)](Math-for-AI/) | 기초 지식 |
-| 2 | [최적화 이론 (Optimization Theory)](Optimization-Theory/) | 미적분학, 선형대수학 |
-| 3 | [머신러닝 (Machine Learning)](Machine-Learning/) | 확률, 최적화 |
-| 4 | [이론적 머신러닝 (Theoretical ML)](Theoretical-ML/) | 확률, 통계, 머신러닝 |
-| 5 | [확률 그래프 모델 (Probabilistic Graphical Models)](Probabilistic-Graphical-Models/) | 확률, 머신러닝 |
-| 6 | [딥러닝 (Deep Learning)](Deep-Learning/) | 머신러닝, 최적화, 선형대수학 |
-| 7 | [생성 모델 (Generative Models)](Generative-Models/) | 딥러닝, 확률 |
-| 8 | [자연어 처리 (NLP)](NLP/) | 딥러닝, 트랜스포머 |
-| 9 | [컴퓨터 비전 (Computer Vision)](Computer-Vision/) | 딥러닝, CNN |
-| 10 | [대규모 언어 모델 (Large Language Models)](Large-Language-Models/) | 딥러닝, 자연어 처리, 스케일링 |
-| 11 | [강화학습 (Reinforcement Learning)](Reinforcement-Learning/) | 확률, 최적화, 머신러닝 |
-| 12 | [인과 추론 (Causal Inference)](Causal-Inference/) | 확률, 통계, 머신러닝 |
-| 13 | [AI 안전성 (AI Safety)](AI-Safety/) | 머신러닝, 딥러닝, LLM |
-| 14 | [머신러닝 운영 (MLOps)](MLOps/) | 머신러닝, 실무 공학, 클라우드 |
-| 15 | [최신/교차 연구 허브 (Advanced Topics)](Advanced-Topics/) | 멀티모달, 효율화, 학습 패러다임 등 교차 연구 주제 |
+| [NLP/](NLP/) | 텍스트 처리, 임베딩, 언어 모델 | 딥러닝 |
+| [Computer-Vision/](Computer-Vision/) | 이미지 분류, 객체 탐지, 세그멘테이션 | 딥러닝 |
+| [Reinforcement-Learning/](Reinforcement-Learning/) | MDP, Q-러닝, Policy Gradient | ML, 확률 |
+| [Generative-Models/](Generative-Models/) | VAE, GAN, Diffusion Model | 딥러닝 |
+| [LLMs/](LLMs/) | GPT 계열, BERT, 프롬프트 엔지니어링, RLHF | NLP, 딥러닝 |
+
+### 심화 이론
+
+| 서브섹션 | 내용 | 선수지식 |
+|---|---|---|
+| [Theoretical-ML/](Theoretical-ML/) | PAC 학습, VC 차원, 일반화 이론 | ML, 실해석학 |
+| [PGMs/](PGMs/) | 베이지안 네트워크, 마르코프 랜덤 필드 | 확률/통계 |
+| [Causal-Inference/](Causal-Inference/) | 인과 그래프, 개입, 반사실 | 확률, PGMs |
+| [AI-Safety/](AI-Safety/) | 정렬 문제, 해석 가능성, 강건성 | 딥러닝, 이론 ML |
+
+### 엔지니어링
+
+| 서브섹션 | 내용 |
+|---|---|
+| [MLOps/](MLOps/) | 실험 관리, 모델 서빙, 모니터링, 파이프라인 |
 
 ---
 
-## Cross Links
+## 학습 순서
 
-- 기반 수학은 [기초 지식 (Foundations)](../Foundations/)에서 관리한다.
-- 모델 구현과 배포에 필요한 실무 기술은 [실무 공학 (Engineering)](../Engineering/)에서 관리한다.
-- 논문, 책, 강의 목록은 [참조 자료 (Reference)](../Reference/)에서 관리한다.
+```
+선형대수 + 확률/통계 + 미적분 (Math 섹션)
+                  ↓
+        Machine-Learning
+                  ↓
+          Deep-Learning
+          ↙     ↓      ↘
+        NLP    CV       RL
+          ↘     ↓      ↙
+        Generative-Models → LLMs
+```
+
+---
+
+## 연관 섹션
+
+- [Math/](../Math/) — 선수 수학 전체
+- [Systems/](../Systems/) — MLOps 인프라 기반
+- [Engineering/](../Engineering/) — 모델 서빙, 시스템 설계

@@ -1,17 +1,36 @@
 # AI 핵심 로드맵 (AI Core Roadmap)
 
-1. [AI를 위한 수학 (Math for AI)](../AI/Math-for-AI/)
-2. [최적화 이론 (Optimization Theory)](../AI/Optimization-Theory/)
-3. [머신러닝 (Machine Learning)](../AI/Machine-Learning/)
-4. [이론적 머신러닝 (Theoretical ML)](../AI/Theoretical-ML/)
-5. [확률 그래프 모델 (Probabilistic Graphical Models)](../AI/Probabilistic-Graphical-Models/)
-6. [딥러닝 (Deep Learning)](../AI/Deep-Learning/)
-7. [생성 모델 (Generative Models)](../AI/Generative-Models/)
-8. [자연어 처리 (NLP)](../AI/NLP/)
-9. [컴퓨터 비전 (Computer Vision)](../AI/Computer-Vision/)
-10. [대규모 언어 모델 (Large Language Models)](../AI/Large-Language-Models/)
-11. [강화학습 (Reinforcement Learning)](../AI/Reinforcement-Learning/)
-12. [인과 추론 (Causal Inference)](../AI/Causal-Inference/)
-13. [AI 안전성 (AI Safety)](../AI/AI-Safety/)
-14. [머신러닝 운영 (MLOps)](../AI/MLOps/)
-15. [최신/교차 연구 허브 (Advanced Topics)](../AI/Advanced-Topics/)
+> AI/ML 전공 지식을 순서대로 공부하려는 사람을 위한 순서.
+
+---
+
+### 수학 기초
+
+1. [선형대수](../Math/Linear-Algebra/)
+2. [확률과 통계](../Math/Probability-Statistics/)
+3. [미적분](../Math/Calculus/)
+4. [최적화](../Math/Optimization/)
+
+### AI 핵심
+
+5. [머신러닝](../AI/Machine-Learning/)
+6. [딥러닝](../AI/Deep-Learning/)
+
+### 응용 분야 (관심에 따라 선택)
+
+7. [자연어 처리 (NLP)](../AI/NLP/)
+8. [컴퓨터 비전](../AI/Computer-Vision/)
+9. [강화학습](../AI/Reinforcement-Learning/)
+10. [생성 모델](../AI/Generative-Models/)
+11. [대규모 언어 모델 (LLMs)](../AI/LLMs/)
+
+### 심화 이론
+
+12. [이론적 머신러닝](../AI/Theoretical-ML/)
+13. [확률 그래프 모델](../AI/PGMs/)
+14. [인과 추론](../AI/Causal-Inference/)
+15. [AI 안전성](../AI/AI-Safety/)
+
+### 엔지니어링
+
+16. [MLOps](../AI/MLOps/)
