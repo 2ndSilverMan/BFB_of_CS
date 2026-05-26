@@ -1,10 +1,19 @@
-﻿# 운영체제 (Operating Systems)
+# 운영체제 (Operating Systems)
 
 > 하드웨어와 애플리케이션 사이의 관리자.
 
-**선수지식**: [Computer-Architecture/](../Computer-Architecture/)
+**선수지식**: [Systems/Computer-Architecture/](../Computer-Architecture/)
 
-## 주제
+---
+
+## 읽는 법
+
+- 링크가 걸린 `Draft` 이상 문서는 지금 읽을 수 있는 본문이다.
+- `Planned` 파일명은 앞으로 채울 예정 주제이며 아직 본문 파일은 없다.
+
+---
+
+## 주제 목록
 
 | 주제 | 파일 | Status |
 |---|---|---|
@@ -16,3 +25,26 @@
 | 가상 메모리와 페이지 교체 | Virtual-Memory.md | Planned |
 | 파일 시스템 | File-Systems.md | Planned |
 | 입출력과 디바이스 드라이버 | IO-and-Drivers.md | Planned |
+
+---
+
+## 학습 순서
+
+```text
+Processes-and-Threads → Scheduling
+        ↓
+Synchronization → Deadlock
+        ↓
+Memory-Management → Virtual-Memory
+        ↓
+File-Systems → IO-and-Drivers
+```
+
+---
+
+## 연관 섹션
+
+- [Systems/Computer-Architecture/](../Computer-Architecture/) — CPU, 메모리, I/O 하드웨어 기반
+- [Systems/Parallel-Computing/](../Parallel-Computing/) — 스레드, 동기화, 병렬 실행 모델
+- [Systems/Networks/](../Networks/) — 소켓, 커널 네트워크 스택
+- [Engineering/Debugging/](../../Engineering/Debugging/) — 프로세스, 메모리, 동시성 버그 분석

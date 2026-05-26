@@ -1,10 +1,19 @@
-﻿# 확률과 통계 (Probability & Statistics)
+# 확률과 통계 (Probability & Statistics)
 
 > 불확실성을 정량화하고 데이터에서 결론을 끌어내는 수학.
 
-**선수지식**: [Calculus/](../Calculus/), [Linear-Algebra/](../Linear-Algebra/)
+**선수지식**: [Math/Calculus/](../Calculus/), [Math/Linear-Algebra/](../Linear-Algebra/)
 
-## 주제
+---
+
+## 읽는 법
+
+- 링크가 걸린 `Draft` 이상 문서는 지금 읽을 수 있는 본문이다.
+- `Planned` 파일명은 앞으로 채울 예정 주제이며 아직 본문 파일은 없다.
+
+---
+
+## 주제 목록
 
 | 주제 | 파일 | Status |
 |---|---|---|
@@ -18,7 +27,21 @@
 | 마르코프 체인 | Markov-Chains.md | Planned |
 | 정보 이론 | Information-Theory.md | Planned |
 
-## 연관
+---
+
+## 학습 순서
+
+```text
+Probability-Basics → Distributions → Expectation → Bayes-Theorem
+        ↓
+MLE → CLT → Hypothesis-Testing
+        ↓
+Markov-Chains → Information-Theory
+```
+
+---
+
+## 연관 섹션
 
 - [AI/Machine-Learning/](../../AI/Machine-Learning/) — 확률 모델, 베이즈 추론
 - [AI/PGMs/](../../AI/PGMs/) — 확률 그래프 모델

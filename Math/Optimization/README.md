@@ -1,10 +1,19 @@
-﻿# 최적화 (Optimization)
+# 최적화 (Optimization)
 
 > 목적 함수를 최소화/최대화하는 방법.
 
-**선수지식**: [Calculus/](../Calculus/), [Linear-Algebra/](../Linear-Algebra/)
+**선수지식**: [Math/Calculus/](../Calculus/), [Math/Linear-Algebra/](../Linear-Algebra/)
 
-## 주제
+---
+
+## 읽는 법
+
+- 링크가 걸린 `Draft` 이상 문서는 지금 읽을 수 있는 본문이다.
+- `Planned` 파일명은 앞으로 채울 예정 주제이며 아직 본문 파일은 없다.
+
+---
+
+## 주제 목록
 
 | 주제 | 파일 | Status |
 |---|---|---|
@@ -16,7 +25,19 @@
 | 선형 프로그래밍 | Linear-Programming.md | Planned |
 | 2차 프로그래밍 | Quadratic-Programming.md | Planned |
 
-## 연관
+---
+
+## 학습 순서
+
+```text
+Convex-Optimization → Gradient-Descent → SGD → Adaptive-Methods
+        ↓
+Lagrangian → Linear-Programming → Quadratic-Programming
+```
+
+---
+
+## 연관 섹션
 
 - [AI/Machine-Learning/](../../AI/Machine-Learning/) — 모델 학습 = 최적화 문제
 - [AI/Deep-Learning/](../../AI/Deep-Learning/) — 옵티마이저 선택

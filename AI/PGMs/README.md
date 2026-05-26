@@ -1,11 +1,72 @@
 # 확률 그래프 모델 (Probabilistic Graphical Models)
 
-- Level: Advanced
-- Prerequisites: [Math/Probability-Statistics/](../../Math/Probability-Statistics/)
-- Status: Stub
+> 확률 변수 간의 의존 구조를 그래프로 표현하고 추론하는 방법.
 
-> 작성 예정.
+**선수지식**: [Math/Probability-Statistics/](../../Math/Probability-Statistics/), [Math/Discrete/](../../Math/Discrete/) (그래프 이론)
 
-## 연관
+---
 
-- [AI/README.md](../README.md)
+## 읽는 법
+
+- 링크가 걸린 `Draft` 이상 문서는 지금 읽을 수 있는 본문이다.
+- `Planned` 파일명은 앞으로 채울 예정 주제이며 아직 본문 파일은 없다.
+
+---
+
+## 주제 목록
+
+### 기초
+
+| 주제 | 파일 | Status |
+|---|---|---|
+| 그래프 이론 복습 (방향/무방향 그래프) | Graph-Review.md | Planned |
+| 인수 분해와 조건부 독립 | Factorization.md | Planned |
+
+### 방향성 그래프 모델 (Bayesian Networks)
+
+| 주제 | 파일 | Status |
+|---|---|---|
+| 베이지안 네트워크 구조와 파라미터 | Bayesian-Networks.md | Planned |
+| d-분리 (d-separation) | d-Separation.md | Planned |
+| 나이브 베이즈 | Naive-Bayes.md | Planned |
+| Hidden Markov Model (HMM) | HMM.md | Planned |
+
+### 무방향성 그래프 모델 (MRF)
+
+| 주제 | 파일 | Status |
+|---|---|---|
+| 마르코프 랜덤 필드 (MRF) | MRF.md | Planned |
+| 클리크와 포텐셜 함수 | Cliques.md | Planned |
+| 조건부 랜덤 필드 (CRF) | CRF.md | Planned |
+
+### 추론 알고리즘
+
+| 주제 | 파일 | Status |
+|---|---|---|
+| 변수 소거 (Variable Elimination) | Variable-Elimination.md | Planned |
+| 신뢰 전파 (Belief Propagation) | Belief-Propagation.md | Planned |
+| 변분 추론 (Variational Inference) | Variational-Inference.md | Planned |
+| MCMC 샘플링 | MCMC.md | Planned |
+| EM 알고리즘 | EM-Algorithm.md | Planned |
+
+---
+
+## 학습 순서
+
+```text
+Graph-Review → Factorization → Bayesian-Networks → d-Separation
+       ↓
+Naive-Bayes / HMM / MRF / CRF
+       ↓
+Variable-Elimination → Belief-Propagation → Variational-Inference / MCMC
+       ↓
+EM-Algorithm
+```
+
+---
+
+## 연관 섹션
+
+- [AI/Causal-Inference/](../Causal-Inference/) — PGM에서 인과 관계로
+- [AI/Machine-Learning/](../Machine-Learning/) — 나이브 베이즈, GMM
+- [Math/Probability-Statistics/](../../Math/Probability-Statistics/) — 선수지식

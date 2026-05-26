@@ -4,13 +4,60 @@
 
 ---
 
+## 대상
+
+- 시스템, 인프라, 백엔드 기반을 깊게 다지려는 학습자
+
+## 현재 가용성
+
+현재 이 로드맵은 시스템 엔지니어 학습 범위와 완료 기준을 제공한다. 시스템과 엔지니어링 본문은 대부분 `Planned` 상태이므로, 지금은 범위를 파악하고 각 섹션 README에서 `Draft` 이상 문서가 열린 항목부터 읽는다.
+
+## 시작 전 확인
+
+- 함수, 배열, 포인터/참조, 기본 자료구조를 읽을 수 있다.
+- 이진수, 메모리, 프로세스 같은 용어가 낯설면 컴퓨터 구조부터 천천히 시작한다.
+- 운영 실무보다 내부 동작 원리를 먼저 잡는 경로다.
+
+## 순서
+
+### 기반
+
 1. [프로그래밍 기초](../Programming/)
 2. [컴퓨터 구조](../Systems/Computer-Architecture/)
 3. [운영체제](../Systems/Operating-Systems/)
-4. [컴퓨터 네트워크](../Systems/Networks/)
-5. [데이터베이스](../Systems/Databases/)
-6. [분산 시스템](../Systems/Distributed-Systems/)
-7. [병렬 컴퓨팅](../Systems/Parallel-Computing/)
+
+### 시스템 심화
+
+4. [병렬 컴퓨팅](../Systems/Parallel-Computing/)
+5. [컴퓨터 네트워크](../Systems/Networks/)
+6. [데이터베이스](../Systems/Databases/)
+7. [분산 시스템](../Systems/Distributed-Systems/)
+
+### 엔지니어링 실무
+
 8. [성능 공학](../Engineering/Performance/)
 9. [DevOps (Git, CI/CD, Docker, Cloud)](../Engineering/DevOps/)
 10. [시스템 설계](../Engineering/System-Design/)
+
+---
+
+## 완료 기준
+
+- 프로세스, 스레드, 가상 메모리, 파일 시스템의 추상화를 시스템 콜 수준에서 설명할 수 있다.
+- 멀티스레딩과 GPU/SIMD 같은 병렬 모델의 차이를 Amdahl의 법칙과 함께 설명할 수 있다.
+- TCP/IP 스택, 라우팅, 소켓 프로그래밍의 동작을 패킷 흐름 수준에서 설명할 수 있다.
+- 트랜잭션, 인덱스, 복제, 샤딩의 트레이드오프를 일관성/가용성 측면에서 비교할 수 있다.
+- 분산 합의, CAP 정리, 메시지 큐의 핵심 개념을 실제 시스템 사례와 연결할 수 있다.
+- 프로파일링 도구로 CPU/메모리/I/O 병목을 찾고, 캐시 친화적 구조로 개선할 수 있다.
+- CI/CD 파이프라인, 컨테이너, IaC를 결합해 재현 가능한 배포 절차를 설계할 수 있다.
+- 수백만 사용자급 시스템의 부하 분산, 캐싱 계층, 데이터 저장소 선택을 정당화할 수 있다.
+
+---
+
+## 다음 단계
+
+- [ML 엔지니어 로드맵](ML-Engineer.md)
+
+## 관련 로드맵
+
+- [CS 핵심 로드맵](CS-Core.md)

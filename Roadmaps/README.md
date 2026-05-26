@@ -2,27 +2,33 @@
 
 > 목적에 따른 학습 순서 가이드.
 
+## 읽는 법
+
+- 로드맵의 순서는 기본 선수지식 흐름이다. 이미 아는 내용은 건너뛰고, 부족한 내용은 해당 섹션 README의 주제 목록으로 내려간다.
+- 링크가 걸린 `Draft` 이상 문서는 지금 읽을 수 있다. `Planned`로 표시된 파일명은 아직 본문이 없는 예정 주제다.
+- 각 로드맵의 `완료 기준`은 다음 단계로 넘어가기 전 점검 목록이다.
+- 관심 분야가 명확하면 입문자 로드맵 이후 바로 목적별 로드맵으로 이동해도 된다.
+
+## 현재 가용성
+
+| 로드맵 | 현재 상태 | 권장 사용법 |
+|---|---|---|
+| [입문자 (Beginner)](Beginner.md) | 일부 본문 있음 | 바로 읽기 시작한다. 완료 기준 일부는 아직 보강 예정이다 |
+| [CS 핵심 (CS Core)](CS-Core.md) | 목차와 완료 기준 중심 | 전공 전체 범위와 작성 순서를 확인한다 |
+| [AI 핵심 (AI Core)](AI-Core.md) | 목차와 완료 기준 중심 | AI/ML 전체 흐름을 확인한다 |
+| [시스템 엔지니어](Systems-Engineer.md) | 목차와 완료 기준 중심 | 시스템/운영 학습 범위를 확인한다 |
+| [ML 엔지니어](ML-Engineer.md) | 목차와 완료 기준 중심 | 모델 운영과 배포 학습 범위를 확인한다 |
+| [연구자 (Researcher)](Researcher.md) | 목차와 완료 기준 중심 | 논문/이론 심화 범위를 확인한다 |
+
 ## 어디서 시작할까?
 
-| 나는... | 여기서 시작 |
+| 나는... | 로드맵 |
 |---|---|
-| 프로그래밍을 처음 배운다 | [Beginner.md](Beginner.md) |
-| CS 전공 핵심을 체계적으로 공부하고 싶다 | [CS-Core.md](CS-Core.md) |
-| AI/ML을 공부하고 싶다 | [AI-Core.md](AI-Core.md) |
-| OS, 네트워크, DB 등 시스템 쪽을 파고 싶다 | [Systems-Engineer.md](Systems-Engineer.md) |
-| ML 모델 학습부터 배포까지 다루고 싶다 | [ML-Engineer.md](ML-Engineer.md) |
-| 논문과 이론 중심으로 깊게 들어가고 싶다 | [Researcher.md](Researcher.md) |
-| 특정 용어나 개념을 찾고 싶다 | [../Reference/Glossary.md](../Reference/Glossary.md) 또는 GitHub 검색 |
+| 프로그래밍을 처음 배운다 | [입문자 (Beginner)](Beginner.md) |
+| CS 전공 핵심을 체계적으로 공부하고 싶다 | [CS 핵심 (CS Core)](CS-Core.md) |
+| AI/ML을 공부하고 싶다 | [AI 핵심 (AI Core)](AI-Core.md) |
+| OS, 네트워크, DB 등 시스템 쪽을 파고 싶다 | [시스템 엔지니어](Systems-Engineer.md) |
+| ML 모델 학습부터 배포까지 다루고 싶다 | [ML 엔지니어](ML-Engineer.md) |
+| 논문과 이론 중심으로 깊게 들어가고 싶다 | [연구자 (Researcher)](Researcher.md) |
 
----
-
-## 로드맵 목록
-
-| 로드맵 | 대상 |
-|---|---|
-| [입문자 (Beginner)](Beginner.md) | 프로그래밍과 CS를 처음 시작하는 사람 |
-| [CS 핵심 (CS Core)](CS-Core.md) | 컴퓨터공학 전공 핵심을 체계적으로 공부하려는 사람 |
-| [AI 핵심 (AI Core)](AI-Core.md) | AI/ML 전공 지식을 순서대로 공부하려는 사람 |
-| [시스템 엔지니어](Systems-Engineer.md) | OS, 네트워크, DB, 분산 시스템 중심 학습자 |
-| [ML 엔지니어](ML-Engineer.md) | 모델 학습부터 배포까지 다루려는 학습자 |
-| [연구자 (Researcher)](Researcher.md) | 논문과 이론 중심으로 깊게 들어가려는 학습자 |
+특정 용어나 개념을 찾고 싶다면 → [Glossary](../Reference/Glossary.md) 또는 GitHub 검색

@@ -1,4 +1,4 @@
-﻿# 알고리즘 (Algorithms)
+# 알고리즘 (Algorithms)
 
 > 문제를 효율적으로 푸는 방법과 그 복잡도 분석.
 
@@ -6,22 +6,29 @@
 
 ---
 
+## 읽는 법
+
+- 링크가 걸린 `Draft` 문서는 지금 읽을 수 있는 초안이다.
+- `Planned` 파일명은 앞으로 채울 예정 주제이며 아직 본문 파일은 없다.
+
+---
+
 ## 주제 목록
 
 ### 기초 및 정렬
 
-| # | 주제 | 파일 | Status |
+| Order | 주제 | 파일 | Status |
 |---|---|---|---|
-| 1 | 복잡도 분석 (Big-O) | Complexity.md | Planned |
-| 2 | 정렬 (Sorting) | Sorting.md | Planned |
-| 3 | 이진 탐색 (Binary Search) | Binary-Search.md | Planned |
+| 1 | 복잡도 분석 (Big-O) | [Complexity.md](Complexity.md) | Draft |
+| 2 | 정렬 (Sorting) | [Sorting.md](Sorting.md) | Draft |
+| 3 | 이진 탐색 (Binary Search) | [Binary-Search.md](Binary-Search.md) | Draft |
 | 4 | 분할 정복 (Divide & Conquer) | Divide-and-Conquer.md | Planned |
 | 5 | 그리디 (Greedy) | Greedy.md | Planned |
 | 6 | 백트래킹 (Backtracking) | Backtracking.md | Planned |
 
 ### 동적 프로그래밍
 
-| # | 주제 | 파일 | Status |
+| Order | 주제 | 파일 | Status |
 |---|---|---|---|
 | 7 | DP 기초 | DP-Basics.md | Planned |
 | 8 | DP 최적화 | DP-Optimization.md | Planned |
@@ -30,9 +37,9 @@
 
 ### 그래프 알고리즘
 
-| # | 주제 | 파일 | Status |
+| Order | 주제 | 파일 | Status |
 |---|---|---|---|
-| 11 | BFS / DFS | BFS-DFS.md | Planned |
+| 11 | BFS / DFS | [BFS-DFS.md](BFS-DFS.md) | Draft |
 | 12 | 위상 정렬 | Topological-Sort.md | Planned |
 | 13 | 강한 연결 요소 (SCC) | SCC.md | Planned |
 | 14 | 최단 경로 — Dijkstra | Dijkstra.md | Planned |
@@ -42,7 +49,7 @@
 
 ### 네트워크 플로우
 
-| # | 주제 | 파일 | Status |
+| Order | 주제 | 파일 | Status |
 |---|---|---|---|
 | 18 | 최대 유량 (Ford-Fulkerson / Edmonds-Karp) | Max-Flow.md | Planned |
 | 19 | Dinic's Algorithm | Dinic.md | Planned |
@@ -51,7 +58,7 @@
 
 ### 문자열 알고리즘
 
-| # | 주제 | 파일 | Status |
+| Order | 주제 | 파일 | Status |
 |---|---|---|---|
 | 22 | KMP | KMP.md | Planned |
 | 23 | Z 알고리즘 | Z-Algorithm.md | Planned |
@@ -61,7 +68,7 @@
 
 ### 수학적 알고리즘
 
-| # | 주제 | 파일 | Status |
+| Order | 주제 | 파일 | Status |
 |---|---|---|---|
 | 27 | 정수론 & 소수 | Number-Theory.md | Planned |
 | 28 | 고속 거듭제곱 / 행렬 거듭제곱 | Fast-Exponentiation.md | Planned |
@@ -69,13 +76,27 @@
 
 ### 고급 알고리즘 이론
 
-| # | 주제 | 파일 | Status |
+| Order | 주제 | 파일 | Status |
 |---|---|---|---|
 | 30 | 분할 상환 분석 | Amortized-Analysis.md | Planned |
 | 31 | 근사 알고리즘 | Approximation-Algorithms.md | Planned |
 | 32 | 랜덤 알고리즘 | Randomized-Algorithms.md | Planned |
 | 33 | 계산 기하학 | Computational-Geometry.md | Planned |
 | 34 | 병렬 알고리즘 | Parallel-Algorithms.md | Planned |
+
+---
+
+## 학습 순서
+
+현재 바로 읽을 수 있는 최소 경로:
+
+```text
+Complexity → Sorting → Binary-Search
+       ↓
+Data-Structures/Graph-Representation → BFS-DFS
+```
+
+DP, 그리디, 백트래킹, 최단 경로는 이후 확장 주제다.
 
 ---
 

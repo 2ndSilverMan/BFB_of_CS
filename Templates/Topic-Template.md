@@ -1,8 +1,11 @@
 # 주제명 (Topic Name)
 
-- Level: Beginner / Intermediate / Advanced
-- Prerequisites:
-- Status: Stub / Draft / Review / Complete
+> 이 템플릿은 **개별 주제 문서**(`Linear-Regression.md`, `BFS-DFS.md` 등) 전용이다.
+> 섹션 허브 README와 주제 인덱스 README는 `Level`/`Status` 필드를 두지 않는다 ([CONTRIBUTING.md](../CONTRIBUTING.md) 문서 작성 규칙 참고).
+
+- Level: Beginner
+- Prerequisites: 없음
+- Status: Stub
 
 ---
 
@@ -37,6 +40,15 @@
 실제로 어디서 쓰이는가.
 
 ## 흔한 오해 (Common Misunderstandings)
+
+## 연습 / 확인 문제 (Exercises)
+
+- 이 개념을 직접 적용해 볼 수 있는 작은 문제나 구현 과제.
+
+## 이어서 읽기 (Reading Path)
+
+- 이전:
+- 다음:
 
 ## 참조 (References)
 

@@ -4,33 +4,73 @@
 
 ---
 
-### 수학 기초
+## 대상
 
-1. [선형대수](../Math/Linear-Algebra/)
-2. [확률과 통계](../Math/Probability-Statistics/)
-3. [미적분](../Math/Calculus/)
-4. [최적화](../Math/Optimization/)
+- AI/ML 전공 지식을 수학 기초부터 응용 분야까지 순서대로 공부하려는 학습자
+
+## 현재 가용성
+
+현재 이 로드맵은 AI/ML 전체 순서와 완료 기준을 제공한다. 수학, 머신러닝, 딥러닝, 응용 AI 본문은 대부분 `Planned` 상태이므로, 지금은 범위를 파악하고 각 섹션 README에서 `Draft` 이상 문서가 열린 항목부터 읽는다.
+
+## 시작 전 확인
+
+- 변수, 조건문, 함수, 배열 같은 프로그래밍 기초를 사용할 수 있다.
+- 미적분, 선형대수, 확률과 통계가 낯설다면 해당 Math 섹션을 먼저 훑고 들어간다.
+- 머신러닝 모델을 외우기보다 데이터, 손실 함수, 최적화가 어떻게 연결되는지 따라갈 준비가 되어 있어야 한다.
+
+## 순서
+
+### 기초 도구
+
+1. [프로그래밍 기초](../Programming/)
+2. [미적분](../Math/Calculus/)
+3. [선형대수](../Math/Linear-Algebra/)
+4. [확률과 통계](../Math/Probability-Statistics/)
+5. [최적화](../Math/Optimization/)
 
 ### AI 핵심
 
-5. [머신러닝](../AI/Machine-Learning/)
-6. [딥러닝](../AI/Deep-Learning/)
+6. [머신러닝](../AI/Machine-Learning/)
+7. [딥러닝](../AI/Deep-Learning/)
 
 ### 응용 분야 (관심에 따라 선택)
 
-7. [자연어 처리 (NLP)](../AI/NLP/)
-8. [컴퓨터 비전](../AI/Computer-Vision/)
-9. [강화학습](../AI/Reinforcement-Learning/)
-10. [생성 모델](../AI/Generative-Models/)
-11. [대규모 언어 모델 (LLMs)](../AI/LLMs/)
+8. [자연어 처리 (NLP)](../AI/NLP/)
+9. [컴퓨터 비전](../AI/Computer-Vision/)
+10. [강화학습](../AI/Reinforcement-Learning/)
+11. [생성 모델](../AI/Generative-Models/)
+12. [대규모 언어 모델 (LLMs)](../AI/LLMs/)
 
 ### 심화 이론
 
-12. [이론적 머신러닝](../AI/Theoretical-ML/)
-13. [확률 그래프 모델](../AI/PGMs/)
-14. [인과 추론](../AI/Causal-Inference/)
-15. [AI 안전성](../AI/AI-Safety/)
+13. [실해석학](../Math/Real-Analysis/)
+14. [이론적 머신러닝](../AI/Theoretical-ML/)
+15. [확률 그래프 모델](../AI/PGMs/)
+16. [인과 추론](../AI/Causal-Inference/)
+17. [AI 안전성](../AI/AI-Safety/)
 
 ### 엔지니어링
 
-16. [MLOps](../AI/MLOps/)
+18. [MLOps](../AI/MLOps/)
+
+---
+
+## 완료 기준
+
+- 선형대수, 미적분, 확률, 최적화가 모델 학습에서 각각 어디에 쓰이는지 설명할 수 있다.
+- 선형 회귀, 로지스틱 회귀, 결정 트리, 앙상블의 학습 방식과 평가 방법을 비교할 수 있다.
+- 역전파, 손실 함수, 정규화, Transformer의 핵심 아이디어를 설명할 수 있다.
+- NLP, 비전, 강화학습, 생성 모델 중 하나를 골라 대표 태스크와 기본 모델 구조를 설명할 수 있다.
+- 실험 추적, 데이터 버전, 모델 서빙, 모니터링이 왜 필요한지 설명할 수 있다.
+
+---
+
+## 다음 단계
+
+- [ML 엔지니어 로드맵](ML-Engineer.md)
+- [연구자 로드맵](Researcher.md)
+
+## 관련 로드맵
+
+- [입문자 로드맵](Beginner.md) — 선수지식 경로
+- [CS 핵심 로드맵](CS-Core.md) — 병렬 경로

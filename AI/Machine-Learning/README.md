@@ -1,10 +1,19 @@
-﻿# 머신러닝 (Machine Learning)
+# 머신러닝 (Machine Learning)
 
 > 데이터에서 규칙을 자동으로 학습하는 방법.
 
 **선수지식**: [Math/Linear-Algebra/](../../Math/Linear-Algebra/), [Math/Probability-Statistics/](../../Math/Probability-Statistics/), [Math/Optimization/](../../Math/Optimization/)
 
-## 주제
+---
+
+## 읽는 법
+
+- 링크가 걸린 `Draft` 이상 문서는 지금 읽을 수 있는 본문이다.
+- `Planned` 파일명은 앞으로 채울 예정 주제이며 아직 본문 파일은 없다.
+
+---
+
+## 주제 목록
 
 ### 지도학습 (Supervised Learning)
 
@@ -34,7 +43,23 @@
 | 정규화 (L1, L2, Dropout) | Regularization.md | Planned |
 | 과적합과 과소적합 | Overfitting.md | Planned |
 
-## 연관
+---
+
+## 학습 순서
+
+```text
+Linear-Regression → Logistic-Regression
+        ↓
+Decision-Trees / KNN / SVM → Ensemble
+        ↓
+K-Means / Hierarchical-Clustering / Dimensionality-Reduction
+        ↓
+Bias-Variance → Cross-Validation → Regularization → Overfitting
+```
+
+---
+
+## 연관 섹션
 
 - [AI/Deep-Learning/](../Deep-Learning/) — ML의 확장
 - [Math/Optimization/](../../Math/Optimization/) — 모델 학습 = 최적화

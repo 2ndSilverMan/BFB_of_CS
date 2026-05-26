@@ -1,6 +1,39 @@
-# Big F**king Book of Computer Science
+# Big Book of Computer Science & AI
 
-> CS & AI 공개 지식 저장고
+> BFB_of_CS: CS & AI 공개 지식 저장고
+
+---
+
+## 바로 시작하기
+
+처음이라면 [입문자 로드맵](Roadmaps/Beginner.md)부터 읽는다. 현재 실제 본문이 있는 최소 경로는 다음 순서다.
+
+1. [변수와 타입](Programming/Variables-and-Types.md) → [조건문과 반복문](Programming/Control-Flow.md) → [함수와 재귀](Programming/Functions-and-Recursion.md) → [배열과 문자열](Programming/Arrays-and-Strings.md)
+2. [명제 논리와 술어 논리](Math/Discrete/Logic.md)
+3. [배열](Data-Structures/Array.md) → [연결 리스트](Data-Structures/Linked-List.md) → [스택](Data-Structures/Stack.md) / [큐](Data-Structures/Queue.md) → [그래프 표현](Data-Structures/Graph-Representation.md)
+4. [복잡도 분석](Algorithms/Complexity.md) → [정렬](Algorithms/Sorting.md) → [이진 탐색](Algorithms/Binary-Search.md) → [BFS / DFS](Algorithms/BFS-DFS.md)
+
+목적이 분명하다면 [학습 로드맵](Roadmaps/)에서 바로 맞는 경로를 고른다.
+
+---
+
+## 현재 읽기 상태
+
+이 저장소는 현재 핵심 학습 경로의 일부 본문을 먼저 열어 둔 상태다. 나머지 주제는 목차와 로드맵으로 준비되어 있으며, 본문이 채워지는 순서는 다음 흐름을 따른다.
+
+1. [입문자 로드맵](Roadmaps/Beginner.md)에 필요한 프로그래밍, 이산수학, 자료구조, 알고리즘 기초
+2. [CS 핵심 로드맵](Roadmaps/CS-Core.md)의 시스템, 계산 이론, 보안 기초
+3. [AI 핵심 로드맵](Roadmaps/AI-Core.md)의 수학, 머신러닝, 딥러닝 기초
+
+학습할 때는 링크가 걸린 `Draft` 이상 문서를 먼저 읽는다. `Planned`는 아직 본문 파일이 없는 예정 주제다.
+
+| 상태 | 학습자에게 의미 |
+|---|---|
+| Planned | 목차에만 있는 예정 주제. 아직 읽을 본문은 없다 |
+| Stub | 파일은 있지만 골격만 있다 |
+| Draft | 지금 읽을 수 있는 초안이다 |
+| Review | 본문 작성은 끝났고 검토 중이다 |
+| Complete | 완성 문서다 |
 
 ---
 
@@ -36,9 +69,15 @@
 
 ---
 
-## 문서 형식
+## 참조 자료
 
-각 주제 문서는 [Templates/Topic-Template.md](Templates/Topic-Template.md)을 기준으로 작성한다.
+용어, 책, 논문, 강의 목록은 [Reference/](Reference/)에서 관리한다.
+
+---
+
+## 작성자용 문서
+
+본문 작성 우선순위, 로드맵 커버리지, 참조 자료 보강, 템플릿, 검수 스크립트는 [Maintainers/](Maintainers/)에서 관리한다.
 
 ---
 
