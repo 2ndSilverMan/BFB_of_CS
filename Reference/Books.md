@@ -22,6 +22,9 @@
 | Linear Algebra and Its Applications | Strang | [Math/Linear-Algebra](../Math/Linear-Algebra/) |
 | Introduction to Probability | Blitzstein & Hwang | [Math/Probability-Statistics](../Math/Probability-Statistics/) |
 | Convex Optimization | Boyd & Vandenberghe | [Math/Optimization](../Math/Optimization/) |
+| Calculus | Spivak | [Math/Calculus](../Math/Calculus/) |
+| Numerical Linear Algebra | Trefethen & Bau | [Math/Numerical-Methods](../Math/Numerical-Methods/) |
+| Principles of Mathematical Analysis | Rudin | [Math/Real-Analysis](../Math/Real-Analysis/) |
 
 ## 자료구조 (Data Structures)
 
@@ -45,6 +48,7 @@
 | Computer Networks: A Top-Down Approach | Kurose & Ross | [Systems/Networks](../Systems/Networks/) |
 | Designing Data-Intensive Applications | Kleppmann | [Systems/Distributed-Systems](../Systems/Distributed-Systems/), [Systems/Databases](../Systems/Databases/) |
 | Database Internals | Petrov | [Systems/Databases](../Systems/Databases/) |
+| Programming Massively Parallel Processors | Kirk & Hwu | [Systems/Parallel-Computing](../Systems/Parallel-Computing/) |
 
 ## CS 이론 (CS Theory)
 
@@ -53,6 +57,7 @@
 | Introduction to the Theory of Computation | Sipser | [CS-Theory/Computation-Theory](../CS-Theory/Computation-Theory/) |
 | Types and Programming Languages (TAPL) | Pierce | [CS-Theory/Programming-Languages](../CS-Theory/Programming-Languages/) |
 | Compilers: Principles, Techniques, and Tools (Dragon Book) | Aho et al. | [CS-Theory/Compilers](../CS-Theory/Compilers/) |
+| Quantum Computation and Quantum Information | Nielsen & Chuang | [CS-Theory/Quantum-Computing](../CS-Theory/Quantum-Computing/) |
 
 ## 인공지능 (AI)
 
@@ -63,6 +68,11 @@
 | Reinforcement Learning: An Introduction | Sutton & Barto | [AI/Reinforcement-Learning](../AI/Reinforcement-Learning/) |
 | Speech and Language Processing | Jurafsky & Martin | [AI/NLP](../AI/NLP/) |
 | Probabilistic Graphical Models | Koller & Friedman | [AI/PGMs](../AI/PGMs/) |
+| Understanding Machine Learning: From Theory to Algorithms | Shalev-Shwartz & Ben-David | [AI/Theoretical-ML](../AI/Theoretical-ML/) |
+| Computer Vision: Algorithms and Applications | Szeliski | [AI/Computer-Vision](../AI/Computer-Vision/) |
+| Designing Machine Learning Systems | Huyen | [AI/MLOps](../AI/MLOps/) |
+| Causal Inference in Statistics: A Primer | Pearl, Glymour & Jewell | [AI/Causal-Inference](../AI/Causal-Inference/) |
+| Human Compatible | Russell | [AI/AI-Safety](../AI/AI-Safety/) |
 
 ## 엔지니어링 (Engineering)
 
@@ -77,3 +87,4 @@
 | Growing Object-Oriented Software, Guided by Tests | Freeman & Pryce | [Engineering/Testing](../Engineering/Testing/) |
 | Systems Performance | Gregg | [Engineering/Performance](../Engineering/Performance/) |
 | Debugging: The 9 Indispensable Rules | Agans | [Engineering/Debugging](../Engineering/Debugging/) |
+| Cryptography Engineering | Ferguson, Schneier & Kohno | [Engineering/Security](../Engineering/Security/) |

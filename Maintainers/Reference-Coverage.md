@@ -12,22 +12,23 @@
 | 섹션 | 하위 분야 | Books | Courses | Papers |
 |---|---|---|---|---|
 | Programming | 1 | 1/1 (3) | 1/1 (2) | 1/1 (2) |
-| Math | 7 | 4/7 (4) | 3/7 (3) | 1/7 (1) |
+| Math | 7 | 7/7 (7) | 7/7 (7) | 3/7 (3) |
 | Data-Structures | 1 | 1/1 (1) | 1/1 (1) | 1/1 (3) |
 | Algorithms | 1 | 1/1 (2) | 1/1 (2) | 1/1 (4) |
-| Systems | 6 | 5/6 (5) | 3/6 (4) | 1/6 (7)* |
-| CS-Theory | 4 | 3/4 (3) | 1/4 (1) | 1/4 (3)* |
-| AI | 12 | 5/12 (5) | 5/12 (6) | 7/12 (14) |
-| Engineering | 7 | 6/7 (9) | 3/7 (4) | 4/7 (6) |
+| Systems | 6 | 6/6 (6) | 6/6 (7) | 4/6 (10)* |
+| CS-Theory | 4 | 4/4 (4) | 3/4 (3) | 3/4 (5) |
+| AI | 12 | 10/12 (10) | 9/12 (10) | 7/12 (14) |
+| Engineering | 7 | 7/7 (10) | 3/7 (4) | 4/7 (6) |
 
 ## 보강 우선순위
 
-2026-05-26 기준 우선순위다.
+2026-06-08 기준이다. 핵심 공백을 1차로 채웠고 남은 항목은 다음과 같다.
 
-- **AI 심화 분야**: Theoretical-ML, PGMs, Causal-Inference, AI-Safety, MLOps, LLMs, Computer-Vision, Generative-Models 각각 책 0권.
-- **Systems Papers**: 7편 전부 Distributed-Systems. Computer-Architecture, Operating-Systems, Databases 논문 필요.
-- **CS-Theory Courses**: Programming-Languages, Compilers, Quantum-Computing 강의 0개.
-- **Math Papers**: 1편 (Shannon). Calculus, Linear-Algebra, Optimization의 역사적 논문 누락.
+- **AI 책**: Theoretical-ML, Computer-Vision, MLOps, Causal-Inference, AI-Safety를 1차로 채웠다. **Generative-Models와 LLMs는 표준 교재가 아직 부족**해 책 0권으로 남아 있다(강의는 보강함).
+- **AI 강의**: MLOps, PGMs, Generative-Models, LLMs를 채웠다. Theoretical-ML, Causal-Inference, AI-Safety 강의는 미보강.
+- **Systems Papers**: Computer-Architecture(Amdahl), Operating-Systems(UNIX), Databases(Codd)를 추가해 4/6. 여전히 Distributed-Systems 편중(10편 중 7편)이라 `*` 유지. Networks, Parallel-Computing 논문 미보강.
+- **CS-Theory**: Compilers, Programming-Languages 강의·논문을 채웠다. **Quantum-Computing 강의 0개**(책은 Nielsen & Chuang 보강).
+- **Math Papers**: Optimization(Robbins-Monro), Numerical-Methods(Hestenes-Stiefel)를 추가해 3/7. Linear-Algebra, Calculus의 역사적 논문은 미보강.
 
 ## Glossary
 

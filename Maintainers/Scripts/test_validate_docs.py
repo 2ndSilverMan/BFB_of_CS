@@ -35,6 +35,15 @@ class PureFunctionTests(unittest.TestCase):
     def test_split_table_cells_escaped_pipe(self):
         self.assertEqual(vd.split_table_cells("| a \\| b | c |"), ["a \\| b", "c"])
 
+    def test_split_table_cells_math_span_with_pipe(self):
+        self.assertEqual(vd.split_table_cells("| $P(A|B)$ | x |"), ["$P(A|B)$", "x"])
+
+    def test_split_table_cells_double_dollar_math_with_pipe(self):
+        self.assertEqual(vd.split_table_cells("| $$a|b$$ | x |"), ["$$a|b$$", "x"])
+
+    def test_split_table_cells_escaped_dollar_does_not_start_math(self):
+        self.assertEqual(vd.split_table_cells("| \\$5 | x |"), ["\\$5", "x"])
+
     def test_split_link_target(self):
         self.assertEqual(vd.split_link_target("path#anchor"), ("path", "anchor"))
         self.assertEqual(vd.split_link_target("p?x=1#f"), ("p", "f"))
@@ -123,6 +132,55 @@ class LineCheckTests(unittest.TestCase):
         self.assertEqual(len(issues), 1)
         self.assertEqual(issues[0].type, "BadStatus")
         self.assertIn("Bogus", issues[0].message)
+
+    def test_topic_metadata_requires_reviewed_by(self):
+        path = self.root / "Programming" / "X.md"
+        lines = [
+            "# X",
+            "",
+            "- Level: Beginner",
+            "- Prerequisites: 없음",
+            "- Status: Draft",
+            "",
+            "---",
+            "",
+        ]
+        issues = vd.check_topic_metadata(path, self.root, lines)
+        self.assertTrue(
+            any(i.type == "MissingMetadata" and "Reviewed-by" in i.message for i in issues),
+            msg=f"issues: {issues}",
+        )
+
+
+class TemplateContractTests(unittest.TestCase):
+    def test_topic_template_contract_detects_missing_reviewed_by(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "Templates").mkdir()
+            (root / "Templates" / "Topic-Template.md").write_text(
+                "\n".join(
+                    [
+                        "# T",
+                        "",
+                        "- Level: Beginner",
+                        "- Prerequisites: 없음",
+                        "- Status: Draft",
+                        "",
+                        "---",
+                        "",
+                        *vd.TOPIC_REQUIRED_HEADINGS,
+                        "## 법적/저작권 확인",
+                        "",
+                    ]
+                ),
+                encoding="utf-8",
+            )
+
+            issues = vd.check_topic_template_contract(root)
+            self.assertTrue(
+                any(i.type == "TopicTemplateContract" and "Reviewed-by" in i.message for i in issues),
+                msg=f"issues: {issues}",
+            )
 
 
 class LinkCheckTests(unittest.TestCase):

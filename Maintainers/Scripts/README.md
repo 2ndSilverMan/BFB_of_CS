@@ -26,18 +26,19 @@ py -3 Maintainers/Scripts/validate_docs.py
 
 - Markdown 파일에 UTF-8 BOM이 없는지
 - Markdown 상대 링크가 실제 파일이나 디렉토리와 앵커를 가리키는지
-- 표 헤더, 구분선, 데이터 행의 열 수가 맞는지
+- 표 헤더, 구분선, 데이터 행의 열 수가 맞는지 (셀 안의 `` `코드` ``와 `$...$` / `$$...$$` 수식 구간의 세로줄은 구분자로 보지 않음)
 - `Status` 값이 허용된 값인지
-- 주제 문서 상단 메타데이터의 `Level`, `Prerequisites`, `Status` 값이 유효한지
-- `Reviewed-by`가 있으면 `이름 (YYYY-MM-DD)` 형식인지, `Status: Complete`에 검토 표식이 있는지
+- 주제 문서 상단 메타데이터의 `Level`, `Prerequisites`, `Status`, `Reviewed-by` 값이 유효한지
+- `Reviewed-by`가 검토 완료 값이면 `이름 (YYYY-MM-DD)` 형식인지, `Status: Complete`에 검토 표식이 있는지
 - 사람 검토 배지(`> ✅ **사람 검토 완료** — 이름, 날짜`)가 `Reviewed-by`와 일치하는지(없거나 어긋나면 보고)
+- 주제 템플릿이 필수 메타데이터와 필수 섹션을 계속 포함하는지
 - `Draft`, `Review`, `Complete` 주제 파일이 README 표에서 링크로 연결되어 있는지
 - 주제 README의 `Status`와 실제 주제 문서 상단 메타데이터가 일치하는지
 - `Draft`, `Review`, `Complete` 주제 문서가 필수 섹션과 `이어서 읽기`를 갖추었는지
 - 루트 README가 `Planned`, `Stub`, `Draft`, `Review`, `Complete`의 학습자 관점 의미를 설명하는지
 - 로드맵 문서가 현재 읽을 수 있는 범위와 아직 예정인 범위를 설명하는지
 - 학습 영역 README가 `Draft` 이상 문서와 `Planned` 주제를 구분해서 안내하는지
-- 작성자용 운영 문서(`Maintainers/Content-Backlog.md`, `Maintainers/Coverage-Matrix.md`, `Maintainers/Topic-Classification.md`, `Maintainers/Reference-Coverage.md`)가 존재하는지
+- 작성자용 운영 문서(`Maintainers/Content-Backlog.md`, `Maintainers/Coverage-Matrix.md`, `Maintainers/Topic-Classification.md`, `Maintainers/Reference-Coverage.md`, `Maintainers/Project-Readiness.md`)가 존재하는지
 - CI, 기여 가이드, 템플릿, 줄바꿈 설정 같은 필수 지원 파일이 존재하는지
 - 학습자 루트에 `Scripts/` 디렉토리가 다시 생기지 않았는지
 - 모든 학습 영역 디렉토리와 하위 디렉토리에 `README.md`가 있는지

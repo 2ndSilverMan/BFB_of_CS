@@ -3,6 +3,7 @@
 - Level: Beginner
 - Prerequisites: 고등학교 수학
 - Status: Draft
+- Reviewed-by: -
 
 ---
 

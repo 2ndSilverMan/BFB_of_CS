@@ -18,7 +18,7 @@
 | 주제 | 파일 | Status |
 |---|---|---|
 | 볼록 최적화 기초 | Convex-Optimization.md | Planned |
-| 경사 하강법 (GD) | Gradient-Descent.md | Planned |
+| 경사 하강법 (GD) | [Gradient-Descent.md](Gradient-Descent.md) | Draft |
 | 확률적 경사 하강법 (SGD) | SGD.md | Planned |
 | Adam, RMSProp 등 적응형 방법 | Adaptive-Methods.md | Planned |
 | 라그랑주 승수법 | Lagrangian.md | Planned |

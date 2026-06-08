@@ -4,7 +4,8 @@
 
 - [ ] 새 문서는 해당 템플릿을 따른다.
 - [ ] 링크가 실제 파일, 디렉토리, 안정적인 외부 출처를 가리킨다.
-- [ ] `Status`, `Level`, `Prerequisites`를 규칙에 맞게 적었다.
+- [ ] `Status`, `Level`, `Prerequisites`, `Reviewed-by`를 규칙에 맞게 적었다.
+- [ ] 구조 변경은 `Maintainers/Project-Readiness.md`의 운영 게이트에 어긋나지 않는다.
 - [ ] 저장소 루트에서 `python Maintainers/Scripts/validate_docs.py` 또는 `py -3 Maintainers/Scripts/validate_docs.py`를 실행했다.
 
 ## 법적/저작권 확인

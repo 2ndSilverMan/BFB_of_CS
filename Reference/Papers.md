@@ -16,6 +16,8 @@
 | 논문 | 저자 | 연도 | 섹션 | 키워드 |
 |---|---|---|---|---|
 | A Mathematical Theory of Communication | Shannon | 1948 | [Math/Probability-Statistics](../Math/Probability-Statistics/) | 정보 이론 |
+| A Stochastic Approximation Method | Robbins & Monro | 1951 | [Math/Optimization](../Math/Optimization/) | 확률적 근사, SGD 기원 |
+| Methods of Conjugate Gradients for Solving Linear Systems | Hestenes & Stiefel | 1952 | [Math/Numerical-Methods](../Math/Numerical-Methods/) | 켤레기울기법 |
 
 ## 자료구조 (Data Structures)
 
@@ -45,6 +47,9 @@
 | Dynamo: Amazon's Highly Available Key-Value Store | DeCandia et al. | 2007 | [Systems/Distributed-Systems](../Systems/Distributed-Systems/) | NoSQL, CAP |
 | Spanner: Google's Globally-Distributed Database | Corbett et al. | 2012 | [Systems/Distributed-Systems](../Systems/Distributed-Systems/) | 글로벌 일관성 |
 | In Search of an Understandable Consensus Algorithm (Raft) | Ongaro & Ousterhout | 2014 | [Systems/Distributed-Systems](../Systems/Distributed-Systems/) | 분산 합의 |
+| Validity of the Single Processor Approach to Achieving Large Scale Computing Capabilities | Amdahl | 1967 | [Systems/Computer-Architecture](../Systems/Computer-Architecture/) | 암달의 법칙 |
+| The UNIX Time-Sharing System | Ritchie & Thompson | 1974 | [Systems/Operating-Systems](../Systems/Operating-Systems/) | UNIX |
+| A Relational Model of Data for Large Shared Data Banks | Codd | 1970 | [Systems/Databases](../Systems/Databases/) | 관계 모델 |
 
 ## CS 이론 (CS Theory)
 
@@ -53,6 +58,8 @@
 | On Computable Numbers, with an Application to the Entscheidungsproblem | Turing | 1936 | [CS-Theory/Computation-Theory](../CS-Theory/Computation-Theory/) | 계산 가능성 |
 | The Complexity of Theorem-Proving Procedures | Cook | 1971 | [CS-Theory/Computation-Theory](../CS-Theory/Computation-Theory/) | NP-완전성 |
 | Reducibility Among Combinatorial Problems | Karp | 1972 | [CS-Theory/Computation-Theory](../CS-Theory/Computation-Theory/) | NP-완전성 |
+| A Theory of Type Polymorphism in Programming | Milner | 1978 | [CS-Theory/Programming-Languages](../CS-Theory/Programming-Languages/) | 타입 추론 |
+| On the Translation of Languages from Left to Right | Knuth | 1965 | [CS-Theory/Compilers](../CS-Theory/Compilers/) | LR 파싱 |
 
 ## 인공지능 (AI)
 

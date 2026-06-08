@@ -11,8 +11,8 @@ from urllib.parse import unquote, urlparse
 
 VALID_STATUSES = {"Planned", "Stub", "Draft", "Review", "Complete"}
 VALID_LEVELS = {"Beginner", "Intermediate", "Advanced"}
-TOPIC_METADATA_FIELDS = ("Level", "Prerequisites", "Status")
 REVIEW_FIELD = "Reviewed-by"
+TOPIC_METADATA_FIELDS = ("Level", "Prerequisites", "Status", REVIEW_FIELD)
 REVIEW_PLACEHOLDERS = {"", "-", "없음"}
 REVIEWED_BY_RE = re.compile(r"^(?P<name>.+?)\s*\((?P<date>\d{4}-\d{2}-\d{2})\)$")
 REVIEW_BADGE_RE = re.compile(
@@ -31,6 +31,7 @@ TOPIC_REQUIRED_HEADINGS = (
     "## 이어서 읽기",
     "## 참조",
 )
+TOPIC_TEMPLATE_EXTRA_HEADINGS = ("## 법적/저작권 확인",)
 NON_TOPIC_DIRS = {".github", "Maintainers", "Reference", "Roadmaps", "Templates"}
 LEARNING_DIRS = {
     "Programming",
@@ -48,6 +49,7 @@ REQUIRED_MAINTAINER_DOCS = (
     "Maintainers/Coverage-Matrix.md",
     "Maintainers/Topic-Classification.md",
     "Maintainers/Reference-Coverage.md",
+    "Maintainers/Project-Readiness.md",
     "Maintainers/Legal-and-Copyright-Policy.md",
 )
 REQUIRED_SUPPORT_FILES = (
@@ -322,6 +324,7 @@ def split_table_cells(line: str) -> list[str]:
     current: list[str] = []
     escaped = False
     in_code = False
+    math_delimiter: str | None = None
     index = 0
 
     while index < len(stripped):
@@ -346,7 +349,19 @@ def split_table_cells(line: str) -> list[str]:
             in_code = not in_code
             continue
 
-        if char == "|" and not in_code:
+        if char == "$" and not in_code:
+            dollar_start = index
+            while index < len(stripped) and stripped[index] == "$":
+                index += 1
+            delimiter = stripped[dollar_start:index]
+            current.append(delimiter)
+            if math_delimiter is None:
+                math_delimiter = delimiter
+            elif math_delimiter == delimiter:
+                math_delimiter = None
+            continue
+
+        if char == "|" and not in_code and math_delimiter is None:
             cells.append("".join(current).strip())
             current = []
         else:
@@ -709,6 +724,41 @@ def check_required_support_files(root: Path) -> list[Issue]:
                     relative_path,
                     1,
                     "Required project support file is missing",
+                )
+            )
+
+    return issues
+
+
+def check_topic_template_contract(root: Path) -> list[Issue]:
+    path = root / "Templates/Topic-Template.md"
+    if not path.exists():
+        return []
+
+    lines = path.read_text(encoding="utf-8").splitlines()
+    issues: list[Issue] = []
+    metadata = metadata_block(lines)
+
+    for field in TOPIC_METADATA_FIELDS:
+        if field not in metadata:
+            issues.append(
+                Issue(
+                    "TopicTemplateContract",
+                    "Templates/Topic-Template.md",
+                    1,
+                    f"Topic template must include metadata field: {field}",
+                )
+            )
+
+    headings = {line.strip() for line in lines if line.startswith("## ")}
+    for required in TOPIC_REQUIRED_HEADINGS + TOPIC_TEMPLATE_EXTRA_HEADINGS:
+        if not any(heading.startswith(required) for heading in headings):
+            issues.append(
+                Issue(
+                    "TopicTemplateContract",
+                    "Templates/Topic-Template.md",
+                    1,
+                    f"Topic template must include heading: {required}",
                 )
             )
 
@@ -1317,6 +1367,7 @@ def validate(root: Path) -> tuple[list[Issue], int]:
     files = markdown_files(root)
     issues: list[Issue] = check_required_maintainer_docs(root)
     issues.extend(check_required_support_files(root))
+    issues.extend(check_topic_template_contract(root))
     issues.extend(check_no_root_scripts_directory(root))
     issues.extend(check_learning_directory_readmes(root))
     issues.extend(check_duplicate_topic_filenames(root))

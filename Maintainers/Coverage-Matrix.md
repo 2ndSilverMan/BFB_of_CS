@@ -21,7 +21,7 @@
 | 영역 | Draft | Review | Planned | 역할 |
 |---|---:|---:|---:|---|
 | Programming | 3 | 2 | 28 | 모든 로드맵의 출발점 |
-| Math | 1 | 0 | 51 | CS/AI 이론의 공통 기반 |
+| Math | 2 | 0 | 50 | CS/AI 이론의 공통 기반 |
 | Data-Structures | 5 | 0 | 12 | 알고리즘과 시스템 구현 기반 |
 | Algorithms | 2 | 2 | 30 | CS 핵심과 코딩 문제 해결 기반 |
 | Systems | 0 | 0 | 54 | CS Core, Systems Engineer 기반 |
@@ -75,7 +75,7 @@ AI 핵심 로드맵은 수학 기초에서 머신러닝, 딥러닝, 주요 응�
 | 선형대수 | `Vectors.md`, `Matrices.md`, `Linear-Systems.md`, `Eigenvalues.md`, `SVD.md`, `PCA.md`, `Orthogonality.md` |
 | 미적분 | `Limits.md`, `Differentiation.md`, `Partial-Derivatives.md`, `Chain-Rule.md`, `Taylor-Series.md` |
 | 확률/통계 | `Probability-Basics.md`, `Distributions.md`, `Expectation.md`, `Bayes-Theorem.md`, `MLE.md`, `CLT.md`, `Hypothesis-Testing.md`, `Information-Theory.md` |
-| 최적화 | `Convex-Optimization.md`, `Gradient-Descent.md`, `SGD.md`, `Adaptive-Methods.md`, `Lagrangian.md` |
+| 최적화 | `Convex-Optimization.md`, [Gradient-Descent.md](../Math/Optimization/Gradient-Descent.md), `SGD.md`, `Adaptive-Methods.md`, `Lagrangian.md` |
 | 머신러닝 | `Linear-Regression.md`, `Logistic-Regression.md`, `Decision-Trees.md`, `Ensemble.md`, `KNN.md`, `K-Means.md`, `Dimensionality-Reduction.md`, `Bias-Variance.md`, `Cross-Validation.md`, `Regularization.md`, `Overfitting.md` |
 | 딥러닝 | `MLP.md`, `Backpropagation.md`, `Activation-Functions.md`, `Loss-Functions.md`, `Normalization-Layers.md`, `Dropout.md`, `CNN.md`, `RNN-LSTM-GRU.md`, `Attention.md`, `Transformer.md`, `Transfer-Learning.md`, `Fine-Tuning.md` |
 | NLP/LLM | `Text-Preprocessing.md`, `Language-Model-Basics.md`, `Word-Embeddings.md`, `Transformer-NLP.md`, `BERT.md`, `GPT.md`, `Transformer-Advanced.md`, `Pretraining.md`, `Instruction-Tuning.md`, `Prompt-Engineering.md`, `RAG.md` |

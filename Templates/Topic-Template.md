@@ -27,9 +27,17 @@
 
 왜 이런 구조/방법이 필요한지, 어떤 문제를 해결하는지.
 
+흐름이나 구조는 ` ```mermaid ` 다이어그램으로 보여 주면 좋다. 이미지 파일이 꼭 필요하면 `assets/<Section>/`에 두고 출처와 라이선스를 남긴다(자세히는 [Legal-and-Copyright-Policy.md](../Maintainers/Legal-and-Copyright-Policy.md)).
+
 ## 이론 (Theory)
 
 수식, 증명, 정의 등 엄밀한 설명.
+
+표기 규약:
+
+- 의미 있는 수식은 GitHub LaTeX로 쓴다. 인라인은 `$ ... $`, 블록은 `$$ ... $$`. 예: 인라인 $f(x) = x^2$, 블록 $$\nabla_\theta J(\theta) = \frac{1}{m}\sum_{i=1}^{m}\nabla_\theta \ell(\theta; x_i, y_i)$$
+- 복잡도 표기(`O(n log n)`)와 변수·함수 같은 코드 식별자는 백틱을 유지한다.
+- 표 안에서도 `$ ... $`를 쓸 수 있다. 조건부 확률처럼 세로줄이 필요하면 `$P(A \mid B)$`처럼 `\mid`를 쓴다.
 
 ## 구현 (Implementation)
 

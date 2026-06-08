@@ -98,6 +98,13 @@ BFB_of_CS/
 
 - 검토하지 않은 문서에는 배지를 넣지 않는다. 배지와 `Reviewed-by`가 어긋나면 검증에서 막힌다.
 
+## 수식과 다이어그램 표기
+
+- **수식**: 하이브리드. 의미 있는 수식은 GitHub LaTeX로 쓴다. 인라인은 `$ ... $`, 블록은 `$$ ... $$`. 복잡도 표기(`O(n log n)`)와 코드 식별자는 백틱을 유지한다.
+- 표 안에서 `$ ... $`를 쓸 수 있다. 검증기가 표 셀을 나눌 때 `$ ... $` 구간의 세로줄을 보호하지만, 조건부 확률 등은 `$P(A \mid B)$`처럼 `\mid`를 쓰는 편이 안전하다.
+- **다이어그램**: ` ```mermaid ` 블록을 우선 쓴다. 텍스트라 diff와 검토가 쉽고 GitHub가 바로 렌더한다.
+- 이미지가 꼭 필요할 때만 `assets/<Section>/`에 두고, 파일명은 의미 중심 `Title-Kebab-Case`로, 출처와 라이선스를 [Legal-and-Copyright-Policy.md](Maintainers/Legal-and-Copyright-Policy.md)에 따라 남긴다.
+
 ## 목차 정렬 원칙
 
 - README의 섹션과 주제 목록은 선수지식이 낮은 것에서 높은 것 순으로 배치한다.
@@ -139,6 +146,7 @@ BFB_of_CS/
 
 - 저장소 루트에서 `python Maintainers/Scripts/validate_docs.py` 또는 `py -3 Maintainers/Scripts/validate_docs.py`로 링크, 표, 메타데이터, README-본문 상태 동기화를 검사했는가
 - 상태를 추가하거나 올렸다면 `python Maintainers/Scripts/sync_summary_counts.py`로 운영 문서의 요약 수치를 자동으로 맞췄는가
+- 구조 준비 완료 기준이 필요한 변경이라면 [Project-Readiness.md](Maintainers/Project-Readiness.md)에 어긋나지 않는가
 - Markdown 파일에 UTF-8 BOM이 없는가
 - 로드맵 필수 문서라면 [Coverage-Matrix.md](Maintainers/Coverage-Matrix.md)에 반영되어 있는가
 - 핵심 경로 밖의 예정 문서라면 [Topic-Classification.md](Maintainers/Topic-Classification.md)에 반영되어 있는가
@@ -147,10 +155,12 @@ BFB_of_CS/
 - API 키, 토큰, 비밀번호, 개인정보, 내부 URL이 포함되지 않았는가
 - Markdown 상대 링크가 실제 파일이나 디렉토리를 가리키는가
 - 표 헤더와 구분선의 열 수가 맞는가
+- 수식은 의미 단위로 LaTeX(`$ ... $` / `$$ ... $$`)를 쓰고, 다이어그램은 Mermaid를 우선했는가
 - `Status` 값이 `Planned`, `Stub`, `Draft`, `Review`, `Complete` 중 하나인가
 - 주제 문서의 `Level` 값이 `Beginner`, `Intermediate`, `Advanced` 중 하나인가
 - `Draft` 이상 주제 문서의 `Prerequisites`가 비어 있지 않은가
-- `Reviewed-by`가 있다면 `이름 (YYYY-MM-DD)` 형식이고, `Complete` 문서에는 검토 표식이 있는가
+- 주제 문서에 `Reviewed-by`가 있으며, 검토 전이면 `-`, 검토 후이면 `이름 (YYYY-MM-DD)` 형식인가
+- `Complete` 문서에는 검토 표식이 있는가
 - 사람 검토를 마친 문서에 `> ✅ 사람 검토 완료` 배지가 있고 `Reviewed-by`와 일치하는가
 - 예정 파일명이 영어 `Title-Kebab-Case.md` 형식인가
 - 주제 파일명이 다른 섹션의 주제 파일명과 중복되지 않는가
