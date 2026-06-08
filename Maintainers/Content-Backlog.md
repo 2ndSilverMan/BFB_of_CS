@@ -14,21 +14,22 @@
 
 | 영역 | 현재 Draft | 남은 Planned | 우선 역할 |
 |---|---:|---:|---|
-| Programming | 4 | 3 | 모든 로드맵의 출발점 |
+| Programming | 5 | 28 | 모든 로드맵의 출발점 |
 | Math | 1 | 51 | CS/AI 공통 기반 |
 | Data-Structures | 5 | 12 | 알고리즘과 시스템 구현 기반 |
 | Algorithms | 4 | 30 | 문제 해결과 전공 핵심 기반 |
-| Systems | 0 | 49 | CS Core, Systems Engineer 기반 |
+| Systems | 0 | 54 | CS Core, Systems Engineer 기반 |
 | CS-Theory | 0 | 30 | 계산 이론, PL, 컴파일러 기반 |
 | AI | 0 | 191 | AI Core, ML Engineer, Researcher 기반 |
-| Engineering | 0 | 105 | 실무 설계, 운영, 품질 기반 |
+| Engineering | 0 | 112 | 실무 설계, 운영, 품질 기반 |
 
 ---
 
 ## 우선순위 기준
 
 - `P0`: 이미 작성된 읽기 가능한 최소 경로.
-- `P1`: 입문자 로드맵 완료 기준을 채우는 기초 문서.
+- `P1`: 입문자 최종 완료 기준 중 비시스템 기초를 채우는 문서.
+- `P1.5`: 입문자 최종 완료 기준 중 시스템 맛보기를 채우는 최소 문서.
 - `P2`: CS Core로 들어가기 위한 시스템/이론 최소 문서.
 - `P3`: AI Core로 들어가기 위한 수학/ML 최소 문서.
 - `P4`: CS Core 전공 흐름을 완성하는 문서.
@@ -46,6 +47,7 @@
 | Programming | [Control-Flow.md](../Programming/Control-Flow.md) | Draft |
 | Programming | [Functions-and-Recursion.md](../Programming/Functions-and-Recursion.md) | Draft |
 | Programming | [Arrays-and-Strings.md](../Programming/Arrays-and-Strings.md) | Draft |
+| Programming | [Language-Selection.md](../Programming/Language-Selection.md) | Draft |
 | Math/Discrete | [Logic.md](../Math/Discrete/Logic.md) | Draft |
 | Data-Structures | [Array.md](../Data-Structures/Array.md) | Draft |
 | Data-Structures | [Linked-List.md](../Data-Structures/Linked-List.md) | Draft |
@@ -57,27 +59,34 @@
 | Algorithms | [Binary-Search.md](../Algorithms/Binary-Search.md) | Draft |
 | Algorithms | [BFS-DFS.md](../Algorithms/BFS-DFS.md) | Draft |
 
-## P1: 입문자 완료 보강
+## P1: 입문자 비시스템 기초 보강
 
 | 섹션 | 파일 | 이유 |
 |---|---|---|
 | Data-Structures | `Binary-Tree.md` | 트리 계열과 재귀 구조의 공통 기반 |
 | Data-Structures | `Hash-Table.md` | 평균 O(1) 탐색과 해시 기반 자료구조 |
-| Algorithms | `DP-Basics.md` | 입문자 완료 기준의 기본 DP |
+| Algorithms | `DP-Basics.md` | 입문자 최종 완료 기준의 기본 DP |
 | Math/Discrete | `Induction.md` | 알고리즘 정당성 증명의 기본 |
 | Math/Discrete | `Graph-Theory.md` | 그래프 알고리즘 이해 보강 |
+
+## P1.5: 입문자 시스템 맛보기
+
+이 문서들은 CS Core의 시스템 파트로도 이어지지만, 입문자 로드맵의 최종 완료 기준에 직접 들어간다. P1 비시스템 기초 문서 직후에 최소 본문을 먼저 열어 둔다.
+
+| 섹션 | 파일 | 이유 |
+|---|---|---|
+| Systems/Computer-Architecture | `Data-Representation.md` | 이진수, 정수, 부동소수점 표현 |
+| Systems/Operating-Systems | `Processes-and-Threads.md` | 프로세스, 스레드, 메모리 용어의 시작점 |
+| Systems/Networks | `Network-Models.md` | TCP/IP 같은 네트워크 기본 용어의 뼈대 |
+| Systems/Databases | `Relational-Model-and-SQL.md` | SQL과 트랜잭션 학습의 입구 |
 
 ## P2: CS Core 진입 보강
 
 | 섹션 | 파일 | 이유 |
 |---|---|---|
-| Systems/Computer-Architecture | `Data-Representation.md` | 이진수, 정수, 부동소수점 표현 |
 | Systems/Computer-Architecture | `CPU-and-ISA.md` | 프로그램이 하드웨어에서 실행되는 흐름 |
-| Systems/Operating-Systems | `Processes-and-Threads.md` | OS 학습의 첫 관문 |
 | Systems/Operating-Systems | `Memory-Management.md` | 메모리 추상화 이해 |
-| Systems/Networks | `Network-Models.md` | 네트워크 계층 흐름 |
 | Systems/Networks | `TCP-UDP.md` | 전송 계층의 핵심 |
-| Systems/Databases | `Relational-Model-and-SQL.md` | DB 학습의 첫 관문 |
 | Systems/Databases | `Transactions-and-ACID.md` | 데이터 일관성의 핵심 |
 | CS-Theory/Computation-Theory | `Regular-Languages.md` | 계산 이론 시작점 |
 

@@ -94,6 +94,13 @@ def recursive_sum(values):
 - 반환값과 출력은 다르다. `print`는 화면에 보여 주는 부작용이고, `return`은 호출한 코드에 값을 돌려준다.
 - 기본 조건이 있어도 재귀 단계에서 문제 크기가 줄지 않으면 종료되지 않는다.
 
+## TMI
+
+- 재귀 예제로 factorial과 Fibonacci가 자주 나오지만, 실무에서는 트리, 파일 시스템, 파서처럼 "안에 같은 구조가 다시 들어 있는" 문제에서 특히 자연스럽다.
+- Python은 기본 재귀 깊이에 제한이 있다. 재귀가 너무 깊어질 수 있는 문제는 반복문이나 명시적 스택으로 바꾸는 편이 안전하다.
+- Python의 기본 인자 값은 함수가 호출될 때마다 새로 만들어지는 것이 아니라 함수가 정의될 때 한 번 만들어진다. 그래서 `def f(x=[]): ...` 같은 코드는 의도치 않게 리스트를 공유할 수 있다.
+- Java는 객체를 넘길 때도 "참조값을 값으로 복사"한다. 그래서 Java를 pass-by-reference라고 부르면 엄밀히는 틀린 설명이다.
+
 ## 연습 / 확인 문제 (Exercises)
 
 - 숫자 목록을 받아 최댓값을 반환하는 함수를 작성하라.
@@ -109,3 +116,5 @@ def recursive_sum(values):
 
 - [Programming/Control-Flow.md](Control-Flow.md)
 - [Algorithms/](../Algorithms/)
+- [Reference/Books.md](../Reference/Books.md)
+- [Reference/Courses.md](../Reference/Courses.md)

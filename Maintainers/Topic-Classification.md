@@ -90,7 +90,15 @@
 
 ### Engineering/DevOps
 
-`Ansible.md`, `AWS-Core-Services.md`, `Container-Networking-Volumes.md`, `Docker-Compose.md`, `GCP-Azure-Overview.md`, `GitHub-Flow.md`, `Git-Internals.md`, `Helm.md`, `Jenkins-GitLab-CI.md`, `Kubernetes-Advanced.md`, `Logging-Systems.md`, `Serverless.md`
+`Ansible.md`, `AWS-Core-Services.md`, `Container-Networking-Volumes.md`, `Docker-Compose.md`, `GCP-Azure-Overview.md`, `Git-Internals.md`, `Helm.md`, `Jenkins-GitLab-CI.md`, `Kubernetes-Advanced.md`, `Logging-Systems.md`, `Serverless.md`
+
+### Engineering/DevOps/Git
+
+`Git-Branches-Merging-Rebasing.md`, `Git-Conflict-Resolution.md`, `Git-Remotes.md`, `Git-Undoing-Changes.md`
+
+### Engineering/DevOps/GitHub
+
+`GitHub-Code-Review.md`, `GitHub-Flow.md`, `GitHub-Issues-and-Pull-Requests.md`, `GitHub-Repositories.md`
 
 ### Engineering/Performance
 
@@ -140,6 +148,26 @@
 
 `Riemann-Integration.md`
 
+### Programming/Languages/C
+
+`C-Arrays-Strings-Structs.md`, `C-Files-and-Builds.md`, `C-Pointers-and-Memory.md`, `C-Setup-and-Compilation.md`, `C-Types-and-Control-Flow.md`
+
+### Programming/Languages/Cpp
+
+`Cpp-Classes-and-Templates.md`, `Cpp-Memory-and-Smart-Pointers.md`, `Cpp-References-and-RAII.md`, `Cpp-STL.md`, `Cpp-Setup-and-Syntax.md`
+
+### Programming/Languages/Java
+
+`Java-Classes-and-Objects.md`, `Java-Collections.md`, `Java-Exceptions-and-Files.md`, `Java-Generics-and-Interfaces.md`, `Java-Setup-and-Syntax.md`
+
+### Programming/Languages/JavaScript
+
+`JavaScript-Async.md`, `JavaScript-DOM-and-Events.md`, `JavaScript-Functions-and-Scope.md`, `JavaScript-Setup-and-Syntax.md`, `JavaScript-Values-and-Coercion.md`
+
+### Programming/Languages/Python
+
+`Python-Collections.md`, `Python-Files-and-Errors.md`, `Python-Functions-and-Modules.md`, `Python-OOP.md`, `Python-Setup-and-Syntax.md`
+
 ### Systems/Computer-Architecture
 
 `Parallel-Architecture.md`, `Virtual-Memory-Hardware.md`
@@ -159,6 +187,10 @@
 ### Systems/Operating-Systems
 
 `IO-and-Drivers.md`
+
+### Systems/Operating-Systems/Linux
+
+`Linux-File-System.md`, `Linux-Packages-and-Logs.md`, `Linux-Processes-and-Services.md`, `Linux-Shell-Basics.md`, `Linux-Users-Permissions.md`
 
 ---
 

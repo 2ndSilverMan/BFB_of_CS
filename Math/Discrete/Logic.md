@@ -101,6 +101,13 @@ def cannot_enter(user):
 - "모든 x에 대해 참"의 반례는 단 하나의 x만 있으면 된다.
 - 복잡한 조건문은 코드 스타일 문제가 아니라 정확성 문제로 이어질 수 있다.
 
+## TMI
+
+- Boolean이라는 이름은 George Boole에서 왔다. 오늘날의 `true`/`false` 연산은 19세기 논리 대수의 아이디어와 이어져 있다.
+- 컴퓨터 회로의 AND, OR, NOT 게이트는 논리 연산을 물리적인 전기 신호로 구현한 것으로 볼 수 있다.
+- 수학 논리에서는 빈 집합의 모든 원소가 조건 P를 만족한다는 명제가 참이다. 이를 vacuous truth라고 부르며, 처음 배우면 꽤 이상하게 느껴진다.
+- Python의 `and`와 `or`는 항상 `True`/`False`만 반환하지 않는다. `a or b`는 실제로 선택된 피연산자 값을 반환할 수 있어서 기본값 처리에 자주 쓰인다.
+
 ## 연습 / 확인 문제 (Exercises)
 
 - `not (a < 10 and b != 0)`을 드모르간 법칙으로 바꾸라.
@@ -116,3 +123,5 @@ def cannot_enter(user):
 
 - [Math/Discrete/](./)
 - [Algorithms/](../../Algorithms/)
+- [Reference/Books.md](../../Reference/Books.md)
+- [Reference/Courses.md](../../Reference/Courses.md)

@@ -98,6 +98,13 @@ class Queue:
 - 큐가 비어 있을 때 `dequeue`를 어떻게 처리할지 정해야 한다. 예외를 던질 수도 있고 `None`을 반환할 수도 있다.
 - BFS에서 큐에 넣을 때 방문 처리하지 않으면 같은 노드가 여러 번 들어갈 수 있다.
 
+## TMI
+
+- 큐의 FIFO는 "First In, First Out"의 약자다. 먼저 줄 선 사람이 먼저 처리되는 대기열과 같은 규칙이다.
+- 운영체제, 메시지 브로커, 프린터, 게임 이벤트 루프처럼 "작업을 순서대로 처리해야 하는" 곳에는 거의 항상 큐가 숨어 있다.
+- `deque`는 double-ended queue의 줄임말이고 보통 "deck"처럼 읽는다. 양쪽 끝에서 삽입/삭제가 가능하다.
+- Kafka 같은 시스템은 큐처럼 쓰이지만, 파티션, 재시도, 소비자 그룹 때문에 단순한 FIFO 큐와는 동작이 달라질 수 있다.
+
 ## 연습 / 확인 문제 (Exercises)
 
 - deque를 사용해 큐 클래스를 구현하라.
@@ -113,3 +120,5 @@ class Queue:
 
 - [Data-Structures/Array.md](Array.md)
 - [Algorithms/BFS-DFS.md](../Algorithms/BFS-DFS.md)
+- [Reference/Books.md](../Reference/Books.md)
+- [Reference/Courses.md](../Reference/Courses.md)

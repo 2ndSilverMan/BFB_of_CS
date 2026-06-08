@@ -98,6 +98,13 @@ def is_balanced(text):
 - 재귀는 내부적으로 호출 스택을 사용하므로 깊이가 커지면 스택 오버플로가 날 수 있다.
 - 배열의 앞쪽을 스택의 top으로 쓰면 삽입/삭제가 O(n)이 될 수 있다. 끝쪽을 top으로 쓰는 편이 일반적이다.
 
+## TMI
+
+- 스택의 LIFO는 "Last In, First Out"의 약자다. 접시를 쌓아 두면 나중에 올린 접시를 먼저 꺼내는 것과 같다.
+- 프로그램 오류 메시지에서 자주 보는 "stack trace"는 함수 호출이 어떤 순서로 쌓였는지 보여 주는 기록이다.
+- 웹 브라우저의 뒤로 가기/앞으로 가기, 편집기의 undo/redo는 스택 두 개로 설명하기 좋은 대표 사례다.
+- "stack overflow"는 호출 스택이 너무 깊어져서 더 쌓을 공간이 없을 때 나는 오류 이름이기도 하다.
+
 ## 연습 / 확인 문제 (Exercises)
 
 - 문자열의 괄호 `()[]{}` 짝이 맞는지 검사하라.
@@ -113,3 +120,5 @@ def is_balanced(text):
 
 - [Data-Structures/Array.md](Array.md)
 - [Algorithms/BFS-DFS.md](../Algorithms/BFS-DFS.md)
+- [Reference/Books.md](../Reference/Books.md)
+- [Reference/Courses.md](../Reference/Courses.md)

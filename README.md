@@ -13,6 +13,8 @@
 3. [배열](Data-Structures/Array.md) → [연결 리스트](Data-Structures/Linked-List.md) → [스택](Data-Structures/Stack.md) / [큐](Data-Structures/Queue.md) → [그래프 표현](Data-Structures/Graph-Representation.md)
 4. [복잡도 분석](Algorithms/Complexity.md) → [정렬](Algorithms/Sorting.md) → [이진 탐색](Algorithms/Binary-Search.md) → [BFS / DFS](Algorithms/BFS-DFS.md)
 
+특정 언어를 골라 배우려면 공통 프로그래밍 기초 뒤에 [언어 선택 가이드](Programming/Language-Selection.md)와 [언어별 학습 트랙](Programming/Languages/)을 읽는다.
+
 목적이 분명하다면 [학습 로드맵](Roadmaps/)에서 바로 맞는 경로를 고른다.
 
 ---
@@ -43,7 +45,7 @@
 
 | 섹션 | 내용 |
 |---|---|
-| [Programming/](Programming/) | 프로그래밍 기초 — 변수, 함수, 재귀, 추상화, 언어 입문 |
+| [Programming/](Programming/) | 프로그래밍 기초 - 변수, 함수, 재귀, 추상화, Python/JavaScript/C/Java/C++ 언어 입문 |
 | [Math/](Math/) | CS와 AI의 수학적 기반 — 이산수학, 선형대수, 확률/통계, 미적분, 최적화 |
 | [Data-Structures/](Data-Structures/) | 배열, 연결 리스트, 트리, 그래프, 해시 등 자료 표현 방법 |
 | [Algorithms/](Algorithms/) | 정렬, 탐색, DP, 그래프 알고리즘, 알고리즘 설계 기법 |
@@ -78,6 +80,8 @@
 ## 작성자용 문서
 
 본문 작성 우선순위, 로드맵 커버리지, 참조 자료 보강, 템플릿, 검수 스크립트는 [Maintainers/](Maintainers/)에서 관리한다.
+저작권, 라이선스, 개인정보, 법적 리스크 방지 규칙은 [Legal and Copyright Policy](Maintainers/Legal-and-Copyright-Policy.md)를 따른다.
+현재 루트 `LICENSE`는 아직 없으므로 저장소 밖 재사용 조건은 별도로 정해지지 않았다.
 
 ---
 

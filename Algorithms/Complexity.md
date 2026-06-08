@@ -98,6 +98,13 @@ def has_duplicate_fast(values):
 - 중첩 반복문이 항상 O(n^2)은 아니다. 반복 범위가 입력과 어떻게 연결되는지 봐야 한다.
 - 공간 복잡도에는 보조 자료구조뿐 아니라 재귀 호출 스택도 포함된다.
 
+## TMI
+
+- Big-O 표기법은 Bachmann과 Landau의 이름을 따라 Landau notation이라고도 불린다.
+- 실무에서는 Big-O가 같아도 상수항, 캐시 지역성, 메모리 할당 비용 때문에 실제 속도가 크게 달라질 수 있다.
+- Big-O에서는 로그의 밑이 보통 중요하지 않다. `log2 n`과 `log10 n`은 상수배 차이라 둘 다 O(log n)으로 본다.
+- 해시 테이블 조회를 O(1)이라고 말할 때는 좋은 해시 함수와 적당한 부하율을 가정한다. 충돌이 심하면 실제 성능은 크게 나빠질 수 있다.
+
 ## 연습 / 확인 문제 (Exercises)
 
 - 배열의 합을 구하는 함수의 시간/공간 복잡도를 분석하라.
@@ -113,3 +120,5 @@ def has_duplicate_fast(values):
 
 - [Data-Structures/Array.md](../Data-Structures/Array.md)
 - [Programming/Control-Flow.md](../Programming/Control-Flow.md)
+- [Reference/Books.md](../Reference/Books.md)
+- [Reference/Courses.md](../Reference/Courses.md)

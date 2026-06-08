@@ -106,6 +106,13 @@ print(steps)
 - `break`는 반복문 전체를 끝내고, `continue`는 현재 반복만 건너뛴다.
 - 중첩 반복문이 항상 O(n^2)은 아니다. 각 루프의 반복 횟수를 따로 봐야 한다.
 
+## TMI
+
+- 구조적 프로그래밍이 널리 퍼지기 전에는 `goto`로 실행 위치를 직접 옮기는 코드가 흔했다. Dijkstra의 "Go To Statement Considered Harmful"은 조건문, 반복문, 함수 중심으로 코드를 구조화하는 흐름에 큰 영향을 주었다.
+- Python의 `for`는 C/Java의 전통적인 카운터 반복문보다 "반복 가능한 값들을 하나씩 꺼낸다"는 의미에 더 가깝다.
+- Python에는 `for ... else` 문법이 있다. 반복문이 `break` 없이 끝났을 때 `else`가 실행되는데, 처음 보면 조건문의 `else`처럼 보여 헷갈리기 쉽다.
+- C와 Java에는 `do ... while`처럼 본문을 최소 한 번 실행하는 반복문이 있지만, Python에는 같은 모양의 전용 문법이 없다.
+
 ## 연습 / 확인 문제 (Exercises)
 
 - 1부터 100까지의 정수 중 짝수만 출력하라.
@@ -121,3 +128,6 @@ print(steps)
 
 - [Programming/Variables-and-Types.md](Variables-and-Types.md)
 - [Algorithms/Complexity.md](../Algorithms/Complexity.md)
+- [Reference/Books.md](../Reference/Books.md)
+- [Reference/Courses.md](../Reference/Courses.md)
+- [Reference/Papers.md](../Reference/Papers.md)

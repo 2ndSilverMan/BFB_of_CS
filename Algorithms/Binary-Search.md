@@ -99,6 +99,13 @@ def lower_bound(values, target):
 - 중복 값이 있을 때 일반 이진 탐색은 아무 위치나 반환할 수 있다.
 - 정렬 비용이 탐색 비용보다 클 수 있다. 한 번만 찾을 거면 선형 탐색이 더 나을 수도 있다.
 
+## TMI
+
+- 이진 탐색은 아이디어는 단순하지만 경계 조건 버그가 자주 나는 알고리즘으로 유명하다. `left`, `right`, `mid`의 의미를 먼저 정해야 구현이 흔들리지 않는다.
+- 예전에는 `mid = (left + right) // 2`가 매우 큰 정수에서 오버플로를 일으킬 수 있었다. 그래서 `left + (right - left) // 2` 형태를 권장하는 언어도 많다.
+- Python의 `bisect` 모듈은 값을 찾았는지 직접 알려 주기보다 "어디에 끼워 넣으면 정렬이 유지되는지"를 알려 준다.
+- Java의 `Arrays.binarySearch`는 값을 못 찾으면 음수를 반환하는데, 그 값은 삽입 위치를 인코딩한 것이다. 처음 보면 에러 코드처럼 보인다.
+
 ## 연습 / 확인 문제 (Exercises)
 
 - 정렬된 배열에서 특정 값의 인덱스를 반환하라. 없으면 `-1`을 반환하라.
@@ -114,3 +121,5 @@ def lower_bound(values, target):
 
 - [Algorithms/Sorting.md](Sorting.md)
 - [Algorithms/Complexity.md](Complexity.md)
+- [Reference/Books.md](../Reference/Books.md)
+- [Reference/Courses.md](../Reference/Courses.md)

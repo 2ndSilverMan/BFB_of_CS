@@ -15,20 +15,19 @@
 
 ## 주제 목록
 
-### 버전 관리
+### 버전 관리와 협업
 
-| 주제 | 파일 | Status |
-|---|---|---|
-| Git 기초 — 커밋, 브랜치, 머지, 리베이스 | Git-Basics.md | Planned |
-| GitHub Flow / Trunk-Based Development | GitHub-Flow.md | Planned |
-| Git 내부 구조 — 오브젝트 모델, 팩파일 | Git-Internals.md | Planned |
+| 주제 | 파일 | 설명 | Status |
+|---|---|---|---|
+| Git 학습 트랙 | [Git/](Git/) | 커밋, 브랜치, 원격 저장소, 충돌 해결 | Planned |
+| GitHub 학습 트랙 | [GitHub/](GitHub/) | 저장소, 이슈, Pull Request, 코드 리뷰, Actions | Planned |
+| Git 내부 구조 | Git-Internals.md | 오브젝트 모델, 팩파일 | Planned |
 
 ### CI/CD
 
 | 주제 | 파일 | Status |
 |---|---|---|
 | CI/CD 개념 — 지속적 통합과 배포의 원칙 | CICD-Principles.md | Planned |
-| GitHub Actions | GitHub-Actions.md | Planned |
 | Jenkins / GitLab CI | Jenkins-GitLab-CI.md | Planned |
 | 배포 전략 — Blue-Green, Canary, Rolling | Deployment-Strategies.md | Planned |
 
@@ -73,7 +72,7 @@
 ## 학습 순서
 
 ```text
-Git → CI/CD
+Git → GitHub → CI/CD
          ↓
       Docker → Kubernetes
          ↓
@@ -89,6 +88,7 @@ Git → CI/CD
 ## 연관 섹션
 
 - [Systems/Operating-Systems/](../../Systems/Operating-Systems/) — 프로세스, 파일 시스템 (컨테이너 기반)
+- [Systems/Operating-Systems/Linux/](../../Systems/Operating-Systems/Linux/) — Linux 셸과 서버 운영 실습
 - [Systems/Networks/](../../Systems/Networks/) — 컨테이너 네트워킹, 클라우드 VPC
 - [Systems/Distributed-Systems/](../../Systems/Distributed-Systems/) — Kubernetes 이론적 기반
 - [Engineering/Performance/](../Performance/) — 배포 후 성능 모니터링

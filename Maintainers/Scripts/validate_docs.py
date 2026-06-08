@@ -6,7 +6,7 @@ import sys
 from dataclasses import dataclass
 from functools import lru_cache
 from pathlib import Path
-from urllib.parse import unquote
+from urllib.parse import unquote, urlparse
 
 
 VALID_STATUSES = {"Planned", "Stub", "Draft", "Review", "Complete"}
@@ -20,11 +20,12 @@ TOPIC_REQUIRED_HEADINGS = (
     "## 복잡도",
     "## 응용",
     "## 흔한 오해",
+    "## TMI",
     "## 연습 / 확인 문제",
     "## 이어서 읽기",
     "## 참조",
 )
-NON_TOPIC_DIRS = {"Maintainers", "Reference", "Roadmaps", "Templates"}
+NON_TOPIC_DIRS = {".github", "Maintainers", "Reference", "Roadmaps", "Templates"}
 LEARNING_DIRS = {
     "Programming",
     "Math",
@@ -41,10 +42,12 @@ REQUIRED_MAINTAINER_DOCS = (
     "Maintainers/Coverage-Matrix.md",
     "Maintainers/Topic-Classification.md",
     "Maintainers/Reference-Coverage.md",
+    "Maintainers/Legal-and-Copyright-Policy.md",
 )
 REQUIRED_SUPPORT_FILES = (
     ".gitattributes",
     ".gitignore",
+    ".github/pull_request_template.md",
     ".github/workflows/docs.yml",
     "CONTRIBUTING.md",
     "README.md",
@@ -71,6 +74,15 @@ REFERENCE_DOCS = {
     "Courses": "Reference/Courses.md",
     "Papers": "Reference/Papers.md",
 }
+DISALLOWED_EXTERNAL_LINK_DOMAIN_KEYWORDS = (
+    "sci-hub",
+    "libgen",
+    "z-library",
+    "z-lib",
+    "pdfdrive",
+    "thepiratebay",
+    "1337x",
+)
 REFERENCE_COVERAGE_DOC = "Maintainers/Reference-Coverage.md"
 REFERENCE_AREA_HEADINGS = {
     "프로그래밍 (Programming)": "Programming",
@@ -123,6 +135,14 @@ def check_markdown_encoding(path: Path, root: Path) -> list[Issue]:
 
 def is_external_link_target(target: str) -> bool:
     return re.match(r"^[a-zA-Z][a-zA-Z0-9+.-]*:", target) is not None
+
+
+def has_disallowed_external_link_domain(target: str) -> bool:
+    parsed = urlparse(target)
+    hostname = (parsed.hostname or "").lower()
+    if hostname.startswith("www."):
+        hostname = hostname[4:]
+    return any(keyword in hostname for keyword in DISALLOWED_EXTERNAL_LINK_DOMAIN_KEYWORDS)
 
 
 def split_link_target(target: str) -> tuple[str, str | None]:
@@ -193,6 +213,15 @@ def check_links(path: Path, root: Path, lines: list[str]) -> list[Issue]:
 
             clean_target, fragment = split_link_target(target)
             if clean_target and is_external_link_target(clean_target):
+                if has_disallowed_external_link_domain(clean_target):
+                    issues.append(
+                        Issue(
+                            "DisallowedExternalLink",
+                            relative(path, root),
+                            line_number,
+                            f"External link domain appears to violate legal/copyright policy: {target}",
+                        )
+                    )
                 continue
 
             resolved = (path.parent / clean_target.replace("\\", "/")).resolve() if clean_target else path.resolve()

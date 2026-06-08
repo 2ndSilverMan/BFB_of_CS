@@ -96,6 +96,13 @@ print(number + 1)  # 43
 - 타입 변환은 값의 의미를 보장하지 않는다. `"0012"`를 정수로 바꾸면 앞의 0 정보는 사라진다.
 - 동적 타입 언어가 타입이 없는 언어라는 뜻은 아니다. 타입 검사를 실행 중에 할 뿐이다.
 
+## TMI
+
+- `Boolean` 타입의 이름은 논리 대수의 기반을 만든 수학자 George Boole에서 왔다.
+- Python에서는 `bool`이 `int`의 하위 타입이라 `True + True`가 `2`가 된다. 실무 코드에서 일부러 이렇게 쓰는 것은 보통 피한다.
+- JavaScript에서는 `typeof null`이 `"object"`로 나온다. 오래된 설계 실수가 호환성 때문에 계속 남아 있는 유명한 TMI다.
+- null reference 개념을 만든 Tony Hoare는 훗날 이를 "billion-dollar mistake"라고 불렀다. 비어 있을 수 있는 값을 타입으로 표현하려는 현대 언어들의 흐름은 이 문제의식과 연결된다.
+
 ## 연습 / 확인 문제 (Exercises)
 
 - 이름, 나이, 학생 여부, 점수 목록을 변수로 저장하고 한 문장으로 출력해 보라.
@@ -111,3 +118,4 @@ print(number + 1)  # 43
 
 - [Programming/](./)
 - [Reference/Books.md](../Reference/Books.md)
+- [Reference/Courses.md](../Reference/Courses.md)

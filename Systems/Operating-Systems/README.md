@@ -26,6 +26,12 @@
 | 파일 시스템 | File-Systems.md | Planned |
 | 입출력과 디바이스 드라이버 | IO-and-Drivers.md | Planned |
 
+### 실습 트랙
+
+| 주제 | 위치 | 설명 | Status |
+|---|---|---|---|
+| Linux 학습 트랙 | [Linux/](Linux/) | 셸, 파일 시스템, 권한, 프로세스, 서비스 운영 기초 | Planned |
+
 ---
 
 ## 학습 순서
@@ -38,6 +44,8 @@ Synchronization → Deadlock
 Memory-Management → Virtual-Memory
         ↓
 File-Systems → IO-and-Drivers
+        ↓
+Linux 실습 트랙
 ```
 
 ---
@@ -48,3 +56,4 @@ File-Systems → IO-and-Drivers
 - [Systems/Parallel-Computing/](../Parallel-Computing/) — 스레드, 동기화, 병렬 실행 모델
 - [Systems/Networks/](../Networks/) — 소켓, 커널 네트워크 스택
 - [Engineering/Debugging/](../../Engineering/Debugging/) — 프로세스, 메모리, 동시성 버그 분석
+- [Engineering/DevOps/](../../Engineering/DevOps/) — Linux 서버 운영과 배포 자동화

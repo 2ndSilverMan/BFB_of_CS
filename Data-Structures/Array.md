@@ -84,6 +84,13 @@ def max_value(values):
 - 동적 배열의 `append`는 항상 O(1)이 아니라 평균 O(1)이다.
 - 배열과 연결 리스트는 둘 다 선형 구조지만 성능 특성이 크게 다르다.
 
+## TMI
+
+- 많은 언어가 0부터 인덱스를 세는 이유 중 하나는 배열의 시작 주소에서 얼마나 떨어져 있는지를 바로 오프셋으로 볼 수 있기 때문이다.
+- Python의 `list`는 이름은 리스트지만 내부적으로는 연결 리스트가 아니라 동적 배열에 가깝다.
+- 동적 배열은 보통 실제 길이보다 큰 용량을 미리 잡아 둔다. 그래서 원소를 하나 추가할 때마다 매번 새 배열을 만들지는 않는다.
+- 배열은 단순해 보여도 CPU 캐시와 잘 맞아서 실제 성능이 좋을 때가 많다. 연결 리스트가 이론상 삽입/삭제에 유리해도 실전에서 배열이 이기는 이유 중 하나다.
+
 ## 연습 / 확인 문제 (Exercises)
 
 - 숫자 배열에서 최솟값과 최댓값을 동시에 찾는 함수를 작성하라.
@@ -100,3 +107,5 @@ def max_value(values):
 - [Programming/Control-Flow.md](../Programming/Control-Flow.md)
 - [Data-Structures/Linked-List.md](Linked-List.md)
 - [Algorithms/Complexity.md](../Algorithms/Complexity.md)
+- [Reference/Books.md](../Reference/Books.md)
+- [Reference/Courses.md](../Reference/Courses.md)

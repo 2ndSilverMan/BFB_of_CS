@@ -7,7 +7,7 @@
 | 템플릿 | 용도 | 대상 |
 |---|---|---|
 | [섹션 README 템플릿](Section-README-Template.md) | 상위 지식 영역의 허브 | `Math/README.md`, `Systems/README.md`, `CS-Theory/README.md`, `AI/README.md`, `Engineering/README.md` |
-| [주제 인덱스 README 템플릿](Topic-Index-README-Template.md) | 상위/하위 주제 목록과 커버리지 관리 | `Programming/README.md`, `Data-Structures/README.md`, `Algorithms/README.md`, `AI/MLOps/README.md`, `Engineering/DevOps/README.md` |
+| [주제 인덱스 README 템플릿](Topic-Index-README-Template.md) | 상위/하위 주제 목록과 커버리지 관리 | `Programming/README.md`, `Programming/Languages/README.md`, `Programming/Languages/Python/README.md`, `Data-Structures/README.md`, `Algorithms/README.md`, `Systems/Operating-Systems/Linux/README.md`, `AI/MLOps/README.md`, `Engineering/DevOps/README.md`, `Engineering/DevOps/Git/README.md`, `Engineering/DevOps/GitHub/README.md` |
 | [개별 주제 문서 템플릿](Topic-Template.md) | 개별 개념, 알고리즘, 이론, 기술 문서 작성 | `Linear-Regression.md`, `BFS-DFS.md` |
 | [로드맵 템플릿](Roadmap-Template.md) | 목적별 학습 순서 | `Roadmaps/*.md` |
 | [참조 목록 템플릿](Reference-List-Template.md) | 책, 강의, 논문 목록 | `Reference/Books.md`, `Reference/Courses.md`, `Reference/Papers.md` |

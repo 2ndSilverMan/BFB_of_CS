@@ -100,6 +100,13 @@ def square_all(values):
 - `len(values)`가 항상 비싼 것은 아니다. 많은 언어에서 길이는 별도로 저장되어 O(1)이다.
 - 빈 배열과 `None`은 다르다. 빈 배열은 원소가 0개인 정상 값이다.
 
+## TMI
+
+- C 문자열은 마지막에 `\0`이라는 널 문자를 두어 끝을 표시한다. 그래서 길이를 따로 저장하는 Python 문자열과 성능/안전성 특성이 다르다.
+- "문자 하나"도 생각보다 복잡하다. 이모지나 한글 조합 문자처럼 화면에 한 글자처럼 보이는 값이 내부적으로 여러 코드 포인트일 수 있다.
+- JavaScript의 배열 정렬은 비교 함수를 주지 않으면 값을 문자열처럼 비교해서 `[1, 10, 2]` 같은 결과가 나올 수 있다.
+- Python 문자열은 불변이다. `s += "x"`가 매번 기존 문자열을 직접 고치는 것이 아니라 새 문자열을 만드는 식으로 동작할 수 있다.
+
 ## 연습 / 확인 문제 (Exercises)
 
 - 숫자 배열에서 짝수만 골라 새 배열로 반환하라.
@@ -116,3 +123,5 @@ def square_all(values):
 - [Programming/Variables-and-Types.md](Variables-and-Types.md)
 - [Programming/Control-Flow.md](Control-Flow.md)
 - [Data-Structures/Array.md](../Data-Structures/Array.md)
+- [Reference/Books.md](../Reference/Books.md)
+- [Reference/Courses.md](../Reference/Courses.md)

@@ -20,14 +20,14 @@
 
 | 영역 | Draft | Planned | 역할 |
 |---|---:|---:|---|
-| Programming | 4 | 3 | 모든 로드맵의 출발점 |
+| Programming | 5 | 28 | 모든 로드맵의 출발점 |
 | Math | 1 | 51 | CS/AI 이론의 공통 기반 |
 | Data-Structures | 5 | 12 | 알고리즘과 시스템 구현 기반 |
 | Algorithms | 4 | 30 | CS 핵심과 코딩 문제 해결 기반 |
-| Systems | 0 | 49 | CS Core, Systems Engineer 기반 |
+| Systems | 0 | 54 | CS Core, Systems Engineer 기반 |
 | CS-Theory | 0 | 30 | 이론/컴파일러/보안 기반 |
 | AI | 0 | 191 | AI Core, ML Engineer, Researcher 기반 |
-| Engineering | 0 | 105 | 실무 운영, 설계, 품질 기반 |
+| Engineering | 0 | 112 | 실무 운영, 설계, 품질 기반 |
 
 ---
 
@@ -37,7 +37,7 @@
 
 | 단계 | 필수 문서 |
 |---|---|
-| 프로그래밍 | [Variables-and-Types.md](../Programming/Variables-and-Types.md), [Control-Flow.md](../Programming/Control-Flow.md), [Functions-and-Recursion.md](../Programming/Functions-and-Recursion.md), [Arrays-and-Strings.md](../Programming/Arrays-and-Strings.md) |
+| 프로그래밍 | [Variables-and-Types.md](../Programming/Variables-and-Types.md), [Control-Flow.md](../Programming/Control-Flow.md), [Functions-and-Recursion.md](../Programming/Functions-and-Recursion.md), [Arrays-and-Strings.md](../Programming/Arrays-and-Strings.md), [Language-Selection.md](../Programming/Language-Selection.md) |
 | 이산수학 | [Logic.md](../Math/Discrete/Logic.md), `Induction.md`, `Graph-Theory.md` |
 | 자료구조 | [Array.md](../Data-Structures/Array.md), [Linked-List.md](../Data-Structures/Linked-List.md), [Stack.md](../Data-Structures/Stack.md), [Queue.md](../Data-Structures/Queue.md), [Graph-Representation.md](../Data-Structures/Graph-Representation.md), `Binary-Tree.md`, `Hash-Table.md` |
 | 알고리즘 | [Complexity.md](../Algorithms/Complexity.md), [Sorting.md](../Algorithms/Sorting.md), [Binary-Search.md](../Algorithms/Binary-Search.md), [BFS-DFS.md](../Algorithms/BFS-DFS.md), `DP-Basics.md` |

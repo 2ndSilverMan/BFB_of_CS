@@ -102,6 +102,13 @@ def contains(head, target):
 - 노드 삭제 시 이전 노드의 링크를 바꾸지 않으면 리스트가 끊기거나 삭제가 반영되지 않는다.
 - 순환이 생기면 단순 순회가 끝나지 않을 수 있다.
 
+## TMI
+
+- Lisp라는 언어 이름은 "LISt Processor"에서 왔다. 리스트와 `cons` 셀은 초기 인공지능 연구와 함수형 프로그래밍 문화에서 매우 중요한 자료구조였다.
+- 연결 리스트의 순환 여부를 찾는 대표 기법은 빠른 포인터와 느린 포인터를 함께 움직이는 Floyd cycle-finding algorithm이다.
+- Linux 커널 코드에는 데이터 안에 링크 포인터를 직접 넣는 intrusive linked list 패턴이 널리 쓰인다. 자료구조가 노드를 감싸는 방식과 반대로, 사용자가 가진 구조체 안에 리스트 연결 정보가 들어간다.
+- 면접에서는 연결 리스트가 자주 나오지만, 일반 애플리케이션 코드에서는 동적 배열, 해시 맵, 덱이 더 자주 쓰이는 편이다.
+
 ## 연습 / 확인 문제 (Exercises)
 
 - 연결 리스트의 길이를 세는 함수를 작성하라.
@@ -117,3 +124,5 @@ def contains(head, target):
 
 - [Data-Structures/Array.md](Array.md)
 - [Programming/Functions-and-Recursion.md](../Programming/Functions-and-Recursion.md)
+- [Reference/Books.md](../Reference/Books.md)
+- [Reference/Courses.md](../Reference/Courses.md)

@@ -96,6 +96,13 @@ print(matrix[0][2] == 1)  # A-C 연결 여부
 - 정점 번호가 0부터 연속이면 배열 기반 표현이 편하고, 문자열/객체 키면 딕셔너리 기반 표현이 편하다.
 - 가중치 그래프는 이웃을 단순 값이 아니라 `(neighbor, weight)` 형태로 저장해야 한다.
 
+## TMI
+
+- 그래프 이론의 대표적인 출발점으로 Euler의 "쾨니히스베르크의 일곱 다리" 문제가 자주 언급된다. 도시의 다리를 한 번씩만 건널 수 있는지 묻는 문제였다.
+- 소셜 네트워크에서 "친구의 친구"를 찾는 일도 그래프의 이웃을 따라가는 연산으로 볼 수 있다.
+- 그래프에는 자기 자신으로 돌아오는 self-loop나 같은 두 정점을 잇는 parallel edge도 있을 수 있다. 문제에서 금지하지 않았다면 표현 방식이 이를 감당하는지 확인해야 한다.
+- 그래프 그림에서 정점 위치는 보통 의미가 없다. 선이 교차해 보여도 실제로 간선이 만나는지는 정점으로 표시되었는지 봐야 한다.
+
 ## 연습 / 확인 문제 (Exercises)
 
 - 무방향 그래프의 간선 목록을 인접 리스트로 변환하라.
@@ -111,3 +118,6 @@ print(matrix[0][2] == 1)  # A-C 연결 여부
 
 - [Algorithms/BFS-DFS.md](../Algorithms/BFS-DFS.md)
 - [Data-Structures/Array.md](Array.md)
+- [Reference/Books.md](../Reference/Books.md)
+- [Reference/Courses.md](../Reference/Courses.md)
+- [Reference/Papers.md](../Reference/Papers.md)

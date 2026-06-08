@@ -93,7 +93,9 @@
 ```text
 Complexity → Sorting → Binary-Search
        ↓
-Data-Structures/Graph-Representation → BFS-DFS
+Data-Structures/Stack + Data-Structures/Queue + Data-Structures/Graph-Representation
+       ↓
+BFS-DFS
 ```
 
 DP, 그리디, 백트래킹, 최단 경로는 이후 확장 주제다.

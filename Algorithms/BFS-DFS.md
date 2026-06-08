@@ -1,7 +1,7 @@
 # BFS / DFS
 
 - Level: Beginner
-- Prerequisites: [Data-Structures/Array.md](../Data-Structures/Array.md), [Data-Structures/Linked-List.md](../Data-Structures/Linked-List.md), [Algorithms/Complexity.md](Complexity.md)
+- Prerequisites: [Data-Structures/Graph-Representation.md](../Data-Structures/Graph-Representation.md), [Data-Structures/Queue.md](../Data-Structures/Queue.md), [Data-Structures/Stack.md](../Data-Structures/Stack.md), [Algorithms/Complexity.md](Complexity.md)
 - Status: Draft
 
 ---
@@ -117,6 +117,13 @@ print(dfs(graph, "A"))
 - DFS 재귀 구현은 깊은 그래프에서 호출 스택 한계에 걸릴 수 있다.
 - 방문 처리를 큐에서 꺼낼 때 할지, 큐에 넣을 때 할지에 따라 중복 삽입이 생길 수 있다.
 
+## TMI
+
+- BFS는 "가까운 곳부터 넓게" 퍼지는 탐색이라 소셜 네트워크의 몇 단계 연결, 격자 미로 최단 거리 같은 문제와 잘 맞는다.
+- DFS는 "한 길을 끝까지" 들어가는 탐색이라 백트래킹, 퍼즐 탐색, 트리 순회에서 자주 보인다.
+- BFS는 최단 거리를 잘 찾지만 큐에 많은 정점이 한꺼번에 쌓일 수 있어 메모리를 크게 먹을 수 있다.
+- 온라인 저지에서 Python 재귀 DFS는 입력이 깊으면 `RecursionError`가 나기 쉽다. 재귀 제한을 올리는 방법도 있지만, 명시적 스택이 더 안전한 경우가 많다.
+
 ## 연습 / 확인 문제 (Exercises)
 
 - 2차원 격자 미로에서 시작점에서 도착점까지의 최단 거리를 BFS로 구하라.
@@ -131,5 +138,9 @@ print(dfs(graph, "A"))
 ## 참조 (References)
 
 - [Algorithms/Complexity.md](Complexity.md)
-- [Data-Structures/Array.md](../Data-Structures/Array.md)
-- [Data-Structures/Linked-List.md](../Data-Structures/Linked-List.md)
+- [Data-Structures/Graph-Representation.md](../Data-Structures/Graph-Representation.md)
+- [Data-Structures/Queue.md](../Data-Structures/Queue.md)
+- [Data-Structures/Stack.md](../Data-Structures/Stack.md)
+- [Reference/Books.md](../Reference/Books.md)
+- [Reference/Courses.md](../Reference/Courses.md)
+- [Reference/Papers.md](../Reference/Papers.md)

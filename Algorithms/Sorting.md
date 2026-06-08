@@ -95,6 +95,13 @@ print(sorted(people, key=lambda person: person["age"]))
 - 안정 정렬 여부는 객체를 여러 기준으로 정렬할 때 중요하다.
 - 실무에서는 직접 정렬 알고리즘을 구현하기보다 언어의 표준 정렬을 쓰는 경우가 많다.
 
+## TMI
+
+- Python의 내장 정렬은 Tim Peters가 만든 Timsort를 사용한다. 이미 어느 정도 정렬된 구간을 잘 활용하도록 설계된 정렬이다.
+- "안정 정렬"은 같은 점수의 학생들을 이름순으로 미리 정렬해 둔 뒤 점수순으로 다시 정렬할 때처럼, 이전 정렬 결과를 보존하고 싶을 때 빛난다.
+- Python의 `list.sort()`와 `sorted()`는 모두 안정 정렬이다. 그래서 여러 기준 정렬을 뒤에서부터 차례대로 적용하는 테크닉이 가능하다.
+- 문자열 정렬은 사람이 기대하는 사전순과 다를 수 있다. 대소문자, 한글, 악센트 문자는 locale이나 정규화 방식에 영향을 받는다.
+
 ## 연습 / 확인 문제 (Exercises)
 
 - 삽입 정렬이 거의 정렬된 배열에서 빠른 이유를 설명하라.
@@ -110,3 +117,5 @@ print(sorted(people, key=lambda person: person["age"]))
 
 - [Algorithms/Complexity.md](Complexity.md)
 - [Algorithms/Binary-Search.md](Binary-Search.md)
+- [Reference/Books.md](../Reference/Books.md)
+- [Reference/Courses.md](../Reference/Courses.md)
