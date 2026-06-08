@@ -12,16 +12,16 @@
 전체 로드맵별 필수 문서 매핑은 [Coverage-Matrix.md](Coverage-Matrix.md)를 따른다.
 핵심 경로 밖의 `Optional`/`Deferred` 주제 분류는 [Topic-Classification.md](Topic-Classification.md)를 따른다.
 
-| 영역 | 현재 Draft | 남은 Planned | 우선 역할 |
-|---|---:|---:|---|
-| Programming | 5 | 28 | 모든 로드맵의 출발점 |
-| Math | 1 | 51 | CS/AI 공통 기반 |
-| Data-Structures | 5 | 12 | 알고리즘과 시스템 구현 기반 |
-| Algorithms | 4 | 30 | 문제 해결과 전공 핵심 기반 |
-| Systems | 0 | 54 | CS Core, Systems Engineer 기반 |
-| CS-Theory | 0 | 30 | 계산 이론, PL, 컴파일러 기반 |
-| AI | 0 | 191 | AI Core, ML Engineer, Researcher 기반 |
-| Engineering | 0 | 112 | 실무 설계, 운영, 품질 기반 |
+| 영역 | 현재 Draft | Review | 남은 Planned | 우선 역할 |
+|---|---:|---:|---:|---|
+| Programming | 3 | 2 | 28 | 모든 로드맵의 출발점 |
+| Math | 1 | 0 | 51 | CS/AI 공통 기반 |
+| Data-Structures | 5 | 0 | 12 | 알고리즘과 시스템 구현 기반 |
+| Algorithms | 2 | 2 | 30 | 문제 해결과 전공 핵심 기반 |
+| Systems | 0 | 0 | 54 | CS Core, Systems Engineer 기반 |
+| CS-Theory | 0 | 0 | 30 | 계산 이론, PL, 컴파일러 기반 |
+| AI | 0 | 0 | 191 | AI Core, ML Engineer, Researcher 기반 |
+| Engineering | 0 | 0 | 112 | 실무 설계, 운영, 품질 기반 |
 
 ---
 
@@ -43,11 +43,11 @@
 
 | 섹션 | 파일 | 상태 |
 |---|---|---|
-| Programming | [Variables-and-Types.md](../Programming/Variables-and-Types.md) | Draft |
+| Programming | [Variables-and-Types.md](../Programming/Variables-and-Types.md) | Review |
 | Programming | [Control-Flow.md](../Programming/Control-Flow.md) | Draft |
 | Programming | [Functions-and-Recursion.md](../Programming/Functions-and-Recursion.md) | Draft |
 | Programming | [Arrays-and-Strings.md](../Programming/Arrays-and-Strings.md) | Draft |
-| Programming | [Language-Selection.md](../Programming/Language-Selection.md) | Draft |
+| Programming | [Language-Selection.md](../Programming/Language-Selection.md) | Review |
 | Math/Discrete | [Logic.md](../Math/Discrete/Logic.md) | Draft |
 | Data-Structures | [Array.md](../Data-Structures/Array.md) | Draft |
 | Data-Structures | [Linked-List.md](../Data-Structures/Linked-List.md) | Draft |
@@ -55,9 +55,9 @@
 | Data-Structures | [Queue.md](../Data-Structures/Queue.md) | Draft |
 | Data-Structures | [Graph-Representation.md](../Data-Structures/Graph-Representation.md) | Draft |
 | Algorithms | [Complexity.md](../Algorithms/Complexity.md) | Draft |
-| Algorithms | [Sorting.md](../Algorithms/Sorting.md) | Draft |
+| Algorithms | [Sorting.md](../Algorithms/Sorting.md) | Review |
 | Algorithms | [Binary-Search.md](../Algorithms/Binary-Search.md) | Draft |
-| Algorithms | [BFS-DFS.md](../Algorithms/BFS-DFS.md) | Draft |
+| Algorithms | [BFS-DFS.md](../Algorithms/BFS-DFS.md) | Review |
 
 ## P1: 입문자 비시스템 기초 보강
 
@@ -154,6 +154,6 @@
 2. 상위 README의 `Planned` 행을 확인한다.
 3. 실제 파일을 만들고 `Status: Draft`를 둔다.
 4. 상위 README의 해당 행을 `Draft`로 바꾼다.
-5. 저장소 루트에서 `python Maintainers/Scripts/validate_docs.py` 또는 `py -3 Maintainers/Scripts/validate_docs.py`를 실행한다.
+5. `python Maintainers/Scripts/sync_summary_counts.py`로 요약 수치를 맞춘 뒤 `python Maintainers/Scripts/validate_docs.py`를 실행한다.
 6. 개념, 직관, 이론, 구현/예시, 복잡도/한계, 응용, 흔한 오해, 연습 문제, 이어서 읽기, 참조가 충분하면 `Review`로 올린다.
 7. 핵심 경로 밖의 주제는 [Topic-Classification.md](Topic-Classification.md)의 `Optional` 또는 `Deferred` 분류를 확인한다.

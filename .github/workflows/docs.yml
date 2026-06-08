@@ -20,3 +20,9 @@ jobs:
 
       - name: Validate Markdown docs
         run: python Maintainers/Scripts/validate_docs.py
+
+      - name: Check summary counts are in sync
+        run: python Maintainers/Scripts/sync_summary_counts.py --check
+
+      - name: Run maintainer script unit tests
+        run: python Maintainers/Scripts/test_validate_docs.py

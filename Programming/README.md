@@ -17,11 +17,11 @@
 
 | 주제 | 파일 | 설명 | Status |
 |---|---|---|---|
-| 변수와 타입 | [Variables-and-Types.md](Variables-and-Types.md) | 데이터를 어떻게 표현하고 저장하는가 | Draft |
+| 변수와 타입 | [Variables-and-Types.md](Variables-and-Types.md) | 데이터를 어떻게 표현하고 저장하는가 | Review |
 | 조건문과 반복문 | [Control-Flow.md](Control-Flow.md) | 프로그램의 흐름을 제어하는 구조 | Draft |
 | 함수와 재귀 | [Functions-and-Recursion.md](Functions-and-Recursion.md) | 코드 재사용과 재귀적 사고 | Draft |
 | 배열과 문자열 | [Arrays-and-Strings.md](Arrays-and-Strings.md) | 가장 기본적인 데이터 묶음 | Draft |
-| 언어 선택 가이드 | [Language-Selection.md](Language-Selection.md) | Python, JavaScript, C, Java, C++ 중 시작 언어를 고르는 기준 | Draft |
+| 언어 선택 가이드 | [Language-Selection.md](Language-Selection.md) | Python, JavaScript, C, Java, C++ 중 시작 언어를 고르는 기준 | Review |
 | 포인터와 메모리 | Pointers-and-Memory.md | C 계열 언어에서 메모리를 직접 다루는 법 | Planned |
 | 객체지향 프로그래밍 | OOP.md | 클래스, 상속, 다형성, 캡슐화 | Planned |
 | 함수형 프로그래밍 입문 | Functional-Intro.md | 순수 함수, 불변성, 고차 함수 | Planned |

@@ -18,16 +18,16 @@
 
 아래 표는 현재 README 주제 표 기준이다.
 
-| 영역 | Draft | Planned | 역할 |
-|---|---:|---:|---|
-| Programming | 5 | 28 | 모든 로드맵의 출발점 |
-| Math | 1 | 51 | CS/AI 이론의 공통 기반 |
-| Data-Structures | 5 | 12 | 알고리즘과 시스템 구현 기반 |
-| Algorithms | 4 | 30 | CS 핵심과 코딩 문제 해결 기반 |
-| Systems | 0 | 54 | CS Core, Systems Engineer 기반 |
-| CS-Theory | 0 | 30 | 이론/컴파일러/보안 기반 |
-| AI | 0 | 191 | AI Core, ML Engineer, Researcher 기반 |
-| Engineering | 0 | 112 | 실무 운영, 설계, 품질 기반 |
+| 영역 | Draft | Review | Planned | 역할 |
+|---|---:|---:|---:|---|
+| Programming | 3 | 2 | 28 | 모든 로드맵의 출발점 |
+| Math | 1 | 0 | 51 | CS/AI 이론의 공통 기반 |
+| Data-Structures | 5 | 0 | 12 | 알고리즘과 시스템 구현 기반 |
+| Algorithms | 2 | 2 | 30 | CS 핵심과 코딩 문제 해결 기반 |
+| Systems | 0 | 0 | 54 | CS Core, Systems Engineer 기반 |
+| CS-Theory | 0 | 0 | 30 | 이론/컴파일러/보안 기반 |
+| AI | 0 | 0 | 191 | AI Core, ML Engineer, Researcher 기반 |
+| Engineering | 0 | 0 | 112 | 실무 운영, 설계, 품질 기반 |
 
 ---
 

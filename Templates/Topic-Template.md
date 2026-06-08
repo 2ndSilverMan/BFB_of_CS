@@ -6,8 +6,18 @@
 - Level: Beginner
 - Prerequisites: 없음
 - Status: Stub
+- Reviewed-by: -
 
 ---
+
+<!--
+사람이 문서 전체를 검토했다면:
+1) Status를 올린다. Complete는 사람 검토가 끝나야만 쓸 수 있다.
+2) Reviewed-by를 "이름 (YYYY-MM-DD)" 형식으로 채운다. 검토 전에는 "-"로 둔다.
+3) 아래 학습자용 배지 한 줄을 본문 맨 위에 추가한다(이름/날짜만 교체):
+> ✅ **사람 검토 완료** — 이름, YYYY-MM-DD
+검토하지 않은 문서에는 이 배지를 넣지 않는다. (검사는 validate_docs.py가 한다.)
+-->
 
 ## 개념 (Concept)
 

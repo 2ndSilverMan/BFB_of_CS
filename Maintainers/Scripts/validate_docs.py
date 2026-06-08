@@ -12,6 +12,12 @@ from urllib.parse import unquote, urlparse
 VALID_STATUSES = {"Planned", "Stub", "Draft", "Review", "Complete"}
 VALID_LEVELS = {"Beginner", "Intermediate", "Advanced"}
 TOPIC_METADATA_FIELDS = ("Level", "Prerequisites", "Status")
+REVIEW_FIELD = "Reviewed-by"
+REVIEW_PLACEHOLDERS = {"", "-", "없음"}
+REVIEWED_BY_RE = re.compile(r"^(?P<name>.+?)\s*\((?P<date>\d{4}-\d{2}-\d{2})\)$")
+REVIEW_BADGE_RE = re.compile(
+    r"^>\s*✅\s*\*\*사람 검토 완료\*\*\s*[-—]\s*(?P<name>.+?),\s*(?P<date>\d{4}-\d{2}-\d{2})\s*$"
+)
 TOPIC_REQUIRED_HEADINGS = (
     "## 개념",
     "## 직관",
@@ -55,6 +61,8 @@ REQUIRED_SUPPORT_FILES = (
     "Roadmaps/README.md",
     "Maintainers/Scripts/README.md",
     "Maintainers/Scripts/validate_docs.py",
+    "Maintainers/Scripts/sync_summary_counts.py",
+    "Maintainers/Scripts/test_validate_docs.py",
     "Templates/README.md",
     "Templates/Topic-Template.md",
     "Templates/Topic-Index-README-Template.md",
@@ -509,6 +517,69 @@ def check_status_values(path: Path, root: Path, lines: list[str]) -> list[Issue]
     return issues
 
 
+def parse_reviewed_by(value: str) -> tuple[str, str] | None:
+    """Return (reviewer, date) when the value marks a completed human review."""
+    value = value.strip()
+    if value in REVIEW_PLACEHOLDERS:
+        return None
+    match = REVIEWED_BY_RE.match(value)
+    if not match:
+        return None
+    return match.group("name").strip(), match.group("date")
+
+
+def find_review_badges(lines: list[str]) -> list[tuple[int, str, str]]:
+    """Return (line_index, reviewer, date) for each learner review badge in the body."""
+    badges: list[tuple[int, str, str]] = []
+    for index, line in enumerate(lines):
+        match = REVIEW_BADGE_RE.match(line.strip())
+        if match:
+            badges.append((index, match.group("name").strip(), match.group("date")))
+    return badges
+
+
+def check_review_badge(path: Path, root: Path, lines: list[str]) -> list[Issue]:
+    if not is_topic_doc(path, root):
+        return []
+
+    issues: list[Issue] = []
+    rel = relative(path, root)
+    reviewed = parse_reviewed_by(metadata_block(lines).get(REVIEW_FIELD, "") or "")
+    badges = find_review_badges(lines)
+
+    if reviewed:
+        reviewer, date = reviewed
+        if not badges:
+            issues.append(
+                Issue(
+                    "MissingReviewBadge",
+                    rel,
+                    1,
+                    "Reviewed doc must show '> ✅ **사람 검토 완료** — name, YYYY-MM-DD'",
+                )
+            )
+        elif not any(name == reviewer and badge_date == date for _, name, badge_date in badges):
+            issues.append(
+                Issue(
+                    "StaleReviewBadge",
+                    rel,
+                    badges[0][0] + 1,
+                    f"Review badge does not match {REVIEW_FIELD}: {reviewer}, {date}",
+                )
+            )
+    elif badges:
+        issues.append(
+            Issue(
+                "UnexpectedReviewBadge",
+                rel,
+                badges[0][0] + 1,
+                f"Review badge present but {REVIEW_FIELD} is not set",
+            )
+        )
+
+    return issues
+
+
 def check_topic_metadata(path: Path, root: Path, lines: list[str]) -> list[Issue]:
     if not is_topic_doc(path, root):
         return []
@@ -532,6 +603,28 @@ def check_topic_metadata(path: Path, root: Path, lines: list[str]) -> list[Issue
     prerequisites = metadata.get("Prerequisites", "")
     if status in {"Draft", "Review", "Complete"} and not prerequisites.strip():
         issues.append(Issue("MissingPrerequisites", rel, 1, "Draft or higher topic must declare prerequisites or 없음"))
+
+    reviewed_raw = metadata.get(REVIEW_FIELD)
+    if reviewed_raw is not None:
+        stripped = reviewed_raw.strip()
+        if stripped not in REVIEW_PLACEHOLDERS and not REVIEWED_BY_RE.match(stripped):
+            issues.append(
+                Issue(
+                    "BadReviewFormat",
+                    rel,
+                    1,
+                    f"{REVIEW_FIELD} must be 'name (YYYY-MM-DD)' or '-': {reviewed_raw}",
+                )
+            )
+    if status == "Complete" and parse_reviewed_by(reviewed_raw or "") is None:
+        issues.append(
+            Issue(
+                "MissingReview",
+                rel,
+                1,
+                f"Status Complete requires a {REVIEW_FIELD} stamp 'name (YYYY-MM-DD)'",
+            )
+        )
 
     if status in {"Draft", "Review", "Complete"}:
         headings = {line.strip() for line in lines if line.startswith("## ")}
@@ -854,9 +947,13 @@ def check_maintainer_summary_counts(root: Path) -> list[Issue]:
                 continue
 
             summary_table_line = index + 1
-            draft_index = next((i for i, cell in enumerate(header_cells) if "Draft" in cell), -1)
-            planned_index = next((i for i, cell in enumerate(header_cells) if "Planned" in cell), -1)
-            if draft_index < 0 or planned_index < 0:
+            status_indexes = {
+                status: i
+                for i, cell in enumerate(header_cells)
+                for status in VALID_STATUSES
+                if status in cell
+            }
+            if "Draft" not in status_indexes or "Planned" not in status_indexes:
                 continue
 
             row = index + 2
@@ -866,7 +963,7 @@ def check_maintainer_summary_counts(root: Path) -> list[Issue]:
                     continue
 
                 row_cells = split_table_cells(lines[row])
-                if max(draft_index, planned_index) < len(row_cells):
+                if row_cells and max(status_indexes.values()) < len(row_cells):
                     area = row_cells[0]
                     if area:
                         seen_areas.add(area)
@@ -880,29 +977,18 @@ def check_maintainer_summary_counts(root: Path) -> list[Issue]:
                             )
                         )
                     else:
-                        expected_draft = counts[area].get("Draft", 0)
-                        expected_planned = counts[area].get("Planned", 0)
-                        actual_draft = parse_int_cell(row_cells[draft_index])
-                        actual_planned = parse_int_cell(row_cells[planned_index])
-
-                        if actual_draft != expected_draft:
-                            issues.append(
-                                Issue(
-                                    "SummaryCountMismatch",
-                                    relative_path,
-                                    row + 1,
-                                    f"{area} Draft is {actual_draft}, expected {expected_draft}",
+                        for status, col_index in status_indexes.items():
+                            expected = counts[area].get(status, 0)
+                            actual = parse_int_cell(row_cells[col_index])
+                            if actual != expected:
+                                issues.append(
+                                    Issue(
+                                        "SummaryCountMismatch",
+                                        relative_path,
+                                        row + 1,
+                                        f"{area} {status} is {actual}, expected {expected}",
+                                    )
                                 )
-                            )
-                        if actual_planned != expected_planned:
-                            issues.append(
-                                Issue(
-                                    "SummaryCountMismatch",
-                                    relative_path,
-                                    row + 1,
-                                    f"{area} Planned is {actual_planned}, expected {expected_planned}",
-                                )
-                            )
 
                 row += 1
 
@@ -1247,6 +1333,7 @@ def validate(root: Path) -> tuple[list[Issue], int]:
         issues.extend(check_learner_availability_guidance(path, root, lines))
         issues.extend(check_topic_file_link_policy(path, root, lines))
         issues.extend(check_topic_metadata(path, root, lines))
+        issues.extend(check_review_badge(path, root, lines))
         issues.extend(check_topic_table_consistency(path, root, lines))
 
     return sorted(issues, key=lambda issue: (issue.type, issue.file, issue.line)), len(files)

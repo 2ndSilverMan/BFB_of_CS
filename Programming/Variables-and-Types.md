@@ -2,7 +2,7 @@
 
 - Level: Beginner
 - Prerequisites: 없음
-- Status: Draft
+- Status: Review
 
 ---
 

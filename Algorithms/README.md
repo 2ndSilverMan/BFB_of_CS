@@ -20,7 +20,7 @@
 | Order | 주제 | 파일 | Status |
 |---|---|---|---|
 | 1 | 복잡도 분석 (Big-O) | [Complexity.md](Complexity.md) | Draft |
-| 2 | 정렬 (Sorting) | [Sorting.md](Sorting.md) | Draft |
+| 2 | 정렬 (Sorting) | [Sorting.md](Sorting.md) | Review |
 | 3 | 이진 탐색 (Binary Search) | [Binary-Search.md](Binary-Search.md) | Draft |
 | 4 | 분할 정복 (Divide & Conquer) | Divide-and-Conquer.md | Planned |
 | 5 | 그리디 (Greedy) | Greedy.md | Planned |
@@ -39,7 +39,7 @@
 
 | Order | 주제 | 파일 | Status |
 |---|---|---|---|
-| 11 | BFS / DFS | [BFS-DFS.md](BFS-DFS.md) | Draft |
+| 11 | BFS / DFS | [BFS-DFS.md](BFS-DFS.md) | Review |
 | 12 | 위상 정렬 | Topological-Sort.md | Planned |
 | 13 | 강한 연결 요소 (SCC) | SCC.md | Planned |
 | 14 | 최단 경로 — Dijkstra | Dijkstra.md | Planned |

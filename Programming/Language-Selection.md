@@ -2,7 +2,7 @@
 
 - Level: Beginner
 - Prerequisites: 없음
-- Status: Draft
+- Status: Review
 
 ---
 
@@ -139,6 +139,7 @@ int main() {
 
 ## 이어서 읽기 (Reading Path)
 
+- 이전: [배열과 문자열](Arrays-and-Strings.md)
 - 다음: [Python 트랙](Languages/Python/), [JavaScript 트랙](Languages/JavaScript/), [C 트랙](Languages/C/), [Java 트랙](Languages/Java/), [C++ 트랙](Languages/Cpp/)
 - 관련: [변수와 타입](Variables-and-Types.md), [조건문과 반복문](Control-Flow.md), [함수와 재귀](Functions-and-Recursion.md)
 

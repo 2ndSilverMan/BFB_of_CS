@@ -85,6 +85,19 @@ BFB_of_CS/
 | Review | 내용 완성, 검토 필요 |
 | Complete | 완성 |
 
+## 사람 검토 표시 (Reviewed-by)
+
+초안은 상당수 AI가 작성하므로, 사람이 문서 전체를 직접 검토했는지는 내용 성숙도(`Status`)와 **별개의 축**으로 표시한다. 문서 상단 메타데이터에 `Reviewed-by`를 둔다.
+
+- 검토 전: `- Reviewed-by: -`
+- 검토 후: `- Reviewed-by: 이름 (YYYY-MM-DD)`
+- `Status: Complete`는 사람 검토를 마친 문서에만 붙인다. 검토 표식이 없으면 검증에서 막힌다(`MissingReview`).
+- 검토를 마치면 본문 맨 위(`---` 아래)에 학습자용 배지 한 줄을 추가한다. 이름과 날짜는 `Reviewed-by`와 같아야 한다.
+
+  > ✅ **사람 검토 완료** — 이름, YYYY-MM-DD
+
+- 검토하지 않은 문서에는 배지를 넣지 않는다. 배지와 `Reviewed-by`가 어긋나면 검증에서 막힌다.
+
 ## 목차 정렬 원칙
 
 - README의 섹션과 주제 목록은 선수지식이 낮은 것에서 높은 것 순으로 배치한다.
@@ -125,6 +138,7 @@ BFB_of_CS/
 문서 구조를 수정한 뒤 다음 항목을 확인한다:
 
 - 저장소 루트에서 `python Maintainers/Scripts/validate_docs.py` 또는 `py -3 Maintainers/Scripts/validate_docs.py`로 링크, 표, 메타데이터, README-본문 상태 동기화를 검사했는가
+- 상태를 추가하거나 올렸다면 `python Maintainers/Scripts/sync_summary_counts.py`로 운영 문서의 요약 수치를 자동으로 맞췄는가
 - Markdown 파일에 UTF-8 BOM이 없는가
 - 로드맵 필수 문서라면 [Coverage-Matrix.md](Maintainers/Coverage-Matrix.md)에 반영되어 있는가
 - 핵심 경로 밖의 예정 문서라면 [Topic-Classification.md](Maintainers/Topic-Classification.md)에 반영되어 있는가
@@ -136,6 +150,8 @@ BFB_of_CS/
 - `Status` 값이 `Planned`, `Stub`, `Draft`, `Review`, `Complete` 중 하나인가
 - 주제 문서의 `Level` 값이 `Beginner`, `Intermediate`, `Advanced` 중 하나인가
 - `Draft` 이상 주제 문서의 `Prerequisites`가 비어 있지 않은가
+- `Reviewed-by`가 있다면 `이름 (YYYY-MM-DD)` 형식이고, `Complete` 문서에는 검토 표식이 있는가
+- 사람 검토를 마친 문서에 `> ✅ 사람 검토 완료` 배지가 있고 `Reviewed-by`와 일치하는가
 - 예정 파일명이 영어 `Title-Kebab-Case.md` 형식인가
 - 주제 파일명이 다른 섹션의 주제 파일명과 중복되지 않는가
 - 예전 구조명이나 폐기된 긴 파일명이 남아 있지 않은가

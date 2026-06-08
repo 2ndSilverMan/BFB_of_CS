@@ -1,0 +1,66 @@
+# License
+
+This repository contains two kinds of material released under two licenses.
+
+---
+
+## 1. Documentation and prose content — CC BY 4.0
+
+All Markdown documentation, explanatory prose, tables, and original diagrams in
+this repository are licensed under the Creative Commons Attribution 4.0
+International License (CC BY 4.0).
+
+Full legal text:
+https://creativecommons.org/licenses/by/4.0/legalcode
+
+Human-readable summary:
+https://creativecommons.org/licenses/by/4.0/
+
+You are free to share (copy and redistribute) and adapt (remix, transform, and
+build upon) this material for any purpose, even commercially, as long as you
+give appropriate credit, provide a link to the license, and indicate if changes
+were made.
+
+Suggested attribution:
+
+    "Big Book of Computer Science & AI (BFB_of_CS)" by 2ndSilverMan,
+    licensed under CC BY 4.0.
+
+---
+
+## 2. Code examples — MIT License
+
+All source code examples (code blocks embedded in documents and the maintainer
+scripts under `Maintainers/Scripts/`) are licensed under the MIT License.
+
+MIT License
+
+Copyright (c) 2026 2ndSilverMan
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+---
+
+## 한국어 요약 (Korean summary)
+
+편의를 위한 요약이며, 법적 효력은 위 영문 라이선스 본문을 따른다.
+
+- 문서, 설명, 표, 직접 만든 다이어그램: **CC BY 4.0** — 출처를 표시하면 상업적 사용을 포함해 자유롭게 공유·수정할 수 있다.
+- 코드 예제와 `Maintainers/Scripts/`의 스크립트: **MIT**.
+- 외부에서 가져온 자료(인용, 링크된 원문 등)는 각 원저작권자의 조건을 따르며, 이 라이선스가 그 권리를 대체하지 않는다. 자세한 내용은 [Maintainers/Legal-and-Copyright-Policy.md](Maintainers/Legal-and-Copyright-Policy.md) 참고.

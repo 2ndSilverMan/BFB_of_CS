@@ -29,6 +29,8 @@ py -3 Maintainers/Scripts/validate_docs.py
 - 표 헤더, 구분선, 데이터 행의 열 수가 맞는지
 - `Status` 값이 허용된 값인지
 - 주제 문서 상단 메타데이터의 `Level`, `Prerequisites`, `Status` 값이 유효한지
+- `Reviewed-by`가 있으면 `이름 (YYYY-MM-DD)` 형식인지, `Status: Complete`에 검토 표식이 있는지
+- 사람 검토 배지(`> ✅ **사람 검토 완료** — 이름, 날짜`)가 `Reviewed-by`와 일치하는지(없거나 어긋나면 보고)
 - `Draft`, `Review`, `Complete` 주제 파일이 README 표에서 링크로 연결되어 있는지
 - 주제 README의 `Status`와 실제 주제 문서 상단 메타데이터가 일치하는지
 - `Draft`, `Review`, `Complete` 주제 문서가 필수 섹션과 `이어서 읽기`를 갖추었는지
@@ -47,3 +49,26 @@ py -3 Maintainers/Scripts/validate_docs.py
 - `Required` 주제가 `Optional`/`Deferred`로 중복 분류되지 않았는지
 - 주제 README 표의 파일명이 중복되어 계획 문서 참조가 모호해지지 않는지
 - 모든 `Planned` 주제가 핵심 경로 또는 `Optional`/`Deferred` 분류에 포함되는지
+
+요약 표 검사는 `Draft`/`Planned`뿐 아니라 표에 `Review`, `Complete`, `Stub` 열이 있으면 그 수치도 실제 README 주제 표와 비교한다.
+
+## sync_summary_counts.py
+
+`Maintainers/Content-Backlog.md`와 `Maintainers/Coverage-Matrix.md`의 영역별 상태 수치 요약 표를 실제 README 주제 표 기준으로 다시 계산해 자동으로 맞춘다. `validate_docs.py`는 수치 불일치를 검사만 하고, 이 스크립트는 고쳐 준다. 상태 열(`Draft`, `Review`, `Planned` 등)의 숫자 칸만 바꾸고 `역할` 같은 다른 열은 그대로 둔다.
+
+```powershell
+python Maintainers/Scripts/sync_summary_counts.py          # 실제로 수정
+python Maintainers/Scripts/sync_summary_counts.py --check   # 수정 없이 불일치만 보고 (CI용)
+```
+
+문서를 추가하거나 상태를 올린 뒤 이 스크립트를 실행하면 요약 수치를 손으로 맞출 필요가 없다.
+
+## test_validate_docs.py
+
+`validate_docs.py`와 `sync_summary_counts.py`의 핵심 함수에 대한 단위 테스트다. 표준 라이브러리 `unittest`만 쓰므로 별도 패키지가 필요 없다.
+
+```powershell
+python Maintainers/Scripts/test_validate_docs.py
+```
+
+CI(`.github/workflows/docs.yml`)는 매 PR과 push에서 `validate_docs.py`, `sync_summary_counts.py --check`, 이 테스트를 모두 실행한다.

@@ -37,6 +37,8 @@
 | Review | 본문 작성은 끝났고 검토 중이다 |
 | Complete | 완성 문서다 |
 
+위 상태는 내용 성숙도다. 이와 별개로, 문서 상단에 `> ✅ 사람 검토 완료` 배지가 있으면 사람이 전체 내용을 직접 검토한 문서다. 초안 상당수는 AI가 작성하므로, 배지가 없으면 아직 사람 검토 전으로 본다. 검토자와 날짜는 배지와 문서 상단 `Reviewed-by` 항목에서 확인할 수 있다. `Complete`는 사람 검토를 마쳐야만 붙인다.
+
 ---
 
 ## 섹션 구성
@@ -81,7 +83,7 @@
 
 본문 작성 우선순위, 로드맵 커버리지, 참조 자료 보강, 템플릿, 검수 스크립트는 [Maintainers/](Maintainers/)에서 관리한다.
 저작권, 라이선스, 개인정보, 법적 리스크 방지 규칙은 [Legal and Copyright Policy](Maintainers/Legal-and-Copyright-Policy.md)를 따른다.
-현재 루트 `LICENSE`는 아직 없으므로 저장소 밖 재사용 조건은 별도로 정해지지 않았다.
+재사용 조건은 [LICENSE](LICENSE)를 따른다. 문서와 설명은 CC BY 4.0, 코드 예제와 `Maintainers/Scripts/` 스크립트는 MIT다.
 
 ---
 
