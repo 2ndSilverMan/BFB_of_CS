@@ -17,10 +17,10 @@
 
 | 주제 | 파일 | Status |
 |---|---|---|
-| 네트워크 계층 모델 (OSI / TCP/IP) | Network-Models.md | Planned |
+| 네트워크 계층 모델 (OSI / TCP/IP) | [Network-Models.md](Network-Models.md) | Draft |
 | 물리 계층과 데이터 링크 계층 | Physical-and-Link.md | Planned |
 | IP 주소와 라우팅 | IP-and-Routing.md | Planned |
-| TCP와 UDP | TCP-UDP.md | Planned |
+| TCP와 UDP | [TCP-UDP.md](TCP-UDP.md) | Draft |
 | HTTP / HTTPS | HTTP.md | Planned |
 | DNS | DNS.md | Planned |
 | 소켓 프로그래밍 | Socket-Programming.md | Planned |

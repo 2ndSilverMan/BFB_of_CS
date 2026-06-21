@@ -19,8 +19,8 @@
 
 | 주제 | 파일 | Status |
 |---|---|---|
-| 선형 회귀 | Linear-Regression.md | Planned |
-| 로지스틱 회귀 | Logistic-Regression.md | Planned |
+| 선형 회귀 | [Linear-Regression.md](Linear-Regression.md) | Draft |
+| 로지스틱 회귀 | [Logistic-Regression.md](Logistic-Regression.md) | Draft |
 | 결정 트리 | Decision-Trees.md | Planned |
 | 앙상블 (Random Forest, Boosting) | Ensemble.md | Planned |
 | SVM | SVM.md | Planned |

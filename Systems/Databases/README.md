@@ -17,10 +17,10 @@
 
 | 주제 | 파일 | Status |
 |---|---|---|
-| 관계형 모델과 SQL | Relational-Model-and-SQL.md | Planned |
+| 관계형 모델과 SQL | [Relational-Model-and-SQL.md](Relational-Model-and-SQL.md) | Draft |
 | 정규화 (1NF ~ BCNF) | Database-Normalization.md | Planned |
 | 인덱스와 B-트리 | Indexes-and-B-Tree.md | Planned |
-| 트랜잭션과 ACID | Transactions-and-ACID.md | Planned |
+| 트랜잭션과 ACID | [Transactions-and-ACID.md](Transactions-and-ACID.md) | Draft |
 | 동시성 제어 (잠금, MVCC) | Concurrency-Control.md | Planned |
 | 복구 (WAL, REDO/UNDO) | Recovery.md | Planned |
 | 쿼리 최적화 | Query-Optimization.md | Planned |

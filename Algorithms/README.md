@@ -30,7 +30,7 @@
 
 | Order | 주제 | 파일 | Status |
 |---|---|---|---|
-| 7 | DP 기초 | DP-Basics.md | Planned |
+| 7 | DP 기초 | [DP-Basics.md](DP-Basics.md) | Draft |
 | 8 | DP 최적화 | DP-Optimization.md | Planned |
 | 9 | 비트마스크 DP | Bitmask-DP.md | Planned |
 | 10 | 트리 DP | Tree-DP.md | Planned |

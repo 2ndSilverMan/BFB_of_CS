@@ -17,8 +17,8 @@
 
 | 주제 | 파일 | Status |
 |---|---|---|
-| 벡터와 벡터 공간 | Vectors.md | Planned |
-| 행렬 연산 | Matrices.md | Planned |
+| 벡터와 벡터 공간 | [Vectors.md](Vectors.md) | Draft |
+| 행렬 연산 | [Matrices.md](Matrices.md) | Draft |
 | 선형 연립방정식 | Linear-Systems.md | Planned |
 | 행렬식 (Determinant) | Determinant.md | Planned |
 | 고유값과 고유벡터 | Eigenvalues.md | Planned |

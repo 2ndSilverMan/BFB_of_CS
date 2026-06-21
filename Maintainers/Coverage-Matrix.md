@@ -21,12 +21,12 @@
 | 영역 | Draft | Review | Planned | 역할 |
 |---|---:|---:|---:|---|
 | Programming | 3 | 2 | 28 | 모든 로드맵의 출발점 |
-| Math | 2 | 0 | 50 | CS/AI 이론의 공통 기반 |
-| Data-Structures | 5 | 0 | 12 | 알고리즘과 시스템 구현 기반 |
-| Algorithms | 2 | 2 | 30 | CS 핵심과 코딩 문제 해결 기반 |
-| Systems | 0 | 0 | 54 | CS Core, Systems Engineer 기반 |
-| CS-Theory | 0 | 0 | 30 | 이론/컴파일러/보안 기반 |
-| AI | 0 | 0 | 191 | AI Core, ML Engineer, Researcher 기반 |
+| Math | 10 | 0 | 42 | CS/AI 이론의 공통 기반 |
+| Data-Structures | 7 | 0 | 10 | 알고리즘과 시스템 구현 기반 |
+| Algorithms | 3 | 2 | 29 | CS 핵심과 코딩 문제 해결 기반 |
+| Systems | 8 | 0 | 46 | CS Core, Systems Engineer 기반 |
+| CS-Theory | 1 | 0 | 29 | 이론/컴파일러/보안 기반 |
+| AI | 2 | 0 | 189 | AI Core, ML Engineer, Researcher 기반 |
 | Engineering | 0 | 0 | 112 | 실무 운영, 설계, 품질 기반 |
 
 ---
@@ -38,10 +38,10 @@
 | 단계 | 필수 문서 |
 |---|---|
 | 프로그래밍 | [Variables-and-Types.md](../Programming/Variables-and-Types.md), [Control-Flow.md](../Programming/Control-Flow.md), [Functions-and-Recursion.md](../Programming/Functions-and-Recursion.md), [Arrays-and-Strings.md](../Programming/Arrays-and-Strings.md), [Language-Selection.md](../Programming/Language-Selection.md) |
-| 이산수학 | [Logic.md](../Math/Discrete/Logic.md), `Induction.md`, `Graph-Theory.md` |
-| 자료구조 | [Array.md](../Data-Structures/Array.md), [Linked-List.md](../Data-Structures/Linked-List.md), [Stack.md](../Data-Structures/Stack.md), [Queue.md](../Data-Structures/Queue.md), [Graph-Representation.md](../Data-Structures/Graph-Representation.md), `Binary-Tree.md`, `Hash-Table.md` |
-| 알고리즘 | [Complexity.md](../Algorithms/Complexity.md), [Sorting.md](../Algorithms/Sorting.md), [Binary-Search.md](../Algorithms/Binary-Search.md), [BFS-DFS.md](../Algorithms/BFS-DFS.md), `DP-Basics.md` |
-| 시스템 맛보기 | `Data-Representation.md`, `Processes-and-Threads.md`, `Network-Models.md`, `Relational-Model-and-SQL.md` |
+| 이산수학 | [Logic.md](../Math/Discrete/Logic.md), [Induction.md](../Math/Discrete/Induction.md), [Graph-Theory.md](../Math/Discrete/Graph-Theory.md) |
+| 자료구조 | [Array.md](../Data-Structures/Array.md), [Linked-List.md](../Data-Structures/Linked-List.md), [Stack.md](../Data-Structures/Stack.md), [Queue.md](../Data-Structures/Queue.md), [Graph-Representation.md](../Data-Structures/Graph-Representation.md), [Binary-Tree.md](../Data-Structures/Binary-Tree.md), [Hash-Table.md](../Data-Structures/Hash-Table.md) |
+| 알고리즘 | [Complexity.md](../Algorithms/Complexity.md), [Sorting.md](../Algorithms/Sorting.md), [Binary-Search.md](../Algorithms/Binary-Search.md), [BFS-DFS.md](../Algorithms/BFS-DFS.md), [DP-Basics.md](../Algorithms/DP-Basics.md) |
+| 시스템 맛보기 | [Data-Representation.md](../Systems/Computer-Architecture/Data-Representation.md), [Processes-and-Threads.md](../Systems/Operating-Systems/Processes-and-Threads.md), [Network-Models.md](../Systems/Networks/Network-Models.md), [Relational-Model-and-SQL.md](../Systems/Databases/Relational-Model-and-SQL.md) |
 
 ---
 
@@ -55,12 +55,12 @@ CS 핵심 로드맵은 전공 필수 흐름을 완성하는 기준이다.
 | 수학 | `Set-Theory.md`, `Relations-and-Functions.md`, `Induction.md`, `Graph-Theory.md`, `Recurrences.md`, `Number-Theory-Basics.md` |
 | 자료구조 | Beginner 필수 문서 + `BST.md`, `Heap.md`, `Union-Find.md`, `Hash-Function.md` |
 | 알고리즘 | Beginner 필수 문서 + `Divide-and-Conquer.md`, `Greedy.md`, `Backtracking.md`, `Topological-Sort.md`, `Dijkstra.md`, `MST.md`, `Amortized-Analysis.md` |
-| 컴퓨터 구조 | `Digital-Logic.md`, `Data-Representation.md`, `CPU-and-ISA.md`, `Pipelining.md`, `Memory-Hierarchy.md`, `IO-Systems.md` |
-| 운영체제 | `Processes-and-Threads.md`, `Scheduling.md`, `Synchronization.md`, `Deadlock.md`, `Memory-Management.md`, `Virtual-Memory.md`, `File-Systems.md` |
-| 네트워크 | `Network-Models.md`, `IP-and-Routing.md`, `TCP-UDP.md`, `HTTP.md`, `DNS.md`, `Socket-Programming.md` |
-| 데이터베이스 | `Relational-Model-and-SQL.md`, `Database-Normalization.md`, `Indexes-and-B-Tree.md`, `Transactions-and-ACID.md`, `Concurrency-Control.md`, `Query-Optimization.md` |
+| 컴퓨터 구조 | `Digital-Logic.md`, [Data-Representation.md](../Systems/Computer-Architecture/Data-Representation.md), [CPU-and-ISA.md](../Systems/Computer-Architecture/CPU-and-ISA.md), `Pipelining.md`, `Memory-Hierarchy.md`, `IO-Systems.md` |
+| 운영체제 | [Processes-and-Threads.md](../Systems/Operating-Systems/Processes-and-Threads.md), `Scheduling.md`, `Synchronization.md`, `Deadlock.md`, [Memory-Management.md](../Systems/Operating-Systems/Memory-Management.md), `Virtual-Memory.md`, `File-Systems.md` |
+| 네트워크 | [Network-Models.md](../Systems/Networks/Network-Models.md), `IP-and-Routing.md`, [TCP-UDP.md](../Systems/Networks/TCP-UDP.md), `HTTP.md`, `DNS.md`, `Socket-Programming.md` |
+| 데이터베이스 | [Relational-Model-and-SQL.md](../Systems/Databases/Relational-Model-and-SQL.md), `Database-Normalization.md`, `Indexes-and-B-Tree.md`, [Transactions-and-ACID.md](../Systems/Databases/Transactions-and-ACID.md), `Concurrency-Control.md`, `Query-Optimization.md` |
 | 분산 시스템 | `System-Models.md`, `CAP-Theorem.md`, `Consensus.md`, `Replication.md`, `Partitioning.md`, `Time-and-Ordering.md` |
-| 계산 이론 | `Regular-Languages.md`, `Regular-Expressions.md`, `Context-Free.md`, `Turing-Machine.md`, `Undecidability.md`, `Complexity-Classes.md`, `NP-Completeness.md` |
+| 계산 이론 | [Regular-Languages.md](../CS-Theory/Computation-Theory/Regular-Languages.md), `Regular-Expressions.md`, `Context-Free.md`, `Turing-Machine.md`, `Undecidability.md`, `Complexity-Classes.md`, `NP-Completeness.md` |
 | PL/컴파일러 | `Syntax-and-Semantics.md`, `Type-Systems.md`, `Lambda-Calculus.md`, `Lexer.md`, `Parser.md`, `AST.md`, `Intermediate-Representation.md`, `Code-Generation.md` |
 | 보안 | `Symmetric-Encryption.md`, `Asymmetric-Encryption.md`, `Hash-Functions.md`, `Digital-Signatures.md`, `PKI-and-TLS.md`, `Auth.md`, `Web-Security.md` |
 
@@ -72,11 +72,11 @@ AI 핵심 로드맵은 수학 기초에서 머신러닝, 딥러닝, 주요 응�
 
 | 단계 | 필수 문서 |
 |---|---|
-| 선형대수 | `Vectors.md`, `Matrices.md`, `Linear-Systems.md`, `Eigenvalues.md`, `SVD.md`, `PCA.md`, `Orthogonality.md` |
-| 미적분 | `Limits.md`, `Differentiation.md`, `Partial-Derivatives.md`, `Chain-Rule.md`, `Taylor-Series.md` |
-| 확률/통계 | `Probability-Basics.md`, `Distributions.md`, `Expectation.md`, `Bayes-Theorem.md`, `MLE.md`, `CLT.md`, `Hypothesis-Testing.md`, `Information-Theory.md` |
+| 선형대수 | [Vectors.md](../Math/Linear-Algebra/Vectors.md), [Matrices.md](../Math/Linear-Algebra/Matrices.md), `Linear-Systems.md`, `Eigenvalues.md`, `SVD.md`, `PCA.md`, `Orthogonality.md` |
+| 미적분 | `Limits.md`, [Differentiation.md](../Math/Calculus/Differentiation.md), `Partial-Derivatives.md`, [Chain-Rule.md](../Math/Calculus/Chain-Rule.md), `Taylor-Series.md` |
+| 확률/통계 | [Probability-Basics.md](../Math/Probability-Statistics/Probability-Basics.md), `Distributions.md`, [Expectation.md](../Math/Probability-Statistics/Expectation.md), `Bayes-Theorem.md`, `MLE.md`, `CLT.md`, `Hypothesis-Testing.md`, `Information-Theory.md` |
 | 최적화 | `Convex-Optimization.md`, [Gradient-Descent.md](../Math/Optimization/Gradient-Descent.md), `SGD.md`, `Adaptive-Methods.md`, `Lagrangian.md` |
-| 머신러닝 | `Linear-Regression.md`, `Logistic-Regression.md`, `Decision-Trees.md`, `Ensemble.md`, `KNN.md`, `K-Means.md`, `Dimensionality-Reduction.md`, `Bias-Variance.md`, `Cross-Validation.md`, `Regularization.md`, `Overfitting.md` |
+| 머신러닝 | [Linear-Regression.md](../AI/Machine-Learning/Linear-Regression.md), [Logistic-Regression.md](../AI/Machine-Learning/Logistic-Regression.md), `Decision-Trees.md`, `Ensemble.md`, `KNN.md`, `K-Means.md`, `Dimensionality-Reduction.md`, `Bias-Variance.md`, `Cross-Validation.md`, `Regularization.md`, `Overfitting.md` |
 | 딥러닝 | `MLP.md`, `Backpropagation.md`, `Activation-Functions.md`, `Loss-Functions.md`, `Normalization-Layers.md`, `Dropout.md`, `CNN.md`, `RNN-LSTM-GRU.md`, `Attention.md`, `Transformer.md`, `Transfer-Learning.md`, `Fine-Tuning.md` |
 | NLP/LLM | `Text-Preprocessing.md`, `Language-Model-Basics.md`, `Word-Embeddings.md`, `Transformer-NLP.md`, `BERT.md`, `GPT.md`, `Transformer-Advanced.md`, `Pretraining.md`, `Instruction-Tuning.md`, `Prompt-Engineering.md`, `RAG.md` |
 | 비전/생성/RL | `Image-Basics.md`, `CNN-Deep-Dive.md`, `Image-Classification.md`, `Object-Detection.md`, `Autoencoders.md`, `VAE.md`, `GAN-Basics.md`, `DDPM.md`, `MDP.md`, `Value-Functions.md`, `Policy.md`, `TD-Learning.md`, `Policy-Gradient.md` |

@@ -17,9 +17,9 @@
 
 | 주제 | 파일 | Status |
 |---|---|---|
-| 확률 공리와 조건부 확률 | Probability-Basics.md | Planned |
+| 확률 공리와 조건부 확률 | [Probability-Basics.md](Probability-Basics.md) | Draft |
 | 확률 변수와 분포 | Distributions.md | Planned |
-| 기댓값, 분산, 공분산 | Expectation.md | Planned |
+| 기댓값, 분산, 공분산 | [Expectation.md](Expectation.md) | Draft |
 | 베이즈 정리 | Bayes-Theorem.md | Planned |
 | 최대 우도 추정 (MLE) | MLE.md | Planned |
 | 중심 극한 정리 | CLT.md | Planned |

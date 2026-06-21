@@ -18,8 +18,8 @@
 | 주제 | 파일 | Status |
 |---|---|---|
 | 디지털 논리 (게이트, 회로) | Digital-Logic.md | Planned |
-| 데이터 표현 (이진수, 부동소수점) | Data-Representation.md | Planned |
-| CPU 구조와 명령어 집합 (ISA) | CPU-and-ISA.md | Planned |
+| 데이터 표현 (이진수, 부동소수점) | [Data-Representation.md](Data-Representation.md) | Draft |
+| CPU 구조와 명령어 집합 (ISA) | [CPU-and-ISA.md](CPU-and-ISA.md) | Draft |
 | 파이프라이닝 | Pipelining.md | Planned |
 | 메모리 계층 (레지스터, 캐시, RAM) | Memory-Hierarchy.md | Planned |
 | 가상 메모리 | Virtual-Memory-Hardware.md | Planned |

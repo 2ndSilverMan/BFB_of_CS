@@ -15,12 +15,12 @@
 | 영역 | 현재 Draft | Review | 남은 Planned | 우선 역할 |
 |---|---:|---:|---:|---|
 | Programming | 3 | 2 | 28 | 모든 로드맵의 출발점 |
-| Math | 2 | 0 | 50 | CS/AI 공통 기반 |
-| Data-Structures | 5 | 0 | 12 | 알고리즘과 시스템 구현 기반 |
-| Algorithms | 2 | 2 | 30 | 문제 해결과 전공 핵심 기반 |
-| Systems | 0 | 0 | 54 | CS Core, Systems Engineer 기반 |
-| CS-Theory | 0 | 0 | 30 | 계산 이론, PL, 컴파일러 기반 |
-| AI | 0 | 0 | 191 | AI Core, ML Engineer, Researcher 기반 |
+| Math | 10 | 0 | 42 | CS/AI 공통 기반 |
+| Data-Structures | 7 | 0 | 10 | 알고리즘과 시스템 구현 기반 |
+| Algorithms | 3 | 2 | 29 | 문제 해결과 전공 핵심 기반 |
+| Systems | 8 | 0 | 46 | CS Core, Systems Engineer 기반 |
+| CS-Theory | 1 | 0 | 29 | 계산 이론, PL, 컴파일러 기반 |
+| AI | 2 | 0 | 189 | AI Core, ML Engineer, Researcher 기반 |
 | Engineering | 0 | 0 | 112 | 실무 설계, 운영, 품질 기반 |
 
 ---
@@ -38,6 +38,8 @@
 - `P5`: AI Core 모델 흐름을 완성하는 문서.
 - `P6`: Systems Engineer와 ML Engineer 실무 흐름을 완성하는 문서.
 - `P7`: Researcher와 심화 이론 흐름을 완성하는 문서.
+
+현재 P0-P3의 대상 파일은 모두 본문이 열려 있다. 다음 신규 작성 작업은 P4/P5 이후에서 고르고, P0-P3은 정확성 검토와 참조 보강을 통해 `Review`로 승격한다.
 
 ---
 
@@ -61,50 +63,50 @@
 | Algorithms | [Binary-Search.md](../Algorithms/Binary-Search.md) | Draft |
 | Algorithms | [BFS-DFS.md](../Algorithms/BFS-DFS.md) | Review |
 
-## P1: 입문자 비시스템 기초 보강
+## P1: 입문자 비시스템 기초 보강 - 작성됨
 
-| 섹션 | 파일 | 이유 |
-|---|---|---|
-| Data-Structures | `Binary-Tree.md` | 트리 계열과 재귀 구조의 공통 기반 |
-| Data-Structures | `Hash-Table.md` | 평균 O(1) 탐색과 해시 기반 자료구조 |
-| Algorithms | `DP-Basics.md` | 입문자 최종 완료 기준의 기본 DP |
-| Math/Discrete | `Induction.md` | 알고리즘 정당성 증명의 기본 |
-| Math/Discrete | `Graph-Theory.md` | 그래프 알고리즘 이해 보강 |
+| 섹션 | 파일 | 상태 | 이유 |
+|---|---|---|---|
+| Data-Structures | [Binary-Tree.md](../Data-Structures/Binary-Tree.md) | Draft | 트리 계열과 재귀 구조의 공통 기반 |
+| Data-Structures | [Hash-Table.md](../Data-Structures/Hash-Table.md) | Draft | 평균 O(1) 탐색과 해시 기반 자료구조 |
+| Algorithms | [DP-Basics.md](../Algorithms/DP-Basics.md) | Draft | 입문자 최종 완료 기준의 기본 DP |
+| Math/Discrete | [Induction.md](../Math/Discrete/Induction.md) | Draft | 알고리즘 정당성 증명의 기본 |
+| Math/Discrete | [Graph-Theory.md](../Math/Discrete/Graph-Theory.md) | Draft | 그래프 알고리즘 이해 보강 |
 
-## P1.5: 입문자 시스템 맛보기
+## P1.5: 입문자 시스템 맛보기 - 작성됨
 
 이 문서들은 CS Core의 시스템 파트로도 이어지지만, 입문자 로드맵의 최종 완료 기준에 직접 들어간다. P1 비시스템 기초 문서 직후에 최소 본문을 먼저 열어 둔다.
 
-| 섹션 | 파일 | 이유 |
-|---|---|---|
-| Systems/Computer-Architecture | `Data-Representation.md` | 이진수, 정수, 부동소수점 표현 |
-| Systems/Operating-Systems | `Processes-and-Threads.md` | 프로세스, 스레드, 메모리 용어의 시작점 |
-| Systems/Networks | `Network-Models.md` | TCP/IP 같은 네트워크 기본 용어의 뼈대 |
-| Systems/Databases | `Relational-Model-and-SQL.md` | SQL과 트랜잭션 학습의 입구 |
+| 섹션 | 파일 | 상태 | 이유 |
+|---|---|---|---|
+| Systems/Computer-Architecture | [Data-Representation.md](../Systems/Computer-Architecture/Data-Representation.md) | Draft | 이진수, 정수, 부동소수점 표현 |
+| Systems/Operating-Systems | [Processes-and-Threads.md](../Systems/Operating-Systems/Processes-and-Threads.md) | Draft | 프로세스, 스레드, 메모리 용어의 시작점 |
+| Systems/Networks | [Network-Models.md](../Systems/Networks/Network-Models.md) | Draft | TCP/IP 같은 네트워크 기본 용어의 뼈대 |
+| Systems/Databases | [Relational-Model-and-SQL.md](../Systems/Databases/Relational-Model-and-SQL.md) | Draft | SQL과 트랜잭션 학습의 입구 |
 
-## P2: CS Core 진입 보강
+## P2: CS Core 진입 보강 - 작성됨
 
-| 섹션 | 파일 | 이유 |
-|---|---|---|
-| Systems/Computer-Architecture | `CPU-and-ISA.md` | 프로그램이 하드웨어에서 실행되는 흐름 |
-| Systems/Operating-Systems | `Memory-Management.md` | 메모리 추상화 이해 |
-| Systems/Networks | `TCP-UDP.md` | 전송 계층의 핵심 |
-| Systems/Databases | `Transactions-and-ACID.md` | 데이터 일관성의 핵심 |
-| CS-Theory/Computation-Theory | `Regular-Languages.md` | 계산 이론 시작점 |
+| 섹션 | 파일 | 상태 | 이유 |
+|---|---|---|---|
+| Systems/Computer-Architecture | [CPU-and-ISA.md](../Systems/Computer-Architecture/CPU-and-ISA.md) | Draft | 프로그램이 하드웨어에서 실행되는 흐름 |
+| Systems/Operating-Systems | [Memory-Management.md](../Systems/Operating-Systems/Memory-Management.md) | Draft | 메모리 추상화 이해 |
+| Systems/Networks | [TCP-UDP.md](../Systems/Networks/TCP-UDP.md) | Draft | 전송 계층의 핵심 |
+| Systems/Databases | [Transactions-and-ACID.md](../Systems/Databases/Transactions-and-ACID.md) | Draft | 데이터 일관성의 핵심 |
+| CS-Theory/Computation-Theory | [Regular-Languages.md](../CS-Theory/Computation-Theory/Regular-Languages.md) | Draft | 계산 이론 시작점 |
 
-## P3: AI Core 진입 보강
+## P3: AI Core 진입 보강 - 작성됨
 
-| 섹션 | 파일 | 이유 |
-|---|---|---|
-| Math/Calculus | `Differentiation.md` | 역전파와 최적화의 최소 미적분 |
-| Math/Calculus | `Chain-Rule.md` | 역전파의 수학적 핵심 |
-| Math/Linear-Algebra | `Vectors.md` | ML 입력과 파라미터 표현의 시작점 |
-| Math/Linear-Algebra | `Matrices.md` | 배치 계산과 선형 변환의 기반 |
-| Math/Probability-Statistics | `Probability-Basics.md` | 확률 모델과 평가 지표의 기반 |
-| Math/Probability-Statistics | `Expectation.md` | 손실과 기대 위험 이해 |
-| Math/Optimization | `Gradient-Descent.md` | 머신러닝 학습의 핵심 절차 |
-| AI/Machine-Learning | `Linear-Regression.md` | AI 경로의 첫 모델 문서 |
-| AI/Machine-Learning | `Logistic-Regression.md` | 분류 모델의 기본 |
+| 섹션 | 파일 | 상태 | 이유 |
+|---|---|---|---|
+| Math/Calculus | [Differentiation.md](../Math/Calculus/Differentiation.md) | Draft | 역전파와 최적화의 최소 미적분 |
+| Math/Calculus | [Chain-Rule.md](../Math/Calculus/Chain-Rule.md) | Draft | 역전파의 수학적 핵심 |
+| Math/Linear-Algebra | [Vectors.md](../Math/Linear-Algebra/Vectors.md) | Draft | ML 입력과 파라미터 표현의 시작점 |
+| Math/Linear-Algebra | [Matrices.md](../Math/Linear-Algebra/Matrices.md) | Draft | 배치 계산과 선형 변환의 기반 |
+| Math/Probability-Statistics | [Probability-Basics.md](../Math/Probability-Statistics/Probability-Basics.md) | Draft | 확률 모델과 평가 지표의 기반 |
+| Math/Probability-Statistics | [Expectation.md](../Math/Probability-Statistics/Expectation.md) | Draft | 손실과 기대 위험 이해 |
+| Math/Optimization | [Gradient-Descent.md](../Math/Optimization/Gradient-Descent.md) | Draft | 머신러닝 학습의 핵심 절차 |
+| AI/Machine-Learning | [Linear-Regression.md](../AI/Machine-Learning/Linear-Regression.md) | Draft | AI 경로의 첫 모델 문서 |
+| AI/Machine-Learning | [Logistic-Regression.md](../AI/Machine-Learning/Logistic-Regression.md) | Draft | 분류 모델의 기본 |
 
 ## P4: CS Core 완성 경로
 

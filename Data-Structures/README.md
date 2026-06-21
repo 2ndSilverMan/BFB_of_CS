@@ -29,7 +29,7 @@
 
 | 주제 | 파일 | 설명 | Status |
 |---|---|---|---|
-| 이진 트리 (Binary Tree) | Binary-Tree.md | 계층 구조의 기본 | Planned |
+| 이진 트리 (Binary Tree) | [Binary-Tree.md](Binary-Tree.md) | 계층 구조의 기본 | Draft |
 | 이진 탐색 트리 (BST) | BST.md | O(log n) 탐색 (균형 시) | Planned |
 | AVL 트리 | AVL-Tree.md | 자기 균형 BST | Planned |
 | 레드-블랙 트리 | Red-Black-Tree.md | 자기 균형 BST (실용) | Planned |
@@ -49,7 +49,7 @@
 
 | 주제 | 파일 | 설명 | Status |
 |---|---|---|---|
-| 해시 테이블 | Hash-Table.md | 평균 O(1) 접근 | Planned |
+| 해시 테이블 | [Hash-Table.md](Hash-Table.md) | 평균 O(1) 접근 | Draft |
 | 해시 함수 | Hash-Function.md | 충돌 처리 전략 | Planned |
 
 ---

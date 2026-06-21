@@ -17,7 +17,7 @@
 
 | 주제 | 파일 | Status |
 |---|---|---|
-| 정규 언어와 유한 오토마타 (DFA/NFA) | Regular-Languages.md | Planned |
+| 정규 언어와 유한 오토마타 (DFA/NFA) | [Regular-Languages.md](Regular-Languages.md) | Draft |
 | 정규 표현식 | Regular-Expressions.md | Planned |
 | 문맥 자유 문법 (CFG)과 푸시다운 오토마타 | Context-Free.md | Planned |
 | 튜링 머신 | Turing-Machine.md | Planned |

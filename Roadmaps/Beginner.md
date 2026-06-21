@@ -10,9 +10,9 @@
 
 ## 현재 가용성
 
-현재 바로 읽을 수 있는 본문은 프로그래밍 기초, 논리, 기본 자료구조, 기본 알고리즘까지의 최소 경로다. 이 경로만으로도 간단한 프로그램 작성, 기본 자료구조 읽기, Big-O와 BFS/DFS의 입문 수준 이해는 가능하다.
+현재 바로 읽을 수 있는 본문은 프로그래밍 기초, 이산수학(논리·귀납법·그래프 이론), 자료구조(배열~트리·해시), 기본 알고리즘(정렬·탐색·BFS/DFS·기본 DP), 그리고 시스템 기본 용어 맛보기(데이터 표현·프로세스·네트워크·SQL)까지다.
 
-아래 전체 로드맵은 최종 목표다. 트리, 해시, 기본 DP, 시스템 맛보기까지 포함한 완료 기준은 아직 `Planned` 문서가 채워져야 닫힌다.
+입문자 로드맵의 최종 완료 기준에 필요한 본문은 모두 열렸다. 이 경로는 처음부터 끝까지 읽고 실습할 수 있는 첫 번째 Draft 학습 경로이며, 사람 검토와 참조 보강은 별도 유지보수 단계에서 진행한다.
 
 ## 순서
 
@@ -26,17 +26,27 @@
    - [언어 선택 가이드](../Programming/Language-Selection.md)
 2. 수학 기초
    - [명제 논리와 술어 논리](../Math/Discrete/Logic.md)
+   - [수학적 귀납법](../Math/Discrete/Induction.md)
+   - [그래프 이론 기초](../Math/Discrete/Graph-Theory.md)
 3. 자료구조
    - [배열](../Data-Structures/Array.md)
    - [연결 리스트](../Data-Structures/Linked-List.md)
    - [스택](../Data-Structures/Stack.md)
    - [큐](../Data-Structures/Queue.md)
    - [그래프 표현](../Data-Structures/Graph-Representation.md)
+   - [이진 트리](../Data-Structures/Binary-Tree.md)
+   - [해시 테이블](../Data-Structures/Hash-Table.md)
 4. 알고리즘
    - [복잡도 분석](../Algorithms/Complexity.md)
    - [정렬](../Algorithms/Sorting.md)
    - [이진 탐색](../Algorithms/Binary-Search.md)
    - [BFS / DFS](../Algorithms/BFS-DFS.md)
+   - [동적 계획법 기초](../Algorithms/DP-Basics.md)
+5. 시스템 맛보기
+   - [데이터 표현](../Systems/Computer-Architecture/Data-Representation.md)
+   - [프로세스와 스레드](../Systems/Operating-Systems/Processes-and-Threads.md)
+   - [네트워크 계층 모델](../Systems/Networks/Network-Models.md)
+   - [관계형 모델과 SQL](../Systems/Databases/Relational-Model-and-SQL.md)
 
 방향을 고르기 위한 선택 트랙 목차는 다음과 같다. 아직 대부분 `Planned` 상태이므로, 본문 경로를 보조하는 지도처럼 사용한다.
 
@@ -45,14 +55,7 @@
 - [Git 학습 트랙](../Engineering/DevOps/Git/)
 - [GitHub 학습 트랙](../Engineering/DevOps/GitHub/)
 
-현재 경로를 다 읽은 뒤 최종 완료 기준을 채우려면 다음 예정 주제가 추가로 필요하다.
-
-| 영역 | 예정 보강 주제 |
-|---|---|
-| 이산수학 | `Induction.md`, `Graph-Theory.md` |
-| 자료구조 | `Binary-Tree.md`, `Hash-Table.md` |
-| 알고리즘 | `DP-Basics.md` |
-| 시스템 맛보기 | `Data-Representation.md`, `Processes-and-Threads.md`, `Network-Models.md`, `Relational-Model-and-SQL.md` |
+입문자 로드맵의 최종 완료 기준에 필요한 본문은 모두 작성되어 위 순서에 포함됐다. 더 깊이 들어가려면 [CS 핵심 로드맵](CS-Core.md)으로 이어 간다.
 
 아래 전체 로드맵은 입문자 과정의 최종 목표다.
 
@@ -89,17 +92,18 @@
 - 배열, 연결 리스트, 스택, 큐, 그래프 표현의 기본 차이를 설명할 수 있다.
 - Big-O로 단일 순회, 중첩 반복문, 이진 탐색의 시간 복잡도를 설명할 수 있다.
 - 정렬된 배열에서 이진 탐색을 구현하고, 그래프를 BFS/DFS로 순회할 수 있다.
-- 다음에 채워야 할 주제가 트리, 해시, DP, 시스템 기본 용어라는 점을 알고 있다.
+- 이진 트리 순회와 해시 테이블의 평균 O(1) 동작을 설명하고, 피보나치·계단 오르기 같은 기본 DP를 풀 수 있다.
+- 데이터 표현, 프로세스와 스레드, 네트워크 계층, 관계형 모델과 SQL 같은 시스템 기본 용어를 설명할 수 있다.
 
 ## 최종 완료 기준
 
-입문자 로드맵 전체를 끝냈을 때의 기준이다. 현재 `Draft` 문서만으로는 일부 항목이 아직 충족되지 않는다.
+입문자 로드맵 전체를 끝냈을 때의 기준이다. 현재 링크가 걸린 `Draft`/`Review` 문서로 아래 항목을 한 번씩 학습할 수 있으며, 정확성 검토와 참조 보강은 문서 상태 승격 과정에서 계속 진행한다.
 
 - 간단한 콘솔 프로그램을 함수와 자료구조로 나누어 작성할 수 있다.
 - Big-O로 기본 연산의 시간/공간 복잡도를 설명할 수 있다.
 - 배열, 연결 리스트, 스택, 큐, 트리, 해시 테이블의 차이를 설명하고 기본 구현을 읽을 수 있다.
 - BFS/DFS, 이진 탐색, 정렬, 기본 DP 문제를 풀이할 수 있다.
-- 프로세스, 메모리, TCP/IP, SQL 트랜잭션 같은 시스템 기본 용어를 설명할 수 있다.
+- 프로세스와 스레드, 데이터 표현, TCP/IP 계층, 관계형 모델과 SQL 같은 시스템 기본 용어를 설명할 수 있다.
 
 ---
 
