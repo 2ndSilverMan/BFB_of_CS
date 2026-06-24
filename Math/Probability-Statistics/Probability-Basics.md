@@ -83,7 +83,7 @@ print(round(estimate_even_given_gt3(), 2))   # ~0.67  (이론값 2/3: {4,6} / {4
 ## 이어서 읽기 (Reading Path)
 
 - 이전: 없음
-- 다음: 확률 변수와 분포 (예정 `Distributions.md`), [기댓값, 분산, 공분산](Expectation.md)
+- 다음: [확률 변수와 분포](Distributions.md), [기댓값, 분산, 공분산](Expectation.md)
 
 ## 참조 (References)
 

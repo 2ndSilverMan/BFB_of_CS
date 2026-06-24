@@ -17,13 +17,13 @@
 
 | 주제 | 파일 | Status |
 |---|---|---|
-| 볼록 최적화 기초 | Convex-Optimization.md | Planned |
+| 볼록 최적화 기초 | [Convex-Optimization.md](Convex-Optimization.md) | Draft |
 | 경사 하강법 (GD) | [Gradient-Descent.md](Gradient-Descent.md) | Draft |
-| 확률적 경사 하강법 (SGD) | SGD.md | Planned |
-| Adam, RMSProp 등 적응형 방법 | Adaptive-Methods.md | Planned |
-| 라그랑주 승수법 | Lagrangian.md | Planned |
-| 선형 프로그래밍 | Linear-Programming.md | Planned |
-| 2차 프로그래밍 | Quadratic-Programming.md | Planned |
+| 확률적 경사 하강법 (SGD) | [SGD.md](SGD.md) | Draft |
+| Adam, RMSProp 등 적응형 방법 | [Adaptive-Methods.md](Adaptive-Methods.md) | Draft |
+| 라그랑주 승수법 | [Lagrangian.md](Lagrangian.md) | Draft |
+| 선형 프로그래밍 | [Linear-Programming.md](Linear-Programming.md) | Draft |
+| 2차 프로그래밍 | [Quadratic-Programming.md](Quadratic-Programming.md) | Draft |
 
 ---
 

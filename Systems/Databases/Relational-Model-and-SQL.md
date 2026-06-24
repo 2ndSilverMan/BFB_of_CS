@@ -105,7 +105,7 @@ print(rows)   # [('Grace',)]
 ## 이어서 읽기 (Reading Path)
 
 - 이전: 없음
-- 다음: 정규화 (예정 `Database-Normalization.md`), 인덱스와 B-트리 (예정 `Indexes-and-B-Tree.md`)
+- 다음: [정규화](Database-Normalization.md), [인덱스와 B-트리](Indexes-and-B-Tree.md)
 - 관련: [이진 트리](../../Data-Structures/Binary-Tree.md), [해시 테이블](../../Data-Structures/Hash-Table.md)
 
 ## 참조 (References)

@@ -17,11 +17,11 @@
 
 | Order | 주제 | 파일 | 설명 | Status |
 |---|---|---|---|---|
-| 1 | 실행 환경과 기본 문법 | Cpp-Setup-and-Syntax.md | 컴파일, namespace, iostream, 값과 참조 | Planned |
-| 2 | 참조와 RAII | Cpp-References-and-RAII.md | reference, lifetime, destructor, resource ownership | Planned |
-| 3 | 클래스와 템플릿 | Cpp-Classes-and-Templates.md | class, operator, template의 기본 사용 | Planned |
-| 4 | STL | Cpp-STL.md | vector, string, map, algorithm 사용 패턴 | Planned |
-| 5 | 스마트 포인터와 메모리 | Cpp-Memory-and-Smart-Pointers.md | unique_ptr, shared_ptr, move semantics 기본 | Planned |
+| 1 | 실행 환경과 기본 문법 | [Cpp-Setup-and-Syntax.md](Cpp-Setup-and-Syntax.md) | 컴파일, namespace, iostream, 값과 참조 | Draft |
+| 2 | 참조와 RAII | [Cpp-References-and-RAII.md](Cpp-References-and-RAII.md) | reference, lifetime, destructor, resource ownership | Draft |
+| 3 | 클래스와 템플릿 | [Cpp-Classes-and-Templates.md](Cpp-Classes-and-Templates.md) | class, operator, template의 기본 사용 | Draft |
+| 4 | STL | [Cpp-STL.md](Cpp-STL.md) | vector, string, map, algorithm 사용 패턴 | Draft |
+| 5 | 스마트 포인터와 메모리 | [Cpp-Memory-and-Smart-Pointers.md](Cpp-Memory-and-Smart-Pointers.md) | unique_ptr, shared_ptr, move semantics 기본 | Draft |
 
 ---
 

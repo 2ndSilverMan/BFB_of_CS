@@ -22,67 +22,67 @@
 | 1 | 복잡도 분석 (Big-O) | [Complexity.md](Complexity.md) | Draft |
 | 2 | 정렬 (Sorting) | [Sorting.md](Sorting.md) | Review |
 | 3 | 이진 탐색 (Binary Search) | [Binary-Search.md](Binary-Search.md) | Draft |
-| 4 | 분할 정복 (Divide & Conquer) | Divide-and-Conquer.md | Planned |
-| 5 | 그리디 (Greedy) | Greedy.md | Planned |
-| 6 | 백트래킹 (Backtracking) | Backtracking.md | Planned |
+| 4 | 분할 정복 (Divide & Conquer) | [Divide-and-Conquer.md](Divide-and-Conquer.md) | Draft |
+| 5 | 그리디 (Greedy) | [Greedy.md](Greedy.md) | Draft |
+| 6 | 백트래킹 (Backtracking) | [Backtracking.md](Backtracking.md) | Draft |
 
 ### 동적 프로그래밍
 
 | Order | 주제 | 파일 | Status |
 |---|---|---|---|
 | 7 | DP 기초 | [DP-Basics.md](DP-Basics.md) | Draft |
-| 8 | DP 최적화 | DP-Optimization.md | Planned |
-| 9 | 비트마스크 DP | Bitmask-DP.md | Planned |
-| 10 | 트리 DP | Tree-DP.md | Planned |
+| 8 | DP 최적화 | [DP-Optimization.md](DP-Optimization.md) | Draft |
+| 9 | 비트마스크 DP | [Bitmask-DP.md](Bitmask-DP.md) | Draft |
+| 10 | 트리 DP | [Tree-DP.md](Tree-DP.md) | Draft |
 
 ### 그래프 알고리즘
 
 | Order | 주제 | 파일 | Status |
 |---|---|---|---|
 | 11 | BFS / DFS | [BFS-DFS.md](BFS-DFS.md) | Review |
-| 12 | 위상 정렬 | Topological-Sort.md | Planned |
-| 13 | 강한 연결 요소 (SCC) | SCC.md | Planned |
-| 14 | 최단 경로 — Dijkstra | Dijkstra.md | Planned |
-| 15 | 최단 경로 — Bellman-Ford | Bellman-Ford.md | Planned |
-| 16 | 최단 경로 — Floyd-Warshall | Floyd-Warshall.md | Planned |
-| 17 | 최소 신장 트리 (Kruskal / Prim) | MST.md | Planned |
+| 12 | 위상 정렬 | [Topological-Sort.md](Topological-Sort.md) | Draft |
+| 13 | 강한 연결 요소 (SCC) | [SCC.md](SCC.md) | Draft |
+| 14 | 최단 경로 — Dijkstra | [Dijkstra.md](Dijkstra.md) | Draft |
+| 15 | 최단 경로 — Bellman-Ford | [Bellman-Ford.md](Bellman-Ford.md) | Draft |
+| 16 | 최단 경로 — Floyd-Warshall | [Floyd-Warshall.md](Floyd-Warshall.md) | Draft |
+| 17 | 최소 신장 트리 (Kruskal / Prim) | [MST.md](MST.md) | Draft |
 
 ### 네트워크 플로우
 
 | Order | 주제 | 파일 | Status |
 |---|---|---|---|
-| 18 | 최대 유량 (Ford-Fulkerson / Edmonds-Karp) | Max-Flow.md | Planned |
-| 19 | Dinic's Algorithm | Dinic.md | Planned |
-| 20 | 이분 매칭 | Bipartite-Matching.md | Planned |
-| 21 | 최소 비용 최대 유량 (MCMF) | MCMF.md | Planned |
+| 18 | 최대 유량 (Ford-Fulkerson / Edmonds-Karp) | [Max-Flow.md](Max-Flow.md) | Draft |
+| 19 | Dinic's Algorithm | [Dinic.md](Dinic.md) | Draft |
+| 20 | 이분 매칭 | [Bipartite-Matching.md](Bipartite-Matching.md) | Draft |
+| 21 | 최소 비용 최대 유량 (MCMF) | [MCMF.md](MCMF.md) | Draft |
 
 ### 문자열 알고리즘
 
 | Order | 주제 | 파일 | Status |
 |---|---|---|---|
-| 22 | KMP | KMP.md | Planned |
-| 23 | Z 알고리즘 | Z-Algorithm.md | Planned |
-| 24 | Rabin-Karp | Rabin-Karp.md | Planned |
-| 25 | Aho-Corasick | Aho-Corasick.md | Planned |
-| 26 | 서픽스 배열 | Suffix-Array.md | Planned |
+| 22 | KMP | [KMP.md](KMP.md) | Draft |
+| 23 | Z 알고리즘 | [Z-Algorithm.md](Z-Algorithm.md) | Draft |
+| 24 | Rabin-Karp | [Rabin-Karp.md](Rabin-Karp.md) | Draft |
+| 25 | Aho-Corasick | [Aho-Corasick.md](Aho-Corasick.md) | Draft |
+| 26 | 서픽스 배열 | [Suffix-Array.md](Suffix-Array.md) | Draft |
 
 ### 수학적 알고리즘
 
 | Order | 주제 | 파일 | Status |
 |---|---|---|---|
-| 27 | 정수론 & 소수 | Number-Theory.md | Planned |
-| 28 | 고속 거듭제곱 / 행렬 거듭제곱 | Fast-Exponentiation.md | Planned |
-| 29 | FFT / NTT | FFT.md | Planned |
+| 27 | 정수론 & 소수 | [Number-Theory.md](Number-Theory.md) | Draft |
+| 28 | 고속 거듭제곱 / 행렬 거듭제곱 | [Fast-Exponentiation.md](Fast-Exponentiation.md) | Draft |
+| 29 | FFT / NTT | [FFT.md](FFT.md) | Draft |
 
 ### 고급 알고리즘 이론
 
 | Order | 주제 | 파일 | Status |
 |---|---|---|---|
-| 30 | 분할 상환 분석 | Amortized-Analysis.md | Planned |
-| 31 | 근사 알고리즘 | Approximation-Algorithms.md | Planned |
-| 32 | 랜덤 알고리즘 | Randomized-Algorithms.md | Planned |
-| 33 | 계산 기하학 | Computational-Geometry.md | Planned |
-| 34 | 병렬 알고리즘 | Parallel-Algorithms.md | Planned |
+| 30 | 분할 상환 분석 | [Amortized-Analysis.md](Amortized-Analysis.md) | Draft |
+| 31 | 근사 알고리즘 | [Approximation-Algorithms.md](Approximation-Algorithms.md) | Draft |
+| 32 | 랜덤 알고리즘 | [Randomized-Algorithms.md](Randomized-Algorithms.md) | Draft |
+| 33 | 계산 기하학 | [Computational-Geometry.md](Computational-Geometry.md) | Draft |
+| 34 | 병렬 알고리즘 | [Parallel-Algorithms.md](Parallel-Algorithms.md) | Draft |
 
 ---
 

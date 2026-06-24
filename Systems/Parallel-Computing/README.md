@@ -17,12 +17,12 @@
 
 | 주제 | 파일 | Status |
 |---|---|---|
-| 병렬 컴퓨팅 모델 (공유 메모리, 분산 메모리) | Parallel-Models.md | Planned |
-| 멀티스레딩과 동기화 | Multithreading.md | Planned |
-| SIMD와 벡터 연산 | SIMD.md | Planned |
-| GPU 아키텍처와 CUDA | GPU-and-CUDA.md | Planned |
-| OpenMP / MPI | OpenMP-MPI.md | Planned |
-| Amdahl의 법칙과 확장성 | Parallel-Scalability.md | Planned |
+| 병렬 컴퓨팅 모델 (공유 메모리, 분산 메모리) | [Parallel-Models.md](Parallel-Models.md) | Draft |
+| 멀티스레딩과 동기화 | [Multithreading.md](Multithreading.md) | Draft |
+| SIMD와 벡터 연산 | [SIMD.md](SIMD.md) | Draft |
+| GPU 아키텍처와 CUDA | [GPU-and-CUDA.md](GPU-and-CUDA.md) | Draft |
+| OpenMP / MPI | [OpenMP-MPI.md](OpenMP-MPI.md) | Draft |
+| Amdahl의 법칙과 확장성 | [Parallel-Scalability.md](Parallel-Scalability.md) | Draft |
 
 ---
 

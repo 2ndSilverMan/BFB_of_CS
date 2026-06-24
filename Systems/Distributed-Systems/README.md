@@ -17,15 +17,15 @@
 
 | 주제 | 파일 | Status |
 |---|---|---|
-| 시스템 모델과 장애 유형 | System-Models.md | Planned |
-| CAP 정리와 PACELC | CAP-Theorem.md | Planned |
-| 분산 합의 (Paxos, Raft) | Consensus.md | Planned |
-| 복제 (단일 리더, 다중 리더, 리더리스) | Replication.md | Planned |
-| 파티셔닝 (샤딩) | Partitioning.md | Planned |
-| 분산 트랜잭션 (2PC, Saga) | Distributed-Transactions.md | Planned |
-| 시간과 순서 (논리적 시계, 벡터 시계) | Time-and-Ordering.md | Planned |
-| 메시지 큐와 이벤트 스트리밍 | Message-Queues-Event-Streaming.md | Planned |
-| 분산 시스템 사례 (Kafka, Cassandra 등) | Distributed-System-Case-Studies.md | Planned |
+| 시스템 모델과 장애 유형 | [System-Models.md](System-Models.md) | Draft |
+| CAP 정리와 PACELC | [CAP-Theorem.md](CAP-Theorem.md) | Draft |
+| 분산 합의 (Paxos, Raft) | [Consensus.md](Consensus.md) | Draft |
+| 복제 (단일 리더, 다중 리더, 리더리스) | [Replication.md](Replication.md) | Draft |
+| 파티셔닝 (샤딩) | [Partitioning.md](Partitioning.md) | Draft |
+| 분산 트랜잭션 (2PC, Saga) | [Distributed-Transactions.md](Distributed-Transactions.md) | Draft |
+| 시간과 순서 (논리적 시계, 벡터 시계) | [Time-and-Ordering.md](Time-and-Ordering.md) | Draft |
+| 메시지 큐와 이벤트 스트리밍 | [Message-Queues-Event-Streaming.md](Message-Queues-Event-Streaming.md) | Draft |
+| 분산 시스템 사례 (Kafka, Cassandra 등) | [Distributed-System-Case-Studies.md](Distributed-System-Case-Studies.md) | Draft |
 
 ---
 

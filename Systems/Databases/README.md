@@ -18,14 +18,14 @@
 | 주제 | 파일 | Status |
 |---|---|---|
 | 관계형 모델과 SQL | [Relational-Model-and-SQL.md](Relational-Model-and-SQL.md) | Draft |
-| 정규화 (1NF ~ BCNF) | Database-Normalization.md | Planned |
-| 인덱스와 B-트리 | Indexes-and-B-Tree.md | Planned |
+| 정규화 (1NF ~ BCNF) | [Database-Normalization.md](Database-Normalization.md) | Draft |
+| 인덱스와 B-트리 | [Indexes-and-B-Tree.md](Indexes-and-B-Tree.md) | Draft |
 | 트랜잭션과 ACID | [Transactions-and-ACID.md](Transactions-and-ACID.md) | Draft |
-| 동시성 제어 (잠금, MVCC) | Concurrency-Control.md | Planned |
-| 복구 (WAL, REDO/UNDO) | Recovery.md | Planned |
-| 쿼리 최적화 | Query-Optimization.md | Planned |
-| NoSQL (키-값, 문서, 컬럼, 그래프) | NoSQL.md | Planned |
-| 분산 데이터베이스 | Distributed-DB.md | Planned |
+| 동시성 제어 (잠금, MVCC) | [Concurrency-Control.md](Concurrency-Control.md) | Draft |
+| 복구 (WAL, REDO/UNDO) | [Recovery.md](Recovery.md) | Draft |
+| 쿼리 최적화 | [Query-Optimization.md](Query-Optimization.md) | Draft |
+| NoSQL (키-값, 문서, 컬럼, 그래프) | [NoSQL.md](NoSQL.md) | Draft |
+| 분산 데이터베이스 | [Distributed-DB.md](Distributed-DB.md) | Draft |
 
 ---
 

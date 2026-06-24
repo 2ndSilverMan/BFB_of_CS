@@ -19,12 +19,12 @@
 |---|---|---|
 | 벡터와 벡터 공간 | [Vectors.md](Vectors.md) | Draft |
 | 행렬 연산 | [Matrices.md](Matrices.md) | Draft |
-| 선형 연립방정식 | Linear-Systems.md | Planned |
-| 행렬식 (Determinant) | Determinant.md | Planned |
-| 고유값과 고유벡터 | Eigenvalues.md | Planned |
-| 특이값 분해 (SVD) | SVD.md | Planned |
-| 주성분 분석 (PCA) | PCA.md | Planned |
-| 직교성과 최소제곱 | Orthogonality.md | Planned |
+| 선형 연립방정식 | [Linear-Systems.md](Linear-Systems.md) | Draft |
+| 행렬식 (Determinant) | [Determinant.md](Determinant.md) | Draft |
+| 고유값과 고유벡터 | [Eigenvalues.md](Eigenvalues.md) | Draft |
+| 특이값 분해 (SVD) | [SVD.md](SVD.md) | Draft |
+| 주성분 분석 (PCA) | [PCA.md](PCA.md) | Draft |
+| 직교성과 최소제곱 | [Orthogonality.md](Orthogonality.md) | Draft |
 
 ---
 

@@ -129,8 +129,8 @@ for lr in (0.01, 0.1, 1.1):
 
 ## 이어서 읽기 (Reading Path)
 
-- 이전: 볼록 최적화 기초 (예정 `Convex-Optimization.md`)
-- 다음: 확률적 경사 하강법 (예정 `SGD.md`)
+- 이전: [볼록 최적화 기초](Convex-Optimization.md)
+- 다음: [확률적 경사 하강법](SGD.md)
 - 관련: [Math/Optimization/](./), [AI/Machine-Learning/](../../AI/Machine-Learning/)
 
 ## 참조 (References)

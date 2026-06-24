@@ -17,11 +17,11 @@
 
 | Order | 주제 | 파일 | 설명 | Status |
 |---|---|---|---|---|
-| 1 | 실행 환경과 기본 문법 | Java-Setup-and-Syntax.md | JDK, main 메서드, 컴파일/실행, 기본 타입 | Planned |
-| 2 | 클래스와 객체 | Java-Classes-and-Objects.md | 클래스, 필드, 메서드, 생성자, 캡슐화 | Planned |
-| 3 | 인터페이스와 제네릭 | Java-Generics-and-Interfaces.md | interface, generic type, 다형성 기본 | Planned |
-| 4 | 컬렉션 | Java-Collections.md | List, Set, Map과 반복 패턴 | Planned |
-| 5 | 예외와 파일 | Java-Exceptions-and-Files.md | checked/unchecked exception, 파일 입출력 | Planned |
+| 1 | 실행 환경과 기본 문법 | [Java-Setup-and-Syntax.md](Java-Setup-and-Syntax.md) | JDK, main 메서드, 컴파일/실행, 기본 타입 | Draft |
+| 2 | 클래스와 객체 | [Java-Classes-and-Objects.md](Java-Classes-and-Objects.md) | 클래스, 필드, 메서드, 생성자, 캡슐화 | Draft |
+| 3 | 인터페이스와 제네릭 | [Java-Generics-and-Interfaces.md](Java-Generics-and-Interfaces.md) | interface, generic type, 다형성 기본 | Draft |
+| 4 | 컬렉션 | [Java-Collections.md](Java-Collections.md) | List, Set, Map과 반복 패턴 | Draft |
+| 5 | 예외와 파일 | [Java-Exceptions-and-Files.md](Java-Exceptions-and-Files.md) | checked/unchecked exception, 파일 입출력 | Draft |
 
 ---
 

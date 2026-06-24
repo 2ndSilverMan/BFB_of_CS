@@ -17,11 +17,11 @@
 
 | Order | 주제 | 파일 | 설명 | Status |
 |---|---|---|---|---|
-| 1 | 실행 환경과 기본 문법 | JavaScript-Setup-and-Syntax.md | 브라우저 콘솔, Node.js, 변수 선언, 기본 입출력 | Planned |
-| 2 | 값과 타입 변환 | JavaScript-Values-and-Coercion.md | `null`, `undefined`, truthy/falsy, 암묵적 변환 | Planned |
-| 3 | 함수와 스코프 | JavaScript-Functions-and-Scope.md | function, arrow function, closure, lexical scope | Planned |
-| 4 | DOM과 이벤트 | JavaScript-DOM-and-Events.md | HTML 요소 선택, 이벤트 처리, 브라우저 API | Planned |
-| 5 | 비동기 프로그래밍 | JavaScript-Async.md | callback, Promise, async/await, fetch | Planned |
+| 1 | 실행 환경과 기본 문법 | [JavaScript-Setup-and-Syntax.md](JavaScript-Setup-and-Syntax.md) | 브라우저 콘솔, Node.js, 변수 선언, 기본 입출력 | Draft |
+| 2 | 값과 타입 변환 | [JavaScript-Values-and-Coercion.md](JavaScript-Values-and-Coercion.md) | `null`, `undefined`, truthy/falsy, 암묵적 변환 | Draft |
+| 3 | 함수와 스코프 | [JavaScript-Functions-and-Scope.md](JavaScript-Functions-and-Scope.md) | function, arrow function, closure, lexical scope | Draft |
+| 4 | DOM과 이벤트 | [JavaScript-DOM-and-Events.md](JavaScript-DOM-and-Events.md) | HTML 요소 선택, 이벤트 처리, 브라우저 API | Draft |
+| 5 | 비동기 프로그래밍 | [JavaScript-Async.md](JavaScript-Async.md) | callback, Promise, async/await, fetch | Draft |
 
 ---
 

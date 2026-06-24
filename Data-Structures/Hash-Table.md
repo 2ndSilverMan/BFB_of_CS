@@ -106,7 +106,7 @@ print(counts)   # {'a': 2, 'b': 1}
 ## 이어서 읽기 (Reading Path)
 
 - 이전: [배열](Array.md)
-- 다음: 해시 함수와 충돌 처리 (예정 `Hash-Function.md`)
+- 다음: [해시 함수와 충돌 처리](Hash-Function.md)
 
 ## 참조 (References)
 

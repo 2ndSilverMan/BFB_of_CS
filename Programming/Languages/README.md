@@ -18,11 +18,11 @@
 
 | 트랙 | 내용 | 권장 선수지식 | Status |
 |---|---|---|---|
-| [Python/](Python/) | 빠른 실습, 자동화, 데이터/AI 입문에 적합한 언어 | [변수와 타입](../Variables-and-Types.md), [조건문과 반복문](../Control-Flow.md) | Planned |
-| [JavaScript/](JavaScript/) | 웹 브라우저와 Node.js에서 UI, 서버, 비동기를 다루는 언어 | [함수와 재귀](../Functions-and-Recursion.md) | Planned |
-| [C/](C/) | 메모리, 포인터, 컴파일, 시스템 기초를 익히는 언어 | [배열과 문자열](../Arrays-and-Strings.md) | Planned |
-| [Java/](Java/) | 객체지향, 타입, 예외, 컬렉션 기반 애플리케이션 언어 | [함수와 재귀](../Functions-and-Recursion.md) | Planned |
-| [Cpp/](Cpp/) | 성능, RAII, STL, 템플릿을 함께 다루는 언어 | [C/](C/), [배열과 문자열](../Arrays-and-Strings.md) | Planned |
+| [Python/](Python/) | 빠른 실습, 자동화, 데이터/AI 입문에 적합한 언어 | [변수와 타입](../Variables-and-Types.md), [조건문과 반복문](../Control-Flow.md) | Draft |
+| [JavaScript/](JavaScript/) | 웹 브라우저와 Node.js에서 UI, 서버, 비동기를 다루는 언어 | [함수와 재귀](../Functions-and-Recursion.md) | Draft |
+| [C/](C/) | 메모리, 포인터, 컴파일, 시스템 기초를 익히는 언어 | [배열과 문자열](../Arrays-and-Strings.md) | Draft |
+| [Java/](Java/) | 객체지향, 타입, 예외, 컬렉션 기반 애플리케이션 언어 | [함수와 재귀](../Functions-and-Recursion.md) | Draft |
+| [Cpp/](Cpp/) | 성능, RAII, STL, 템플릿을 함께 다루는 언어 | [C/](C/), [배열과 문자열](../Arrays-and-Strings.md) | Draft |
 
 ---
 

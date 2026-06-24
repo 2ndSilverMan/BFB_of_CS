@@ -18,19 +18,19 @@
 | 주제 | 파일 | Status |
 |---|---|---|
 | 프로세스와 스레드 | [Processes-and-Threads.md](Processes-and-Threads.md) | Draft |
-| CPU 스케줄링 | Scheduling.md | Planned |
-| 동기화 (뮤텍스, 세마포어) | Synchronization.md | Planned |
-| 교착 상태 (Deadlock) | Deadlock.md | Planned |
+| CPU 스케줄링 | [Scheduling.md](Scheduling.md) | Draft |
+| 동기화 (뮤텍스, 세마포어) | [Synchronization.md](Synchronization.md) | Draft |
+| 교착 상태 (Deadlock) | [Deadlock.md](Deadlock.md) | Draft |
 | 메모리 관리 (페이징, 세그멘테이션) | [Memory-Management.md](Memory-Management.md) | Draft |
-| 가상 메모리와 페이지 교체 | Virtual-Memory.md | Planned |
-| 파일 시스템 | File-Systems.md | Planned |
-| 입출력과 디바이스 드라이버 | IO-and-Drivers.md | Planned |
+| 가상 메모리와 페이지 교체 | [Virtual-Memory.md](Virtual-Memory.md) | Draft |
+| 파일 시스템 | [File-Systems.md](File-Systems.md) | Draft |
+| 입출력과 디바이스 드라이버 | [IO-and-Drivers.md](IO-and-Drivers.md) | Draft |
 
 ### 실습 트랙
 
 | 주제 | 위치 | 설명 | Status |
 |---|---|---|---|
-| Linux 학습 트랙 | [Linux/](Linux/) | 셸, 파일 시스템, 권한, 프로세스, 서비스 운영 기초 | Planned |
+| Linux 학습 트랙 | [Linux/](Linux/) | 셸, 파일 시스템, 권한, 프로세스, 서비스 운영 기초 | Draft |
 
 ---
 

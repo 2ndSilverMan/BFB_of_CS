@@ -21,20 +21,20 @@
 
 | 주제 | 파일 | Status |
 |---|---|---|
-| 대칭 암호화 (AES, ChaCha20) | Symmetric-Encryption.md | Planned |
-| 비대칭 암호화 (RSA, ECC) | Asymmetric-Encryption.md | Planned |
-| 해시 함수 (SHA, 무결성) | Hash-Functions.md | Planned |
-| 디지털 서명 | Digital-Signatures.md | Planned |
-| 공개키 인프라 (PKI, TLS) | PKI-and-TLS.md | Planned |
-| 영지식 증명 | Zero-Knowledge-Proofs.md | Planned |
+| 대칭 암호화 (AES, ChaCha20) | [Symmetric-Encryption.md](Symmetric-Encryption.md) | Draft |
+| 비대칭 암호화 (RSA, ECC) | [Asymmetric-Encryption.md](Asymmetric-Encryption.md) | Draft |
+| 해시 함수 (SHA, 무결성) | [Hash-Functions.md](Hash-Functions.md) | Draft |
+| 디지털 서명 | [Digital-Signatures.md](Digital-Signatures.md) | Draft |
+| 공개키 인프라 (PKI, TLS) | [PKI-and-TLS.md](PKI-and-TLS.md) | Draft |
+| 영지식 증명 | [Zero-Knowledge-Proofs.md](Zero-Knowledge-Proofs.md) | Draft |
 
 ### 응용 보안
 
 | 주제 | 파일 | Status |
 |---|---|---|
-| 인증과 인가 (OAuth, JWT) | Auth.md | Planned |
-| 웹 보안 (OWASP Top 10) | Web-Security.md | Planned |
-| 네트워크 보안 | Network-Security.md | Planned |
+| 인증과 인가 (OAuth, JWT) | [Auth.md](Auth.md) | Draft |
+| 웹 보안 (OWASP Top 10) | [Web-Security.md](Web-Security.md) | Draft |
+| 네트워크 보안 | [Network-Security.md](Network-Security.md) | Draft |
 
 ---
 

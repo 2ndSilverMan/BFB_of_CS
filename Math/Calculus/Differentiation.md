@@ -79,8 +79,8 @@ print(derivative(lambda x: x**3, 0))   # ~0.0
 
 ## 이어서 읽기 (Reading Path)
 
-- 이전: 극한과 연속 (예정 `Limits.md`; 이 문서는 필요한 극한 직관을 요약해 독립적으로 읽을 수 있음)
-- 다음: [연쇄 법칙](Chain-Rule.md), 편미분과 그래디언트 (예정 `Partial-Derivatives.md`)
+- 이전: [극한과 연속](Limits.md) (이 문서는 필요한 극한 직관을 요약해 독립적으로 읽을 수 있음)
+- 다음: [연쇄 법칙](Chain-Rule.md), [편미분과 그래디언트](Partial-Derivatives.md)
 
 ## 참조 (References)
 

@@ -87,7 +87,7 @@ print(np.linalg.inv(A))   # 역행렬
 ## 이어서 읽기 (Reading Path)
 
 - 이전: [벡터와 벡터 공간](Vectors.md)
-- 다음: 선형 연립방정식 (예정 `Linear-Systems.md`), 고유값과 고유벡터 (예정 `Eigenvalues.md`)
+- 다음: [선형 연립방정식](Linear-Systems.md), [고유값과 고유벡터](Eigenvalues.md)
 
 ## 참조 (References)
 

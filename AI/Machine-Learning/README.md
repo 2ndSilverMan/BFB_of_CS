@@ -21,27 +21,27 @@
 |---|---|---|
 | 선형 회귀 | [Linear-Regression.md](Linear-Regression.md) | Draft |
 | 로지스틱 회귀 | [Logistic-Regression.md](Logistic-Regression.md) | Draft |
-| 결정 트리 | Decision-Trees.md | Planned |
-| 앙상블 (Random Forest, Boosting) | Ensemble.md | Planned |
-| SVM | SVM.md | Planned |
-| k-NN | KNN.md | Planned |
+| 결정 트리 | [Decision-Trees.md](Decision-Trees.md) | Draft |
+| 앙상블 (Random Forest, Boosting) | [Ensemble.md](Ensemble.md) | Draft |
+| SVM | [SVM.md](SVM.md) | Draft |
+| k-NN | [KNN.md](KNN.md) | Draft |
 
 ### 비지도학습 (Unsupervised Learning)
 
 | 주제 | 파일 | Status |
 |---|---|---|
-| k-평균 클러스터링 | K-Means.md | Planned |
-| 계층적 클러스터링 | Hierarchical-Clustering.md | Planned |
-| 차원 축소 (PCA, t-SNE, UMAP) | Dimensionality-Reduction.md | Planned |
+| k-평균 클러스터링 | [K-Means.md](K-Means.md) | Draft |
+| 계층적 클러스터링 | [Hierarchical-Clustering.md](Hierarchical-Clustering.md) | Draft |
+| 차원 축소 (PCA, t-SNE, UMAP) | [Dimensionality-Reduction.md](Dimensionality-Reduction.md) | Draft |
 
 ### 모델 평가 및 일반화
 
 | 주제 | 파일 | Status |
 |---|---|---|
-| 편향-분산 트레이드오프 | Bias-Variance.md | Planned |
-| 교차 검증 | Cross-Validation.md | Planned |
-| 정규화 (L1, L2, Dropout) | Regularization.md | Planned |
-| 과적합과 과소적합 | Overfitting.md | Planned |
+| 편향-분산 트레이드오프 | [Bias-Variance.md](Bias-Variance.md) | Draft |
+| 교차 검증 | [Cross-Validation.md](Cross-Validation.md) | Draft |
+| 정규화 (L1, L2, Dropout) | [Regularization.md](Regularization.md) | Draft |
+| 과적합과 과소적합 | [Overfitting.md](Overfitting.md) | Draft |
 
 ---
 

@@ -90,7 +90,7 @@ sock.close()
 ## 이어서 읽기 (Reading Path)
 
 - 이전: 없음
-- 다음: TCP와 UDP (예정 `TCP-UDP.md`), IP 주소와 라우팅 (예정 `IP-and-Routing.md`)
+- 다음: [TCP와 UDP](TCP-UDP.md), [IP 주소와 라우팅](IP-and-Routing.md)
 
 ## 참조 (References)
 

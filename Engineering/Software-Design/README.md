@@ -19,18 +19,18 @@
 
 | 주제 | 파일 | Status |
 |---|---|---|
-| SOLID 원칙 | SOLID.md | Planned |
-| DRY / KISS / YAGNI | Design-Principles.md | Planned |
-| 클린 코드 | Clean-Code.md | Planned |
-| 리팩토링 | Refactoring.md | Planned |
+| SOLID 원칙 | [SOLID.md](SOLID.md) | Draft |
+| DRY / KISS / YAGNI | [Design-Principles.md](Design-Principles.md) | Draft |
+| 클린 코드 | [Clean-Code.md](Clean-Code.md) | Draft |
+| 리팩토링 | [Refactoring.md](Refactoring.md) | Draft |
 
 ### 디자인 패턴
 
 | 주제 | 파일 | Status |
 |---|---|---|
-| 생성 패턴 (Singleton, Factory, Builder) | Creational-Patterns.md | Planned |
-| 구조 패턴 (Adapter, Composite, Decorator) | Structural-Patterns.md | Planned |
-| 행동 패턴 (Strategy, Observer, Command) | Behavioral-Patterns.md | Planned |
+| 생성 패턴 (Singleton, Factory, Builder) | [Creational-Patterns.md](Creational-Patterns.md) | Draft |
+| 구조 패턴 (Adapter, Composite, Decorator) | [Structural-Patterns.md](Structural-Patterns.md) | Draft |
+| 행동 패턴 (Strategy, Observer, Command) | [Behavioral-Patterns.md](Behavioral-Patterns.md) | Draft |
 
 ---
 

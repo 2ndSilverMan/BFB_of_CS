@@ -17,12 +17,12 @@
 
 | 주제 | 파일 | Status |
 |---|---|---|
-| 부동소수점 표현과 오차 | Floating-Point.md | Planned |
-| 방정식의 수치 해법 (이분법, Newton-Raphson) | Root-Finding.md | Planned |
-| 선형 방정식 수치 풀이 (LU 분해, Gaussian 소거) | Numerical-Linear-Systems.md | Planned |
-| 보간법 (Interpolation) | Interpolation.md | Planned |
-| 수치 미분과 적분 | Differentiation-Integration.md | Planned |
-| 상미분 방정식 수치 해법 (Euler, Runge-Kutta) | ODE-Solvers.md | Planned |
+| 부동소수점 표현과 오차 | [Floating-Point.md](Floating-Point.md) | Draft |
+| 방정식의 수치 해법 (이분법, Newton-Raphson) | [Root-Finding.md](Root-Finding.md) | Draft |
+| 선형 방정식 수치 풀이 (LU 분해, Gaussian 소거) | [Numerical-Linear-Systems.md](Numerical-Linear-Systems.md) | Draft |
+| 보간법 (Interpolation) | [Interpolation.md](Interpolation.md) | Draft |
+| 수치 미분과 적분 | [Differentiation-Integration.md](Differentiation-Integration.md) | Draft |
+| 상미분 방정식 수치 해법 (Euler, Runge-Kutta) | [ODE-Solvers.md](ODE-Solvers.md) | Draft |
 
 ---
 

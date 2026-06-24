@@ -17,11 +17,11 @@
 
 | Order | 주제 | 파일 | 설명 | Status |
 |---|---|---|---|---|
-| 1 | Git 기초 | Git-Basics.md | 저장소, 커밋, 상태 확인, staging area | Planned |
-| 2 | 브랜치, 머지, 리베이스 | Git-Branches-Merging-Rebasing.md | branch, merge, rebase의 차이와 사용 기준 | Planned |
-| 3 | 원격 저장소 | Git-Remotes.md | remote, fetch, pull, push, upstream | Planned |
-| 4 | 충돌 해결 | Git-Conflict-Resolution.md | merge conflict 읽기, 해결, 재검증 | Planned |
-| 5 | 변경 되돌리기 | Git-Undoing-Changes.md | restore, revert, reset의 차이와 위험도 | Planned |
+| 1 | Git 기초 | [Git-Basics.md](Git-Basics.md) | 저장소, 커밋, 상태 확인, staging area | Draft |
+| 2 | 브랜치, 머지, 리베이스 | [Git-Branches-Merging-Rebasing.md](Git-Branches-Merging-Rebasing.md) | branch, merge, rebase의 차이와 사용 기준 | Draft |
+| 3 | 원격 저장소 | [Git-Remotes.md](Git-Remotes.md) | remote, fetch, pull, push, upstream | Draft |
+| 4 | 충돌 해결 | [Git-Conflict-Resolution.md](Git-Conflict-Resolution.md) | merge conflict 읽기, 해결, 재검증 | Draft |
+| 5 | 변경 되돌리기 | [Git-Undoing-Changes.md](Git-Undoing-Changes.md) | restore, revert, reset의 차이와 위험도 | Draft |
 
 ---
 

@@ -17,11 +17,11 @@
 
 | Order | 주제 | 파일 | 설명 | Status |
 |---|---|---|---|---|
-| 1 | 실행 환경과 기본 문법 | Python-Setup-and-Syntax.md | 인터프리터, 스크립트 실행, 들여쓰기, 기본 입출력 | Planned |
-| 2 | 컬렉션 | Python-Collections.md | list, tuple, dict, set과 순회 패턴 | Planned |
-| 3 | 함수와 모듈 | Python-Functions-and-Modules.md | 함수 정의, 스코프, import, 패키지 기본 | Planned |
-| 4 | 파일과 예외 | Python-Files-and-Errors.md | 파일 입출력, 예외 처리, with 문 | Planned |
-| 5 | 클래스와 객체 | Python-OOP.md | class, 인스턴스, 메서드, 간단한 데이터 모델 | Planned |
+| 1 | 실행 환경과 기본 문법 | [Python-Setup-and-Syntax.md](Python-Setup-and-Syntax.md) | 인터프리터, 스크립트 실행, 들여쓰기, 기본 입출력 | Draft |
+| 2 | 컬렉션 | [Python-Collections.md](Python-Collections.md) | list, tuple, dict, set과 순회 패턴 | Draft |
+| 3 | 함수와 모듈 | [Python-Functions-and-Modules.md](Python-Functions-and-Modules.md) | 함수 정의, 스코프, import, 패키지 기본 | Draft |
+| 4 | 파일과 예외 | [Python-Files-and-Errors.md](Python-Files-and-Errors.md) | 파일 입출력, 예외 처리, with 문 | Draft |
+| 5 | 클래스와 객체 | [Python-OOP.md](Python-OOP.md) | class, 인스턴스, 메서드, 간단한 데이터 모델 | Draft |
 
 ---
 

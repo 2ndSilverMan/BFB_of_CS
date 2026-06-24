@@ -98,7 +98,7 @@ print(conn.execute("SELECT id, balance FROM account").fetchall())
 ## 이어서 읽기 (Reading Path)
 
 - 이전: [관계형 모델과 SQL](Relational-Model-and-SQL.md)
-- 다음: 동시성 제어 (예정 `Concurrency-Control.md`), 복구 (예정 `Recovery.md`)
+- 다음: [동시성 제어](Concurrency-Control.md), [복구](Recovery.md)
 
 ## 참조 (References)
 

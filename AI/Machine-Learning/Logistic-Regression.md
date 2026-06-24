@@ -90,7 +90,7 @@ print((sigmoid(X @ theta) >= 0.5).astype(int))   # [0 0 1 1]
 ## 이어서 읽기 (Reading Path)
 
 - 이전: [선형 회귀](Linear-Regression.md)
-- 다음: 결정 트리 (예정 `Decision-Trees.md`), 정규화 (예정 `Regularization.md`)
+- 다음: [결정 트리](Decision-Trees.md), [규제](Regularization.md)
 
 ## 참조 (References)
 

@@ -92,7 +92,7 @@ def triangular(n):
 ## 이어서 읽기 (Reading Path)
 
 - 이전: [명제 논리와 술어 논리](Logic.md)
-- 다음: 재귀와 점화식 (예정 `Recurrences.md`), [그래프 이론 기초](Graph-Theory.md)
+- 다음: [재귀와 점화식](Recurrences.md), [그래프 이론 기초](Graph-Theory.md)
 
 ## 참조 (References)
 

@@ -19,43 +19,43 @@
 
 | 주제 | 파일 | Status |
 |---|---|---|
-| PAC 학습 프레임워크 | PAC-Learning.md | Planned |
-| VC 차원 | VC-Dimension.md | Planned |
-| Shattering과 성장 함수 | Shattering.md | Planned |
-| 샘플 복잡도 하한 (NFL 정리) | No-Free-Lunch.md | Planned |
+| PAC 학습 프레임워크 | [PAC-Learning.md](PAC-Learning.md) | Draft |
+| VC 차원 | [VC-Dimension.md](VC-Dimension.md) | Draft |
+| Shattering과 성장 함수 | [Shattering.md](Shattering.md) | Draft |
+| 샘플 복잡도 하한 (NFL 정리) | [No-Free-Lunch.md](No-Free-Lunch.md) | Draft |
 
 ### 일반화 이론
 
 | 주제 | 파일 | Status |
 |---|---|---|
-| 편향-분산 트레이드오프 (이론적) | Bias-Variance-Theory.md | Planned |
-| Rademacher 복잡도 | Rademacher-Complexity.md | Planned |
-| 일반화 경계 (Generalization Bounds) | Generalization-Bounds.md | Planned |
-| 이중 강하 현상 (Double Descent) | Double-Descent.md | Planned |
+| 편향-분산 트레이드오프 (이론적) | [Bias-Variance-Theory.md](Bias-Variance-Theory.md) | Draft |
+| Rademacher 복잡도 | [Rademacher-Complexity.md](Rademacher-Complexity.md) | Draft |
+| 일반화 경계 (Generalization Bounds) | [Generalization-Bounds.md](Generalization-Bounds.md) | Draft |
+| 이중 강하 현상 (Double Descent) | [Double-Descent.md](Double-Descent.md) | Draft |
 
 ### 최적화 이론과 학습
 
 | 주제 | 파일 | Status |
 |---|---|---|
-| 볼록 최적화와 학습 | Convex-Learning.md | Planned |
-| 비볼록 최적화에서의 수렴 | Non-Convex-Convergence.md | Planned |
-| 경사 하강법 수렴 분석 | GD-Convergence.md | Planned |
-| 암묵적 규제 (Implicit Regularization) | Implicit-Regularization.md | Planned |
+| 볼록 최적화와 학습 | [Convex-Learning.md](Convex-Learning.md) | Draft |
+| 비볼록 최적화에서의 수렴 | [Non-Convex-Convergence.md](Non-Convex-Convergence.md) | Draft |
+| 경사 하강법 수렴 분석 | [GD-Convergence.md](GD-Convergence.md) | Draft |
+| 암묵적 규제 (Implicit Regularization) | [Implicit-Regularization.md](Implicit-Regularization.md) | Draft |
 
 ### 온라인 학습
 
 | 주제 | 파일 | Status |
 |---|---|---|
-| 후회 최소화 (Regret Minimization) | Regret-Minimization.md | Planned |
-| 전문가 알고리즘 | Expert-Algorithms.md | Planned |
-| 멀티암드 밴딧 | Multi-Armed-Bandit.md | Planned |
+| 후회 최소화 (Regret Minimization) | [Regret-Minimization.md](Regret-Minimization.md) | Draft |
+| 전문가 알고리즘 | [Expert-Algorithms.md](Expert-Algorithms.md) | Draft |
+| 멀티암드 밴딧 | [Multi-Armed-Bandit.md](Multi-Armed-Bandit.md) | Draft |
 
 ### 정보 이론과 학습
 
 | 주제 | 파일 | Status |
 |---|---|---|
-| MDL (최소 기술 길이) | MDL.md | Planned |
-| 상호 정보량과 학습 | Mutual-Information.md | Planned |
+| MDL (최소 기술 길이) | [MDL.md](MDL.md) | Draft |
+| 상호 정보량과 학습 | [Mutual-Information.md](Mutual-Information.md) | Draft |
 
 ---
 

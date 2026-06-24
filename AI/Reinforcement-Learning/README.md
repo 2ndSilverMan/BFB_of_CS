@@ -19,42 +19,42 @@
 
 | 주제 | 파일 | Status |
 |---|---|---|
-| MDP (마르코프 결정 과정) | MDP.md | Planned |
-| 가치 함수와 벨만 방정식 | Value-Functions.md | Planned |
-| 정책 (Policy)과 최적 정책 | Policy.md | Planned |
+| MDP (마르코프 결정 과정) | [MDP.md](MDP.md) | Draft |
+| 가치 함수와 벨만 방정식 | [Value-Functions.md](Value-Functions.md) | Draft |
+| 정책 (Policy)과 최적 정책 | [Policy.md](Policy.md) | Draft |
 
 ### 모델 기반 방법
 
 | 주제 | 파일 | Status |
 |---|---|---|
-| 동적 프로그래밍 (가치 반복, 정책 반복) | Dynamic-Programming.md | Planned |
+| 동적 프로그래밍 (가치 반복, 정책 반복) | [Dynamic-Programming.md](Dynamic-Programming.md) | Draft |
 
 ### 모델 프리 방법
 
 | 주제 | 파일 | Status |
 |---|---|---|
-| 몬테카를로 방법 | Monte-Carlo.md | Planned |
-| 시간 차분 학습 (TD, SARSA, Q-Learning) | TD-Learning.md | Planned |
-| 함수 근사 (Linear, Neural) | Function-Approximation.md | Planned |
+| 몬테카를로 방법 | [Monte-Carlo.md](Monte-Carlo.md) | Draft |
+| 시간 차분 학습 (TD, SARSA, Q-Learning) | [TD-Learning.md](TD-Learning.md) | Draft |
+| 함수 근사 (Linear, Neural) | [Function-Approximation.md](Function-Approximation.md) | Draft |
 
 ### 딥 강화학습
 
 | 주제 | 파일 | Status |
 |---|---|---|
-| DQN (Deep Q-Network) | DQN.md | Planned |
-| Policy Gradient (REINFORCE) | Policy-Gradient.md | Planned |
-| Actor-Critic (A2C, A3C) | Actor-Critic.md | Planned |
-| PPO (Proximal Policy Optimization) | PPO.md | Planned |
-| SAC (Soft Actor-Critic) | SAC.md | Planned |
+| DQN (Deep Q-Network) | [DQN.md](DQN.md) | Draft |
+| Policy Gradient (REINFORCE) | [Policy-Gradient.md](Policy-Gradient.md) | Draft |
+| Actor-Critic (A2C, A3C) | [Actor-Critic.md](Actor-Critic.md) | Draft |
+| PPO (Proximal Policy Optimization) | [PPO.md](PPO.md) | Draft |
+| SAC (Soft Actor-Critic) | [SAC.md](SAC.md) | Draft |
 
 ### 심화
 
 | 주제 | 파일 | Status |
 |---|---|---|
-| 모델 기반 딥 RL (Dreamer, MuZero) | Model-Based-DRL.md | Planned |
-| 다중 에이전트 RL | Multi-Agent-RL.md | Planned |
-| 계층적 RL | Hierarchical-RL.md | Planned |
-| 오프라인 RL | Offline-RL.md | Planned |
+| 모델 기반 딥 RL (Dreamer, MuZero) | [Model-Based-DRL.md](Model-Based-DRL.md) | Draft |
+| 다중 에이전트 RL | [Multi-Agent-RL.md](Multi-Agent-RL.md) | Draft |
+| 계층적 RL | [Hierarchical-RL.md](Hierarchical-RL.md) | Draft |
+| 오프라인 RL | [Offline-RL.md](Offline-RL.md) | Draft |
 
 ---
 

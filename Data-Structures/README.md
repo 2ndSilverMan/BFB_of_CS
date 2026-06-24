@@ -23,34 +23,34 @@
 | 연결 리스트 (Linked List) | [Linked-List.md](Linked-List.md) | 동적 크기, O(n) 접근 | Draft |
 | 스택 (Stack) | [Stack.md](Stack.md) | LIFO | Draft |
 | 큐 (Queue) | [Queue.md](Queue.md) | FIFO | Draft |
-| 덱 (Deque) | Deque.md | 양방향 큐 | Planned |
+| 덱 (Deque) | [Deque.md](Deque.md) | 양방향 큐 | Draft |
 
 ### 트리 구조
 
 | 주제 | 파일 | 설명 | Status |
 |---|---|---|---|
 | 이진 트리 (Binary Tree) | [Binary-Tree.md](Binary-Tree.md) | 계층 구조의 기본 | Draft |
-| 이진 탐색 트리 (BST) | BST.md | O(log n) 탐색 (균형 시) | Planned |
-| AVL 트리 | AVL-Tree.md | 자기 균형 BST | Planned |
-| 레드-블랙 트리 | Red-Black-Tree.md | 자기 균형 BST (실용) | Planned |
-| 힙 (Heap) | Heap.md | 우선순위 큐 구현 | Planned |
-| 트라이 (Trie) | Trie.md | 문자열 탐색 특화 | Planned |
-| 세그먼트 트리 | Segment-Tree.md | 구간 쿼리 | Planned |
-| 펜윅 트리 (BIT) | Fenwick-Tree.md | 구간 합 쿼리 | Planned |
+| 이진 탐색 트리 (BST) | [BST.md](BST.md) | O(log n) 탐색 (균형 시) | Draft |
+| AVL 트리 | [AVL-Tree.md](AVL-Tree.md) | 자기 균형 BST | Draft |
+| 레드-블랙 트리 | [Red-Black-Tree.md](Red-Black-Tree.md) | 자기 균형 BST (실용) | Draft |
+| 힙 (Heap) | [Heap.md](Heap.md) | 우선순위 큐 구현 | Draft |
+| 트라이 (Trie) | [Trie.md](Trie.md) | 문자열 탐색 특화 | Draft |
+| 세그먼트 트리 | [Segment-Tree.md](Segment-Tree.md) | 구간 쿼리 | Draft |
+| 펜윅 트리 (BIT) | [Fenwick-Tree.md](Fenwick-Tree.md) | 구간 합 쿼리 | Draft |
 
 ### 그래프
 
 | 주제 | 파일 | 설명 | Status |
 |---|---|---|---|
 | 그래프 표현 | [Graph-Representation.md](Graph-Representation.md) | 인접 행렬 vs 인접 리스트 | Draft |
-| 유니온-파인드 (DSU) | Union-Find.md | 집합 합병 및 탐색 | Planned |
+| 유니온-파인드 (DSU) | [Union-Find.md](Union-Find.md) | 집합 합병 및 탐색 | Draft |
 
 ### 해시
 
 | 주제 | 파일 | 설명 | Status |
 |---|---|---|---|
 | 해시 테이블 | [Hash-Table.md](Hash-Table.md) | 평균 O(1) 접근 | Draft |
-| 해시 함수 | Hash-Function.md | 충돌 처리 전략 | Planned |
+| 해시 함수 | [Hash-Function.md](Hash-Function.md) | 충돌 처리 전략 | Draft |
 
 ---
 

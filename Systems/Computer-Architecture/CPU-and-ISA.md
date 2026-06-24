@@ -112,7 +112,7 @@ run([
 ## 이어서 읽기 (Reading Path)
 
 - 이전: [데이터 표현](Data-Representation.md)
-- 다음: 파이프라이닝 (예정 `Pipelining.md`), 메모리 계층 (예정 `Memory-Hierarchy.md`)
+- 다음: [파이프라이닝](Pipelining.md), [메모리 계층](Memory-Hierarchy.md)
 
 ## 참조 (References)
 

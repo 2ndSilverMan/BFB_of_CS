@@ -82,7 +82,7 @@ print(translate(300))   # page 1, offset 44 -> frame 2 -> 2*256 + 44 = 556
 ## 이어서 읽기 (Reading Path)
 
 - 이전: [프로세스와 스레드](Processes-and-Threads.md)
-- 다음: 가상 메모리와 페이지 교체 (예정 `Virtual-Memory.md`)
+- 다음: [가상 메모리와 페이지 교체](Virtual-Memory.md)
 
 ## 참조 (References)
 

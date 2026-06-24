@@ -84,7 +84,7 @@ print(round(variance(faces, probs), 3)) # 2.917
 ## 이어서 읽기 (Reading Path)
 
 - 이전: [확률 공리와 조건부 확률](Probability-Basics.md)
-- 다음: 베이즈 정리 (예정 `Bayes-Theorem.md`), 최대 우도 추정 (예정 `MLE.md`)
+- 다음: [베이즈 정리](Bayes-Theorem.md), [최대 우도 추정](MLE.md)
 
 ## 참조 (References)
 

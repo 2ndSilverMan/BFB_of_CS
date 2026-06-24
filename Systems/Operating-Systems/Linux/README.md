@@ -17,11 +17,11 @@
 
 | Order | 주제 | 파일 | 설명 | Status |
 |---|---|---|---|---|
-| 1 | 셸과 기본 명령 | Linux-Shell-Basics.md | 터미널, 경로, `ls`, `cd`, `cp`, `mv`, `rm` | Planned |
-| 2 | 파일 시스템 | Linux-File-System.md | 디렉토리 구조, 절대/상대 경로, 마운트 개념 | Planned |
-| 3 | 사용자와 권한 | Linux-Users-Permissions.md | 사용자, 그룹, `chmod`, `chown`, sudo | Planned |
-| 4 | 프로세스와 서비스 | Linux-Processes-and-Services.md | `ps`, `top`, signal, systemd 서비스 | Planned |
-| 5 | 패키지와 로그 | Linux-Packages-and-Logs.md | 패키지 관리자, 로그 위치, 기본 진단 흐름 | Planned |
+| 1 | 셸과 기본 명령 | [Linux-Shell-Basics.md](Linux-Shell-Basics.md) | 터미널, 경로, `ls`, `cd`, `cp`, `mv`, `rm` | Draft |
+| 2 | 파일 시스템 | [Linux-File-System.md](Linux-File-System.md) | 디렉토리 구조, 절대/상대 경로, 마운트 개념 | Draft |
+| 3 | 사용자와 권한 | [Linux-Users-Permissions.md](Linux-Users-Permissions.md) | 사용자, 그룹, `chmod`, `chown`, sudo | Draft |
+| 4 | 프로세스와 서비스 | [Linux-Processes-and-Services.md](Linux-Processes-and-Services.md) | `ps`, `top`, signal, systemd 서비스 | Draft |
+| 5 | 패키지와 로그 | [Linux-Packages-and-Logs.md](Linux-Packages-and-Logs.md) | 패키지 관리자, 로그 위치, 기본 진단 흐름 | Draft |
 
 ---
 

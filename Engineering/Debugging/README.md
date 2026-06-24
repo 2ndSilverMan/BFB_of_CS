@@ -19,45 +19,45 @@
 
 | 주제 | 파일 | Status |
 |---|---|---|
-| 과학적 디버깅 — 가설 수립 → 실험 → 검증 사이클 | Scientific-Debugging.md | Planned |
-| 버그 재현 — 최소 재현 케이스(MRE) 만들기 | Minimal-Reproducible-Example.md | Planned |
-| 이분 탐색 디버깅 — git bisect, 주석 제거 | Bisect-Debugging.md | Planned |
-| 러버 덕 디버깅과 코드 리뷰 활용 | Rubber-Duck-Debugging.md | Planned |
+| 과학적 디버깅 — 가설 수립 → 실험 → 검증 사이클 | [Scientific-Debugging.md](Scientific-Debugging.md) | Draft |
+| 버그 재현 — 최소 재현 케이스(MRE) 만들기 | [Minimal-Reproducible-Example.md](Minimal-Reproducible-Example.md) | Draft |
+| 이분 탐색 디버깅 — git bisect, 주석 제거 | [Bisect-Debugging.md](Bisect-Debugging.md) | Draft |
+| 러버 덕 디버깅과 코드 리뷰 활용 | [Rubber-Duck-Debugging.md](Rubber-Duck-Debugging.md) | Draft |
 
 ### 디버거 사용법
 
 | 주제 | 파일 | Status |
 |---|---|---|
-| 중단점, 스텝 실행, 변수 감시 | Breakpoints-and-Stepping.md | Planned |
-| 스택 트레이스 읽기 | Stack-Traces.md | Planned |
-| 조건부 중단점과 로깅 포인트 | Conditional-Breakpoints.md | Planned |
-| 원격 디버깅 | Remote-Debugging.md | Planned |
-| 코어 덤프 분석 | Core-Dump-Analysis.md | Planned |
+| 중단점, 스텝 실행, 변수 감시 | [Breakpoints-and-Stepping.md](Breakpoints-and-Stepping.md) | Draft |
+| 스택 트레이스 읽기 | [Stack-Traces.md](Stack-Traces.md) | Draft |
+| 조건부 중단점과 로깅 포인트 | [Conditional-Breakpoints.md](Conditional-Breakpoints.md) | Draft |
+| 원격 디버깅 | [Remote-Debugging.md](Remote-Debugging.md) | Draft |
+| 코어 덤프 분석 | [Core-Dump-Analysis.md](Core-Dump-Analysis.md) | Draft |
 
 ### 로깅과 관찰 가능성
 
 | 주제 | 파일 | Status |
 |---|---|---|
-| 로깅 수준 설계 — DEBUG/INFO/WARN/ERROR | Logging-Levels.md | Planned |
-| 구조화 로깅 (Structured Logging) — JSON 포맷 | Structured-Logging.md | Planned |
-| 분산 시스템 로그 상관 — Trace ID, Span | Distributed-Log-Correlation.md | Planned |
+| 로깅 수준 설계 — DEBUG/INFO/WARN/ERROR | [Logging-Levels.md](Logging-Levels.md) | Draft |
+| 구조화 로깅 (Structured Logging) — JSON 포맷 | [Structured-Logging.md](Structured-Logging.md) | Draft |
+| 분산 시스템 로그 상관 — Trace ID, Span | [Distributed-Log-Correlation.md](Distributed-Log-Correlation.md) | Draft |
 
 ### 메모리 & 동시성 버그
 
 | 주제 | 파일 | Status |
 |---|---|---|
-| 메모리 오류 — 버퍼 오버플로우, Use-After-Free | Memory-Errors.md | Planned |
-| Valgrind / AddressSanitizer | Valgrind-AddressSanitizer.md | Planned |
-| 레이스 컨디션 디버깅 | Race-Condition-Debugging.md | Planned |
-| 데드락 탐지 | Deadlock-Detection.md | Planned |
+| 메모리 오류 — 버퍼 오버플로우, Use-After-Free | [Memory-Errors.md](Memory-Errors.md) | Draft |
+| Valgrind / AddressSanitizer | [Valgrind-AddressSanitizer.md](Valgrind-AddressSanitizer.md) | Draft |
+| 레이스 컨디션 디버깅 | [Race-Condition-Debugging.md](Race-Condition-Debugging.md) | Draft |
+| 데드락 탐지 | [Deadlock-Detection.md](Deadlock-Detection.md) | Draft |
 
 ### 프로덕션 디버깅
 
 | 주제 | 파일 | Status |
 |---|---|---|
-| 카나리 배포와 기능 플래그 활용 | Canary-Feature-Flags.md | Planned |
-| 에러 트래킹 — Sentry, Rollbar | Error-Tracking.md | Planned |
-| 사후 분석 (Postmortem) 작성법 | Postmortem.md | Planned |
+| 카나리 배포와 기능 플래그 활용 | [Canary-Feature-Flags.md](Canary-Feature-Flags.md) | Draft |
+| 에러 트래킹 — Sentry, Rollbar | [Error-Tracking.md](Error-Tracking.md) | Draft |
+| 사후 분석 (Postmortem) 작성법 | [Postmortem.md](Postmortem.md) | Draft |
 
 ---
 

@@ -122,7 +122,7 @@ def level_order(root):
 ## 이어서 읽기 (Reading Path)
 
 - 이전: [연결 리스트](Linked-List.md)
-- 다음: 이진 탐색 트리 (예정 `BST.md`), 힙 (예정 `Heap.md`)
+- 다음: [이진 탐색 트리](BST.md), [힙](Heap.md)
 
 ## 참조 (References)
 

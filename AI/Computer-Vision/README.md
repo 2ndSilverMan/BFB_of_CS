@@ -19,29 +19,29 @@
 
 | 주제 | 파일 | Status |
 |---|---|---|
-| 이미지 표현 (픽셀, 컬러 스페이스) | Image-Basics.md | Planned |
-| 고전 비전 (에지 검출, HOG, SIFT) | Classical-Vision.md | Planned |
-| 합성곱 신경망 (CNN) 심화 | CNN-Deep-Dive.md | Planned |
+| 이미지 표현 (픽셀, 컬러 스페이스) | [Image-Basics.md](Image-Basics.md) | Draft |
+| 고전 비전 (에지 검출, HOG, SIFT) | [Classical-Vision.md](Classical-Vision.md) | Draft |
+| 합성곱 신경망 (CNN) 심화 | [CNN-Deep-Dive.md](CNN-Deep-Dive.md) | Draft |
 
 ### 주요 태스크
 
 | 주제 | 파일 | Status |
 |---|---|---|
-| 이미지 분류 | Image-Classification.md | Planned |
-| 객체 탐지 (YOLO, Faster R-CNN, DETR) | Object-Detection.md | Planned |
-| 시맨틱 세그멘테이션 | Semantic-Segmentation.md | Planned |
-| 인스턴스 세그멘테이션 | Instance-Segmentation.md | Planned |
-| 이미지 생성 (GAN, Diffusion) | Image-Generation.md | Planned |
+| 이미지 분류 | [Image-Classification.md](Image-Classification.md) | Draft |
+| 객체 탐지 (YOLO, Faster R-CNN, DETR) | [Object-Detection.md](Object-Detection.md) | Draft |
+| 시맨틱 세그멘테이션 | [Semantic-Segmentation.md](Semantic-Segmentation.md) | Draft |
+| 인스턴스 세그멘테이션 | [Instance-Segmentation.md](Instance-Segmentation.md) | Draft |
+| 이미지 생성 (GAN, Diffusion) | [Image-Generation.md](Image-Generation.md) | Draft |
 
 ### 심화
 
 | 주제 | 파일 | Status |
 |---|---|---|
-| 포즈 추정 | Pose-Estimation.md | Planned |
-| 광류 (Optical Flow) | Optical-Flow.md | Planned |
-| 영상 이해 (Video Understanding) | Video-Understanding.md | Planned |
-| Vision-Language Model (CLIP, ViT) | Vision-Language.md | Planned |
-| 3D 비전 (NeRF, 포인트 클라우드) | 3D-Vision.md | Planned |
+| 포즈 추정 | [Pose-Estimation.md](Pose-Estimation.md) | Draft |
+| 광류 (Optical Flow) | [Optical-Flow.md](Optical-Flow.md) | Draft |
+| 영상 이해 (Video Understanding) | [Video-Understanding.md](Video-Understanding.md) | Draft |
+| Vision-Language Model (CLIP, ViT) | [Vision-Language.md](Vision-Language.md) | Draft |
+| 3D 비전 (NeRF, 포인트 클라우드) | [3D-Vision.md](3D-Vision.md) | Draft |
 
 ---
 

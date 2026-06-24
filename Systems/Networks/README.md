@@ -18,14 +18,14 @@
 | 주제 | 파일 | Status |
 |---|---|---|
 | 네트워크 계층 모델 (OSI / TCP/IP) | [Network-Models.md](Network-Models.md) | Draft |
-| 물리 계층과 데이터 링크 계층 | Physical-and-Link.md | Planned |
-| IP 주소와 라우팅 | IP-and-Routing.md | Planned |
+| 물리 계층과 데이터 링크 계층 | [Physical-and-Link.md](Physical-and-Link.md) | Draft |
+| IP 주소와 라우팅 | [IP-and-Routing.md](IP-and-Routing.md) | Draft |
 | TCP와 UDP | [TCP-UDP.md](TCP-UDP.md) | Draft |
-| HTTP / HTTPS | HTTP.md | Planned |
-| DNS | DNS.md | Planned |
-| 소켓 프로그래밍 | Socket-Programming.md | Planned |
-| 네트워크 보안 기초 | Network-Security-Basics.md | Planned |
-| CDN과 로드 밸런싱 | CDN-and-Load-Balancing.md | Planned |
+| HTTP / HTTPS | [HTTP.md](HTTP.md) | Draft |
+| DNS | [DNS.md](DNS.md) | Draft |
+| 소켓 프로그래밍 | [Socket-Programming.md](Socket-Programming.md) | Draft |
+| 네트워크 보안 기초 | [Network-Security-Basics.md](Network-Security-Basics.md) | Draft |
+| CDN과 로드 밸런싱 | [CDN-and-Load-Balancing.md](CDN-and-Load-Balancing.md) | Draft |
 
 ---
 

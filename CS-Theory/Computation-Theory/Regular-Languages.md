@@ -95,7 +95,7 @@ DFA 실행은 입력을 한 번 훑으므로 매우 효율적이다. 단, NFA를
 ## 이어서 읽기 (Reading Path)
 
 - 이전: 없음
-- 다음: 정규 표현식 (예정 `Regular-Expressions.md`), 문맥 자유 문법 (예정 `Context-Free.md`)
+- 다음: [정규 표현식](Regular-Expressions.md), [문맥 자유 문법](Context-Free.md)
 
 ## 참조 (References)
 

@@ -17,14 +17,14 @@
 
 | 주제 | 파일 | Status |
 |---|---|---|
-| 어휘 분석 (Lexer) | Lexer.md | Planned |
-| 구문 분석 (Parser) | Parser.md | Planned |
-| 추상 구문 트리 (AST) | AST.md | Planned |
-| 의미 분석과 타입 검사 | Semantic-Analysis.md | Planned |
-| 중간 표현 (IR) | Intermediate-Representation.md | Planned |
-| 코드 최적화 | Optimization.md | Planned |
-| 코드 생성 | Code-Generation.md | Planned |
-| 인터프리터 vs 컴파일러 | Interpreter-vs-Compiler.md | Planned |
+| 어휘 분석 (Lexer) | [Lexer.md](Lexer.md) | Draft |
+| 구문 분석 (Parser) | [Parser.md](Parser.md) | Draft |
+| 추상 구문 트리 (AST) | [AST.md](AST.md) | Draft |
+| 의미 분석과 타입 검사 | [Semantic-Analysis.md](Semantic-Analysis.md) | Draft |
+| 중간 표현 (IR) | [Intermediate-Representation.md](Intermediate-Representation.md) | Draft |
+| 코드 최적화 | [Optimization.md](Optimization.md) | Draft |
+| 코드 생성 | [Code-Generation.md](Code-Generation.md) | Draft |
+| 인터프리터 vs 컴파일러 | [Interpreter-vs-Compiler.md](Interpreter-vs-Compiler.md) | Draft |
 
 ---
 

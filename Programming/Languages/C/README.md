@@ -17,11 +17,11 @@
 
 | Order | 주제 | 파일 | 설명 | Status |
 |---|---|---|---|---|
-| 1 | 컴파일과 기본 문법 | C-Setup-and-Compilation.md | 컴파일러, main 함수, 헤더, 기본 입출력 | Planned |
-| 2 | 타입과 제어 흐름 | C-Types-and-Control-Flow.md | 정수/실수/문자 타입, 조건문, 반복문 | Planned |
-| 3 | 포인터와 메모리 | C-Pointers-and-Memory.md | 주소, 역참조, 스택/힙, 동적 할당 | Planned |
-| 4 | 배열, 문자열, 구조체 | C-Arrays-Strings-Structs.md | C 문자열, 구조체, 포인터와 배열 관계 | Planned |
-| 5 | 파일과 빌드 | C-Files-and-Builds.md | 파일 입출력, 여러 소스 파일, 간단한 빌드 흐름 | Planned |
+| 1 | 컴파일과 기본 문법 | [C-Setup-and-Compilation.md](C-Setup-and-Compilation.md) | 컴파일러, main 함수, 헤더, 기본 입출력 | Draft |
+| 2 | 타입과 제어 흐름 | [C-Types-and-Control-Flow.md](C-Types-and-Control-Flow.md) | 정수/실수/문자 타입, 조건문, 반복문 | Draft |
+| 3 | 포인터와 메모리 | [C-Pointers-and-Memory.md](C-Pointers-and-Memory.md) | 주소, 역참조, 스택/힙, 동적 할당 | Draft |
+| 4 | 배열, 문자열, 구조체 | [C-Arrays-Strings-Structs.md](C-Arrays-Strings-Structs.md) | C 문자열, 구조체, 포인터와 배열 관계 | Draft |
+| 5 | 파일과 빌드 | [C-Files-and-Builds.md](C-Files-and-Builds.md) | 파일 입출력, 여러 소스 파일, 간단한 빌드 흐름 | Draft |
 
 ---
 

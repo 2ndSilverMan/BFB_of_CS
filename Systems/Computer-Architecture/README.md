@@ -17,14 +17,14 @@
 
 | 주제 | 파일 | Status |
 |---|---|---|
-| 디지털 논리 (게이트, 회로) | Digital-Logic.md | Planned |
+| 디지털 논리 (게이트, 회로) | [Digital-Logic.md](Digital-Logic.md) | Draft |
 | 데이터 표현 (이진수, 부동소수점) | [Data-Representation.md](Data-Representation.md) | Draft |
 | CPU 구조와 명령어 집합 (ISA) | [CPU-and-ISA.md](CPU-and-ISA.md) | Draft |
-| 파이프라이닝 | Pipelining.md | Planned |
-| 메모리 계층 (레지스터, 캐시, RAM) | Memory-Hierarchy.md | Planned |
-| 가상 메모리 | Virtual-Memory-Hardware.md | Planned |
-| 입출력 (I/O) 시스템 | IO-Systems.md | Planned |
-| 병렬 아키텍처 (멀티코어, GPU) | Parallel-Architecture.md | Planned |
+| 파이프라이닝 | [Pipelining.md](Pipelining.md) | Draft |
+| 메모리 계층 (레지스터, 캐시, RAM) | [Memory-Hierarchy.md](Memory-Hierarchy.md) | Draft |
+| 가상 메모리 | [Virtual-Memory-Hardware.md](Virtual-Memory-Hardware.md) | Draft |
+| 입출력 (I/O) 시스템 | [IO-Systems.md](IO-Systems.md) | Draft |
+| 병렬 아키텍처 (멀티코어, GPU) | [Parallel-Architecture.md](Parallel-Architecture.md) | Draft |
 
 ---
 

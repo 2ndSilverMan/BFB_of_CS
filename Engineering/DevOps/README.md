@@ -19,53 +19,53 @@
 
 | 주제 | 파일 | 설명 | Status |
 |---|---|---|---|
-| Git 학습 트랙 | [Git/](Git/) | 커밋, 브랜치, 원격 저장소, 충돌 해결 | Planned |
-| GitHub 학습 트랙 | [GitHub/](GitHub/) | 저장소, 이슈, Pull Request, 코드 리뷰, Actions | Planned |
-| Git 내부 구조 | Git-Internals.md | 오브젝트 모델, 팩파일 | Planned |
+| Git 학습 트랙 | [Git/](Git/) | 커밋, 브랜치, 원격 저장소, 충돌 해결 | Draft |
+| GitHub 학습 트랙 | [GitHub/](GitHub/) | 저장소, 이슈, Pull Request, 코드 리뷰, Actions | Draft |
+| Git 내부 구조 | [Git-Internals.md](Git-Internals.md) | 오브젝트 모델, 팩파일 | Draft |
 
 ### CI/CD
 
 | 주제 | 파일 | Status |
 |---|---|---|
-| CI/CD 개념 — 지속적 통합과 배포의 원칙 | CICD-Principles.md | Planned |
-| Jenkins / GitLab CI | Jenkins-GitLab-CI.md | Planned |
-| 배포 전략 — Blue-Green, Canary, Rolling | Deployment-Strategies.md | Planned |
+| CI/CD 개념 — 지속적 통합과 배포의 원칙 | [CICD-Principles.md](CICD-Principles.md) | Draft |
+| Jenkins / GitLab CI | [Jenkins-GitLab-CI.md](Jenkins-GitLab-CI.md) | Draft |
+| 배포 전략 — Blue-Green, Canary, Rolling | [Deployment-Strategies.md](Deployment-Strategies.md) | Draft |
 
 ### 컨테이너화
 
 | 주제 | 파일 | Status |
 |---|---|---|
-| Docker 기초 — 이미지, 컨테이너, Dockerfile | Docker-Basics.md | Planned |
-| Docker Compose — 멀티 컨테이너 구성 | Docker-Compose.md | Planned |
-| 컨테이너 네트워킹과 볼륨 | Container-Networking-Volumes.md | Planned |
-| Kubernetes 기초 — Pod, Deployment, Service | Kubernetes-Basics.md | Planned |
-| Kubernetes 고급 — Ingress, HPA, StatefulSet | Kubernetes-Advanced.md | Planned |
-| Helm — 패키지 관리 | Helm.md | Planned |
+| Docker 기초 — 이미지, 컨테이너, Dockerfile | [Docker-Basics.md](Docker-Basics.md) | Draft |
+| Docker Compose — 멀티 컨테이너 구성 | [Docker-Compose.md](Docker-Compose.md) | Draft |
+| 컨테이너 네트워킹과 볼륨 | [Container-Networking-Volumes.md](Container-Networking-Volumes.md) | Draft |
+| Kubernetes 기초 — Pod, Deployment, Service | [Kubernetes-Basics.md](Kubernetes-Basics.md) | Draft |
+| Kubernetes 고급 — Ingress, HPA, StatefulSet | [Kubernetes-Advanced.md](Kubernetes-Advanced.md) | Draft |
+| Helm — 패키지 관리 | [Helm.md](Helm.md) | Draft |
 
 ### 클라우드
 
 | 주제 | 파일 | Status |
 |---|---|---|
-| 클라우드 컴퓨팅 개념 — IaaS/PaaS/SaaS | Cloud-Computing.md | Planned |
-| AWS 핵심 서비스 — EC2, S3, RDS, VPC | AWS-Core-Services.md | Planned |
-| GCP / Azure 개요 | GCP-Azure-Overview.md | Planned |
-| 서버리스 — Lambda, Cloud Functions | Serverless.md | Planned |
+| 클라우드 컴퓨팅 개념 — IaaS/PaaS/SaaS | [Cloud-Computing.md](Cloud-Computing.md) | Draft |
+| AWS 핵심 서비스 — EC2, S3, RDS, VPC | [AWS-Core-Services.md](AWS-Core-Services.md) | Draft |
+| GCP / Azure 개요 | [GCP-Azure-Overview.md](GCP-Azure-Overview.md) | Draft |
+| 서버리스 — Lambda, Cloud Functions | [Serverless.md](Serverless.md) | Draft |
 
 ### Infrastructure as Code
 
 | 주제 | 파일 | Status |
 |---|---|---|
-| Terraform 기초 — 선언형 인프라 관리 | Terraform-Basics.md | Planned |
-| Ansible — 구성 관리 자동화 | Ansible.md | Planned |
+| Terraform 기초 — 선언형 인프라 관리 | [Terraform-Basics.md](Terraform-Basics.md) | Draft |
+| Ansible — 구성 관리 자동화 | [Ansible.md](Ansible.md) | Draft |
 
 ### 모니터링 & 관찰 가능성
 
 | 주제 | 파일 | Status |
 |---|---|---|
-| 로깅 시스템 — ELK Stack, Loki | Logging-Systems.md | Planned |
-| 메트릭 & 알람 — Prometheus, Grafana | Metrics-Alerts.md | Planned |
-| 분산 트레이싱 — OpenTelemetry, Jaeger | Distributed-Tracing.md | Planned |
-| SLI / SLO / SLA 정의 | SLI-SLO-SLA.md | Planned |
+| 로깅 시스템 — ELK Stack, Loki | [Logging-Systems.md](Logging-Systems.md) | Draft |
+| 메트릭 & 알람 — Prometheus, Grafana | [Metrics-Alerts.md](Metrics-Alerts.md) | Draft |
+| 분산 트레이싱 — OpenTelemetry, Jaeger | [Distributed-Tracing.md](Distributed-Tracing.md) | Draft |
+| SLI / SLO / SLA 정의 | [SLI-SLO-SLA.md](SLI-SLO-SLA.md) | Draft |
 
 ---
 

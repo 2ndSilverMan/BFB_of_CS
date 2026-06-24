@@ -18,13 +18,13 @@
 | 주제 | 파일 | Status |
 |---|---|---|
 | 명제 논리와 술어 논리 | [Logic.md](Logic.md) | Draft |
-| 집합론 | Set-Theory.md | Planned |
-| 관계와 함수 | Relations-and-Functions.md | Planned |
+| 집합론 | [Set-Theory.md](Set-Theory.md) | Draft |
+| 관계와 함수 | [Relations-and-Functions.md](Relations-and-Functions.md) | Draft |
 | 수학적 귀납법 | [Induction.md](Induction.md) | Draft |
-| 조합론 (순열, 조합, 생성 함수) | Combinatorics.md | Planned |
+| 조합론 (순열, 조합, 생성 함수) | [Combinatorics.md](Combinatorics.md) | Draft |
 | 그래프 이론 기초 | [Graph-Theory.md](Graph-Theory.md) | Draft |
-| 재귀와 점화식 | Recurrences.md | Planned |
-| 정수론 기초 | Number-Theory-Basics.md | Planned |
+| 재귀와 점화식 | [Recurrences.md](Recurrences.md) | Draft |
+| 정수론 기초 | [Number-Theory-Basics.md](Number-Theory-Basics.md) | Draft |
 
 ---
 

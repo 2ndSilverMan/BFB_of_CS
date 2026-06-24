@@ -17,11 +17,11 @@
 
 | Order | 주제 | 파일 | 설명 | Status |
 |---|---|---|---|---|
-| 1 | 저장소와 권한 | GitHub-Repositories.md | repository, visibility, collaborator, permission | Planned |
-| 2 | 이슈와 Pull Request | GitHub-Issues-and-Pull-Requests.md | issue, PR, review, merge 흐름 | Planned |
-| 3 | GitHub Flow | GitHub-Flow.md | 브랜치 기반 협업과 trunk-based 개발 비교 | Planned |
-| 4 | 코드 리뷰 | GitHub-Code-Review.md | 리뷰 관점, 코멘트, 승인, 변경 요청 | Planned |
-| 5 | GitHub Actions | GitHub-Actions.md | workflow, job, step, runner, secret | Planned |
+| 1 | 저장소와 권한 | [GitHub-Repositories.md](GitHub-Repositories.md) | repository, visibility, collaborator, permission | Draft |
+| 2 | 이슈와 Pull Request | [GitHub-Issues-and-Pull-Requests.md](GitHub-Issues-and-Pull-Requests.md) | issue, PR, review, merge 흐름 | Draft |
+| 3 | GitHub Flow | [GitHub-Flow.md](GitHub-Flow.md) | 브랜치 기반 협업과 trunk-based 개발 비교 | Draft |
+| 4 | 코드 리뷰 | [GitHub-Code-Review.md](GitHub-Code-Review.md) | 리뷰 관점, 코멘트, 승인, 변경 요청 | Draft |
+| 5 | GitHub Actions | [GitHub-Actions.md](GitHub-Actions.md) | workflow, job, step, runner, secret | Draft |
 
 ---
 

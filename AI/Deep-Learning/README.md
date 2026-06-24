@@ -19,30 +19,30 @@
 
 | 주제 | 파일 | Status |
 |---|---|---|
-| 퍼셉트론과 다층 신경망 (MLP) | MLP.md | Planned |
-| 역전파 (Backpropagation) | Backpropagation.md | Planned |
-| 활성화 함수 | Activation-Functions.md | Planned |
-| 손실 함수 | Loss-Functions.md | Planned |
-| 배치 정규화 / 레이어 정규화 | Normalization-Layers.md | Planned |
-| 드롭아웃 | Dropout.md | Planned |
+| 퍼셉트론과 다층 신경망 (MLP) | [MLP.md](MLP.md) | Draft |
+| 역전파 (Backpropagation) | [Backpropagation.md](Backpropagation.md) | Draft |
+| 활성화 함수 | [Activation-Functions.md](Activation-Functions.md) | Draft |
+| 손실 함수 | [Loss-Functions.md](Loss-Functions.md) | Draft |
+| 배치 정규화 / 레이어 정규화 | [Normalization-Layers.md](Normalization-Layers.md) | Draft |
+| 드롭아웃 | [Dropout.md](Dropout.md) | Draft |
 
 ### 아키텍처
 
 | 주제 | 파일 | Status |
 |---|---|---|
-| CNN (합성곱 신경망) | CNN.md | Planned |
-| RNN / LSTM / GRU | RNN-LSTM-GRU.md | Planned |
-| Transformer | Transformer.md | Planned |
-| 어텐션 메커니즘 | Attention.md | Planned |
-| 그래프 신경망 (GNN) | GNN.md | Planned |
+| CNN (합성곱 신경망) | [CNN.md](CNN.md) | Draft |
+| RNN / LSTM / GRU | [RNN-LSTM-GRU.md](RNN-LSTM-GRU.md) | Draft |
+| Transformer | [Transformer.md](Transformer.md) | Draft |
+| 어텐션 메커니즘 | [Attention.md](Attention.md) | Draft |
+| 그래프 신경망 (GNN) | [GNN.md](GNN.md) | Draft |
 
 ### 학습 기법
 
 | 주제 | 파일 | Status |
 |---|---|---|
-| 전이 학습 (Transfer Learning) | Transfer-Learning.md | Planned |
-| 파인튜닝 | Fine-Tuning.md | Planned |
-| 자기 지도 학습 (Self-supervised) | Self-Supervised.md | Planned |
+| 전이 학습 (Transfer Learning) | [Transfer-Learning.md](Transfer-Learning.md) | Draft |
+| 파인튜닝 | [Fine-Tuning.md](Fine-Tuning.md) | Draft |
+| 자기 지도 학습 (Self-supervised) | [Self-Supervised.md](Self-Supervised.md) | Draft |
 
 ---
 

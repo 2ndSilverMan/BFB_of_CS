@@ -105,7 +105,7 @@ CPU 위주 작업을 진짜 병렬로 돌리려면 파이썬에서는 스레드 
 ## 이어서 읽기 (Reading Path)
 
 - 이전: [데이터 표현](../Computer-Architecture/Data-Representation.md)
-- 다음: CPU 스케줄링 (예정 `Scheduling.md`), 동기화 (예정 `Synchronization.md`)
+- 다음: [CPU 스케줄링](Scheduling.md), [동기화](Synchronization.md)
 
 ## 참조 (References)
 

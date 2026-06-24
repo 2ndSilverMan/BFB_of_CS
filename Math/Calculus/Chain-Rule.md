@@ -76,7 +76,7 @@ print(6 * (3 * 2 + 1))       # 42  (연쇄 법칙 결과와 일치)
 ## 이어서 읽기 (Reading Path)
 
 - 이전: [미분](Differentiation.md)
-- 다음: 편미분과 그래디언트 (예정 `Partial-Derivatives.md`)
+- 다음: [편미분과 그래디언트](Partial-Derivatives.md)
 - 관련: [경사 하강법](../Optimization/Gradient-Descent.md)
 
 ## 참조 (References)

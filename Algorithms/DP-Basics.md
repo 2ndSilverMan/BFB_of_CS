@@ -123,7 +123,7 @@ print(fib_tab(30))   # 832040
 ## 이어서 읽기 (Reading Path)
 
 - 이전: [BFS / DFS](BFS-DFS.md)
-- 다음: 그리디 (예정 `Greedy.md`), 분할 정복 (예정 `Divide-and-Conquer.md`)
+- 다음: [그리디](Greedy.md), [분할 정복](Divide-and-Conquer.md)
 
 ## 참조 (References)
 

@@ -98,7 +98,7 @@ tcp = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 ## 이어서 읽기 (Reading Path)
 
 - 이전: [네트워크 계층 모델](Network-Models.md)
-- 다음: HTTP / HTTPS (예정 `HTTP.md`), DNS (예정 `DNS.md`)
+- 다음: [HTTP / HTTPS](HTTP.md), [DNS](DNS.md)
 
 ## 참조 (References)
 

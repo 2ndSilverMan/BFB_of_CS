@@ -17,13 +17,13 @@
 
 | 주제 | 파일 | Status |
 |---|---|---|
-| 구문과 의미론 | Syntax-and-Semantics.md | Planned |
-| 타입 시스템 | Type-Systems.md | Planned |
-| 타입 추론 | Type-Inference.md | Planned |
-| 람다 대수 | Lambda-Calculus.md | Planned |
-| 패러다임 비교 (명령형, 함수형, 논리형) | Paradigms.md | Planned |
-| 메모리 관리 모델 | Memory-Models.md | Planned |
-| 동시성 모델 | Concurrency-Models.md | Planned |
+| 구문과 의미론 | [Syntax-and-Semantics.md](Syntax-and-Semantics.md) | Draft |
+| 타입 시스템 | [Type-Systems.md](Type-Systems.md) | Draft |
+| 타입 추론 | [Type-Inference.md](Type-Inference.md) | Draft |
+| 람다 대수 | [Lambda-Calculus.md](Lambda-Calculus.md) | Draft |
+| 패러다임 비교 (명령형, 함수형, 논리형) | [Paradigms.md](Paradigms.md) | Draft |
+| 메모리 관리 모델 | [Memory-Models.md](Memory-Models.md) | Draft |
+| 동시성 모델 | [Concurrency-Models.md](Concurrency-Models.md) | Draft |
 
 ---
 

@@ -17,13 +17,13 @@
 
 | 주제 | 파일 | Status |
 |---|---|---|
-| 극한과 연속 | Limits.md | Planned |
+| 극한과 연속 | [Limits.md](Limits.md) | Draft |
 | 미분 (단변수) | [Differentiation.md](Differentiation.md) | Draft |
-| 편미분과 그래디언트 | Partial-Derivatives.md | Planned |
+| 편미분과 그래디언트 | [Partial-Derivatives.md](Partial-Derivatives.md) | Draft |
 | 연쇄 법칙 | [Chain-Rule.md](Chain-Rule.md) | Draft |
-| 적분 | Integration.md | Planned |
-| 다변수 적분 | Multivariable-Integration.md | Planned |
-| 테일러 전개 | Taylor-Series.md | Planned |
+| 적분 | [Integration.md](Integration.md) | Draft |
+| 다변수 적분 | [Multivariable-Integration.md](Multivariable-Integration.md) | Draft |
+| 테일러 전개 | [Taylor-Series.md](Taylor-Series.md) | Draft |
 
 ---
 

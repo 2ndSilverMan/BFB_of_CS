@@ -19,42 +19,42 @@
 
 | 주제 | 파일 | Status |
 |---|---|---|
-| 상관 vs 인과 | Correlation-vs-Causation.md | Planned |
-| 교란 변수 (Confounding) | Confounding.md | Planned |
-| 잠재 결과 프레임워크 (Potential Outcomes) | Potential-Outcomes.md | Planned |
+| 상관 vs 인과 | [Correlation-vs-Causation.md](Correlation-vs-Causation.md) | Draft |
+| 교란 변수 (Confounding) | [Confounding.md](Confounding.md) | Draft |
+| 잠재 결과 프레임워크 (Potential Outcomes) | [Potential-Outcomes.md](Potential-Outcomes.md) | Draft |
 
 ### 구조적 인과 모델 (SCM)
 
 | 주제 | 파일 | Status |
 |---|---|---|
-| 구조적 인과 모델 (SCM) | SCM.md | Planned |
-| 인과 DAG와 d-분리 | Causal-DAG.md | Planned |
-| do-calculus | Do-Calculus.md | Planned |
-| 식별가능성 (Identifiability) | Identifiability.md | Planned |
+| 구조적 인과 모델 (SCM) | [SCM.md](SCM.md) | Draft |
+| 인과 DAG와 d-분리 | [Causal-DAG.md](Causal-DAG.md) | Draft |
+| do-calculus | [Do-Calculus.md](Do-Calculus.md) | Draft |
+| 식별가능성 (Identifiability) | [Identifiability.md](Identifiability.md) | Draft |
 
 ### 인과 효과 추정
 
 | 주제 | 파일 | Status |
 |---|---|---|
-| 개입 (Intervention)과 ATE | Intervention.md | Planned |
-| 반사실 (Counterfactual) | Counterfactual.md | Planned |
-| 매개 분석 (Mediation Analysis) | Mediation.md | Planned |
+| 개입 (Intervention)과 ATE | [Intervention.md](Intervention.md) | Draft |
+| 반사실 (Counterfactual) | [Counterfactual.md](Counterfactual.md) | Draft |
+| 매개 분석 (Mediation Analysis) | [Mediation.md](Mediation.md) | Draft |
 
 ### 실증적 방법
 
 | 주제 | 파일 | Status |
 |---|---|---|
-| 무작위 실험 (RCT) | RCT.md | Planned |
-| 자연 실험과 도구 변수 (IV) | Instrumental-Variables.md | Planned |
-| 이중 차분법 (Difference-in-Differences) | DiD.md | Planned |
-| 회귀 불연속 설계 (RDD) | RDD.md | Planned |
+| 무작위 실험 (RCT) | [RCT.md](RCT.md) | Draft |
+| 자연 실험과 도구 변수 (IV) | [Instrumental-Variables.md](Instrumental-Variables.md) | Draft |
+| 이중 차분법 (Difference-in-Differences) | [DiD.md](DiD.md) | Draft |
+| 회귀 불연속 설계 (RDD) | [RDD.md](RDD.md) | Draft |
 
 ### ML과의 결합
 
 | 주제 | 파일 | Status |
 |---|---|---|
-| 인과적 머신러닝 | Causal-ML.md | Planned |
-| 인과적 표현 학습 | Causal-Representation.md | Planned |
+| 인과적 머신러닝 | [Causal-ML.md](Causal-ML.md) | Draft |
+| 인과적 표현 학습 | [Causal-Representation.md](Causal-Representation.md) | Draft |
 
 ---
 

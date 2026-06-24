@@ -18,12 +18,12 @@
 | 주제 | 파일 | Status |
 |---|---|---|
 | 정규 언어와 유한 오토마타 (DFA/NFA) | [Regular-Languages.md](Regular-Languages.md) | Draft |
-| 정규 표현식 | Regular-Expressions.md | Planned |
-| 문맥 자유 문법 (CFG)과 푸시다운 오토마타 | Context-Free.md | Planned |
-| 튜링 머신 | Turing-Machine.md | Planned |
-| 결정 불가능성 (정지 문제) | Undecidability.md | Planned |
-| 복잡도 클래스 (P, NP, PSPACE) | Complexity-Classes.md | Planned |
-| NP-완전성과 환원 | NP-Completeness.md | Planned |
+| 정규 표현식 | [Regular-Expressions.md](Regular-Expressions.md) | Draft |
+| 문맥 자유 문법 (CFG)과 푸시다운 오토마타 | [Context-Free.md](Context-Free.md) | Draft |
+| 튜링 머신 | [Turing-Machine.md](Turing-Machine.md) | Draft |
+| 결정 불가능성 (정지 문제) | [Undecidability.md](Undecidability.md) | Draft |
+| 복잡도 클래스 (P, NP, PSPACE) | [Complexity-Classes.md](Complexity-Classes.md) | Draft |
+| NP-완전성과 환원 | [NP-Completeness.md](NP-Completeness.md) | Draft |
 
 ---
 
