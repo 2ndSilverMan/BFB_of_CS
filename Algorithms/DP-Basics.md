@@ -124,6 +124,7 @@ print(fib_tab(30))   # 832040
 
 - 이전: [BFS / DFS](BFS-DFS.md)
 - 다음: [그리디](Greedy.md), [분할 정복](Divide-and-Conquer.md)
+- 관련: [DP 최적화](DP-Optimization.md)
 
 ## 참조 (References)
 

@@ -34,6 +34,21 @@ std::weak_ptr<std::string> weak = shared;
 
 기본 소유권은 `std::unique_ptr`로 표현하고, 실제 공유 소유가 필요할 때만 `std::shared_ptr`를 쓴다. 순환 참조가 가능한 구조는 `std::weak_ptr`를 포함해 설계하고, raw pointer는 비소유 관찰자로 제한한다.
 
+```cpp
+#include <iostream>
+#include <memory>
+#include <utility>
+
+struct Node { int value; };
+
+int main() {
+    auto owner = std::make_unique<Node>(Node{42});  // 기본 소유권
+    auto moved = std::move(owner);                  // 소유권 이전
+    if (!owner) std::cout << "owner is empty\n";
+    std::cout << moved->value << "\n";             // 42
+}
+```
+
 ## 복잡도 (Complexity)
 
 `unique_ptr` 이동은 가볍지만 `shared_ptr` 복사는 reference count 갱신 비용이 있다. 동적 allocation은 cache locality와 fragmentation에 영향을 주며, 작은 객체를 많이 만들면 allocator 비용이 병목이 될 수 있다.

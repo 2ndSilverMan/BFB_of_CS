@@ -1,7 +1,7 @@
 # 교란 변수 (Confounding)
 
 - Level: Intermediate
-- Prerequisites: [AI/Causal-Inference/Correlation-vs-Causation.md](Correlation-vs-Causation.md), [AI/PGMs/d-Separation.md](../PGMs/d-Separation.md)
+- Prerequisites: [AI/Causal-Inference/Correlation-vs-Causation.md](Correlation-vs-Causation.md)
 - Status: Draft
 - Reviewed-by: -
 

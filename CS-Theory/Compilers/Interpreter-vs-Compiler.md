@@ -1,7 +1,7 @@
 # 인터프리터 vs 컴파일러 (Interpreter vs Compiler)
 
 - Level: Intermediate
-- Prerequisites: [Lexer.md](Lexer.md), [Parser.md](Parser.md), [Intermediate-Representation.md](Intermediate-Representation.md)
+- Prerequisites: [Lexer.md](Lexer.md), [Parser.md](Parser.md)
 - Status: Draft
 - Reviewed-by: -
 

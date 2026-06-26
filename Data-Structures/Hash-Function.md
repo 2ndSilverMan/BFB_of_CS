@@ -99,7 +99,7 @@ def bucket_index(key, num_buckets):
 ## 이어서 읽기 (Reading Path)
 
 - 이전: [해시 테이블](Hash-Table.md)
-- 다음: 암호학적 해시 함수 (예정 `Hash-Functions.md`, 보안 섹션)
+- 다음: [암호학적 해시 함수](../Engineering/Security/Hash-Functions.md)
 - 관련: [배열](Array.md)
 
 ## 참조 (References)

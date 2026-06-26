@@ -15,14 +15,6 @@ Python의 대표 컬렉션은 `list`, `tuple`, `dict`, `set`이다. 여러 값�
 
 `list`는 순서 있는 가변 목록, `tuple`은 고정된 묶음, `dict`는 이름표가 붙은 사전, `set`은 중복 없는 집합으로 보면 된다.
 
-## 이론 (Theory)
-
-Python 컬렉션은 동적 객체 reference를 담는 고수준 자료구조다. `list`는 동적 배열, `dict`와 `set`은 hash table에 가깝고, mutation과 aliasing이 동작 이해의 핵심이다.
-
-## 구현 (Implementation)
-
-구현할 때는 access pattern에 맞춰 기본 컬렉션을 고른다. 순서와 중복이 중요하면 `list`, key lookup이 중요하면 `dict`, membership과 중복 제거가 중요하면 `set`을 먼저 고려한다.
-
 ## 핵심 문법 (Core Syntax)
 
 ```python
@@ -43,6 +35,25 @@ List comprehension은 짧은 변환에 유용하다.
 
 ```python
 squares = [x * x for x in range(5)]
+```
+
+## 이론 (Theory)
+
+Python 컬렉션은 동적 객체 reference를 담는 고수준 자료구조다. `list`는 동적 배열, `dict`와 `set`은 hash table에 가깝고, mutation과 aliasing이 동작 이해의 핵심이다.
+
+## 구현 (Implementation)
+
+구현할 때는 access pattern에 맞춰 기본 컬렉션을 고른다. 순서와 중복이 중요하면 `list`, key lookup이 중요하면 `dict`, membership과 중복 제거가 중요하면 `set`을 먼저 고려한다.
+
+```python
+words = ["a", "b", "a", "c", "a", "b"]
+
+freq = {}
+for w in words:
+    freq[w] = freq.get(w, 0) + 1   # dict: key별 집계
+
+unique = set(words)                # set: 중복 제거
+print(freq["a"], len(unique))      # 3 3
 ```
 
 ## 복잡도 (Complexity)

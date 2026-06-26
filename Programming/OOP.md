@@ -75,6 +75,7 @@ OOP 자체는 알고리즘 복잡도를 바꾸지 않는다. 동적 디스패치
 
 - 이전: [함수와 재귀](Functions-and-Recursion.md)
 - 다음: [함수형 프로그래밍 입문](Functional-Intro.md), [Engineering/Software-Design/SOLID.md](../Engineering/Software-Design/SOLID.md)
+- 관련: [DRY / KISS / YAGNI 설계 원칙](../Engineering/Software-Design/Design-Principles.md)
 
 ## 참조 (References)
 

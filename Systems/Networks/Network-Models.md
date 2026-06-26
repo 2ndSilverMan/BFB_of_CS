@@ -91,6 +91,7 @@ sock.close()
 
 - 이전: 없음
 - 다음: [TCP와 UDP](TCP-UDP.md), [IP 주소와 라우팅](IP-and-Routing.md)
+- 관련: [물리 계층과 데이터 링크 계층](Physical-and-Link.md)
 
 ## 참조 (References)
 

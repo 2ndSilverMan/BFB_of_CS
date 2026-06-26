@@ -7,6 +7,8 @@
 
 ---
 
+> 📍 **초점**: producer/consumer·offset·파티션 등 **분산 시스템 내부 동작**과 이벤트 스트리밍을 다룬다.
+
 ## 개념 (Concept)
 
 메시지 큐와 이벤트 스트리밍은 서비스들이 직접 동기 호출로 강하게 결합되지 않고, 메시지나 이벤트를 통해 비동기적으로 통신하게 하는 시스템이다. 큐는 작업 전달과 소비에, 스트리밍 로그는 이벤트의 순서 있는 저장과 재처리에 강하다.
@@ -83,6 +85,7 @@ print(handle({"id": "m1", "payload": "create-order"}))
 
 - 이전: [시간과 순서](Time-and-Ordering.md)
 - 다음: [분산 시스템 사례](Distributed-System-Case-Studies.md)
+- 같은 주제 다른 관점: [메시지 큐 (시스템 설계 관점)](../../Engineering/System-Design/Message-Queues.md)
 
 ## 참조 (References)
 

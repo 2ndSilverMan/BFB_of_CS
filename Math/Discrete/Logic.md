@@ -119,6 +119,7 @@ def cannot_enter(user):
 
 - 이전: [배열과 문자열](../../Programming/Arrays-and-Strings.md)
 - 다음: [배열](../../Data-Structures/Array.md)
+- 관련: [집합론](Set-Theory.md)
 
 ## 참조 (References)
 

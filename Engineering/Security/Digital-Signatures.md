@@ -85,7 +85,7 @@ except InvalidSignature:
 
 - 이전: [비대칭 암호화와 키 교환](Asymmetric-Encryption.md)
 - 다음: [PKI와 TLS](PKI-and-TLS.md)
-- 관련: [암호학적 해시 함수](Hash-Functions.md)
+- 관련: [암호학적 해시 함수](Hash-Functions.md), [영지식 증명](Zero-Knowledge-Proofs.md)
 
 ## 참조 (References)
 

@@ -91,7 +91,7 @@ print(identified_effect(p_z, p_y_given_xz, 1))
 ## 이어서 읽기 (Reading Path)
 
 - 이전: [do-calculus](Do-Calculus.md)
-- 다음: `Intervention.md`, `Counterfactual.md`
+- 다음: [개입과 ATE](Intervention.md), [반사실](Counterfactual.md)
 
 ## 참조 (References)
 

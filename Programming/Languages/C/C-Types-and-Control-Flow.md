@@ -37,6 +37,22 @@ for (int i = 0; i < count; i++) {
 
 변수 선언, 조건문, 반복문을 작은 함수로 분리해 작성하고 compiler warning을 확인한다. 정수 크기, signed/unsigned 비교, 명시적 cast, `switch`의 `break` 누락처럼 C에서 흔한 함정을 예제로 검증한다.
 
+```c
+#include <stdio.h>
+
+char grade_of(int score) {           // 조건문을 작은 함수로 분리
+    if (score >= 90) return 'A';
+    else if (score >= 80) return 'B';
+    else return 'C';
+}
+
+int main(void) {
+    int scores[] = {95, 82, 70};
+    for (int i = 0; i < 3; i++)
+        printf("%d -> %c\n", scores[i], grade_of(scores[i]));
+}
+```
+
 ## 복잡도 (Complexity)
 
 조건문 자체는 보통 상수 비용이지만 반복문은 iteration 수가 곧 시간 복잡도를 만든다. 타입 크기는 메모리 사용량과 overflow 범위를 결정하고, signed overflow처럼 정의되지 않은 동작은 최적화 결과까지 바꿀 수 있다.

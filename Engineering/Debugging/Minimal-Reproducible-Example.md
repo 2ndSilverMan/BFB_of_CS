@@ -1,7 +1,7 @@
 # 최소 재현 케이스 (Minimal Reproducible Example)
 
 - Level: Beginner
-- Prerequisites: [Engineering/Debugging/Scientific-Debugging.md](Scientific-Debugging.md)
+- Prerequisites: 없음
 - Status: Draft
 - Reviewed-by: -
 

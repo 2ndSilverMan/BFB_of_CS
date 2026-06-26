@@ -37,6 +37,20 @@ except ValueError:
 
 파일은 `with open(..., encoding="utf-8")`처럼 context manager로 열고, 예외는 `FileNotFoundError`, `PermissionError`, `UnicodeDecodeError`처럼 구체적으로 처리한다. 사용자에게 보여 줄 메시지와 로그에 남길 세부 정보를 분리한다.
 
+```python
+def read_count(path):
+    try:
+        with open(path, encoding="utf-8") as f:   # context manager
+            return int(f.read().strip())
+    except FileNotFoundError:                      # 구체 예외 처리
+        return 0
+    except ValueError:
+        return -1
+
+
+print(read_count("missing.txt"))  # 0
+```
+
 ## 복잡도 (Complexity)
 
 파일 I/O 시간은 byte 수, buffering, storage latency에 좌우된다. 큰 파일을 한 번에 `read()`하면 memory 사용량이 파일 크기에 비례하므로 line streaming이나 chunk 처리로 제한한다.

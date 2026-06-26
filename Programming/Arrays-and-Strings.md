@@ -118,6 +118,7 @@ def square_all(values):
 
 - 이전: [함수와 재귀](Functions-and-Recursion.md)
 - 다음: [명제 논리와 술어 논리](../Math/Discrete/Logic.md)
+- 관련: [언어 선택 가이드](Language-Selection.md), [포인터와 메모리](Pointers-and-Memory.md)
 
 ## 참조 (References)
 

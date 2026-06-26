@@ -70,6 +70,7 @@ Observation, inference, action log를 분리하면 같은 실패를 반복하지
 
 - 이전: [단위 테스트 원칙](../Testing/Unit-Test-Principles.md)
 - 다음: [스택 트레이스](Stack-Traces.md), [구조화 로깅](Structured-Logging.md)
+- 관련: [최소 재현 케이스](Minimal-Reproducible-Example.md), [러버 덕 디버깅과 코드 리뷰 활용](Rubber-Duck-Debugging.md)
 
 ## 참조 (References)
 

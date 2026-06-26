@@ -79,6 +79,7 @@ policy iteration은 보통 적은 반복으로 수렴하지만, 각 반복마다
 
 - 이전: [가치 함수와 벨만 방정식](Value-Functions.md)
 - 다음: [시간 차분 학습](TD-Learning.md), [Policy Gradient](Policy-Gradient.md)
+- 관련: [동적 프로그래밍: 가치 반복과 정책 반복](Dynamic-Programming.md)
 
 ## 참조 (References)
 

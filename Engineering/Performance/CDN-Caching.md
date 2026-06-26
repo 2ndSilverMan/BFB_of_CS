@@ -7,6 +7,8 @@
 
 ---
 
+> 📍 **초점**: HTTP 캐시 헤더·TTL·무효화 등 **엣지 캐시의 동작 메커니즘**에 집중한다.
+
 ## 개념 (Concept)
 
 CDN 캐싱은 사용자와 가까운 edge server에 static 또는 cache 가능한 response를 저장해 origin 부하와 latency를 줄이는 설계다.
@@ -61,6 +63,7 @@ Hit request는 edge에서 끝나 origin 비용이 줄지만, miss와 purge 전�
 
 - 이전: [네트워크 성능](Network-Performance.md)
 - 다음: [JIT 최적화](JIT-Optimization.md)
+- 같은 주제 다른 관점: [CDN (시스템 설계 관점)](../System-Design/CDN.md), [CDN과 로드 밸런싱 (네트워크 관점)](../../Systems/Networks/CDN-and-Load-Balancing.md), [메모이제이션과 캐싱 (성능 관점)](Memoization-Caching.md), [캐싱 전략 (시스템 설계 관점)](../System-Design/Caching.md)
 
 ## 참조 (References)
 

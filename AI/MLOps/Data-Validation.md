@@ -71,6 +71,7 @@ Blocking rule과 warning rule을 구분해 pipeline 중단 조건을 명확히 �
 
 - 이전: [데이터 버전 관리](Data-Versioning.md), [Feature Store](Feature-Store.md)
 - 다음: [스트리밍 vs 배치](Streaming-vs-Batch.md), [데이터 드리프트](Data-Drift.md)
+- 관련: [데이터 레이블링](Data-Labeling.md)
 
 ## 참조 (References)
 

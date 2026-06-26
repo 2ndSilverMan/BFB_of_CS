@@ -123,6 +123,7 @@ def level_order(root):
 
 - 이전: [연결 리스트](Linked-List.md)
 - 다음: [이진 탐색 트리](BST.md), [힙](Heap.md)
+- 관련: [세그먼트 트리](Segment-Tree.md)
 
 ## 참조 (References)
 

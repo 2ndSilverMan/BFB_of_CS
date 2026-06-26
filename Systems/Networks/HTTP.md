@@ -1,6 +1,6 @@
 # HTTP / HTTPS
 
-- Level: Beginner
+- Level: Intermediate
 - Prerequisites: [Systems/Networks/TCP-UDP.md](TCP-UDP.md)
 - Status: Draft
 - Reviewed-by: -

@@ -1,7 +1,7 @@
 # 러버 덕 디버깅과 코드 리뷰 활용
 
 - Level: Beginner
-- Prerequisites: [Engineering/Debugging/Scientific-Debugging.md](Scientific-Debugging.md)
+- Prerequisites: 없음
 - Status: Draft
 - Reviewed-by: -
 

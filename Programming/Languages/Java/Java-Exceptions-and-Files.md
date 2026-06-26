@@ -1,7 +1,7 @@
 # Java 예외와 파일
 
-- Level: Beginner
-- Prerequisites: [Java 컬렉션](Java-Collections.md), [Engineering/Debugging/Stack-Traces.md](../../../Engineering/Debugging/Stack-Traces.md)
+- Level: Intermediate
+- Prerequisites: [Java 컬렉션](Java-Collections.md)
 - Status: Draft
 - Reviewed-by: -
 
@@ -41,6 +41,26 @@ Checked exception은 메서드 시그니처에 선언하거나 잡아야 한다.
 ## 구현 (Implementation)
 
 파일은 `try-with-resources`로 열어 자동 close되게 하고, 예외는 구체 type별로 처리한다. 실패한 파일 경로, encoding, 권한 문제를 메시지에 남기되 민감 정보는 출력하지 않는다.
+
+```java
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
+public class Main {
+    public static void main(String[] args) {
+        try (BufferedReader r = Files.newBufferedReader(Path.of("input.txt"))) {
+            String line;
+            while ((line = r.readLine()) != null) {  // try-with-resources
+                System.out.println(line);
+            }
+        } catch (IOException e) {                     // 구체 예외 처리
+            System.err.println("읽기 실패: " + e.getMessage());
+        }
+    }
+}
+```
 
 ## 복잡도 (Complexity)
 

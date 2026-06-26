@@ -7,6 +7,8 @@
 
 ---
 
+> 📍 **초점**: 실행 계획·인덱스·조인을 손보는 **실무 쿼리 튜닝**에 집중한다.
+
 ## 개념 (Concept)
 
 데이터베이스 쿼리 최적화는 실행 계획, 인덱스, join 방식, 통계, transaction 비용을 조정해 query latency와 resource 사용을 줄이는 작업이다.
@@ -66,6 +68,7 @@ Index lookup은 보통 `O(log n)`이고 full scan은 `O(n)`이다. 하지만 ran
 
 - 이전: [비동기 I/O](Async-IO.md)
 - 다음: [네트워크 성능](Network-Performance.md)
+- 같은 주제 다른 관점: [쿼리 최적화 (데이터베이스 관점)](../../Systems/Databases/Query-Optimization.md)
 
 ## 참조 (References)
 

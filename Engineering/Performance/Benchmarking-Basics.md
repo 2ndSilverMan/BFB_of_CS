@@ -70,6 +70,7 @@ def benchmark(fn, repeats=100):
 
 - 이전: [복잡도 분석](../../Algorithms/Complexity.md)
 - 다음: [CPU 프로파일링](CPU-Profiling.md)
+- 관련: [부하 테스트, 스트레스 테스트, 소크 테스트](../Testing/Load-Stress-Soak-Testing.md)
 
 ## 참조 (References)
 

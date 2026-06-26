@@ -91,7 +91,7 @@ print(measurement_probs(alpha, beta))
 ## 이어서 읽기 (Reading Path)
 
 - 이전: [Math/Linear-Algebra/Vectors.md](../../Math/Linear-Algebra/Vectors.md)
-- 다음: `Quantum-Gates.md`
+- 다음: [양자 게이트](Quantum-Gates.md)
 
 ## 참조 (References)
 

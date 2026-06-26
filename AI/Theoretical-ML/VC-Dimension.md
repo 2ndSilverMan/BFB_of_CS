@@ -88,6 +88,7 @@ print(shatters(hypotheses, points))  # False: 패턴 (1, 0)을 만들 수 없음
 
 - 이전: [PAC 학습](PAC-Learning.md)
 - 다음: [Rademacher 복잡도](Rademacher-Complexity.md)
+- 관련: [Shattering과 성장 함수](Shattering.md)
 
 ## 참조 (References)
 

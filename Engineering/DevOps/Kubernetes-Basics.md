@@ -76,6 +76,7 @@ spec:
 
 - 이전: [Docker 기초](Docker-Basics.md)
 - 다음: [메트릭과 알람](Metrics-Alerts.md)
+- 관련: [Kubernetes 고급](Kubernetes-Advanced.md)
 
 ## 참조 (References)
 

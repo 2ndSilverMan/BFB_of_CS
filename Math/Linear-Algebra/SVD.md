@@ -1,6 +1,6 @@
 # 특이값 분해 (Singular Value Decomposition)
 
-- Level: Advanced
+- Level: Intermediate
 - Prerequisites: [Math/Linear-Algebra/Eigenvalues.md](Eigenvalues.md), [Math/Linear-Algebra/Orthogonality.md](Orthogonality.md)
 - Status: Draft
 - Reviewed-by: -

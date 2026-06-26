@@ -72,6 +72,7 @@ Test 실행 비용은 대상+fixture setup이다. Shared fixture가 크면 개�
 
 - 이전: [테스트 피라미드](Testing-Pyramid.md)
 - 다음: [통합 테스트 전략](Integration-Test-Strategy.md)
+- 관련: [과학적 디버깅](../Debugging/Scientific-Debugging.md), [경계값 분석과 동등 분할](Boundary-Value-Analysis.md), [테스트 더블](Test-Doubles.md)
 
 ## 참조 (References)
 

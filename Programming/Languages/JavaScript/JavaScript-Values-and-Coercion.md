@@ -39,6 +39,17 @@ Falsy 값에는 `false`, `0`, `""`, `null`, `undefined`, `NaN` 등이 있다.
 
 값 비교는 기본적으로 `===`를 사용하고, 필요한 변환은 `Number()`, `String()`, `Boolean()`처럼 명시한다. `null`, `undefined`, `NaN`, truthy/falsy 값을 표로 만들어 직접 평가해 보면 coercion 함정을 줄일 수 있다.
 
+```javascript
+console.log(0 == "");   // true  — 느슨한 비교의 함정
+console.log(0 === "");  // false — 기본적으로 === 사용
+
+function toInt(value) {
+  const n = Number(value);          // 명시적 변환
+  return Number.isNaN(n) ? 0 : n;
+}
+console.log(toInt("42"), toInt("x")); // 42 0
+```
+
 ## 복잡도 (Complexity)
 
 숫자와 boolean 변환은 대체로 작지만 문자열 parsing은 입력 길이에 비례한다. 객체와 배열은 reference로 전달되므로 복사 여부가 memory와 mutation 비용을 결정하고, 암묵 변환은 성능보다 correctness 비용이 더 크다.

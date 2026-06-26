@@ -86,6 +86,7 @@ print(round(cosine_similarity([1, 0], [1, 1]), 3))  # 0.707
 
 - 이전: 없음
 - 다음: [행렬 연산](Matrices.md)
+- 관련: [큐비트와 중첩](../../CS-Theory/Quantum-Computing/Qubits.md)
 
 ## 참조 (References)
 

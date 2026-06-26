@@ -108,7 +108,7 @@ print(hedge(losses, eta=0.8))
 ## 이어서 읽기 (Reading Path)
 
 - 이전: [경사 하강법 수렴 분석](GD-Convergence.md)
-- 다음: `Expert-Algorithms.md`, `Multi-Armed-Bandit.md`
+- 다음: [전문가 알고리즘](Expert-Algorithms.md), [멀티암드 밴딧](Multi-Armed-Bandit.md)
 
 ## 참조 (References)
 

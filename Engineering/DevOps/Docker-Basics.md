@@ -69,6 +69,7 @@ Build 시간은 context·layer·dependency에, image pull은 compressed size와 
 
 - 이전: [CI/CD 원칙](CICD-Principles.md)
 - 다음: [Kubernetes 기초](Kubernetes-Basics.md)
+- 관련: [Docker Compose](Docker-Compose.md)
 
 ## 참조 (References)
 

@@ -1,7 +1,7 @@
 # Java 클래스와 객체
 
 - Level: Beginner
-- Prerequisites: [Programming/OOP.md](../../OOP.md), [Java 기본 문법](Java-Setup-and-Syntax.md)
+- Prerequisites: [Java 기본 문법](Java-Setup-and-Syntax.md)
 - Status: Draft
 - Reviewed-by: -
 
@@ -40,6 +40,28 @@ class User {
 ## 구현 (Implementation)
 
 필드, 생성자, method를 작게 정의하고 class invariant를 constructor에서 세운다. `private` field와 public method로 캡슐화한 뒤, `toString`, `equals`, `hashCode`가 필요한 객체인지 의도적으로 결정한다.
+
+```java
+class Counter {
+    private int count = 0;          // 불변식: count >= 0
+
+    void increment() { count++; }
+    int value() { return count; }
+
+    @Override public String toString() {
+        return "Counter(" + count + ")";
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Counter c = new Counter();
+        c.increment();
+        c.increment();
+        System.out.println(c);      // Counter(2)
+    }
+}
+```
 
 ## 복잡도 (Complexity)
 

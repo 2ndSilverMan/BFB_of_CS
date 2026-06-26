@@ -116,6 +116,7 @@ def has_duplicate_fast(values):
 
 - 이전: [그래프 표현](../Data-Structures/Graph-Representation.md)
 - 다음: [정렬](Sorting.md)
+- 관련: [벤치마킹 기초](../Engineering/Performance/Benchmarking-Basics.md)
 
 ## 참조 (References)
 

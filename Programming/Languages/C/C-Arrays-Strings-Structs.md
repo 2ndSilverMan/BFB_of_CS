@@ -38,6 +38,24 @@ printf("%d %s\n", scores[0], name);
 
 배열은 길이를 별도로 전달하고, 문자열은 null terminator 공간까지 확보하며, 구조체는 값 복사와 포인터 전달의 차이를 의식해 작성한다. `sizeof`, bounds check, 초기화 여부를 작은 예제로 확인한다.
 
+```c
+#include <stdio.h>
+#include <string.h>
+
+int sum(const int *a, int n) {        // 길이를 따로 전달
+    int s = 0;
+    for (int i = 0; i < n; i++) s += a[i];
+    return s;
+}
+
+int main(void) {
+    int xs[] = {90, 80, 70};
+    int n = sizeof xs / sizeof xs[0];  // 요소 개수 계산
+    char name[] = "Ada";
+    printf("sum=%d len=%zu\n", sum(xs, n), strlen(name));  // sum=240 len=3
+}
+```
+
 ## 복잡도 (Complexity)
 
 배열 index 접근은 `O(1)`이지만 문자열 길이 계산은 null terminator를 찾는 `O(n)` 작업이다. 큰 구조체를 값으로 넘기면 크기에 비례한 복사 비용이 생기며, 구조체 배열은 cache locality에 영향을 준다.

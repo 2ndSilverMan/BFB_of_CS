@@ -7,6 +7,8 @@
 
 ---
 
+> 📍 **초점**: **네트워크 관점**에서 CDN과 로드 밸런싱(L4/L7·분배 알고리즘·헬스 체크)을 함께 다룬다.
+
 ## 개념 (Concept)
 
 CDN(콘텐츠 전송 네트워크)은 콘텐츠를 사용자 가까운 엣지 서버에 복제해 지연과 원본 부하를 줄인다. 로드 밸런싱은 여러 서버에 요청을 분산해 처리량과 가용성을 높인다.
@@ -74,6 +76,7 @@ class WeightedRR:
 
 - 이전: [네트워크 보안 기초](Network-Security-Basics.md)
 - 다음: [Engineering/System-Design/Scalability.md](../../Engineering/System-Design/Scalability.md), [Engineering/System-Design/Caching.md](../../Engineering/System-Design/Caching.md)
+- 같은 주제 다른 관점: [CDN과 캐싱 계층 (성능 관점)](../../Engineering/Performance/CDN-Caching.md), [CDN (시스템 설계 관점)](../../Engineering/System-Design/CDN.md)
 
 ## 참조 (References)
 

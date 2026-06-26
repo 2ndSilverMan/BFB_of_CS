@@ -84,6 +84,7 @@ Double descent를 실험적으로 확인하려면 모델 크기나 학습 시간
 
 - 이전: [일반화 경계](Generalization-Bounds.md)
 - 다음: [경사 하강법 수렴 분석](GD-Convergence.md)
+- 관련: [볼록 최적화와 학습](Convex-Learning.md)
 
 ## 참조 (References)
 

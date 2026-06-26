@@ -43,6 +43,20 @@ Python 이름 탐색은 지역(local), 둘러싼 함수(enclosing), 전역(globa
 
 함수는 하나의 책임과 명확한 인자·반환값을 갖게 작성하고, module은 import side effect가 없도록 구성한다. 실행용 코드는 `main()`과 module guard 아래에 두어 import와 실행을 분리한다.
 
+```python
+def greet(name, excited=False):
+    return f"Hello, {name}{'!' if excited else '.'}"
+
+
+def main():
+    print(greet("Ada"))
+    print(greet("Linus", excited=True))
+
+
+if __name__ == "__main__":   # import와 실행을 분리
+    main()
+```
+
 ## 복잡도 (Complexity)
 
 함수 호출은 Python에서 작지 않은 상수 비용이 있으므로 아주 작은 연산을 과도하게 쪼개면 hot path에서 부담이 될 수 있다. Module import는 한 번 cache되지만 초기 import 시점의 I/O와 top-level 실행 비용은 남는다.

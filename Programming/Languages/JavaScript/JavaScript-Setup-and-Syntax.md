@@ -40,6 +40,19 @@ for (let i = 0; i < 3; i++) {
 
 같은 문법을 Node.js와 브라우저 console에서 실행해 보고, 사용 가능한 API 차이를 구분한다. `let`/`const`, module import/export, strict mode, package script를 작은 파일로 확인한다.
 
+```javascript
+// add.mjs — 모듈로 분리해 export
+export function add(a, b) {
+  return a + b;
+}
+
+// main.mjs — 다른 모듈을 import
+import { add } from "./add.mjs";
+console.log(add(2, 3)); // 5
+```
+
+`.js` 확장자를 쓰려면 `package.json`에 `"type": "module"`을 명시한다.
+
 ## 복잡도 (Complexity)
 
 JavaScript runtime은 JIT warmup, hidden class, garbage collection의 영향을 받는다. 브라우저에서는 DOM 접근과 layout/repaint가 단순 계산보다 훨씬 비쌀 수 있고, Node.js에서는 I/O 대기와 event loop 점유가 중요하다.

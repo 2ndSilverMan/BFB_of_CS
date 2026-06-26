@@ -42,6 +42,19 @@ C++ 표준은 계속 발전한다. 현대 C++에서는 raw array와 raw pointer�
 
 `-std=c++20`, 경고 옵션, sanitizer를 켠 작은 프로그램으로 문법을 확인한다. `namespace`, `auto`, range-for, reference, RAII 같은 C++ 기본 관용구를 C 스타일 코드와 비교하며 익힌다.
 
+```cpp
+#include <iostream>
+#include <vector>
+
+int main() {
+    std::vector<int> xs = {1, 2, 3};
+    int total = 0;
+    for (auto& x : xs) total += x;     // auto + range-for + reference
+    auto avg = total / static_cast<double>(xs.size());
+    std::cout << "avg=" << avg << "\n";  // avg=2
+}
+```
+
 ## 복잡도 (Complexity)
 
 실행 시간은 선택한 알고리즘과 객체 복사·이동 비용에 좌우된다. 컴파일 시간은 template, include, optimization 수준에 민감하며, header-only 설계는 사용 편의성과 빌드 비용을 맞바꿀 수 있다.

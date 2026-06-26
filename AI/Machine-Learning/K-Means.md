@@ -82,6 +82,7 @@ def kmeans(points, k, steps=30):
 
 - 이전: [k-최근접 이웃](KNN.md)
 - 다음: [차원 축소](Dimensionality-Reduction.md)
+- 관련: [계층적 클러스터링](Hierarchical-Clustering.md)
 
 ## 참조 (References)
 

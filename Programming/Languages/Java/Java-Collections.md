@@ -1,6 +1,6 @@
 # Java 컬렉션
 
-- Level: Beginner
+- Level: Intermediate
 - Prerequisites: [Java 인터페이스와 제네릭](Java-Generics-and-Interfaces.md), [Data-Structures/](../../../Data-Structures/)
 - Status: Draft
 - Reviewed-by: -
@@ -15,14 +15,6 @@ Java Collections Framework는 `List`, `Set`, `Map`, `Queue` 같은 자료구조 
 
 컬렉션은 데이터를 담는 표준 상자들이다. 순서가 필요하면 `List`, 중복 제거가 필요하면 `Set`, key-value 검색이 필요하면 `Map`을 먼저 떠올린다.
 
-## 이론 (Theory)
-
-Java 컬렉션은 인터페이스와 구현체를 분리한다. 같은 `List`라도 `ArrayList`와 `LinkedList`의 비용이 다르고, 같은 `Map`이라도 `HashMap`과 `TreeMap`의 ordering·lookup 특성이 다르다.
-
-## 구현 (Implementation)
-
-구현할 때는 변수 타입을 가능한 인터페이스로 두고, 실제 access pattern에 맞춰 구현체를 고른다. key로 쓰는 객체는 `equals`와 `hashCode` 계약을 지켜야 한다.
-
 ## 핵심 문법 (Core Syntax)
 
 ```java
@@ -34,6 +26,30 @@ tags.add("java");
 
 Map<String, Integer> scores = new HashMap<>();
 scores.put("Ada", 100);
+```
+
+## 이론 (Theory)
+
+Java 컬렉션은 인터페이스와 구현체를 분리한다. 같은 `List`라도 `ArrayList`와 `LinkedList`의 비용이 다르고, 같은 `Map`이라도 `HashMap`과 `TreeMap`의 ordering·lookup 특성이 다르다.
+
+## 구현 (Implementation)
+
+구현할 때는 변수 타입을 가능한 인터페이스로 두고, 실제 access pattern에 맞춰 구현체를 고른다. key로 쓰는 객체는 `equals`와 `hashCode` 계약을 지켜야 한다.
+
+```java
+import java.util.HashMap;
+import java.util.Map;
+
+public class Main {
+    public static void main(String[] args) {
+        String[] words = {"a", "b", "a", "c", "a"};
+        Map<String, Integer> freq = new HashMap<>();  // 변수는 인터페이스 타입
+        for (String w : words) {
+            freq.merge(w, 1, Integer::sum);
+        }
+        System.out.println(freq.get("a"));  // 3
+    }
+}
 ```
 
 ## 복잡도 (Complexity)

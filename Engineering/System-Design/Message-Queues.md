@@ -7,6 +7,8 @@
 
 ---
 
+> 📍 **초점**: **시스템 설계 관점**에서 메시지 큐의 용도·전달 의미·DLQ를 다룬다.
+
 ## 개념 (Concept)
 
 메시지 큐는 producer와 consumer 사이에 메시지를 저장해 비동기 처리, 부하 완충, 서비스 결합도 감소를 제공하는 시스템 구성요소다.
@@ -68,6 +70,7 @@ Queue lag는 producer rate와 consumer 처리량의 차이로 커진다. 재시�
 
 - 이전: [확장성](Scalability.md)
 - 다음: [마이크로서비스](Microservices.md), [설계 사례](System-Design-Case-Studies.md)
+- 같은 주제 다른 관점: [메시지 큐와 이벤트 스트리밍 (분산 시스템 관점)](../../Systems/Distributed-Systems/Message-Queues-Event-Streaming.md)
 
 ## 참조 (References)
 

@@ -43,6 +43,21 @@ free(arr);
 
 포인터는 선언 직후 초기화하고, ownership을 주석이나 함수 이름으로 분명히 한다. `malloc` 결과 확인, `free` 위치, double free·use-after-free 여부를 sanitizer나 debugger로 함께 검증한다.
 
+```c
+#include <stdio.h>
+#include <stdlib.h>
+
+int main(void) {
+    int n = 5;
+    int *arr = malloc(n * sizeof *arr);  // 크기 계산
+    if (arr == NULL) return 1;           // 결과 확인
+    for (int i = 0; i < n; i++) arr[i] = i * i;
+    printf("%d\n", arr[4]);             // 16
+    free(arr);                           // 해제
+    arr = NULL;                          // dangling 포인터 방지
+}
+```
+
 ## 복잡도 (Complexity)
 
 포인터 역참조는 상수 시간처럼 보이지만 cache miss와 잘못된 locality가 큰 비용을 만든다. 동적 allocation은 allocator lock, fragmentation, metadata overhead가 있으며, leak은 장기 실행 프로그램에서 공간 비용을 계속 누적한다.

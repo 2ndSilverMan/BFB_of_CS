@@ -41,6 +41,28 @@ T max_value(T a, T b) {
 
 클래스는 불변식과 public interface를 먼저 정하고, 생성자·소멸자·복사/이동 동작을 의도적으로 설계한다. 템플릿은 header에 정의를 두는 경우가 많고, error message가 길어질 수 있어 작은 instantiation부터 확인한다.
 
+```cpp
+#include <iostream>
+
+class Account {
+public:
+    explicit Account(int balance) : balance_(balance) {}
+    void deposit(int amount) { if (amount > 0) balance_ += amount; }
+    int balance() const { return balance_; }
+private:
+    int balance_;   // 불변식: 생성자에서 초기 잔액을 세움
+};
+
+template <typename T>
+T clamp_min(T v, T lo) { return v < lo ? lo : v; }  // 작은 instantiation
+
+int main() {
+    Account a(100);
+    a.deposit(50);
+    std::cout << a.balance() << " " << clamp_min(-3, 0) << "\n";  // 150 0
+}
+```
+
 ## 복잡도 (Complexity)
 
 Virtual dispatch는 보통 상수 시간 overhead지만 inlining을 막을 수 있다. Template은 runtime 추상화 비용을 줄일 수 있지만 instantiation 수가 많으면 compile time과 binary size가 커진다.

@@ -95,7 +95,7 @@ print(abs(a - 0.3) < 1e-9)   # True
 
 - 이전: 없음(디지털 논리는 CS Core에서 예정)
 - 다음: [CPU 구조와 명령어 집합](CPU-and-ISA.md)
-- 관련: [변수와 타입](../../Programming/Variables-and-Types.md)
+- 관련: [변수와 타입](../../Programming/Variables-and-Types.md), [부동소수점 표현과 오차](../../Math/Numerical-Methods/Floating-Point.md), [디지털 논리](Digital-Logic.md)
 
 ## 참조 (References)
 

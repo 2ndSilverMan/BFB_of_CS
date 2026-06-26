@@ -7,6 +7,8 @@
 
 ---
 
+> 📍 **초점**: 옵티마이저가 실행 계획을 고르는 **DB 내부 동작(RBO/CBO·통계·비용 모델)**을 다룬다.
+
 ## 개념 (Concept)
 
 쿼리 최적화는 선언형 SQL 질의를 받아 **같은 결과를 내는 여러 실행 방법(실행 계획, query plan) 중 가장 비용이 적은 것을 고르는** 데이터베이스의 과정이다. 사용자는 "무엇을 원하는지(what)"만 쓰고, 옵티마이저가 "어떻게 가져올지(how)"를 결정한다.
@@ -101,6 +103,7 @@ ANALYZE orders;
 - 이전: [인덱스와 B-트리](Indexes-and-B-Tree.md)
 - 다음: [NoSQL](NoSQL.md), [분산 데이터베이스](Distributed-DB.md)
 - 관련: [동시성 제어](Concurrency-Control.md)
+- 같은 주제 다른 관점: [데이터베이스 쿼리 최적화 (성능 관점)](../../Engineering/Performance/Database-Query-Optimization.md)
 
 ## 참조 (References)
 

@@ -1,7 +1,7 @@
 # 클라우드 컴퓨팅 (Cloud Computing)
 
 - Level: Beginner
-- Prerequisites: [Systems/Networks/IP-and-Routing.md](../../Systems/Networks/IP-and-Routing.md), [Systems/Operating-Systems/Processes-and-Threads.md](../../Systems/Operating-Systems/Processes-and-Threads.md)
+- Prerequisites: [Systems/Operating-Systems/Processes-and-Threads.md](../../Systems/Operating-Systems/Processes-and-Threads.md)
 - Status: Draft
 - Reviewed-by: -
 
@@ -64,9 +64,9 @@ basic cloud design:
 
 - 이전: [Helm](Helm.md)
 - 다음: [AWS 핵심 서비스](AWS-Core-Services.md)
+- 관련: [IP 주소와 라우팅](../../Systems/Networks/IP-and-Routing.md), [분산 시스템 모델](../../Systems/Distributed-Systems/System-Models.md)
 
 ## 참조 (References)
 
 - [Systems/Networks/IP-and-Routing.md](../../Systems/Networks/IP-and-Routing.md)
 - [Systems/Distributed-Systems/System-Models.md](../../Systems/Distributed-Systems/System-Models.md)
-

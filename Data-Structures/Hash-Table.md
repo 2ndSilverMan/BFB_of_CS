@@ -107,6 +107,7 @@ print(counts)   # {'a': 2, 'b': 1}
 
 - 이전: [배열](Array.md)
 - 다음: [해시 함수와 충돌 처리](Hash-Function.md)
+- 관련: [트라이](Trie.md)
 
 ## 참조 (References)
 

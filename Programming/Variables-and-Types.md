@@ -114,6 +114,7 @@ print(number + 1)  # 43
 
 - 이전: 없음
 - 다음: [조건문과 반복문](Control-Flow.md)
+- 관련: [C 컴파일과 기본 문법](Languages/C/C-Setup-and-Compilation.md), [Java 실행 환경과 기본 문법](Languages/Java/Java-Setup-and-Syntax.md), [JavaScript 실행 환경과 기본 문법](Languages/JavaScript/JavaScript-Setup-and-Syntax.md), [Python 실행 환경과 기본 문법](Languages/Python/Python-Setup-and-Syntax.md)
 
 ## 참조 (References)
 

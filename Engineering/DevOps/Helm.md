@@ -1,7 +1,7 @@
 # Helm
 
 - Level: Intermediate
-- Prerequisites: [Engineering/DevOps/Kubernetes-Advanced.md](Kubernetes-Advanced.md)
+- Prerequisites: [Engineering/DevOps/Kubernetes-Basics.md](Kubernetes-Basics.md)
 - Status: Draft
 - Reviewed-by: -
 

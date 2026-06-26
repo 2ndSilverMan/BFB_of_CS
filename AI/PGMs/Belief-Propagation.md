@@ -92,6 +92,7 @@ print(belief_a)
 
 - 이전: [변수 소거](Variable-Elimination.md)
 - 다음: [MCMC](MCMC.md)
+- 관련: [변분 추론](Variational-Inference.md)
 
 ## 참조 (References)
 

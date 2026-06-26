@@ -7,6 +7,8 @@
 
 ---
 
+> 📍 **초점**: cache-aside·write-through 등 **아키텍처 수준 캐싱 패턴**과 일관성 정책을 다룬다.
+
 ## 개념 (Concept)
 
 Cache는 비싼 원본 계산·저장소보다 가까운 곳에 재사용 가능한 결과를 임시 보관해 latency와 backend load를 줄인다. 핵심은 key, placement, eviction, invalidation, consistency 정책이다.
@@ -69,6 +71,7 @@ Hash cache lookup은 평균 `O(1)`이지만 network cache는 round trip이 있�
 
 - 이전: [확장성](Scalability.md)
 - 다음: [CDN](CDN.md)
+- 같은 주제 다른 관점: [CDN과 캐싱 계층 (성능 관점)](../Performance/CDN-Caching.md), [메모이제이션과 캐싱 (성능 관점)](../Performance/Memoization-Caching.md)
 
 ## 참조 (References)
 

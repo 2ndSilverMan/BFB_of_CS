@@ -73,6 +73,7 @@ def self_attention(x, Wq, Wk, Wv, mask=None):
 
 - 이전: [단어 임베딩](Word-Embeddings.md), [AI/Deep-Learning/Transformer.md](../Deep-Learning/Transformer.md)
 - 다음: [BERT](BERT.md), [GPT](GPT.md), [AI/LLMs/Transformer-Advanced.md](../LLMs/Transformer-Advanced.md)
+- 관련: [텍스트 분류](Text-Classification.md)
 
 ## 참조 (References)
 

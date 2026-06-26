@@ -91,6 +91,7 @@ print((sigmoid(X @ theta) >= 0.5).astype(int))   # [0 0 1 1]
 
 - 이전: [선형 회귀](Linear-Regression.md)
 - 다음: [결정 트리](Decision-Trees.md), [규제](Regularization.md)
+- 관련: [퍼셉트론과 다층 신경망](../Deep-Learning/MLP.md), [k-최근접 이웃](KNN.md), [SVM](SVM.md)
 
 ## 참조 (References)
 

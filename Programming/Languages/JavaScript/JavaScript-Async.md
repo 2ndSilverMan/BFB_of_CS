@@ -39,6 +39,24 @@ Event loop는 call stack, task queue, microtask queue를 조정한다. Promise c
 
 `async`/`await` 예제는 성공, 실패, timeout, cancellation 경로를 함께 작성한다. 독립 I/O는 `Promise.all`로 병렬화하되, 외부 API나 DB를 과부하시키지 않도록 concurrency limit을 둔다.
 
+```javascript
+function withTimeout(promise, ms) {
+  const timeout = new Promise((_, reject) =>
+    setTimeout(() => reject(new Error("timeout")), ms)
+  );
+  return Promise.race([promise, timeout]); // 성공 또는 timeout 중 먼저
+}
+
+async function main() {
+  const results = await Promise.all([       // 독립 작업 병렬화
+    Promise.resolve(1),
+    Promise.resolve(2),
+  ]);
+  console.log(results); // [1, 2]
+}
+main();
+```
+
 ## 복잡도 (Complexity)
 
 비동기는 CPU 계산을 자동으로 빠르게 만들지 않고, 대기 시간을 겹쳐 체감 latency를 줄인다. pending promise가 많으면 memory와 queue 관리 비용이 늘고, blocking CPU 작업은 event loop 전체를 멈춘다.

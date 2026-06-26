@@ -1,6 +1,6 @@
 # 경계값 분석과 동등 분할
 
-- Level: Beginner
+- Level: Intermediate
 - Prerequisites: [Engineering/Testing/Unit-Test-Principles.md](Unit-Test-Principles.md)
 - Status: Draft
 - Reviewed-by: -

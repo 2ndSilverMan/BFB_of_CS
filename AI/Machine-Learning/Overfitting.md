@@ -69,6 +69,7 @@ print(round(gap, 3))
 
 - 이전: [규제](Regularization.md)
 - 다음: [딥러닝](../Deep-Learning/)
+- 관련: [PAC 학습 프레임워크](../Theoretical-ML/PAC-Learning.md)
 
 ## 참조 (References)
 

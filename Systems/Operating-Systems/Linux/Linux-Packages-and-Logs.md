@@ -1,7 +1,7 @@
 # Linux 패키지와 로그 (Packages and Logs)
 
 - Level: Beginner
-- Prerequisites: [Systems/Operating-Systems/Linux/Linux-Processes-and-Services.md](Linux-Processes-and-Services.md), [Engineering/Debugging/Structured-Logging.md](../../../Engineering/Debugging/Structured-Logging.md)
+- Prerequisites: [Systems/Operating-Systems/Linux/Linux-Processes-and-Services.md](Linux-Processes-and-Services.md)
 - Status: Draft
 - Reviewed-by: -
 

@@ -1,7 +1,7 @@
 # 보간법 (Interpolation)
 
 - Level: Intermediate
-- Prerequisites: [Math/Numerical-Methods/Numerical-Linear-Systems.md](Numerical-Linear-Systems.md), [Math/Calculus/Taylor-Series.md](../Calculus/Taylor-Series.md)
+- Prerequisites: [Math/Linear-Algebra/Linear-Systems.md](../Linear-Algebra/Linear-Systems.md), [Math/Calculus/Taylor-Series.md](../Calculus/Taylor-Series.md)
 - Status: Draft
 - Reviewed-by: -
 

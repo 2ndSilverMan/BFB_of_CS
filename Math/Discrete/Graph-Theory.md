@@ -107,6 +107,7 @@ print(sum(degree(graph, v) for v in graph))   # 10 = 2 * 간선 수(5)
 
 - 이전: [수학적 귀납법](Induction.md)
 - 다음: [그래프 표현](../../Data-Structures/Graph-Representation.md), [BFS / DFS](../../Algorithms/BFS-DFS.md)
+- 관련: [그래프 이론 복습](../../AI/PGMs/Graph-Review.md)
 
 ## 참조 (References)
 

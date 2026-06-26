@@ -37,6 +37,22 @@ JDK는 컴파일러와 개발 도구를 포함하고, JRE/JVM은 실행 환경�
 
 `javac`와 `java`로 작은 `main` class를 컴파일·실행하고, package 이름과 directory 구조가 맞는지 확인한다. IDE를 쓰더라도 classpath, build tool, entry point가 실제로 어떻게 연결되는지 한 번은 터미널에서 확인한다.
 
+```java
+public class Main {
+    static int square(int x) { return x * x; }
+
+    public static void main(String[] args) {
+        for (int i = 1; i <= 3; i++) {
+            System.out.println(i + " -> " + square(i));
+        }
+    }
+}
+```
+
+```bash
+javac Main.java && java Main
+```
+
 ## 복잡도 (Complexity)
 
 Java 코드는 JVM startup, JIT warmup, GC의 영향을 받는다. 작은 CLI에서는 startup 비용이 두드러지고, 장기 실행 서버에서는 hot method 최적화와 allocation pattern이 성능을 크게 좌우한다.

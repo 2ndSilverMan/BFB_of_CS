@@ -88,6 +88,7 @@ print(np.linalg.inv(A))   # 역행렬
 
 - 이전: [벡터와 벡터 공간](Vectors.md)
 - 다음: [선형 연립방정식](Linear-Systems.md), [고유값과 고유벡터](Eigenvalues.md)
+- 관련: [이미지 표현 기초](../../AI/Computer-Vision/Image-Basics.md), [행렬식](Determinant.md)
 
 ## 참조 (References)
 

@@ -93,6 +93,7 @@ def triangular(n):
 
 - 이전: [명제 논리와 술어 논리](Logic.md)
 - 다음: [재귀와 점화식](Recurrences.md), [그래프 이론 기초](Graph-Theory.md)
+- 관련: [정수론 기초](Number-Theory-Basics.md)
 
 ## 참조 (References)
 

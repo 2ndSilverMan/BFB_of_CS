@@ -74,6 +74,7 @@ for train_idx, valid_idx in kfold_indices(10, 3):
 
 - 이전: [편향-분산](Bias-Variance.md)
 - 다음: [규제](Regularization.md)
+- 관련: [실험 추적](../MLOps/Experiment-Tracking.md), [하이퍼파라미터 튜닝](../MLOps/Hyperparameter-Tuning.md)
 
 ## 참조 (References)
 

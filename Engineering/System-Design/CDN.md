@@ -7,6 +7,8 @@
 
 ---
 
+> 📍 **초점**: CDN을 **아키텍처 구성요소**로 보고 배치·오리진 오프로드·동적 콘텐츠 캐싱 전략을 다룬다.
+
 ## 개념 (Concept)
 
 CDN은 사용자 가까운 edge location에 정적·동적 콘텐츠를 캐싱해 latency를 줄이고 origin 부하를 낮추는 네트워크 계층이다. 이미지, JS/CSS, 동영상, 다운로드 파일, 일부 API 응답에 쓰인다.
@@ -63,6 +65,7 @@ CDN은 latency를 줄이지만 캐시 무효화와 일관성 문제를 만든다
 
 - 이전: [캐싱](Caching.md)
 - 다음: [로드 밸런싱](Load-Balancing.md), [성능 공학](../Performance/)
+- 같은 주제 다른 관점: [CDN과 캐싱 계층 (성능 관점)](../Performance/CDN-Caching.md), [CDN과 로드 밸런싱 (네트워크 관점)](../../Systems/Networks/CDN-and-Load-Balancing.md)
 
 ## 참조 (References)
 

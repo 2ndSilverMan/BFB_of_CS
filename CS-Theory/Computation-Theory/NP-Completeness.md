@@ -95,7 +95,7 @@ NP-완전임이 P≠NP를 증명하는 것은 아니다. 다만 "다항 시간 �
 ## 이어서 읽기 (Reading Path)
 
 - 이전: [복잡도 클래스](Complexity-Classes.md)
-- 다음: 근사 알고리즘 (예정 `Approximation-Algorithms.md`, Algorithms)
+- 다음: [근사 알고리즘](../../Algorithms/Approximation-Algorithms.md)
 - 관련: [결정 불가능성](Undecidability.md)
 
 ## 참조 (References)

@@ -70,7 +70,8 @@ def transformer_block(x, attention_fn, mlp_fn, norm_fn):
 ## 이어서 읽기 (Reading Path)
 
 - 이전: [어텐션](Attention.md)
-- 다음: [전이 학습](Transfer-Learning.md), NLP Transformer 응용
+- 다음: [전이 학습](Transfer-Learning.md), [NLP Transformer 응용](../NLP/Transformer-NLP.md)
+- 관련: [고급 Transformer](../LLMs/Transformer-Advanced.md), [효율적 Attention](../LLMs/Efficient-Attention.md)
 
 ## 참조 (References)
 

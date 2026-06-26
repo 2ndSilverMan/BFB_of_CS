@@ -44,6 +44,23 @@ cc main.c util.c -o app
 
 파일 I/O는 `fopen` 실패, partial read/write, `fclose` 오류를 확인하는 코드로 작성한다. 여러 translation unit을 빌드할 때는 header guard, object file, linker error를 구분해 보고 build dependency를 명시한다.
 
+```c
+#include <stdio.h>
+
+int main(void) {
+    FILE *f = fopen("data.txt", "r");
+    if (f == NULL) {                 // 열기 실패 확인
+        perror("fopen");
+        return 1;
+    }
+    int lines = 0, c;
+    while ((c = fgetc(f)) != EOF)
+        if (c == '\n') lines++;
+    if (fclose(f) != 0) perror("fclose");  // 닫기 오류도 확인
+    printf("lines=%d\n", lines);
+}
+```
+
 ## 복잡도 (Complexity)
 
 파일 처리 시간은 byte 수, buffering, syscall 횟수, storage latency에 좌우된다. Build 시간은 source file 수와 header dependency에 비례해 늘고, incremental build는 바뀐 dependency만 다시 컴파일할 때 효과가 크다.

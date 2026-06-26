@@ -42,6 +42,24 @@ void increment(int& x) {
 
 Resource를 획득하는 생성자와 해제하는 소멸자를 한 쌍으로 설계하고, 함수 인자는 소유권이 없으면 `const&`, 소유권 이동이면 value나 rvalue reference로 표현한다. Scope를 벗어날 때 해제가 실제로 일어나는지 로그나 테스트로 확인한다.
 
+```cpp
+#include <iostream>
+#include <string>
+
+class Timer {
+public:
+    Timer() { std::cout << "start\n"; }
+    ~Timer() { std::cout << "stop\n"; }   // scope 종료 시 자동 해제
+};
+
+void run(const std::string& label) {       // const&: 복사 없이 읽기
+    Timer t;
+    std::cout << "work: " << label << "\n";
+}
+
+int main() { run("job"); }  // start / work: job / stop 순서로 출력
+```
+
 ## 복잡도 (Complexity)
 
 RAII 자체는 점근 복잡도를 바꾸지 않지만 cleanup 시점을 결정적으로 만든다. Reference 전달은 큰 객체 복사를 피하지만 lifetime 제약을 만들고, move는 보통 싸지만 type별로 비용이 다를 수 있다.

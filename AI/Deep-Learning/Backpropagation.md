@@ -77,6 +77,7 @@ backward pass의 시간은 보통 forward pass의 작은 상수배이며, 중간
 
 - 이전: [MLP](MLP.md), [연쇄 법칙](../../Math/Calculus/Chain-Rule.md)
 - 다음: [손실 함수](Loss-Functions.md)
+- 관련: [순환 신경망](RNN-LSTM-GRU.md), [오토인코더](../Generative-Models/Autoencoders.md)
 
 ## 참조 (References)
 

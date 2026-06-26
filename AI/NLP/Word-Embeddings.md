@@ -75,6 +75,7 @@ vocabulary $V$, 차원 $d$의 embedding table은 `O(Vd)` 공간이다. lookup은
 
 - 이전: [언어 모델 기초](Language-Model-Basics.md)
 - 다음: [BERT](BERT.md), [GPT](GPT.md)
+- 관련: [RNN / LSTM / GRU for NLP](RNN-for-NLP.md)
 
 ## 참조 (References)
 

@@ -1,7 +1,7 @@
 # 나이브 베이즈 (Naive Bayes)
 
 - Level: Intermediate
-- Prerequisites: [Bayesian-Networks.md](Bayesian-Networks.md), [Math/Probability-Statistics/Bayes-Theorem.md](../../Math/Probability-Statistics/Bayes-Theorem.md), [AI/Machine-Learning/Logistic-Regression.md](../Machine-Learning/Logistic-Regression.md)
+- Prerequisites: [Math/Probability-Statistics/Bayes-Theorem.md](../../Math/Probability-Statistics/Bayes-Theorem.md), [AI/Machine-Learning/Logistic-Regression.md](../Machine-Learning/Logistic-Regression.md)
 - Status: Draft
 - Reviewed-by: -
 

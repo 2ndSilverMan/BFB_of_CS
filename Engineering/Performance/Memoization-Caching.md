@@ -7,6 +7,8 @@
 
 ---
 
+> 📍 **초점**: 함수 메모이제이션 등 **코드·계산 수준의 캐싱**에 집중한다.
+
 ## 개념 (Concept)
 
 메모이제이션은 함수 입력과 결과를 저장해 같은 계산을 재사용하는 기법이고, 캐싱은 비싼 데이터 접근·계산 결과를 가까운 계층에 보관하는 전략이다.
@@ -67,6 +69,7 @@ def fib(n: int) -> int:
 
 - 이전: [실전 복잡도](Practical-Complexity.md)
 - 다음: [지연 계산](Lazy-Evaluation.md)
+- 같은 주제 다른 관점: [CDN과 캐싱 계층 (성능 관점)](CDN-Caching.md), [캐싱 전략 (시스템 설계 관점)](../System-Design/Caching.md)
 
 ## 참조 (References)
 

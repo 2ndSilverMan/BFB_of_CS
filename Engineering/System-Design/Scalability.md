@@ -67,6 +67,7 @@ Scale out은 capacity를 늘리지만 coordination·network·replication overhea
 
 - 이전: [시스템 설계 접근](Approach.md)
 - 다음: [캐싱](Caching.md)
+- 관련: [데이터베이스 선택과 샤딩](Database-Design.md)
 
 ## 참조 (References)
 

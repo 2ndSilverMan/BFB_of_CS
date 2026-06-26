@@ -1,7 +1,7 @@
 # Python 클래스와 객체 (Python OOP)
 
 - Level: Beginner
-- Prerequisites: [Programming/OOP.md](../../OOP.md), [Python 함수와 모듈](Python-Functions-and-Modules.md)
+- Prerequisites: [Python 함수와 모듈](Python-Functions-and-Modules.md)
 - Status: Draft
 - Reviewed-by: -
 
@@ -39,6 +39,23 @@ Python은 duck typing을 자주 사용한다. 어떤 객체가 필요한 메서�
 ## 구현 (Implementation)
 
 상태를 가진 개념은 class로 묶고, 값 객체는 `dataclass`로 시작하면 좋다. 상속보다 composition을 먼저 고려하고, method가 객체 상태를 실제로 사용하는지 확인해 불필요한 class를 피한다.
+
+```python
+from dataclasses import dataclass
+
+
+@dataclass
+class Point:          # 값 객체는 dataclass로 시작
+    x: int
+    y: int
+
+    def moved(self, dx, dy):
+        return Point(self.x + dx, self.y + dy)
+
+
+p = Point(1, 2)
+print(p.moved(3, 4))   # Point(x=4, y=6)
+```
 
 ## 복잡도 (Complexity)
 

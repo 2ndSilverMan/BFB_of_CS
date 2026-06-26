@@ -1,6 +1,6 @@
 # Docker Compose (Docker Compose)
 
-- Level: Beginner
+- Level: Intermediate
 - Prerequisites: [Engineering/DevOps/Docker-Basics.md](Docker-Basics.md)
 - Status: Draft
 - Reviewed-by: -

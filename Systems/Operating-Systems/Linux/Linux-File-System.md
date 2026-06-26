@@ -1,7 +1,7 @@
 # Linux 파일 시스템 (Linux File System)
 
 - Level: Beginner
-- Prerequisites: [Systems/Operating-Systems/File-Systems.md](../File-Systems.md), [Systems/Operating-Systems/Linux/Linux-Shell-Basics.md](Linux-Shell-Basics.md)
+- Prerequisites: [Systems/Operating-Systems/Linux/Linux-Shell-Basics.md](Linux-Shell-Basics.md)
 - Status: Draft
 - Reviewed-by: -
 

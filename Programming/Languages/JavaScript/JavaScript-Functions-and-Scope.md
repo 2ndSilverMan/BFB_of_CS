@@ -41,6 +41,21 @@ function makeCounter() {
 
 함수는 입력과 반환값을 분명히 하고, closure가 어떤 binding을 캡처하는지 console로 확인한다. `var` 대신 `let`/`const`를 기본으로 쓰고, callback에서 `this`가 필요한 경우 arrow function과 일반 function의 차이를 실험한다.
 
+```javascript
+function makeAdder(base) {
+  return (x) => base + x;   // base를 캡처하는 closure
+}
+
+const add10 = makeAdder(10);
+console.log(add10(5));      // 15
+
+const next = (() => {
+  let count = 0;            // 외부에서 접근 불가능한 private 상태
+  return () => (count += 1);
+})();
+console.log(next(), next()); // 1 2
+```
+
 ## 복잡도 (Complexity)
 
 함수 호출과 closure 생성은 보통 작지만 hot loop에서는 누적될 수 있다. 재귀는 call stack 깊이 제한을 받으며, 캡처한 큰 객체가 오래 살아 있으면 memory retention 문제가 생긴다.

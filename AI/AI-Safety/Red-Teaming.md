@@ -78,7 +78,7 @@ Red-teaming은 사람 시간과 반복 비용이 크다. 모델 버전, decoding
 ## 이어서 읽기 (Reading Path)
 
 - 이전: [AI 역량 평가](Capability-Evaluation.md)
-- 다음: `Scalable-Oversight.md`, `AI-Regulation.md`
+- 다음: [Scalable Oversight](Scalable-Oversight.md), [AI 규제 프레임워크](AI-Regulation.md)
 
 ## 참조 (References)
 

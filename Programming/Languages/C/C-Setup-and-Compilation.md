@@ -42,6 +42,22 @@ cc main.c -o main
 
 작은 `main.c`를 만들고 `gcc -Wall -Wextra -std=c17 main.c -o main`처럼 경고를 켠 상태로 컴파일한다. 헤더와 소스가 나뉘면 선언은 `.h`, 구현은 `.c`에 두고, 여러 파일은 Makefile이나 build system으로 의존성을 관리한다.
 
+```c
+#include <stdio.h>
+
+static int square(int x) { return x * x; }  // 같은 파일 내 함수 분리
+
+int main(void) {
+    for (int i = 1; i <= 3; i++)
+        printf("%d -> %d\n", i, square(i));
+    return 0;
+}
+```
+
+```bash
+gcc -Wall -Wextra -std=c17 main.c -o main && ./main
+```
+
 ## 복잡도 (Complexity)
 
 컴파일 시간은 파일 수, include graph, 최적화 수준에 영향을 받는다. 실행 시간은 compile command가 아니라 생성된 코드와 알고리즘에 좌우되며, 최적화 플래그는 runtime 성능과 디버깅 편의성을 맞바꿀 수 있다.

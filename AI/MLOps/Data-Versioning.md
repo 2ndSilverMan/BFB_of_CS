@@ -65,6 +65,7 @@ Full copy는 version마다 `O(data size)` 공간, content-addressed chunking은 
 
 - 이전: [재현 가능성](Reproducibility.md)
 - 다음: [ML 파이프라인](ML-Pipeline.md)
+- 관련: [Feature Store](Feature-Store.md)
 
 ## 참조 (References)
 

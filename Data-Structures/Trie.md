@@ -87,7 +87,7 @@ $m$은 문자열 길이. 공간은 최악의 경우 노드 수 × 알파벳 크�
 ## 이어서 읽기 (Reading Path)
 
 - 이전: [해시 테이블](Hash-Table.md)
-- 다음: 문자열 매칭 (예정 `KMP.md`), 다중 패턴 매칭 (예정 `Aho-Corasick.md`)
+- 다음: [문자열 매칭](../Algorithms/KMP.md), [다중 패턴 매칭](../Algorithms/Aho-Corasick.md)
 
 ## 참조 (References)
 

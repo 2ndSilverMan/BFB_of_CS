@@ -1,7 +1,7 @@
 # 주성분 분석 (Principal Component Analysis)
 
 - Level: Intermediate
-- Prerequisites: [Math/Linear-Algebra/SVD.md](SVD.md), [Math/Probability-Statistics/Expectation.md](../Probability-Statistics/Expectation.md)
+- Prerequisites: [Math/Linear-Algebra/Eigenvalues.md](Eigenvalues.md), [Math/Linear-Algebra/SVD.md](SVD.md), [Math/Probability-Statistics/Expectation.md](../Probability-Statistics/Expectation.md)
 - Status: Draft
 - Reviewed-by: -
 
@@ -90,7 +90,7 @@ $N\ge d$인 조밀한 데이터의 전체 SVD 기반 PCA는 대략 `O(Nd^2)` 시
 ## 이어서 읽기 (Reading Path)
 
 - 이전: [특이값 분해](SVD.md)
-- 다음: 차원 축소 (예정 `Dimensionality-Reduction.md`, AI/Machine-Learning)
+- 다음: [차원 축소](../../AI/Machine-Learning/Dimensionality-Reduction.md)
 - 관련: [기댓값](../Probability-Statistics/Expectation.md)
 
 ## 참조 (References)

@@ -78,6 +78,7 @@ def banner_message(order_total):
 
 - 이전: [Programming/OOP.md](../../Programming/OOP.md)
 - 다음: [SOLID](SOLID.md)
+- 관련: [생성 패턴](Creational-Patterns.md)
 
 ## 참조 (References)
 

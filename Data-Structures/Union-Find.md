@@ -114,7 +114,7 @@ print(dsu.find(0) == dsu.find(3))   # False
 ## 이어서 읽기 (Reading Path)
 
 - 이전: [그래프 표현](Graph-Representation.md)
-- 다음: 최소 신장 트리 (예정 `MST.md`), 크루스칼 알고리즘
+- 다음: [최소 신장 트리](../Algorithms/MST.md), 크루스칼 알고리즘
 - 관련: [그래프 이론](../Math/Discrete/Graph-Theory.md)
 
 ## 참조 (References)

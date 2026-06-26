@@ -65,6 +65,7 @@ git log --oneline
 
 - 이전: [DevOps 개요](../)
 - 다음: [브랜치, 머지, 리베이스](Git-Branches-Merging-Rebasing.md)
+- 관련: [Git 내부 구조](../Git-Internals.md)
 
 ## 참조 (References)
 

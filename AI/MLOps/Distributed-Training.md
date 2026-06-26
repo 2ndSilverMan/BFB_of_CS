@@ -65,6 +65,7 @@ Compute는 이상적으로 worker 수에 반비례하지만 gradient communicati
 
 - 이전: [병렬 컴퓨팅 모델](../../Systems/Parallel-Computing/Parallel-Models.md)
 - 다음: [모델 레지스트리](Model-Registry.md)
+- 관련: [GPU 클러스터 관리](GPU-Cluster.md)
 
 ## 참조 (References)
 

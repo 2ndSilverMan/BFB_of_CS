@@ -84,6 +84,7 @@ print(round(estimate_even_given_gt3(), 2))   # ~0.67  (이론값 2/3: {4,6} / {4
 
 - 이전: 없음
 - 다음: [확률 변수와 분포](Distributions.md), [기댓값, 분산, 공분산](Expectation.md)
+- 관련: [상관 vs 인과](../../AI/Causal-Inference/Correlation-vs-Causation.md), [마르코프 체인](Markov-Chains.md)
 
 ## 참조 (References)
 

@@ -41,6 +41,25 @@ class UserRepository implements Repository<User> {
 
 API는 가능한 interface 타입으로 받고, 구현체는 사용 지점에서 선택한다. Generics는 `List<T>`, bounded type parameter, wildcard를 작은 예제로 나눠 확인하고 unchecked warning을 남기지 않도록 한다.
 
+```java
+import java.util.List;
+
+public class Main {
+    // bounded type parameter: Comparable을 만족하는 T만 허용
+    static <T extends Comparable<T>> T max(List<T> items) {
+        T best = items.get(0);
+        for (T x : items) {
+            if (x.compareTo(best) > 0) best = x;
+        }
+        return best;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(max(List.of(3, 9, 2)));  // 9
+    }
+}
+```
+
 ## 복잡도 (Complexity)
 
 Java generics는 주로 type erasure로 구현되어 primitive specialization을 자동 제공하지 않는다. Boxing된 값은 객체 allocation과 indirection 비용을 만들 수 있고, interface dispatch는 JIT 최적화 여부에 따라 비용이 달라진다.

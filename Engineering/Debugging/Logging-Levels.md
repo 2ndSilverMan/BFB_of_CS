@@ -1,7 +1,7 @@
 # 로깅 수준 설계 (Logging Levels)
 
 - Level: Beginner
-- Prerequisites: [Engineering/Debugging/Structured-Logging.md](Structured-Logging.md)
+- Prerequisites: 없음
 - Status: Draft
 - Reviewed-by: -
 

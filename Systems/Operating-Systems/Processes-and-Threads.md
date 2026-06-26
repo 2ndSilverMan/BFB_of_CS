@@ -106,6 +106,7 @@ CPU 위주 작업을 진짜 병렬로 돌리려면 파이썬에서는 스레드 
 
 - 이전: [데이터 표현](../Computer-Architecture/Data-Representation.md)
 - 다음: [CPU 스케줄링](Scheduling.md), [동기화](Synchronization.md)
+- 관련: [셸과 기본 명령](Linux/Linux-Shell-Basics.md)
 
 ## 참조 (References)
 

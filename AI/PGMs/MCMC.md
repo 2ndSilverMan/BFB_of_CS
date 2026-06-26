@@ -94,6 +94,7 @@ print(round(sum(samples[1000:]) / len(samples[1000:]), 3))
 
 - 이전: [신뢰 전파](Belief-Propagation.md)
 - 다음: [AI/Causal-Inference/](../Causal-Inference/)
+- 관련: [변분 추론](Variational-Inference.md)
 
 ## 참조 (References)
 

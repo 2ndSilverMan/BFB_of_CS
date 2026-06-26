@@ -90,8 +90,9 @@ print(round(joint(c=1, r=1, s=0), 3))
 
 ## 이어서 읽기 (Reading Path)
 
-- 이전: `Factorization.md`
+- 이전: [인수 분해와 조건부 독립](Factorization.md)
 - 다음: [d-분리](d-Separation.md)
+- 관련: [나이브 베이즈](Naive-Bayes.md)
 
 ## 참조 (References)
 

@@ -69,6 +69,7 @@ Sampling overhead는 frequency와 stack depth에, instrumentation overhead는 ev
 
 - 이전: [벤치마킹 기초](Benchmarking-Basics.md)
 - 다음: [캐시 친화적 코드](Cache-Friendly-Code.md)
+- 관련: [메모리 프로파일링](Memory-Profiling.md)
 
 ## 참조 (References)
 

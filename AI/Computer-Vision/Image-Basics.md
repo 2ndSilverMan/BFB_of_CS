@@ -65,6 +65,7 @@ $H\times W\times C$ 이미지의 pointwise 변환은 `O(HWC)`, 저장도 `O(HWC)
 
 - 이전: [행렬 연산](../../Math/Linear-Algebra/Matrices.md)
 - 다음: [CNN](../Deep-Learning/CNN.md), [이미지 분류](Image-Classification.md)
+- 관련: [고전 컴퓨터 비전](Classical-Vision.md), [광류](Optical-Flow.md)
 
 ## 참조 (References)
 

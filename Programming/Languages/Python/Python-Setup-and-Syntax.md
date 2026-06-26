@@ -40,6 +40,19 @@ for i in range(3):
 
 가상 환경을 만들고 작은 script와 REPL을 번갈아 사용해 문법을 확인한다. 실행 파일에는 `if __name__ == "__main__":` guard를 두고, package 설치와 interpreter version을 프로젝트별로 고정한다.
 
+```python
+import sys
+
+
+def main():
+    print(f"Python {sys.version_info.major}.{sys.version_info.minor}")
+    print("Hello, BFB")
+
+
+if __name__ == "__main__":   # 실행 진입점
+    main()
+```
+
 ## 복잡도 (Complexity)
 
 Python은 interpreter overhead가 있어 작은 연산을 매우 많이 반복하면 느려질 수 있다. 대신 built-in 자료구조와 C로 구현된 library를 활용하면 같은 알고리즘도 훨씬 작은 상수 비용으로 실행된다.

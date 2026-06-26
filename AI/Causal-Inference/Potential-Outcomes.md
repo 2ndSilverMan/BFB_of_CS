@@ -1,6 +1,6 @@
 # 잠재 결과 프레임워크 (Potential Outcomes)
 
-- Level: Advanced
+- Level: Intermediate
 - Prerequisites: [Math/Probability-Statistics/Probability-Basics.md](../../Math/Probability-Statistics/Probability-Basics.md), [Math/Probability-Statistics/Expectation.md](../../Math/Probability-Statistics/Expectation.md), [AI/MLOps/AB-Testing.md](../MLOps/AB-Testing.md)
 - Status: Draft
 - Reviewed-by: -
@@ -106,7 +106,7 @@ print(difference_in_means(rows))
 
 ## 이어서 읽기 (Reading Path)
 
-- 이전: `Confounding.md`
+- 이전: [교란 변수](Confounding.md)
 - 다음: [구조적 인과 모델](SCM.md)
 
 ## 참조 (References)

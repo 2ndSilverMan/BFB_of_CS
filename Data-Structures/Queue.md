@@ -116,6 +116,7 @@ class Queue:
 
 - 이전: [스택](Stack.md)
 - 다음: [그래프 표현](Graph-Representation.md)
+- 관련: [덱](Deque.md)
 
 ## 참조 (References)
 

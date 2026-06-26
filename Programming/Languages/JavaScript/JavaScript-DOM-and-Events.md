@@ -36,6 +36,18 @@ button.addEventListener("click", () => {
 
 DOM 변경은 query, event listener, state update를 분리해 작성한다. 반복되는 child element에는 event delegation을 고려하고, layout을 읽고 쓰는 작업을 섞지 않도록 작은 예제로 reflow를 관찰한다.
 
+```javascript
+const list = document.querySelector("#todos");
+
+// 항목마다 listener를 달지 않고 부모에서 한 번만 처리 (event delegation)
+list.addEventListener("click", (event) => {
+  const item = event.target.closest("li");
+  if (item) {
+    item.classList.toggle("done");
+  }
+});
+```
+
 ## 복잡도 (Complexity)
 
 DOM query와 layout 계산은 문서 크기와 style 복잡도에 영향을 받는다. 많은 listener를 개별 node에 붙이면 memory와 관리 비용이 커지고, 잦은 DOM write는 layout thrashing을 만들 수 있다.
