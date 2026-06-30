@@ -27,7 +27,7 @@
 | Systems | 54 | 0 | 0 | CS Core, Systems Engineer 기반 |
 | CS-Theory | 30 | 0 | 0 | 이론/컴파일러/보안 기반 |
 | AI | 191 | 0 | 0 | AI Core, ML Engineer, Researcher 기반 |
-| Engineering | 112 | 0 | 0 | 실무 운영, 설계, 품질 기반 |
+| Engineering | 113 | 0 | 0 | 실무 운영, 설계, 품질 기반 |
 
 ---
 

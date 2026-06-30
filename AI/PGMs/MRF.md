@@ -4,6 +4,7 @@
 - Prerequisites: [Factorization.md](Factorization.md), [Graph-Review.md](Graph-Review.md), [Math/Probability-Statistics/Distributions.md](../../Math/Probability-Statistics/Distributions.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -31,6 +32,25 @@ $$
 
 라고 쓴다. 낮은 에너지는 더 그럴듯한 할당을 뜻한다.
 
+```mermaid
+flowchart LR
+    Graph["undirected graph"] --> Potentials["clique potentials"]
+    Potentials --> Energy["energy / unnormalized score"]
+    Energy --> Inference["marginal or MAP inference"]
+```
+
+### Markov property
+
+MRF의 국소 Markov property는 한 노드가 이웃 노드가 주어지면 나머지와 조건부 독립이라는 뜻이다. 이미지 grid에서는 한 픽셀 label이 주변 픽셀 label과 직접 상호작용하고, 먼 픽셀의 영향은 이웃을 통해 전달된다고 가정한다.
+
+### MAP와 marginal의 차이
+
+가장 가능성 높은 전체 할당을 찾는 MAP 문제와 각 변수의 주변확률을 구하는 marginal inference는 다르다. graph cut, belief propagation, MCMC, variational inference 중 어떤 방법이 맞는지는 에너지 형태와 필요한 출력에 따라 달라진다.
+
+### Smoothness prior의 위험
+
+pairwise smoothness는 segmentation에서 노이즈를 줄이지만, 실제 경계까지 지나치게 부드럽게 만들 수 있다. edge-aware potential이나 contrast-sensitive term을 사용해 강한 이미지 경계에서는 label 변화가 허용되도록 한다.
+
 ## 구현 (Implementation)
 
 두 이진 변수의 pairwise potential을 곱해 비정규화 점수를 계산할 수 있다.
@@ -52,6 +72,12 @@ print(unnormalized_score({"A": 1, "B": 1, "C": 0}))
 ```
 
 정규화된 확률을 얻으려면 모든 할당에 대한 partition function이 필요하다.
+
+```python
+def energy_from_score(score):
+    import math
+    return -math.log(score)
+```
 
 ## 복잡도 (Complexity)
 

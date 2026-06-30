@@ -4,6 +4,7 @@
 - Prerequisites: [Engineering/Security/Auth.md](Auth.md), [Systems/Networks/README.md](../../Systems/Networks/README.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -29,6 +30,20 @@
 | 공급망 실패 | 취약·변조된 의존성과 빌드 | 잠금 파일, 출처·서명, 업데이트 정책 |
 
 브라우저의 same-origin policy는 출처가 다른 문서의 읽기를 제한하지만 모든 요청 전송을 막지는 않는다. CORS는 서버가 브라우저에 교차 출처 읽기 권한을 선언하는 방식이지 인증이나 방화벽이 아니다.
+
+### 신뢰 경계
+
+웹 보안의 기본 질문은 "이 값은 누가 통제하는가"다. URL path, query, header, cookie, form body, uploaded file, webhook payload, queue message, cached HTML은 모두 다른 신뢰 경계를 가진다. 내부 서비스에서 온 요청도 앞단 프록시나 큐를 거쳤다면 원본 사용자 권한을 다시 확인해야 한다.
+
+권한 검사는 라우트 진입, 객체 조회, mutation 직전, background job 실행 지점에 반복적으로 필요할 수 있다.
+
+### 출력 문맥
+
+XSS 방어는 입력을 "깨끗하게" 만드는 것보다 출력 문맥을 정확히 아는 일이 중요하다. HTML text, HTML attribute, URL, JavaScript string, CSS는 서로 다른 escaping 규칙을 가진다. Markdown이나 rich text를 허용하면 sanitizer 정책과 CSP를 함께 설계한다.
+
+### 운영 방어
+
+웹 보안은 코드만으로 끝나지 않는다. 보안 헤더, dependency update, secret scanning, rate limit, audit log, anomaly alert, incident runbook이 함께 필요하다. 실패가 발생했을 때 어떤 요청과 계정, 자원, 배포 버전이 관련됐는지 추적할 수 있어야 한다.
 
 ## 구현 (Implementation)
 

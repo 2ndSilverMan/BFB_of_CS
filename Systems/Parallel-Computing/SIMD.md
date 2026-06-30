@@ -4,6 +4,7 @@
 - Prerequisites: [Parallel-Models.md](Parallel-Models.md), [Systems/Computer-Architecture/CPU-and-ISA.md](../Computer-Architecture/CPU-and-ISA.md), [Math/Linear-Algebra/Vectors.md](../../Math/Linear-Algebra/Vectors.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 

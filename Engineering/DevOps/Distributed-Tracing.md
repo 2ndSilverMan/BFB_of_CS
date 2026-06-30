@@ -4,6 +4,7 @@
 - Prerequisites: [Engineering/DevOps/Logging-Systems.md](Logging-Systems.md), [Systems/Distributed-Systems/System-Models.md](../../Systems/Distributed-Systems/System-Models.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -15,9 +16,27 @@
 
 사용자 요청 하나에 GPS 추적표를 붙인다. 어느 서비스에서 얼마나 머물렀고 어디서 길이 막혔는지 한 장의 경로로 본다.
 
+```mermaid
+sequenceDiagram
+    participant U as User
+    participant A as API
+    participant P as Payment
+    participant I as Inventory
+    U->>A: request trace_id=t1
+    A->>P: span parent=t1
+    A->>I: span parent=t1
+    P-->>A: 80ms
+    I-->>A: 25ms
+    A-->>U: 120ms
+```
+
 ## 이론 (Theory)
 
 Trace는 전체 요청, span은 개별 작업 구간이다. Trace context는 HTTP header나 message metadata로 전파된다. OpenTelemetry는 instrumentation과 data model을 표준화하고, Jaeger 같은 backend가 저장·조회한다. Sampling은 비용을 줄이지만 tail event를 놓칠 수 있어 head/tail sampling 전략을 고른다.
+
+### span 설계
+
+좋은 span은 "어디서 시간이 쓰였는가"와 "어떤 dependency가 실패했는가"를 알려 준다. HTTP route, DB query 종류, queue topic, retry count 같은 낮은 cardinality attribute는 유용하다. 사용자 이메일, raw token, 전체 SQL parameter처럼 민감하거나 cardinality가 큰 값은 비용과 개인정보 위험을 만든다.
 
 ## 구현 (Implementation)
 
@@ -30,9 +49,18 @@ trace_id=abc
 
 로그에 trace_id를 함께 남기면 trace에서 관련 로그로 바로 이동할 수 있다.
 
+Queue 경계에서는 context를 message metadata에 넣어야 trace가 끊기지 않는다.
+
+```text
+headers:
+  traceparent: 00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01
+```
+
 ## 복잡도 (Complexity)
 
 Instrumentation 범위가 넓을수록 원인 분석은 쉬워지지만 data volume과 runtime overhead가 증가한다. 비동기 queue 경계에서는 context propagation을 명시적으로 챙긴다.
+
+워크드 예제: 하루 요청 1억 개를 모두 trace로 저장할 수 없다면 head sampling 1%는 비용을 줄이지만 희귀한 500 에러를 놓칠 수 있다. tail sampling은 응답 후 성공/실패/지연을 보고 느린 요청과 실패 요청을 더 많이 남길 수 있다.
 
 ## 응용 (Applications)
 
@@ -69,4 +97,3 @@ Instrumentation 범위가 넓을수록 원인 분석은 쉬워지지만 data vol
 
 - [Engineering/Debugging/Distributed-Log-Correlation.md](../Debugging/Distributed-Log-Correlation.md)
 - [Systems/Distributed-Systems/Time-and-Ordering.md](../../Systems/Distributed-Systems/Time-and-Ordering.md)
-

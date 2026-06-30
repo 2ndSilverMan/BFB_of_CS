@@ -4,6 +4,7 @@
 - Prerequisites: [VC-Dimension.md](VC-Dimension.md), [PAC-Learning.md](PAC-Learning.md), [Math/Discrete/Combinatorics.md](../../Math/Discrete/Combinatorics.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -33,6 +34,22 @@ $\Pi_H(m)=2^m$이면 어떤 $m$개 점 집합을 shatter할 수 있다. VC 차�
 
 Sauer-Shelah lemma는 VC 차원이 $d$인 클래스에 대해 $m>d$이면 성장 함수가 지수 $2^m$이 아니라 대략 $O(m^d)$로 제한됨을 보여준다. 이것이 무한 가설 클래스에도 일반화 경계를 줄 수 있는 이유다.
 
+### Shattering은 최악 경우 표현력이다
+
+어떤 데이터셋 하나를 완벽히 맞췄다고 shattering이 아니다. Shattering은 같은 점 위치에 대해 가능한 모든 라벨링을 구현할 수 있어야 한다. 즉, 데이터 분포나 실제 라벨이 쉬운지가 아니라 가설 클래스가 얼마나 마음대로 라벨 패턴을 만들 수 있는지를 본다.
+
+그래서 shattering은 overfitting 능력의 조합적 척도다. 모든 라벨링을 만들 수 있으면 무작위 라벨도 외울 수 있다.
+
+### 성장 함수의 두 구간
+
+VC 차원이 $d$라면 $m\le d$까지는 성장 함수가 $2^m$까지 갈 수 있다. 하지만 $m>d$가 되면 Sauer-Shelah lemma에 의해 가능한 라벨 패턴 수가 다항식 수준으로 제한된다.
+
+이 전환이 중요하다. 무한한 $H$라도 표본 위에서 가능한 행동 패턴 수가 제한되면 union bound를 적용할 수 있고, 일반화 경계가 나온다.
+
+### 예시: threshold와 interval
+
+1차원 threshold는 점 하나는 shatter할 수 있지만 두 점의 라벨링 `(1, 0)`을 만들 수 없다. 반면 1차원 interval classifier는 두 점을 shatter할 수 있다. 하지만 세 점에서 `(1, 0, 1)` 패턴은 하나의 구간으로 만들 수 없으므로 VC 차원이 2다.
+
 ## 구현 (Implementation)
 
 유한한 가설 집합과 점 집합에서는 가능한 라벨 패턴 수를 직접 셀 수 있다.
@@ -52,6 +69,13 @@ print("shattered?", len(patterns) == 2 ** len(points))
 ```
 
 연속 가설 클래스에서는 직접 열거가 아니라 증명으로 shattering 가능성과 불가능성을 보인다.
+
+```python
+def growth_count(hypotheses, points):
+    return len(label_patterns(hypotheses, points))
+```
+
+성장 함수는 특정 `points`에서의 개수가 아니라 모든 점 집합에 대한 최대값이다. 코드는 개념 확인용 lower bound로만 봐야 한다.
 
 ## 복잡도 (Complexity)
 

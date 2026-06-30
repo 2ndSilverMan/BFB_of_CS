@@ -4,6 +4,7 @@
 - Prerequisites: [CS-Theory/Computation-Theory/Regular-Expressions.md](../Computation-Theory/Regular-Expressions.md), [CS-Theory/Programming-Languages/Syntax-and-Semantics.md](../Programming-Languages/Syntax-and-Semantics.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 

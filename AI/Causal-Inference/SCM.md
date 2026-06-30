@@ -4,6 +4,7 @@
 - Prerequisites: [Potential-Outcomes.md](Potential-Outcomes.md), [AI/PGMs/Bayesian-Networks.md](../PGMs/Bayesian-Networks.md), [AI/PGMs/d-Separation.md](../PGMs/d-Separation.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -36,6 +37,26 @@ $$
 1. Abduction: 관측된 사실로 외생 변수에 대한 믿음을 갱신한다.
 2. Action: 관심 개입으로 구조 방정식을 바꾼다.
 3. Prediction: 수정된 모델에서 결과를 계산한다.
+
+```mermaid
+flowchart LR
+    U["exogenous U"] --> F["structural equations F"]
+    F --> V["endogenous variables V"]
+    Intervention["do operation"] --> F
+    F --> Counterfactual["counterfactual prediction"]
+```
+
+### Graph surgery
+
+개입 $do(X=x)$는 $X$로 들어오는 모든 원인 방정식을 끊고 $X$를 상수로 고정한다. 하지만 $X$에서 나가는 간선은 그대로 남아 후속 변수들이 바뀐다. 이 점이 단순 조건화와 다르다.
+
+### 외생 변수와 누락 교란
+
+두 내생 변수의 외생 잡음이 상관되어 있으면 관측되지 않은 공통 원인이 있다는 뜻으로 해석할 수 있다. SCM에서 독립 외생 변수 가정은 그래프의 누락 confounding 여부와 연결된다.
+
+### 반사실의 강한 가정
+
+counterfactual은 같은 단위의 다른 세계를 말하므로 단순 ATE보다 더 강한 모델 가정이 필요하다. 구조 방정식이 틀리면 "이 사람이 처치를 받지 않았다면" 같은 개별 반사실은 크게 흔들린다.
 
 ## 구현 (Implementation)
 

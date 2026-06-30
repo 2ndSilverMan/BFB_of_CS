@@ -4,86 +4,98 @@
 - Prerequisites: [JavaScript 기본 문법](JavaScript-Setup-and-Syntax.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
 ## 개념 (Concept)
 
-JavaScript 값은 원시값과 객체로 나뉘며, 연산 중 암묵적 타입 변환(coercion)이 일어날 수 있다. `null`, `undefined`, truthy/falsy, `NaN`은 반드시 익숙해져야 하는 기본 개념이다.
+JavaScript 값은 **7가지 원시값**(string, number, bigint, boolean, undefined, symbol, null)과 **객체**로 나뉜다. 연산 중 **암묵적 타입 변환(coercion)** 이 일어나는데, 그 규칙(ToPrimitive→ToNumber/ToString)을 알아야 `==`·`+`·truthy의 함정을 피한다.
 
 ## 직관 (Intuition)
 
-JavaScript는 편의를 위해 값을 자동으로 바꿔 주려 하지만, 그 친절함이 버그가 되기도 한다. 그래서 "언제 변환되는가"를 알고 명시적으로 다루는 습관이 중요하다.
+JavaScript는 편의를 위해 값을 자동으로 바꿔 준다. 그 친절함이 곧 버그의 원천이다. 해법은 "언제 어떤 규칙으로 변환되는가"를 알고 **명시적 변환 + `===`** 를 쓰는 것.
 
 ## 핵심 문법 (Core Syntax)
 
 ```javascript
-console.log(Boolean(""));
-console.log(Boolean("hello"));
-console.log(Number("42"));
-console.log(Number("not a number"));
-
-const value = null;
-if (value == null) {
-  console.log("null 또는 undefined");
-}
+Boolean("");          // false   (falsy)
+Boolean("hello");     // true
+Number("42");         // 42
+Number("x");          // NaN
+value == null;        // value가 null 또는 undefined일 때만 true
 ```
 
-Falsy 값에는 `false`, `0`, `""`, `null`, `undefined`, `NaN` 등이 있다.
+falsy: `false, 0, -0, 0n, "", null, undefined, NaN`. 그 외는 모두 truthy(빈 배열·빈 객체 포함).
 
 ## 이론 (Theory)
 
-`undefined`는 값이 아직 주어지지 않았음을, `null`은 의도적으로 비어 있음을 표현하는 경우가 많다. `NaN`은 숫자 타입의 특수값이며 자기 자신과도 같지 않다.
+### 1. `==` 의 추상 동등 알고리즘
+
+`==` 는 타입이 다르면 한쪽을 변환해 비교한다(대략: 불리언→숫자, 문자열↔숫자는 숫자로, 객체→원시값). 그래서 `0 == ""`(둘 다 0), `0 == "0"`, `"" == "0"` 가 `false` 인 **비추이성**이 생긴다. `===` 는 변환 없이 타입+값 비교 → **항상 `===`**.
+
+### 2. null vs undefined vs NaN
+
+`undefined` = 값이 안 주어짐, `null` = 의도적 비움. `NaN` 은 숫자 특수값이며 **자기 자신과도 같지 않다**(`NaN === NaN` 은 false) → `Number.isNaN`. `typeof null === "object"` 는 언어 초기의 유명한 버그.
+
+### 3. `||` vs `??`
+
+`||` 는 falsy면 오른쪽(그래서 `0`·`""` 도 대체) — 기본값 버그의 원천. `??`(nullish)는 **null/undefined일 때만** 오른쪽 → 0이나 빈 문자열을 보존.
 
 ## 구현 (Implementation)
 
-값 비교는 기본적으로 `===`를 사용하고, 필요한 변환은 `Number()`, `String()`, `Boolean()`처럼 명시한다. `null`, `undefined`, `NaN`, truthy/falsy 값을 표로 만들어 직접 평가해 보면 coercion 함정을 줄일 수 있다.
-
 ```javascript
-console.log(0 == "");   // true  — 느슨한 비교의 함정
-console.log(0 === "");  // false — 기본적으로 === 사용
+0 == "";    // true   ← 추상 동등의 함정(둘 다 ToNumber 0)
+0 === "";   // false  ← 권장
+[] == ![];  // true   ← ![]=false→0, []→""→0  (악명 높은 예)
 
 function toInt(value) {
-  const n = Number(value);          // 명시적 변환
-  return Number.isNaN(n) ? 0 : n;
+  const n = Number(value);
+  return Number.isNaN(n) ? 0 : n;           // 명시적 변환 + NaN 가드
 }
-console.log(toInt("42"), toInt("x")); // 42 0
+const count = config.retries ?? 3;          // 0이면 0 유지(|| 였으면 3)
 ```
 
 ## 복잡도 (Complexity)
 
-숫자와 boolean 변환은 대체로 작지만 문자열 parsing은 입력 길이에 비례한다. 객체와 배열은 reference로 전달되므로 복사 여부가 memory와 mutation 비용을 결정하고, 암묵 변환은 성능보다 correctness 비용이 더 크다.
+| 항목 | 특성 |
+|---|---|
+| number/boolean 변환 | $O(1)$ |
+| 문자열 파싱 | 입력 길이에 비례 |
+| 객체/배열 | 참조 전달 — 복사 여부가 메모리·mutation 비용 결정 |
+
+암묵 변환의 비용은 성능보다 **correctness**다.
 
 ## 응용 (Applications)
 
-- 사용자 입력 파싱
-- API 응답 검증
-- 조건문 안전성 개선
-- 폼 값 처리
+- 사용자 입력·폼 값 파싱, API 응답 검증, 조건문 안전성.
 
 ## 흔한 오해 (Common Misunderstandings)
 
-- `typeof null`은 `"object"`로 나오지만 실제 객체처럼 다루면 안 된다.
-- `NaN === NaN`은 `false`다. 확인에는 `Number.isNaN`을 쓴다.
-- 빈 배열 `[]`은 truthy다.
-- `||`로 기본값을 주면 `0`이나 빈 문자열도 대체될 수 있다. 필요하면 `??`를 쓴다.
+- **`typeof null === "object"`** — 객체처럼 다루면 안 됨.
+- **`NaN === NaN` 은 false** — `Number.isNaN` 사용.
+- **빈 배열 `[]` 은 truthy** (하지만 `[] == false` 는 true — 다른 경로).
+- **`||` 기본값은 0/""도 대체** — 필요하면 `??`.
+- **`==` 는 추이적이지 않다** — `===` 만 안전.
 
 ## TMI
 
-- `??`는 nullish coalescing operator로 `null` 또는 `undefined`일 때만 오른쪽 값을 사용한다.
-- Optional chaining `?.`은 중첩 속성 접근에서 오류를 줄인다.
-- TypeScript는 이런 값 흐름을 정적으로 더 잘 잡게 도와준다.
+- `??` 와 `||` 를 괄호 없이 섞으면 문법 에러다(우선순위 모호성을 막으려는 설계).
+- 옵셔널 체이닝 `?.` 은 `null/undefined` 면 단락(`a?.b?.c`)해 `TypeError` 를 막는다.
+- TypeScript는 이런 값 흐름을 정적으로 잡아 coercion 버그를 컴파일 타임에 드러낸다.
 
 ## 연습 / 확인 문제 (Exercises)
 
-- Falsy 값 목록을 직접 조건문으로 확인하라.
-- `||`와 `??`가 다르게 동작하는 예를 작성하라.
-- `Number.isNaN(NaN)`과 `NaN === NaN` 결과를 설명하라.
+- falsy 값 목록을 조건문으로 직접 확인하라.
+- `||` 와 `??` 가 `0` 입력에서 다르게 동작하는 예를 작성하라.
+- `[] == ![]` 가 왜 true인지 변환 단계를 추적하라.
+- `0 == "0"`, `0 == ""`, `"" == "0"` 의 결과로 `==` 의 비추이성을 보여라.
 
 ## 이어서 읽기 (Reading Path)
 
 - 이전: [JavaScript 기본 문법](JavaScript-Setup-and-Syntax.md)
 - 다음: [함수와 스코프](JavaScript-Functions-and-Scope.md)
+- 관련: [변수와 타입](../../Variables-and-Types.md)
 
 ## 참조 (References)
 

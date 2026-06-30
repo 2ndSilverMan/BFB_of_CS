@@ -4,6 +4,7 @@
 - Prerequisites: [Engineering/Security/Digital-Signatures.md](Digital-Signatures.md), [Systems/Networks/TCP-UDP.md](../../Systems/Networks/TCP-UDP.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -35,6 +36,20 @@ X.509 인증서에는 주체, 공개키, 발급자, 유효 기간, 확장 필드
 - 정책상 필요한 폐기 상태와 알고리즘 요구사항을 만족하는가
 
 TLS 1.3 핸드셰이크는 지원 버전과 암호 스위트를 협상하고, 일반적으로 임시 (EC)DH 키 합의로 트래픽 키를 만든 뒤 서버가 인증서 개인키 소유를 증명한다. 이후 레코드는 AEAD로 보호한다. 0-RTT 데이터는 재전송 가능성이 있으므로 멱등성이 없는 요청에 신중해야 한다.
+
+### 인증서 검증 파이프라인
+
+TLS 검증은 체인 서명, hostname, 유효 기간, key usage, basic constraints, 정책, 폐기 상태를 함께 본다. 중간 인증서 누락, wildcard 범위 오해, 내부 도메인 이름 불일치가 운영에서 자주 발생한다.
+
+검증을 끄는 플래그는 테스트 편의 기능이 아니라 보안 경계 제거다. 개발 환경에서도 자체 CA를 명시적으로 신뢰하도록 구성한다.
+
+### mTLS와 서비스 신원
+
+mTLS는 클라이언트도 인증서를 제시해 서비스 간 신원을 확인한다. 이때 인증서 subject를 권한으로 직접 쓰기보다 SPIFFE ID나 service identity를 정책 엔진에 연결한다. 인증서 발급·회전 자동화가 없으면 mTLS는 운영 부채가 된다.
+
+### 갱신과 사고 대응
+
+인증서는 만료 전 자동 갱신, 배포 확인, 실패 알림이 필요하다. 키 유출이나 오발급 사고가 나면 폐기, 교체, pinning 업데이트, 영향 범위 확인 절차가 있어야 한다. Certificate Transparency 모니터링은 공개 인증서 오발급 탐지에 도움을 준다.
 
 ## 구현 (Implementation)
 

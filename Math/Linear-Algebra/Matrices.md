@@ -4,6 +4,7 @@
 - Prerequisites: [Math/Linear-Algebra/Vectors.md](Vectors.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -14,6 +15,14 @@
 ## 직관 (Intuition)
 
 벡터가 "점"이라면, 행렬은 "점을 다른 점으로 옮기는 규칙"이다. 행렬을 벡터에 곱하면 그 벡터가 회전·확대·반사된다. 여러 데이터를 한꺼번에 변환할 때, 행렬 한 번의 곱으로 전부 처리할 수 있어 효율적이다.
+
+```mermaid
+flowchart LR
+    X["입력 벡터 x"] --> A["행렬 A<br/>선형 변환"]
+    A --> Y["출력 Ax"]
+    BATCH["데이터 행렬 X<br/>샘플 묶음"] --> W["가중치 W"]
+    W --> OUT["XW<br/>배치 결과"]
+```
 
 ## 이론 (Theory)
 
@@ -32,6 +41,10 @@ $$C_{ij} = \sum_{l=1}^{k} A_{il}\,B_{lj}$$
 
 행렬 곱은 두 선형 변환의 합성에 대응한다. 먼저 $B$로, 그다음 $A$로 변환하는 것이 $AB$다.
 
+### 모양(shape)이 먼저다
+
+행렬 계산 오류 대부분은 값보다 모양에서 시작한다. $(m \times k)(k \times n)$만 곱할 수 있고 결과는 $m \times n$이다. 딥러닝에서 배치 행렬 `X`가 `(batch, features)`이고 가중치 `W`가 `(features, hidden)`이면 `X @ W`의 결과는 `(batch, hidden)`이다.
+
 ## 구현 (Implementation)
 
 ```python
@@ -49,6 +62,23 @@ print(A.T)          # 전치
 print(np.linalg.inv(A))   # 역행렬
 ```
 
+행렬 곱을 직접 계산하면 정의가 드러난다.
+
+```python
+def matmul(A, B):
+    m, k = len(A), len(A[0])
+    k2, n = len(B), len(B[0])
+    assert k == k2
+    C = [[0 for _ in range(n)] for _ in range(m)]
+    for i in range(m):
+        for j in range(n):
+            for l in range(k):
+                C[i][j] += A[i][l] * B[l][j]
+    return C
+```
+
+워크드 예제: `A=[[1,2],[3,4]]`, `B=[[5,6],[7,8]]`이면 `C[0][1] = 1*6 + 2*8 = 22`, `C[1][0] = 3*5 + 4*7 = 43`이다.
+
 ## 복잡도 (Complexity)
 
 | 연산 | 시간 (정사각 `n×n`) |
@@ -58,6 +88,8 @@ print(np.linalg.inv(A))   # 역행렬
 | 역행렬 | `O(n^3)` |
 
 행렬 곱은 빠른 알고리즘(Strassen 등)으로 더 줄일 수 있지만, 실무에서는 고도로 최적화된 라이브러리(BLAS)와 GPU가 처리한다.
+
+소박한 곱셈은 `i,j,l` 세 중첩 반복으로 `n^3`번 곱셈·덧셈을 한다. 하지만 실제 성능은 Big-O만으로 결정되지 않는다. 행렬은 메모리 접근 패턴이 중요해서, 블로킹(blocking)과 캐시 친화적 배치가 큰 차이를 만든다.
 
 ## 응용 (Applications)
 

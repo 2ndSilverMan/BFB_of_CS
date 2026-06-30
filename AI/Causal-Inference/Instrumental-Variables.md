@@ -4,6 +4,7 @@
 - Prerequisites: [AI/Causal-Inference/Confounding.md](Confounding.md), [AI/Causal-Inference/Intervention.md](Intervention.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -25,6 +26,26 @@
 
 선형 설정에서는 2SLS가 대표적이다. 먼저 $X$를 $Z$로 예측하고, 예측된 treatment variation으로 $Y$를 설명한다. 해석은 종종 complier에 대한 LATE가 된다.
 
+```mermaid
+flowchart LR
+    Z["instrument Z"] --> X["treatment X"]
+    X --> Y["outcome Y"]
+    U["unobserved confounder U"] --> X
+    U --> Y
+```
+
+### IV 가정의 의미
+
+relevance는 데이터로 어느 정도 확인할 수 있지만, exclusion과 independence는 주로 도메인 논증이다. 병원 거리 IV에서 거리가 건강 결과에 직접 영향을 주는 교통 접근성·지역 소득을 반영한다면 exclusion이나 independence가 깨질 수 있다.
+
+### LATE 해석
+
+monotonicity가 있고 binary instrument/treatment라면 IV는 instrument 때문에 treatment 상태가 바뀐 complier의 평균 효과(LATE)를 식별한다. 이는 전체 ATE와 다를 수 있다. always-taker, never-taker, defier 개념을 명확히 해야 한다.
+
+### Weak instrument 진단
+
+first stage가 약하면 2SLS 추정량이 불안정하고 finite-sample bias가 커진다. first-stage F-statistic, reduced form, balance check, overidentification test를 보되, validity를 증명하는 것은 아님을 기억한다.
+
 ## 구현 (Implementation)
 
 ```python
@@ -32,6 +53,13 @@ wald_estimate = (mean_y_z1 - mean_y_z0) / (mean_x_z1 - mean_x_z0)
 ```
 
 Binary instrument의 단순 Wald estimator는 reduced form 효과를 first stage 효과로 나눈다.
+
+```python
+def wald(reduced_form, first_stage):
+    if abs(first_stage) < 1e-12:
+        raise ValueError("weak or zero first stage")
+    return reduced_form / first_stage
+```
 
 ## 복잡도 (Complexity)
 

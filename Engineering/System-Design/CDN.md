@@ -4,6 +4,7 @@
 - Prerequisites: [Engineering/System-Design/Caching.md](Caching.md), [Systems/Networks/CDN-and-Load-Balancing.md](../../Systems/Networks/CDN-and-Load-Balancing.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 

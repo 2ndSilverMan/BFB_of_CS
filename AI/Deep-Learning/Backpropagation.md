@@ -4,6 +4,7 @@
 - Prerequisites: [AI/Deep-Learning/MLP.md](MLP.md), [Math/Calculus/Chain-Rule.md](../../Math/Calculus/Chain-Rule.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -14,6 +15,18 @@
 ## 직관 (Intuition)
 
 최종 오차가 각 중간 계산에 얼마나 책임이 있는지 뒤에서 앞으로 나눠 전달한다. 한 중간값이 여러 경로에 쓰이면 각 경로의 영향을 합한다.
+
+```mermaid
+flowchart LR
+    X["x"] --> MUL["z = wx + b"]
+    W["w"] --> MUL
+    B["b"] --> MUL
+    MUL --> ACT["y = phi(z)"]
+    ACT --> LOSS["L(y)"]
+    LOSS -. upstream grad .-> ACT
+    ACT -. local grad .-> MUL
+    MUL -. grad .-> W
+```
 
 ## 이론 (Theory)
 
@@ -27,6 +40,15 @@ $$\frac{\partial L}{\partial w}=
 다. forward pass에서 중간 activation을 저장하고 backward pass에서 local derivative와 upstream gradient를 곱한다. reverse-mode automatic differentiation은 출력 스칼라와 파라미터가 많은 신경망에 적합하다.
 
 긴 곱에서 derivative가 계속 0에 가까워지거나 커지면 vanishing/exploding gradient가 생긴다. 초기화, activation, normalization, residual connection이 이를 완화한다.
+
+### 분기된 그래프의 gradient 합
+
+중간값 $u$가 두 경로에서 쓰이면 전체 손실은 두 경로를 모두 통해 $u$에 의존한다. 이때
+
+$$\frac{\partial L}{\partial u}=
+\sum_i \frac{\partial L}{\partial v_i}\frac{\partial v_i}{\partial u}$$
+
+가 된다. 그래서 자동미분 엔진은 각 노드에 들어오는 upstream gradient를 누적한다. 프레임워크에서 `zero_grad()`가 필요한 이유도 이전 step의 누적값을 지우기 위해서다.
 
 ## 구현 (Implementation)
 
@@ -43,9 +65,25 @@ loss, grad = square_loss_gradient(x=3.0, w=2.0, target=5.0)
 print(loss, grad)
 ```
 
+워크드 예제: `x=3`, `w=2`, `target=5`이면 prediction은 6, loss는 `0.5`, `dloss/dprediction=1`, `dloss/dw=1*3=3`이다. 학습률 0.1로 gradient descent를 하면 `w`는 `2 - 0.1*3 = 1.7`로 갱신된다.
+
+finite difference로 확인:
+
+```python
+def loss_at(w):
+    pred = w * 3.0
+    return 0.5 * (pred - 5.0) ** 2
+
+eps = 1e-5
+numeric = (loss_at(2.0 + eps) - loss_at(2.0 - eps)) / (2 * eps)
+print(round(numeric, 4))  # 3.0
+```
+
 ## 복잡도 (Complexity)
 
 backward pass의 시간은 보통 forward pass의 작은 상수배이며, 중간값 저장 때문에 activation memory가 필요하다. gradient checkpointing은 일부 activation을 다시 계산해 메모리와 시간을 교환한다.
+
+워크드 비용: 층이 24개이고 각 층 activation이 100MB라면 단순 저장은 activation만 약 2.4GB가 필요하다. checkpointing으로 4개 층마다만 저장하면 저장량은 줄지만, backward 때 중간 forward를 다시 계산해 시간이 늘어난다.
 
 ## 응용 (Applications)
 

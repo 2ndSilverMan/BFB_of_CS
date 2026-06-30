@@ -4,6 +4,7 @@
 - Prerequisites: [AI/NLP/Transformer-NLP.md](../NLP/Transformer-NLP.md), [AI/NLP/Machine-Translation.md](../NLP/Machine-Translation.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -21,6 +22,33 @@ Encoder self-attention은 입력 전체를 bidirectional하게 본다. Decoder s
 
 T5류 모델은 다양한 과제를 text-to-text 형식으로 통일한다. Denoising pretraining은 손상된 입력을 원래 텍스트로 복원하는 목표를 사용한다.
 
+```mermaid
+flowchart LR
+    X["source tokens"] --> ENC["encoder"]
+    ENC --> MEM["encoder memory"]
+    Y0["previous target tokens"] --> DEC["causal decoder"]
+    MEM --> DEC
+    DEC --> OUT["next target token"]
+```
+
+### 세 종류의 attention
+
+| 구성 | 보는 범위 | 목적 |
+| --- | --- | --- |
+| Encoder self-attention | 입력 전체 | source 이해 |
+| Decoder self-attention | 과거 target token | autoregressive 생성 |
+| Cross-attention | encoder output | 입력과 출력 정렬 |
+
+이 분리는 입력이 길고 출력이 비교적 짧은 요약, 번역, 정보 추출형 생성에서 유리할 수 있다. 반대로 자유 대화나 긴 continuation은 decoder-only 구조가 serving과 캐시 측면에서 단순한 경우가 많다.
+
+### Teacher forcing과 exposure bias
+
+훈련 때 decoder는 보통 정답 이전 token을 입력으로 받는다(teacher forcing). 추론 때는 모델이 직접 생성한 token을 다음 step 입력으로 쓰므로, 초반 오류가 뒤로 전파될 수 있다. beam search, length penalty, scheduled sampling, sequence-level objective는 이 차이를 줄이거나 decoding 품질을 조정하는 방법이다.
+
+### Text-to-text 포맷 설계
+
+T5식 인터페이스에서는 task prefix, 입력 구분자, 출력 형식이 중요하다. 예를 들어 분류를 `"sentiment: ..."` 입력과 `"positive"` 출력으로 바꾸면 여러 과제를 같은 모델로 처리할 수 있지만, label verbalizer가 애매하면 평가가 흔들린다.
+
 ## 구현 (Implementation)
 
 ```python
@@ -32,9 +60,16 @@ def seq2seq_step(encoder_outputs, decoder_tokens):
 
 입력 prefix로 task를 지정하면 여러 과제를 같은 text-to-text 인터페이스로 처리할 수 있다.
 
+```python
+def make_t5_example(task, source, target):
+    return f"{task}: {source}", target
+```
+
 ## 복잡도 (Complexity)
 
 비용은 encoder 입력 길이, decoder 출력 길이, cross-attention 비용에 좌우된다. 입력이 길고 출력도 긴 작업에서는 decoder-only 모델과 다른 병목이 생긴다.
+
+입력 길이를 $m$, 출력 길이를 $n$이라 하면 encoder self-attention은 `O(m^2)`, decoder self-attention은 `O(n^2)`, cross-attention은 `O(mn)`에 해당한다.
 
 ## 응용 (Applications)
 

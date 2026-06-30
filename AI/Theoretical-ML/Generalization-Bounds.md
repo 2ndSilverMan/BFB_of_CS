@@ -4,6 +4,7 @@
 - Prerequisites: [PAC-Learning.md](PAC-Learning.md), [Rademacher-Complexity.md](Rademacher-Complexity.md), [AI/Machine-Learning/Cross-Validation.md](../Machine-Learning/Cross-Validation.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -34,6 +35,26 @@ true risk ≤ empirical risk + complexity penalty + confidence penalty
 
 여기서 complexity penalty는 가설 공간이나 알고리즘이 데이터를 얼마나 유연하게 맞출 수 있는지를 나타내고, confidence penalty는 실패 확률 $\delta$를 낮출수록 커진다.
 
+### Uniform convergence와 algorithm-dependent bound
+
+Uniform convergence 경계는 모든 $h\in H$에 대해 동시에 경험 위험과 실제 위험이 가깝다고 보장한다. 이는 ERM 분석에 강력하지만, 현대 딥러닝에서는 매우 느슨할 수 있다.
+
+Algorithm-dependent bound는 실제 학습 알고리즘이 어떤 해를 선택하는지 반영한다. Stability, compression, PAC-Bayes, margin/norm bound는 단순한 hypothesis class 크기보다 학습 과정과 선택된 해의 성질을 더 많이 본다.
+
+### Confidence parameter 해석
+
+$\delta$는 모델이 틀릴 확률이 아니라 경계 자체가 실패할 확률이다. 예를 들어 $1-\delta$ 확률로 모든 $h$에 대해 부등식이 성립한다는 뜻이다. $\delta$를 작게 만들수록 confidence penalty가 커진다.
+
+실무에서 이론 bound의 $\delta$를 테스트셋 p-value처럼 해석하면 안 된다. 역할은 보장 수준을 조절하는 수학적 매개변수다.
+
+### Bound가 느슨해도 유용한 이유
+
+딥러닝 bound는 수치적으로 실제 test error보다 훨씬 클 수 있다. 그래도 어떤 항이 표본 수, norm, margin, stability, compression과 연결되는지 보여 주면 연구적으로 의미가 있다. Bound의 목적은 항상 정확한 예측이 아니라 일반화 메커니즘을 분해하는 것이다.
+
+### 분포 이동의 한계
+
+대부분의 기본 일반화 경계는 train/test가 같은 분포에서 i.i.d.로 온다고 가정한다. 배포 환경이 바뀌면 경험 위험과 실제 위험의 연결 자체가 약해진다. 이 경우 domain adaptation, robust optimization, causal invariance, OOD evaluation이 별도로 필요하다.
+
 ## 구현 (Implementation)
 
 유한 가설 집합 경계는 간단히 계산할 수 있다.
@@ -53,6 +74,13 @@ print(round(finite_class_bound(0.08, num_hypotheses=100, n=1000, delta=0.05), 3)
 ```
 
 이 값은 보통 실제 검증 오차보다 보수적이다. 경계는 모델 선택의 정확한 대체재라기보다 일반화가 가능하려면 무엇을 제어해야 하는지 알려주는 분석 도구다.
+
+```python
+def generic_bound(empirical_risk, complexity, confidence):
+    return empirical_risk + complexity + confidence
+```
+
+대부분의 경계는 이 구조를 갖지만, 어떤 complexity를 쓰는지와 어떤 가정에서 성립하는지가 핵심이다.
 
 ## 복잡도 (Complexity)
 

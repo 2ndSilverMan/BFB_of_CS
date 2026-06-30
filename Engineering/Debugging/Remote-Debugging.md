@@ -4,6 +4,7 @@
 - Prerequisites: [Engineering/Debugging/Breakpoints-and-Stepping.md](Breakpoints-and-Stepping.md), [Engineering/DevOps/Docker-Basics.md](../DevOps/Docker-Basics.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -18,6 +19,12 @@
 ## 이론 (Theory)
 
 원격 디버깅은 debug agent, port forwarding, symbol/source mapping, 권한 설정이 필요하다. 보안상 디버그 포트는 외부에 열면 안 되며, 운영 환경에서는 중단점이 서비스 영향을 줄 수 있다.
+
+### 안전한 원격 관찰
+
+원격 디버깅은 production state를 직접 관찰할 수 있어 강력하지만, 권한·성능·개인정보 위험이 크다. 접속은 시간 제한, 감사 로그, read-only 우선, break 금지 정책을 둔다. Production에서 프로세스를 멈추는 breakpoint는 장애를 확대할 수 있다.
+
+가능하면 live debugger보다 metrics, trace, structured log, feature flag, shadow traffic 같은 비침습적 관찰을 먼저 사용한다.
 
 ## 구현 (Implementation)
 

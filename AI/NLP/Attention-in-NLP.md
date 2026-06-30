@@ -4,6 +4,7 @@
 - Prerequisites: [RNN-for-NLP.md](RNN-for-NLP.md), [AI/Deep-Learning/Attention.md](../Deep-Learning/Attention.md), [Word-Embeddings.md](Word-Embeddings.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -27,6 +28,29 @@ RNN encoder-decoder에서는 decoder state가 query가 되고 encoder hidden sta
 
 Multi-head attention은 여러 attention head가 서로 다른 관계를 볼 수 있게 한다.
 
+```mermaid
+flowchart LR
+    Query["query"] --> Score["similarity scores"]
+    Keys["keys"] --> Score
+    Score --> Weights["softmax weights"]
+    Values["values"] --> Context["weighted context"]
+    Weights --> Context
+```
+
+### NLP에서 attention의 형태
+
+| 형태 | Query | Key/Value | 사용 |
+| --- | --- | --- | --- |
+| Encoder-decoder attention | decoder state | encoder states | 번역 alignment |
+| Self-attention | 같은 sequence token | 같은 sequence token | Transformer |
+| Cross-attention | 생성 중 token | 외부 context 또는 encoder | RAG, seq2seq |
+
+attention은 내용 기반으로 연결을 만들지만 위치 정보는 별도로 넣어야 한다. causal task에서는 미래 token을 가리는 mask가 필수다.
+
+### Attention weight 해석
+
+weight가 높은 token은 해당 layer/head의 value 가중합에 많이 반영되었다는 뜻이다. 그러나 여러 layer, residual, MLP가 섞인 최종 예측의 인과 설명으로 바로 해석할 수는 없다. 분석에는 ablation, gradient, counterfactual test를 함께 사용한다.
+
 ## 구현 (Implementation)
 
 Attention score를 softmax로 바꿔 value를 가중합한다.
@@ -36,7 +60,8 @@ import math
 
 
 def softmax(xs):
-    exps = [math.exp(x) for x in xs]
+    m = max(xs)
+    exps = [math.exp(x - m) for x in xs]
     z = sum(exps)
     return [e / z for e in exps]
 

@@ -4,6 +4,7 @@
 - Prerequisites: [Engineering/Debugging/Structured-Logging.md](Structured-Logging.md), [Engineering/System-Design/Load-Balancing.md](../System-Design/Load-Balancing.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -18,6 +19,12 @@
 ## 이론 (Theory)
 
 카나리는 error rate, latency, business metric, log anomaly를 비교해야 한다. 기능 플래그는 release flag, experiment flag, ops kill switch 등 목적별 수명이 다르며 오래된 플래그는 기술 부채가 된다.
+
+### 점진 노출의 관측 조건
+
+카나리는 적은 사용자에게 먼저 노출한다는 뜻만으로 안전하지 않다. 실패를 감지할 metric, 비교군, rollback 기준, 노출 단위가 있어야 한다. Error rate, latency, business metric, support ticket, downstream saturation을 함께 본다.
+
+Feature flag는 release와 deploy를 분리하지만, 오래 남으면 분기 복잡도와 테스트 조합을 늘린다. Flag에는 owner, expiry date, cleanup ticket, kill switch 여부를 기록한다.
 
 ## 구현 (Implementation)
 

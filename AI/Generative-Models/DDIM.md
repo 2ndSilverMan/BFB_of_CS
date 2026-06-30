@@ -4,6 +4,7 @@
 - Prerequisites: [AI/Generative-Models/DDPM.md](DDPM.md), [Math/Probability-Statistics/Distributions.md](../../Math/Probability-Statistics/Distributions.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -21,6 +22,25 @@ DDIM은 같은 training objective를 유지하면서 reverse process를 non-Mark
 
 Step 수를 줄이면 속도는 빨라지지만 품질과 다양성에 영향이 생길 수 있다. Classifier-free guidance와 schedule 선택도 결과에 큰 영향을 준다.
 
+```mermaid
+flowchart LR
+    Noise["initial noise"] --> Steps["selected timesteps"]
+    Steps --> DDIM["DDIM update"]
+    DDIM --> Image["sample"]
+```
+
+### Deterministic 경로
+
+`eta=0`인 DDIM은 같은 initial noise와 condition에서 같은 샘플을 만들기 쉬워 inversion, interpolation, editing에 유용하다. 하지만 stochasticity가 줄면 다양성이 줄 수 있으므로 생성 목적에 따라 eta와 step 수를 조정한다.
+
+### Sampler 비교 방법
+
+sampler를 비교할 때는 model checkpoint, resolution, prompt/condition, guidance scale, seed, step schedule을 고정해야 한다. 그렇지 않으면 sampler 효과와 다른 설정 효과가 섞인다.
+
+### 빠른 샘플링의 실패
+
+step을 너무 줄이면 구조가 깨지거나 texture artifact가 늘 수 있다. 빠른 sampler는 latency 요구가 강한 서비스에 유리하지만, 고품질 오프라인 생성에는 더 많은 step이 여전히 유리할 수 있다.
+
 ## 구현 (Implementation)
 
 ```python
@@ -32,6 +52,11 @@ sampler = {
 ```
 
 실제 sampler는 timestep subset, prediction parameterization, guidance scale을 함께 설정한다.
+
+```python
+def speedup(training_steps, sampling_steps):
+    return training_steps / sampling_steps
+```
 
 ## 복잡도 (Complexity)
 

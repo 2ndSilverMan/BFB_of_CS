@@ -4,6 +4,7 @@
 - Prerequisites: [Math/Probability-Statistics/Probability-Basics.md](../../Math/Probability-Statistics/Probability-Basics.md), [Math/Probability-Statistics/Information-Theory.md](../../Math/Probability-Statistics/Information-Theory.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -27,6 +28,26 @@ $$\operatorname{PPL}=\exp\left(-\frac1T\sum_t\log p(x_t\mid x_{<t})\right)$$
 
 tokenization과 데이터셋이 다르면 perplexity를 직접 비교하기 어렵다.
 
+```mermaid
+flowchart LR
+    Context["previous tokens"] --> Dist["next-token distribution"]
+    Dist --> Loss["negative log likelihood"]
+    Dist --> Sample["sampling / decoding"]
+    Sample --> Context
+```
+
+### 확률 모델과 생성기의 차이
+
+언어 모델은 다음 token 분포를 낸다. 생성 품질은 이 분포뿐 아니라 decoding 전략에도 좌우된다. greedy는 가장 높은 확률 token을 고르고, sampling은 분포에서 뽑으며, temperature는 분포의 날카로움을 바꾼다. 같은 모델이라도 decoding 설정이 다르면 출력 다양성과 오류 양상이 달라진다.
+
+### Perplexity 해석
+
+perplexity는 평균적으로 다음 token 선택지가 얼마나 혼란스러운지를 나타내는 지표로 볼 수 있다. 하지만 tokenizer, corpus, normalization, context length가 다르면 직접 비교하기 어렵다. 낮은 perplexity가 특정 task 정확도, 사실성, 안전성을 보장하지도 않는다.
+
+### n-gram에서 neural LM으로
+
+n-gram은 명시적 count로 확률을 추정해 해석이 쉽지만 긴 문맥과 희소성에 약하다. neural LM은 문맥을 dense representation으로 압축해 일반화하지만, 왜 특정 확률을 줬는지 해석하기 어렵고 대규모 학습 비용이 든다.
+
 ## 구현 (Implementation)
 
 ```python
@@ -42,6 +63,13 @@ def train_bigram(tokens):
 
 model = train_bigram("나는 밥을 먹고 나는 물을 마신다".split())
 print(model["나는"])
+```
+
+```python
+def bigram_probability(model, left, right, alpha=1.0):
+    counts = model[left]
+    vocab_size = len({token for counter in model.values() for token in counter})
+    return (counts[right] + alpha) / (sum(counts.values()) + alpha * vocab_size)
 ```
 
 ## 복잡도 (Complexity)

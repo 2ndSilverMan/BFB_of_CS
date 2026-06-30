@@ -4,6 +4,7 @@
 - Prerequisites: [Programming/Languages/C/C-Pointers-and-Memory.md](../../Programming/Languages/C/C-Pointers-and-Memory.md), [Engineering/Debugging/Stack-Traces.md](Stack-Traces.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -18,6 +19,12 @@
 ## 이론 (Theory)
 
 코어 덤프 분석에는 실행 파일, symbol/debug info, core file이 필요하다. 최적화와 symbol strip 여부에 따라 stack 품질이 달라진다. 민감정보가 메모리에 포함될 수 있어 보관과 공유에 주의해야 한다.
+
+### 덤프의 증거 보존
+
+코어 덤프는 crash 순간의 프로세스 스냅샷이다. 분석에는 binary, symbol file, build ID, source revision, environment, core pattern 설정이 함께 필요하다. 심볼이 없으면 stack은 주소 목록에 가까워져 원인 분석이 크게 어려워진다.
+
+덤프에는 메모리의 민감정보가 들어갈 수 있다. 접근 권한, 보관 기간, 전송 경로, 마스킹 정책을 사고 대응 절차에 포함한다.
 
 ## 구현 (Implementation)
 

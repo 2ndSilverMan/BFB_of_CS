@@ -4,119 +4,111 @@
 - Prerequisites: [Programming/Arrays-and-Strings.md](../Programming/Arrays-and-Strings.md), [Algorithms/Complexity.md](Complexity.md), [Algorithms/Sorting.md](Sorting.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
 ## 개념 (Concept)
 
-이진 탐색은 정렬된 배열에서 탐색 범위를 절반씩 줄이며 원하는 값을 찾는 알고리즘이다. 매 단계마다 가운데 값을 보고 왼쪽 절반 또는 오른쪽 절반을 버린다.
+이진 탐색은 **단조(monotone)한 탐색 공간**에서 가운데를 보고 절반을 버리며 답을 좁히는 알고리즘이다. 정렬 배열의 값 찾기가 대표지만, 본질은 "정렬"이 아니라 **단조 술어(predicate)** — 이 일반화가 파라메트릭 서치의 위력이다.
 
 ## 직관 (Intuition)
 
-사전에서 단어를 찾을 때 처음부터 한 장씩 넘기지 않는다. 중간쯤을 펴 보고 찾는 단어가 앞쪽인지 뒤쪽인지 판단한 뒤 절반을 버린다. 이진 탐색도 같은 방식이다.
-
-핵심 조건은 데이터가 정렬되어 있어야 한다는 점이다.
+사전에서 단어를 처음부터 넘기지 않고, 중간을 펴 앞/뒤를 판단해 절반을 버린다. 매 비교가 후보를 절반으로 줄여 $\lfloor\log_2 n\rfloor+1$ 번이면 끝난다. 필요한 단 하나의 조건: **"왼쪽은 전부 아니오, 오른쪽은 전부 예"** 처럼 경계가 한 번만 바뀌는 단조성.
 
 ## 이론 (Theory)
 
-이진 탐색은 항상 다음 불변식을 유지한다.
+### 1. 불변식과 종료
 
-```text
-target이 있다면 left와 right 사이에 있다.
-```
+전 과정에서 **불변식** "답이 있다면 `[left, right]` 안에 있다"를 유지한다. 매 반복마다 구간이 strictly 줄어드니 반드시 종료한다. 핵심 설계는 *경계와 종료조건을 불변식에 맞추는 것*이다.
 
-중간 인덱스 `mid`를 확인한 뒤 다음 중 하나를 수행한다.
+| 형태 | 종료 | mid 갱신 | 쓰임 |
+|---|---|---|---|
+| `left <= right` (닫힌 구간) | `left > right` | `left=mid+1` / `right=mid-1` | 정확한 값 찾기 |
+| `left < right` (반열린) | `left == right` | `left=mid+1` / `right=mid` | 경계(lower/upper bound) |
 
-| 비교 | 행동 |
-|---|---|
-| `values[mid] == target` | 찾음 |
-| `values[mid] < target` | 왼쪽 절반을 버림 |
-| `values[mid] > target` | 오른쪽 절반을 버림 |
+### 2. lower/upper bound
 
-탐색 범위가 매번 절반으로 줄기 때문에 시간 복잡도는 O(log n)이다.
+`lower_bound`는 `target` **이상인 첫 위치**, `upper_bound`는 **초과하는 첫 위치**. 둘의 차가 등장 횟수다. Python `bisect_left/right`가 이것이며, "찾았는지"가 아니라 "어디 끼울지"를 답한다.
+
+### 3. 파라메트릭 서치 — 답을 이분하기
+
+"최솟값 $x$ 를 직접 구하기"가 어려워도, **"$x$ 가 가능한가?"** 라는 술어 $P(x)$ 가 단조($P$ 가 어느 지점부터 계속 참)면 답을 이분할 수 있다.
+
+$$P(x):\ \underbrace{\text{F F F F}}_{x<\text{답}}\ \underbrace{\text{T T T T}}_{x\ge\text{답}} \;\Rightarrow\; \text{경계 = 답}$$
+
+예: "택배를 $D$ 일 안에 나르는 최소 적재량" → "적재량 $c$ 면 $D$ 일 안에 되나?"는 $c$ 에 단조 → 적재량을 이분. 정수뿐 아니라 실수(에 $\varepsilon$ 또는 고정 반복)로도 한다.
 
 ## 구현 (Implementation)
 
-반복문 버전:
-
 ```python
-def binary_search(values, target):
-    left = 0
-    right = len(values) - 1
-
-    while left <= right:
-        mid = (left + right) // 2
-
-        if values[mid] == target:
-            return mid
-        if values[mid] < target:
-            left = mid + 1
-        else:
-            right = mid - 1
-
+def binary_search(a, target):              # 정확한 위치, 없으면 -1
+    lo, hi = 0, len(a) - 1
+    while lo <= hi:
+        mid = lo + (hi - lo) // 2          # 오버플로 안전
+        if a[mid] == target: return mid
+        if a[mid] < target:  lo = mid + 1
+        else:                hi = mid - 1
     return -1
+
+def lower_bound(a, target):                # target 이상인 첫 인덱스
+    lo, hi = 0, len(a)                     # 반열린 [lo, hi)
+    while lo < hi:
+        mid = lo + (hi - lo) // 2
+        if a[mid] < target: lo = mid + 1
+        else:               hi = mid
+    return lo
+
+def smallest_feasible(lo, hi, ok):         # 파라메트릭: ok가 단조 F..FT..T
+    while lo < hi:
+        mid = lo + (hi - lo) // 2
+        if ok(mid): hi = mid               # 가능 → 더 작게
+        else:       lo = mid + 1
+    return lo
 ```
-
-삽입 위치 찾기:
-
-```python
-def lower_bound(values, target):
-    left = 0
-    right = len(values)
-
-    while left < right:
-        mid = (left + right) // 2
-        if values[mid] < target:
-            left = mid + 1
-        else:
-            right = mid
-
-    return left
-```
-
-`lower_bound`는 `target` 이상인 첫 위치를 반환한다. 같은 값이 여러 개 있을 때 첫 위치를 찾는 데 유용하다.
 
 ## 복잡도 (Complexity)
 
-| 연산 | 시간 | 공간 |
+| 형태 | 시간 | 공간 |
 |---|---|---|
-| 반복문 이진 탐색 | O(log n) | O(1) |
-| 재귀 이진 탐색 | O(log n) | O(log n) |
-| 정렬 후 한 번 탐색 | O(n log n) | 정렬 구현에 따름 |
+| 반복 이진 탐색 | $O(\log n)$ (정확히 $\lfloor\log_2 n\rfloor+1$ 비교) | $O(1)$ |
+| 재귀 이진 탐색 | $O(\log n)$ | $O(\log n)$ 스택 |
+| 파라메트릭(값 범위 $R$) | $O(\log R \times C_{\text{check}})$ | 술어 비용에 의존 |
+| 미정렬 → 정렬 후 1회 탐색 | $O(n\log n)$ | 정렬에 의존 |
 
-데이터가 이미 정렬되어 있지 않다면 정렬 비용도 함께 고려해야 한다.
+한 번만 찾을 거면 정렬 비용($O(n\log n)$)이 선형 탐색($O(n)$)보다 비싸다 — **반복 질의일 때** 정렬+이분이 이득.
 
 ## 응용 (Applications)
 
-- 정렬된 배열에서 값 찾기
-- 첫 위치/마지막 위치 찾기
-- 조건을 만족하는 최소/최대 값 찾기
-- 답을 정해 놓고 가능 여부를 검사하는 파라메트릭 서치
+- 정렬 배열 값/경계 찾기, 등장 횟수(`upper-lower`).
+- **파라메트릭 서치**: 최소 최대화/최대 최소화, 자원 할당, 시간 제한 하 최소 용량.
+- 회전 정렬 배열 탐색, 실수 방정식 근(이분법), `√x`·단조 함수 역.
 
 ## 흔한 오해 (Common Misunderstandings)
 
-- 정렬되지 않은 배열에는 이진 탐색을 사용할 수 없다.
-- `left <= right`와 `left < right`는 서로 다른 형태다. 불변식에 맞춰 경계를 정해야 한다.
-- 중복 값이 있을 때 일반 이진 탐색은 아무 위치나 반환할 수 있다.
-- 정렬 비용이 탐색 비용보다 클 수 있다. 한 번만 찾을 거면 선형 탐색이 더 나을 수도 있다.
+- **미정렬(또는 비단조)엔 못 쓴다** — 전제는 단조성.
+- **`<=` 와 `<` 는 다른 템플릿** — 불변식에 맞춰 경계·종료를 정하지 않으면 off-by-one/무한 루프.
+- **중복이 있으면 일반 이진 탐색은 아무 위치나** 반환 — 첫/마지막은 lower/upper bound로.
+- **`mid=(lo+hi)//2` 는 큰 정수에서 오버플로** 가능 → `lo+(hi-lo)//2`.
 
 ## TMI
 
-- 이진 탐색은 아이디어는 단순하지만 경계 조건 버그가 자주 나는 알고리즘으로 유명하다. `left`, `right`, `mid`의 의미를 먼저 정해야 구현이 흔들리지 않는다.
-- 예전에는 `mid = (left + right) // 2`가 매우 큰 정수에서 오버플로를 일으킬 수 있었다. 그래서 `left + (right - left) // 2` 형태를 권장하는 언어도 많다.
-- Python의 `bisect` 모듈은 값을 찾았는지 직접 알려 주기보다 "어디에 끼워 넣으면 정렬이 유지되는지"를 알려 준다.
-- Java의 `Arrays.binarySearch`는 값을 못 찾으면 음수를 반환하는데, 그 값은 삽입 위치를 인코딩한 것이다. 처음 보면 에러 코드처럼 보인다.
+- "아이디어는 쉬운데 구현 버그가 잦은 알고리즘"의 대명사 — Bentley는 *Programming Pearls*에서 "직접 짠 이진 탐색의 90%가 틀렸다"고 했다.
+- Java `Arrays.binarySearch`는 못 찾으면 음수를 반환하는데, 그 값은 `-(삽입위치)-1` 로 **삽입 위치를 인코딩**한 것이다.
+- JDK의 이진 탐색 `mid` 오버플로 버그가 2006년에야 공개 수정된 것은 유명한 일화다.
 
 ## 연습 / 확인 문제 (Exercises)
 
-- 정렬된 배열에서 특정 값의 인덱스를 반환하라. 없으면 `-1`을 반환하라.
-- 정렬된 배열에서 target 이상인 첫 위치를 구하라.
-- 정렬된 배열에서 특정 값이 몇 번 등장하는지 이진 탐색으로 구하라.
+- 정렬 배열에서 값의 인덱스를, 없으면 `-1` 을 반환하라.
+- `target` 의 첫/마지막 위치를 lower/upper bound로 구하고 등장 횟수를 계산하라.
+- "$D$ 일 안에 나르는 최소 적재량"을 파라메트릭 서치로 풀고 술어의 단조성을 보여라.
+- 회전 정렬 배열(`[4,5,6,0,1,2]`)에서 값 찾기를 $O(\log n)$ 에 구현하라.
 
 ## 이어서 읽기 (Reading Path)
 
 - 이전: [정렬](Sorting.md)
 - 다음: [BFS / DFS](BFS-DFS.md)
+- 관련: [복잡도 분석](Complexity.md), [분할 정복](Divide-and-Conquer.md)
 
 ## 참조 (References)
 

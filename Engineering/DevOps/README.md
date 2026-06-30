@@ -48,6 +48,7 @@
 |---|---|---|
 | 클라우드 컴퓨팅 개념 — IaaS/PaaS/SaaS | [Cloud-Computing.md](Cloud-Computing.md) | Draft |
 | AWS 핵심 서비스 — EC2, S3, RDS, VPC | [AWS-Core-Services.md](AWS-Core-Services.md) | Draft |
+| 서버 이미지와 스냅샷 — AMI, EBS 스냅샷, COW/ROW | [Server-Images-and-Snapshots.md](Server-Images-and-Snapshots.md) | Draft |
 | GCP / Azure 개요 | [GCP-Azure-Overview.md](GCP-Azure-Overview.md) | Draft |
 | 서버리스 — Lambda, Cloud Functions | [Serverless.md](Serverless.md) | Draft |
 

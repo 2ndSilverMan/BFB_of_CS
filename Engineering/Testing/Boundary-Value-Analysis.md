@@ -4,6 +4,7 @@
 - Prerequisites: [Engineering/Testing/Unit-Test-Principles.md](Unit-Test-Principles.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -18,6 +19,12 @@
 ## 이론 (Theory)
 
 입력 domain을 valid/invalid partition으로 나누고 각 partition의 대표값을 고른다. 경계에서는 `min`, `min+1`, `max-1`, `max`, `max+1` 같은 값을 확인한다.
+
+### 경계의 종류
+
+경계값은 숫자 범위만 의미하지 않는다. 빈 문자열, 최대 길이, timezone 전환, leap day, 권한 없음, 중복 요청, 정렬 동률, pagination 마지막 페이지도 모두 경계다. 결함은 보통 normal case 내부보다 비교 연산이 바뀌는 지점에서 많이 나온다.
+
+동등 분할은 입력 공간을 같은 규칙으로 처리되는 그룹으로 나누는 기법이다. 각 partition에서 대표값을 고르고, partition 사이 경계에서 바로 안쪽/바깥쪽 값을 추가하면 적은 테스트로 많은 위험을 덮을 수 있다.
 
 ## 구현 (Implementation)
 

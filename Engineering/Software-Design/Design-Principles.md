@@ -4,6 +4,7 @@
 - Prerequisites: [Programming/OOP.md](../../Programming/OOP.md), [Engineering/Software-Design/Clean-Code.md](Clean-Code.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 

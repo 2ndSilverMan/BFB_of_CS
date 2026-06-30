@@ -4,6 +4,7 @@
 - Prerequisites: [Systems/Networks/Network-Models.md](../../Systems/Networks/Network-Models.md), [Systems/Networks/TCP-UDP.md](../../Systems/Networks/TCP-UDP.md), [PKI-and-TLS.md](PKI-and-TLS.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -25,6 +26,20 @@
 - 운영 계층: logging, monitoring, incident response, patching
 
 주요 위협은 eavesdropping, spoofing, tampering, replay, lateral movement, DDoS, misconfiguration이다. 방어는 단일 장치보다 defense in depth로 설계한다.
+
+### Segmentation과 blast radius
+
+네트워크 분리는 침입을 완전히 막는 장치가 아니라 침해 범위를 줄이는 장치다. Public subnet, application subnet, data subnet, management plane을 나누고, east-west traffic도 필요한 경로만 허용한다.
+
+정책은 "열어야 하는 포트" 목록보다 "허용된 source identity, destination, protocol, purpose"로 문서화하는 편이 안전하다.
+
+### Zero Trust 운영
+
+Zero Trust는 내부망을 무조건 신뢰하지 않는다는 원칙이다. 요청마다 신원, 장치 상태, 서비스 권한, 정책을 확인하고, 네트워크 위치는 신뢰의 보조 신호로만 사용한다. mTLS, service identity, short-lived credentials, continuous monitoring이 핵심 도구다.
+
+### 관찰 가능성과 대응
+
+방화벽이나 IDS 경고는 대응 절차가 없으면 가치가 작다. Flow log, DNS log, auth log, application log를 상관 분석할 수 있어야 하고, 의심스러운 lateral movement를 발견했을 때 격리·차단·증거 보존 절차가 있어야 한다.
 
 ## 구현 (Implementation)
 

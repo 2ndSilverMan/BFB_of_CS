@@ -4,6 +4,7 @@
 - Prerequisites: [MRF.md](MRF.md), [Graph-Review.md](Graph-Review.md), [Factorization.md](Factorization.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -36,6 +37,26 @@ $$
 $$
 E(X)=\sum_C E_C(X_C)
 $$
+
+```mermaid
+flowchart LR
+    Graph["undirected graph"] --> Cliques["maximal cliques"]
+    Cliques --> Potentials["potential functions"]
+    Potentials --> Product["unnormalized score"]
+    Product --> Z["partition function"]
+```
+
+### Maximal과 maximum
+
+maximal clique는 더 이상 노드를 추가할 수 없는 클리크이고, maximum clique는 그래프에서 크기가 가장 큰 클리크다. MRF factorization에서는 보통 maximal clique를 기준으로 potential을 둔다. 용어를 혼동하면 factor scope를 잘못 잡기 쉽다.
+
+### Log-linear potential
+
+실무에서는 포텐셜을 $\phi_C(x_C)=\exp(w^\top f(x_C))$처럼 feature와 weight의 지수형으로 두는 경우가 많다. 그러면 에너지는 $-w^\top f(x_C)$가 되고, feature는 어떤 국소 패턴을 선호할지 정의한다.
+
+### Partition function의 병목
+
+포텐셜 곱은 정규화 전 점수이므로 확률을 얻으려면 모든 할당에 대한 합 $Z$가 필요하다. 변수 수와 클리크 크기가 커지면 $Z$ 계산이 어려워져 MCMC, variational inference, pseudo-likelihood 같은 근사가 필요하다.
 
 ## 구현 (Implementation)
 

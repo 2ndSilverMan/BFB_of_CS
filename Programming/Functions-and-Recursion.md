@@ -4,6 +4,7 @@
 - Prerequisites: [Programming/Variables-and-Types.md](Variables-and-Types.md), [Programming/Control-Flow.md](Control-Flow.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -16,6 +17,17 @@
 함수는 프로그램의 이름 붙은 부품이다. 같은 코드를 반복해서 쓰지 않고, 의미 있는 단위로 나누며, 테스트하기 쉬운 경계를 만든다.
 
 재귀는 "큰 문제를 같은 형태의 작은 문제로 줄일 수 있을 때" 자연스럽다. 예를 들어 리스트의 합은 첫 원소와 나머지 리스트의 합으로 나눌 수 있다.
+
+```mermaid
+flowchart TD
+    CALL["factorial(3)"] --> C2["3 * factorial(2)"]
+    C2 --> C1["2 * factorial(1)"]
+    C1 --> C0["1 * factorial(0)"]
+    C0 --> BASE["1"]
+    BASE --> R1["1 * 1"]
+    R1 --> R2["2 * 1"]
+    R2 --> R3["3 * 2 = 6"]
+```
 
 ## 이론 (Theory)
 
@@ -34,6 +46,14 @@
 - 재귀 단계: 문제를 더 작은 같은 형태의 문제로 줄이는 경우
 
 기본 조건이 없거나 문제 크기가 줄지 않으면 재귀는 끝나지 않는다.
+
+### 호출 스택
+
+함수를 호출하면 매개변수, 지역 변수, 돌아갈 위치가 호출 프레임에 저장된다. 재귀는 이 프레임이 여러 겹 쌓인다. 그래서 재귀의 공간 복잡도는 보통 최대 재귀 깊이와 같다. 꼬리 재귀 최적화를 지원하는 언어도 있지만 Python처럼 지원하지 않는 언어에서는 깊은 재귀가 `RecursionError`나 스택 오버플로로 이어질 수 있다.
+
+### 부작용과 반환값
+
+함수 설계에서 계산 결과를 `return`으로 돌려주는지, 외부 상태를 수정하는지 구분한다. 같은 입력에 같은 값을 반환하는 함수는 테스트와 조합이 쉽다. 파일 쓰기, 네트워크 호출, 전역 변수 변경 같은 부작용은 필요하지만 경계를 분명히 해야 한다.
 
 ## 구현 (Implementation)
 
@@ -70,6 +90,17 @@ def recursive_sum(values):
 
 다만 위 구현은 슬라이싱 때문에 매 호출마다 새 리스트를 만들 수 있다. 실제 코드에서는 인덱스를 넘기거나 반복문을 쓰는 편이 더 효율적일 수 있다.
 
+슬라이싱 없이 재귀 합을 쓰면 비용이 달라진다.
+
+```python
+def recursive_sum_index(values, i=0):
+    if i == len(values):
+        return 0
+    return values[i] + recursive_sum_index(values, i + 1)
+```
+
+`values[1:]`는 매번 새 리스트를 만들 수 있지만, 인덱스 `i`만 넘기면 같은 배열을 공유한다.
+
 ## 복잡도 (Complexity)
 
 | 함수 | 시간 | 공간 |
@@ -77,8 +108,11 @@ def recursive_sum(values):
 | `average(values)` | O(n) | O(1) |
 | `factorial(n)` | O(n) | O(n) |
 | 슬라이싱을 쓰는 재귀 합 | O(n^2) | O(n^2) |
+| 인덱스를 쓰는 재귀 합 | O(n) | O(n) |
 
 재귀의 공간 복잡도에는 호출 스택이 포함된다.
+
+워크드 예제: `recursive_sum_index([4, 5, 6])`은 깊이 4의 호출을 만든다. `i=0,1,2`에서 값을 더하고 `i=3`에서 0을 반환한다. 시간은 원소 3개를 한 번씩 보므로 `O(n)`, 스택은 깊이 `n+1`이므로 `O(n)`이다.
 
 ## 응용 (Applications)
 

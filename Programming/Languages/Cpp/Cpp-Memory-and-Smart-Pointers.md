@@ -4,85 +4,102 @@
 - Prerequisites: [C++ 참조와 RAII](Cpp-References-and-RAII.md), [Programming/Pointers-and-Memory.md](../../Pointers-and-Memory.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
 ## 개념 (Concept)
 
-스마트 포인터는 동적 객체의 소유권과 해제를 RAII로 관리하는 표준 타입이다. `std::unique_ptr`은 단독 소유, `std::shared_ptr`은 공유 소유, `std::weak_ptr`은 소유하지 않는 관찰 참조를 표현한다.
+스마트 포인터는 동적 객체의 **소유권과 해제를 RAII로** 관리한다. `unique_ptr`=단독 소유(이동만), `shared_ptr`=공유 소유(참조 카운트), `weak_ptr`=비소유 관찰(순환 끊기). 소유권을 *타입으로 표현*해 leak·double free·use-after-free를 구조적으로 막는다.
 
 ## 직관 (Intuition)
 
-Raw pointer가 주소만 적힌 쪽지라면, 스마트 포인터는 "누가 이 자원을 책임지는가"까지 적힌 계약서다. 계약서가 scope를 벗어나면 자원을 자동으로 정리한다.
+raw pointer가 주소만 적힌 쪽지라면, 스마트 포인터는 **"누가 이 자원을 책임지나"까지 적힌 계약서**다. 계약서가 scope를 벗어나면 자원을 자동 정리한다. 핵심 질문은 항상 "이 객체의 소유자는 누구인가" — 답이 하나면 `unique_ptr`, 여럿이면 `shared_ptr`.
 
 ## 핵심 문법 (Core Syntax)
 
 ```cpp
 #include <memory>
-
-auto p = std::make_unique<int>(42);
-
-auto shared = std::make_shared<std::string>("hello");
-std::weak_ptr<std::string> weak = shared;
+auto p = std::make_unique<int>(42);              // 단독 소유
+auto s = std::make_shared<std::string>("hi");    // 공유 소유
+std::weak_ptr<std::string> w = s;                // 비소유 관찰
 ```
 
 ## 이론 (Theory)
 
-`unique_ptr`은 복사할 수 없고 move할 수 있다. `shared_ptr`은 reference count가 0이 되면 객체를 해제한다. 순환 참조가 있으면 reference count가 0이 되지 않을 수 있으므로 `weak_ptr`이 필요하다.
+### 1. unique_ptr — 제로 오버헤드
+
+복사 불가, **이동만** 가능(소유권 이전). 크기·성능이 raw pointer와 사실상 같다(제로 오버헤드 추상화). 기본 선택지.
+
+### 2. shared_ptr — 제어 블록과 원자적 카운트
+
+별도 **control block**(강한 카운트 + 약한 카운트)을 둔다. 복사 시 카운트 **원자적 증가**(스레드 안전하지만 비용), 0이 되면 객체 해제. `make_shared` 는 객체+제어블록을 **한 번에 할당**(2회 → 1회).
+
+### 3. 순환 참조와 weak_ptr
+
+두 `shared_ptr` 이 서로를 가리키면 카운트가 **0이 되지 않아 leak**. 한쪽을 `weak_ptr` 로 바꿔 끊는다. `weak_ptr` 은 `lock()` 으로 살아 있을 때만 `shared_ptr` 를 얻는다(만료 시 빈 포인터).
 
 ## 구현 (Implementation)
 
-기본 소유권은 `std::unique_ptr`로 표현하고, 실제 공유 소유가 필요할 때만 `std::shared_ptr`를 쓴다. 순환 참조가 가능한 구조는 `std::weak_ptr`를 포함해 설계하고, raw pointer는 비소유 관찰자로 제한한다.
-
 ```cpp
-#include <iostream>
 #include <memory>
-#include <utility>
+struct Node {
+    std::shared_ptr<Node> next;        // 강한 참조
+    std::weak_ptr<Node> prev;          // 약한 참조: 순환 끊기 (이게 shared면 leak)
+};
 
-struct Node { int value; };
+auto factory() {                       // 팩토리: unique_ptr 반환이 자연스러움
+    return std::make_unique<int>(7);
+}
 
 int main() {
-    auto owner = std::make_unique<Node>(Node{42});  // 기본 소유권
-    auto moved = std::move(owner);                  // 소유권 이전
-    if (!owner) std::cout << "owner is empty\n";
-    std::cout << moved->value << "\n";             // 42
+    auto owner = std::make_unique<int>(42);
+    auto moved = std::move(owner);     // 소유권 이전
+    // owner == nullptr, moved == 42
+    auto a = std::make_shared<Node>(), b = std::make_shared<Node>();
+    a->next = b; b->prev = a;          // prev가 weak라 누수 없음
 }
 ```
 
 ## 복잡도 (Complexity)
 
-`unique_ptr` 이동은 가볍지만 `shared_ptr` 복사는 reference count 갱신 비용이 있다. 동적 allocation은 cache locality와 fragmentation에 영향을 주며, 작은 객체를 많이 만들면 allocator 비용이 병목이 될 수 있다.
+| 연산 | 비용 |
+|---|---|
+| `unique_ptr` 이동 | 포인터 대입(제로 오버헤드) |
+| `shared_ptr` 복사/소멸 | **원자적** 카운트 갱신(경합 시 비쌈) |
+| `make_shared` | 객체+제어블록 1회 할당 |
+| 작은 객체 대량 할당 | allocator·단편화 병목 |
 
 ## 응용 (Applications)
 
-- 동적 객체 소유권 표현
-- 팩토리 함수 반환값
-- 트리·그래프 구조 일부
-- 예외 안전 자원 관리
+- 동적 객체 소유권, 팩토리 반환값, 트리·그래프(부모는 weak).
+- 예외 안전 자원 관리(스택 unwinding에서 자동 해제).
 
 ## 흔한 오해 (Common Misunderstandings)
 
-- 스마트 포인터가 모든 메모리 문제를 자동으로 해결하지는 않는다.
-- 기본 선택은 보통 `unique_ptr`이다. 필요할 때만 `shared_ptr`을 쓴다.
-- `shared_ptr` 남발은 소유권을 흐리게 만든다.
-- Raw pointer도 비소유 관찰 용도로는 쓸 수 있지만 수명 보장이 필요하다.
+- **스마트 포인터가 모든 메모리 문제를 풀지 않는다** — 순환·dangling은 설계로.
+- **기본은 `unique_ptr`** — 진짜 공유일 때만 `shared_ptr`(남발은 소유권을 흐린다).
+- **`shared_ptr` 순환은 leak** — 한쪽을 `weak_ptr`.
+- **raw pointer는 비소유 관찰**로만(수명은 다른 곳이 보장).
 
 ## TMI
 
-- `make_unique`, `make_shared`는 안전하고 간결한 생성 패턴이다.
-- Move semantics는 `unique_ptr` 소유권 이전의 기반이다.
-- RAII는 mutex, file, socket에도 같은 방식으로 적용된다.
+- `make_shared` 는 객체와 제어블록이 한 메모리 블록이라, `weak_ptr` 이 남아 있으면 객체 메모리도 못 푼다(미묘한 retention).
+- `unique_ptr<T[]>` 와 커스텀 deleter로 배열·C 자원(FILE*, fd)도 RAII 관리한다.
+- move semantics가 `unique_ptr` 소유권 이전의 기반 — `std::move` 는 "이동해도 된다"는 캐스트일 뿐.
 
 ## 연습 / 확인 문제 (Exercises)
 
-- `unique_ptr`을 함수에서 반환하는 예제를 작성하라.
-- `shared_ptr` 순환 참조가 왜 문제인지 설명하라.
-- Raw pointer, `unique_ptr`, `shared_ptr`의 사용 기준을 비교하라.
+- `unique_ptr` 을 함수에서 반환하고 호출부에서 받아라(이동).
+- `shared_ptr` 순환 참조로 leak을 재현하고 `weak_ptr` 로 고쳐라(sanitizer 확인).
+- raw/`unique_ptr`/`shared_ptr` 의 사용 기준을 표로 정리하라.
+- 커스텀 deleter로 `FILE*` 를 RAII로 닫아라.
 
 ## 이어서 읽기 (Reading Path)
 
-- 이전: [참조와 RAII](Cpp-References-and-RAII.md), [STL](Cpp-STL.md)
-- 다음: [Systems](../../../Systems/), [Performance](../../../Engineering/Performance/)
+- 이전: [C++ 참조와 RAII](Cpp-References-and-RAII.md)
+- 다음: [Systems/Operating-Systems](../../../Systems/Operating-Systems/)
+- 관련: [STL](Cpp-STL.md)
 
 ## 참조 (References)
 

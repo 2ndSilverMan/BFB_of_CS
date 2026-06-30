@@ -4,6 +4,7 @@
 - Prerequisites: [Engineering/Security/Symmetric-Encryption.md](Symmetric-Encryption.md), [Math/Discrete/](../../Math/Discrete/)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -27,6 +28,18 @@ $$
 공유 비밀은 그대로 암호 키로 쓰기보다 HKDF 같은 KDF로 프로토콜 문맥과 결합한다. RSA 암호화가 필요한 기존 시스템에서는 결정적인 textbook RSA가 아니라 무작위 패딩을 포함한 RSA-OAEP 같은 승인된 구성을 사용한다.
 
 비대칭 암호만으로 상대의 신원을 확인할 수는 없다. 받은 공개키가 정말 상대의 것인지 인증서, 신뢰된 키 교환 경로, 키 고정(pinning) 같은 별도 신뢰 메커니즘이 필요하다. 또한 장기적으로는 양자 컴퓨터 위협에 대비한 후양자 알고리즘 전환과 crypto agility가 중요하다.
+
+### KEM과 key agreement
+
+현대 프로토콜은 공개키로 본문을 직접 암호화하기보다, KEM이나 Diffie-Hellman 계열로 짧은 shared secret을 만들고 KDF로 대칭키를 유도한다. 본문은 AEAD가 처리한다. 이렇게 하면 성능, 메시지 크기, 보안 속성을 더 잘 관리할 수 있다.
+
+### 인증 없는 키 교환의 한계
+
+Diffie-Hellman은 공유 비밀을 만들지만 상대가 누구인지는 보장하지 않는다. 중간자가 양쪽과 각각 키를 합의하면 두 당사자는 서로 안전하게 연결됐다고 착각할 수 있다. 따라서 인증서, 서명, 사전 공유키, 키 고정 같은 인증 계층이 필요하다.
+
+### Crypto agility
+
+알고리즘과 키 길이는 영구 불변이 아니다. 프로토콜 메시지에 버전과 알고리즘 식별자를 넣고, 금지 알고리즘 제거와 새 알고리즘 추가가 가능한 협상·마이그레이션 경로를 둔다. 후양자 전환에서도 이 유연성이 중요하다.
 
 ## 구현 (Implementation)
 

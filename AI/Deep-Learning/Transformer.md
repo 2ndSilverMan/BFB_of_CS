@@ -4,6 +4,7 @@
 - Prerequisites: [AI/Deep-Learning/Attention.md](Attention.md), [AI/Deep-Learning/Normalization-Layers.md](Normalization-Layers.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -14,6 +15,18 @@ Transformer는 attention, position information, feed-forward network, residual c
 ## 직관 (Intuition)
 
 각 token이 attention으로 필요한 다른 token을 읽고, MLP로 각 위치의 표현을 가공한다. 이 과정을 여러 층 반복하면 문맥에 따라 같은 단어도 다른 표현을 갖는다.
+
+```mermaid
+flowchart TD
+    TOK["tokens"] --> EMB["embedding + position"]
+    EMB --> N1["norm"]
+    N1 --> ATT["multi-head attention"]
+    ATT --> ADD1["residual add"]
+    ADD1 --> N2["norm"]
+    N2 --> MLP["position-wise MLP"]
+    MLP --> ADD2["residual add"]
+    ADD2 --> OUT["contextual states"]
+```
 
 ## 이론 (Theory)
 
@@ -26,6 +39,10 @@ H''=H'+\operatorname{MLP}(\operatorname{Norm}(H'))$$
 
 encoder는 전체 입력을 양방향으로 읽고, autoregressive decoder는 causal mask로 미래를 가린다. language model은 다음 token의 조건부 확률을 곱해 sequence 확률을 모델링한다.
 
+### shape trace
+
+배치 크기 `B`, 길이 `n`, hidden size `d`, head 수 `h`라면 입력은 `(B,n,d)`다. Q/K/V projection 뒤에는 보통 `(B,h,n,d/h)`가 되고, attention score는 `(B,h,n,n)`이다. 이 `n x n` score 때문에 긴 sequence에서 메모리가 빠르게 커진다.
+
 ## 구현 (Implementation)
 
 ```python
@@ -37,9 +54,20 @@ def transformer_block(x, attention_fn, mlp_fn, norm_fn):
 
 이는 구조를 보여 주는 pseudocode이며 실제 구현은 multi-head projection, mask, dropout과 shape 처리가 필요하다.
 
+causal mask의 핵심은 미래 위치를 `-inf`로 가려 softmax 확률을 0으로 만드는 것이다.
+
+```python
+def causal_mask(n):
+    return [[0 if j <= i else float("-inf") for j in range(n)] for i in range(n)]
+```
+
+길이 4에서는 0번 토큰이 0번만 보고, 3번 토큰은 0~3번을 모두 본다. 그래서 생성 중 미래 token을 몰래 보는 누수가 없다.
+
 ## 복잡도 (Complexity)
 
 길이 $n$, hidden size $d$에서 attention은 `O(n^2d)`, MLP는 보통 `O(nd^2)`다. 학습 activation과 attention score가 큰 메모리를 사용하며, autoregressive 생성은 KV cache로 과거 재계산을 줄인다.
+
+워크드 예제: `n=2048`에서 attention score는 head마다 약 4.2M개다. `n`을 4096으로 늘리면 score는 약 16.8M개로 4배가 된다. context 길이를 두 배로 늘릴 때 attention 메모리가 네 배가 되는 이유다.
 
 ## 응용 (Applications)
 

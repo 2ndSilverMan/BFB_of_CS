@@ -4,6 +4,7 @@
 - Prerequisites: [Engineering/System-Design/Scalability.md](Scalability.md), [Systems/Networks/CDN-and-Load-Balancing.md](../../Systems/Networks/CDN-and-Load-Balancing.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 

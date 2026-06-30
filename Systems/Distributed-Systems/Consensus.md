@@ -4,6 +4,7 @@
 - Prerequisites: [Systems/Distributed-Systems/System-Models.md](System-Models.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -14,6 +15,18 @@
 ## 직관 (Intuition)
 
 여러 사람이 서로 다른 메모를 주고받으며(일부는 늦게 도착하고, 일부는 졸고 있어도) "회의 시작 시각"을 단 하나로 합의해야 한다. 합의 알고리즘은 "과반수가 동의한 값은 절대 번복되지 않는다"는 규칙으로, 혼란 속에서도 모두가 같은 결론에 이르게 한다. 핵심 도구는 **다수결(과반수 쿼럼)** 이다.
+
+```mermaid
+flowchart TD
+    C["Client command"] --> L["Leader log append"]
+    L --> F1["Follower A"]
+    L --> F2["Follower B"]
+    L --> F3["Follower C"]
+    F1 --> Q["majority ack"]
+    F2 --> Q
+    Q --> COMMIT["commit index advance"]
+    COMMIT --> APPLY["state machine apply"]
+```
 
 ## 이론 (Theory)
 
@@ -33,6 +46,10 @@
 - **Raft**: "이해 가능성"을 목표로 설계. 리더 선출(leader election), 로그 복제(log replication), 안전성(safety)으로 역할을 명확히 분리했다.
 
 > 위 알고리즘들은 **비잔틴이 아닌**(crash) 장애를 가정한다. 악의적 노드까지 견디려면 PBFT 같은 비잔틴 내성 합의(3f+1 노드 필요)가 필요하다.
+
+### 왜 과반수가 안전한가
+
+5개 노드에서 과반수는 3개다. 어떤 두 과반수 집합도 최소 1개 노드를 공유한다. 첫 번째 값이 `{A,B,C}`에 기록되었다면, 이후 다른 리더가 새 값을 커밋하려 해도 `{C,D,E}` 같은 과반수 안에 이전 값을 아는 노드가 최소 하나 있다. 합의 알고리즘은 이 교집합 노드를 통해 이미 선택된 값을 보존한다.
 
 ## 구현 (Implementation)
 
@@ -61,6 +78,16 @@ class RaftNode:
 
 리더가 정해지면 클라이언트 명령을 로그에 추가하고, 과반수에 복제되면 커밋(commit)으로 확정한다.
 
+Raft 로그 커밋 trace:
+
+| 단계 | leader log | follower a | follower b | commit? |
+|---|---|---|---|---|
+| append x | x | - | - | no |
+| replicate a | x | x | - | no |
+| replicate b | x | x | x | yes, 3개 중 과반수 |
+
+커밋된 명령은 모든 정상 노드의 상태 기계에 같은 순서로 적용되어야 한다. 순서가 달라지면 같은 명령 집합이어도 최종 상태가 달라질 수 있다.
+
 ## 복잡도 (Complexity)
 
 | 항목 | 특징 |
@@ -69,6 +96,8 @@ class RaftNode:
 | 비잔틴 내결함성 | `3f+1` 노드 필요(PBFT 등) |
 | 정상 시 통신 | 명령 1개 커밋에 1라운드(리더→팔로워→리더) |
 | 리더 장애 | 재선출 동안 일시적 가용성 저하 |
+
+워크드 예제: 5노드 클러스터는 `f=2` 장애까지 견딘다. 쓰기 하나를 커밋하려면 3개 노드 응답이 필요하다. 2개가 죽어도 남은 3개로 커밋 가능하지만, 3개가 죽으면 과반수를 만들 수 없어 안전하게 쓰기를 진행할 수 없다.
 
 ## 응용 (Applications)
 

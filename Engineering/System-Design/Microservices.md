@@ -4,6 +4,7 @@
 - Prerequisites: [Engineering/System-Design/Message-Queues.md](Message-Queues.md), [Engineering/System-Design/Database-Design.md](Database-Design.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 

@@ -4,6 +4,7 @@
 - Prerequisites: [Systems/Operating-Systems/Memory-Management.md](Memory-Management.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -14,6 +15,20 @@
 ## 직관 (Intuition)
 
 책상(RAM)은 좁고 책장(디스크)은 넓다. 지금 보는 책만 책상에 올려 두고, 다른 책이 필요해지면 책상에서 안 쓰는 책을 책장에 꽂은 뒤 새 책을 꺼낸다. "어떤 책을 책장으로 돌려보낼까"가 바로 페이지 교체 문제다. 잘못 고르면 방금 치운 책을 또 꺼내느라 시간을 다 쓴다.
+
+```mermaid
+flowchart TD
+    CPU["CPU 가상 주소 접근"] --> TLB{"TLB hit?"}
+    TLB -- yes --> PA["물리 주소로 변환"]
+    TLB -- no --> PT["페이지 테이블 조회"]
+    PT --> PRESENT{"present bit?"}
+    PRESENT -- yes --> FILL["TLB 채움"]
+    FILL --> PA
+    PRESENT -- no --> FAULT["page fault trap"]
+    FAULT --> OS["OS가 victim 선택/디스크 읽기"]
+    OS --> PTUPDATE["페이지 테이블 갱신"]
+    PTUPDATE --> FILL
+```
 
 ## 이론 (Theory)
 
@@ -31,6 +46,10 @@
 $$\text{EAT} = (1-p)\times t_{\text{mem}} + p \times t_{\text{fault}}$$
 
 $t_{\text{fault}}$(디스크 접근)가 $t_{\text{mem}}$보다 수만 배 크므로, 작은 $p$도 성능을 크게 떨어뜨린다.
+
+### 페이지 폴트 처리 흐름
+
+페이지 폴트는 CPU 예외로 OS 커널에 제어권을 넘긴다. OS는 접근이 합법적인지 먼저 확인한다. 합법적인데 RAM에 없을 뿐이면 빈 프레임을 찾거나 victim 페이지를 고르고, victim이 dirty이면 디스크에 기록한 뒤 필요한 페이지를 읽어 온다. 마지막으로 페이지 테이블과 TLB를 갱신하고, 실패했던 명령을 다시 실행한다. 매핑 자체가 불법이면 프로세스에 segfault를 보낸다.
 
 ## 구현 (Implementation)
 
@@ -54,6 +73,18 @@ refs = [1, 2, 3, 1, 4, 2, 5]
 print(lru_faults(refs, capacity=3))   # 6
 ```
 
+워크드 trace(capacity 3, LRU):
+
+| 참조 | cache 상태 | fault? |
+|---|---|---|
+| 1 | [1] | yes |
+| 2 | [1, 2] | yes |
+| 3 | [1, 2, 3] | yes |
+| 1 | [2, 3, 1] | no |
+| 4 | [3, 1, 4] | yes, 2 제거 |
+| 2 | [1, 4, 2] | yes, 3 제거 |
+| 5 | [4, 2, 5] | yes, 1 제거 |
+
 ## 복잡도 (Complexity)
 
 | 항목 | 비용 |
@@ -64,6 +95,12 @@ print(lru_faults(refs, capacity=3))   # 6
 | TLB 적중 | 페이지 테이블 접근 없이 즉시 변환 |
 
 TLB(Translation Lookaside Buffer)는 최근 주소 변환을 캐시해, 페이지 테이블 조회 비용을 줄인다.
+
+워크드 예제: 메모리 접근 100ns, 페이지 폴트 10ms, 폴트율이 0.1%라면
+
+$$\text{EAT}=0.999\times100\text{ns}+0.001\times10\text{ms}\approx10.1\mu s$$
+
+평균 접근 시간이 100ns에서 약 10마이크로초로 100배 이상 커진다. 그래서 폴트율을 작게 유지하는 것이 중요하다.
 
 ## 응용 (Applications)
 

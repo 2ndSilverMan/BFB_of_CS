@@ -4,6 +4,7 @@
 - Prerequisites: [Engineering/Debugging/Minimal-Reproducible-Example.md](Minimal-Reproducible-Example.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -18,6 +19,12 @@
 ## 이론 (Theory)
 
 후보가 정렬되어 있고 good/bad 판정이 가능하면 `O(log n)` 실험으로 원인을 찾을 수 있다. 판정이 flaky하면 잘못된 방향으로 갈 수 있어 재현 안정성이 중요하다.
+
+### 좋은 판정 함수
+
+Bisect의 품질은 각 지점을 good/bad로 안정적으로 분류하는 판정 함수에 달려 있다. Flaky test나 환경 의존 결과가 있으면 잘못된 반쪽을 버릴 수 있다. 판정 스크립트는 deterministic해야 하고, 필요하면 같은 지점을 여러 번 실행해 신뢰도를 높인다.
+
+Commit bisect뿐 아니라 config, dependency version, feature flag, input size, pipeline stage에도 같은 이분 탐색 사고를 적용할 수 있다.
 
 ## 구현 (Implementation)
 

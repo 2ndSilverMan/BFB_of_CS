@@ -4,6 +4,7 @@
 - Prerequisites: [Systems/Networks/README.md](../../Systems/Networks/README.md), [Systems/Databases/README.md](../../Systems/Databases/README.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 

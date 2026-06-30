@@ -4,6 +4,7 @@
 - Prerequisites: [AI/AI-Safety/Mechanistic-Interpretability.md](Mechanistic-Interpretability.md), [AI/Machine-Learning/Logistic-Regression.md](../Machine-Learning/Logistic-Regression.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -21,6 +22,30 @@ Probe 성능이 높다는 것은 representation에서 label을 예측할 수 있
 
 Linear probe는 선형적으로 접근 가능한 정보를 보고, nonlinear probe는 더 많은 정보를 뽑아낼 수 있지만 과해석 위험이 커진다.
 
+### Accessibility와 usage의 차이
+
+Probe는 정보가 representation에서 읽힐 수 있는지를 측정한다. 그러나 모델의 forward pass가 그 정보를 실제로 사용한다는 뜻은 아니다. 예를 들어 hidden state에서 성별 정보를 예측할 수 있어도, 특정 decision head가 그 정보를 사용하지 않을 수 있다.
+
+따라서 probe 결과는 "정보 존재 가능성"의 증거이고, "인과적 사용"의 증거가 되려면 ablation, activation patching, counterfactual input, causal mediation 분석이 필요하다.
+
+### Probe capacity 통제
+
+강한 nonlinear probe는 representation에 없는 구조까지 데이터셋 shortcut으로 학습할 수 있다. 그래서 probe capacity를 제한하거나, linear probe와 nonlinear probe를 함께 비교한다. Probe가 너무 약하면 실제 정보를 못 읽고, 너무 강하면 원 모델이 아니라 probe가 문제를 푸는 셈이 된다.
+
+좋은 보고서는 probe architecture, parameter 수, regularization, training data size, control task 성능을 함께 적는다.
+
+### Control task와 selectivity
+
+Control task는 label을 무작위로 섞거나, 표면적 shortcut만 남긴 task로 probe가 얼마나 쉽게 가짜 패턴을 배우는지 확인한다. Selectivity는 실제 task 성능과 control task 성능의 차이로 볼 수 있다.
+
+Probe accuracy가 높아도 selectivity가 낮으면 representation에 의미 있는 정보가 있다기보다 probe가 dataset artifact를 이용했을 가능성이 크다.
+
+### Layer-wise 해석
+
+Layer별 probe를 학습하면 정보가 어느 층에서 나타나고 사라지는지 볼 수 있다. 낮은 층은 표면적·지역적 정보, 중간 층은 syntactic/semantic feature, 높은 층은 task-specific 정보가 강할 수 있지만 이는 모델과 task에 따라 달라진다.
+
+Layer curve는 가설 생성 도구다. 특정 층에서 probe 성능이 높다면 그 층을 대상으로 patching이나 ablation을 설계한다.
+
 ## 구현 (Implementation)
 
 ```python
@@ -32,6 +57,13 @@ probe = {
 ```
 
 Train/test split은 원 모델 학습 데이터와 독립적으로 구성하고 leakage를 피한다.
+
+```python
+def selectivity(real_accuracy, control_accuracy):
+    return real_accuracy - control_accuracy
+```
+
+높은 probe 성능은 높은 selectivity와 함께 보고해야 해석 가치가 커진다.
 
 ## 복잡도 (Complexity)
 

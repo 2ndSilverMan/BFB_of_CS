@@ -4,6 +4,7 @@
 - Prerequisites: [AI/LLMs/RAG.md](RAG.md), [AI/LLMs/Chain-of-Thought.md](Chain-of-Thought.md), [AI/MLOps/Model-Monitoring.md](../MLOps/Model-Monitoring.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -21,6 +22,35 @@ Agent loop는 보통 plan → act → observe → revise 구조를 갖는다. To
 
 위험은 hallucinated tool call, 권한 오남용, prompt injection, 무한 루프, 비용 폭증, 잘못된 외부 쓰기다. 따라서 sandbox, confirmation, budget, audit log, deterministic validator가 필요하다.
 
+```mermaid
+flowchart LR
+    Goal["user goal"] --> Plan["plan"]
+    Plan --> Act["tool call"]
+    Act --> Obs["observation"]
+    Obs --> Decide["revise or finish"]
+    Decide --> Act
+    Decide --> Final["final answer"]
+```
+
+### Tool 위험 등급
+
+| 도구 유형 | 예 | 기본 통제 |
+| --- | --- | --- |
+| Read-only | 검색, 문서 조회 | 출처 기록, prompt injection 필터 |
+| Deterministic compute | 계산기, 코드 formatter | 입력 검증, timeout |
+| External write | DB 수정, 이메일 발송 | 사용자 확인, idempotency, rollback |
+| Payment/permission | 결제, 권한 변경 | 강한 인증, 승인 workflow |
+
+agent 설계에서는 모델의 "판단"과 시스템의 "권한"을 분리해야 한다. 모델이 도구 호출을 제안하더라도 실제 실행은 schema validation, policy check, rate limit을 통과해야 한다.
+
+### State와 memory
+
+대화 context는 단기 상태이고, vector store나 profile DB는 장기 memory다. 장기 memory는 유용하지만 개인정보, stale preference, 잘못 저장된 사실을 계속 재사용할 수 있다. 저장 전 동의와 scope, 만료, 삭제 경로를 설계해야 한다.
+
+### Agent 평가
+
+agent는 최종 답만 채점하면 부족하다. 올바른 도구를 호출했는지, 불필요한 호출을 줄였는지, 비용 budget을 지켰는지, 실패 후 복구했는지, write action 전에 확인했는지를 함께 평가한다. 테스트에는 정상 경로뿐 아니라 tool failure, 느린 API, 악성 문서, 부분 성공 사례를 포함한다.
+
 ## 구현 (Implementation)
 
 ```python
@@ -32,6 +62,13 @@ tool = {
 ```
 
 쓰기 작업은 가능한 한 명시적 확인과 rollback 전략을 둔다.
+
+```python
+def can_execute(tool, user_confirmed):
+    if tool["side_effect"] == "read_only":
+        return True
+    return user_confirmed
+```
 
 ## 복잡도 (Complexity)
 

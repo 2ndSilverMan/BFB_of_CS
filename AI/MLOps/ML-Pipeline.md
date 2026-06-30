@@ -4,6 +4,7 @@
 - Prerequisites: [AI/MLOps/Data-Versioning.md](Data-Versioning.md), [AI/MLOps/Experiment-Tracking.md](Experiment-Tracking.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -21,6 +22,36 @@ ML 파이프라인은 data validation, transformation, training, evaluation, reg
 
 Cache key는 code+input+config를 포함해야 한다. Evaluation gate를 통과하기 전 model을 production alias로 승격하지 않는다.
 
+```mermaid
+flowchart LR
+    Raw["raw data"] --> Validate["validate"]
+    Validate --> Transform["transform"]
+    Transform --> Train["train"]
+    Train --> Eval["evaluate"]
+    Eval --> Register["register"]
+    Register --> Deploy["deploy"]
+```
+
+### Step contract
+
+각 step은 함수처럼 입력과 출력 계약이 명확해야 한다. 입력에는 dataset version, code commit, config, secret reference, runtime image가 포함되고, 출력에는 artifact URI, schema, metrics, lineage, status가 포함된다. 이 계약이 없으면 같은 DAG라도 실행 환경에 따라 다른 모델이 만들어진다.
+
+| 계약 항목 | 예 |
+| --- | --- |
+| Input artifact | `dataset:churn-v7`, `features:2026-06-01` |
+| Code version | git commit, container digest |
+| Config | hyperparameter, split seed, threshold |
+| Output artifact | transformed data, model, eval report |
+| Metadata | owner, start/end time, lineage, quality gate |
+
+### Gate와 승격 정책
+
+모델 등록은 단순 저장이고, production 승격은 정책 결정이다. evaluation gate는 offline metric, segment metric, fairness/safety check, latency budget, data validation 결과를 함께 본다. gate 실패 모델도 실험 기록으로 남기되 serving alias로 연결하지 않는다.
+
+### 재실행과 backfill
+
+backfill은 과거 partition을 현재 코드로 다시 계산할지, 당시 코드와 config를 복원해 계산할지 선택해야 한다. 데이터 수정, feature definition 변경, label correction은 재실행 범위가 다르므로 pipeline graph와 lineage가 이를 설명할 수 있어야 한다.
+
 ## 구현 (Implementation)
 
 ```python
@@ -31,6 +62,11 @@ pipeline = {
     "evaluate": {"needs": ["train"]},
     "register": {"needs": ["evaluate"]},
 }
+```
+
+```python
+def cache_key(step_name, input_versions, code_version, config_hash):
+    return (step_name, tuple(sorted(input_versions)), code_version, config_hash)
 ```
 
 ## 복잡도 (Complexity)

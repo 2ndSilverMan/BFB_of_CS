@@ -4,6 +4,7 @@
 - Prerequisites: [Systems/Computer-Architecture/Memory-Hierarchy.md](Memory-Hierarchy.md), [Systems/Operating-Systems/Memory-Management.md](../Operating-Systems/Memory-Management.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 

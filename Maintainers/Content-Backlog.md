@@ -11,6 +11,7 @@
 
 전체 로드맵별 필수 문서 매핑은 [Coverage-Matrix.md](Coverage-Matrix.md)를 따른다.
 핵심 경로 밖의 `Optional`/`Deferred` 주제 분류는 [Topic-Classification.md](Topic-Classification.md)를 따른다.
+기존 문서를 더 깊게 만들거나 `Deep-dive` 후보를 고를 때는 [Documentation-Depth-Plan.md](Documentation-Depth-Plan.md)를 따른다.
 
 | 영역 | 현재 Draft | Review | 남은 Planned | 우선 역할 |
 |---|---:|---:|---:|---|
@@ -21,7 +22,7 @@
 | Systems | 54 | 0 | 0 | CS Core, Systems Engineer 기반 |
 | CS-Theory | 30 | 0 | 0 | 계산 이론, PL, 컴파일러 기반 |
 | AI | 191 | 0 | 0 | AI Core, ML Engineer, Researcher 기반 |
-| Engineering | 112 | 0 | 0 | 실무 설계, 운영, 품질 기반 |
+| Engineering | 113 | 0 | 0 | 실무 설계, 운영, 품질 기반 |
 
 ---
 

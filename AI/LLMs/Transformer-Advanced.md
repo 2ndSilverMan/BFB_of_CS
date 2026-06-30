@@ -4,6 +4,7 @@
 - Prerequisites: [AI/Deep-Learning/Transformer.md](../Deep-Learning/Transformer.md), [AI/NLP/Transformer-NLP.md](../NLP/Transformer-NLP.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -26,6 +27,37 @@
 
 **효율적 attention.** 전체 $QK^\top$의 `O(n^2)` 비용을 줄이려 sparse·sliding-window·linear attention을 쓰거나, FlashAttention처럼 메모리 IO를 줄이는 정확 계산을 쓴다.
 
+```mermaid
+flowchart LR
+    TOK["tokens"] --> POS["position scheme"]
+    POS --> ATT["attention"]
+    ATT --> KV["KV cache during decode"]
+    KV --> OUT["next token latency"]
+```
+
+### 위치 정보 설계
+
+| 방식 | 핵심 아이디어 | 장점 | 주의점 |
+| --- | --- | --- | --- |
+| Learned absolute | 위치별 embedding 학습 | 단순함 | 학습 길이 밖 일반화 약함 |
+| Sinusoidal | 주기 함수 위치 벡터 | 길이 외삽 가능성 | 현대 LLM에서는 덜 흔함 |
+| RoPE | query/key 회전 | 상대 위치 성질, decoder LLM에 강함 | 긴 길이 확장에는 scaling 기법 필요 |
+| ALiBi | 거리 bias 추가 | 긴 길이 extrapolation 친화 | 모델 계열별 성능 차이 |
+
+긴 context를 늘릴 때는 position scheme만 바꾸면 끝나는 것이 아니다. 학습 데이터의 길이 분포, attention pattern, optimizer stability, 평가 task가 모두 길이 활용 능력에 영향을 준다.
+
+### Prefill과 decode의 분리
+
+LLM serving에서 prompt를 한 번 처리하는 prefill과 token을 하나씩 생성하는 decode는 병목이 다르다. prefill은 큰 matrix 연산과 attention이 중심이고 GPU 활용률이 높을 수 있다. decode는 batch가 작고 매 step 순차적이라 memory bandwidth와 KV cache 접근이 병목이 되기 쉽다.
+
+### KV cache 크기 추정
+
+대략 cache memory는
+
+$$2 \times L \times B \times n \times h_{kv} \times d_{head} \times \text{bytes}$$
+
+에 비례한다. 앞의 2는 key와 value를 뜻한다. MQA/GQA는 $h_{kv}$를 줄여 긴 context와 큰 batch에서 cache 메모리를 낮춘다.
+
 ## 구현 (Implementation)
 
 ```python
@@ -38,6 +70,11 @@ def generate(model, prompt, max_new):
         next_token = sample(logits[-1])
         tokens.append(next_token)
     return tokens
+```
+
+```python
+def kv_cache_bytes(layers, batch, length, kv_heads, head_dim, bytes_per_value=2):
+    return 2 * layers * batch * length * kv_heads * head_dim * bytes_per_value
 ```
 
 ## 복잡도 (Complexity)

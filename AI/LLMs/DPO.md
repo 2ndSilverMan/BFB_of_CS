@@ -4,6 +4,7 @@
 - Prerequisites: [AI/LLMs/RLHF.md](RLHF.md), [AI/LLMs/Instruction-Tuning.md](Instruction-Tuning.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -21,6 +22,35 @@ RLHF가 "채점자를 만들고 그 점수를 높이는 게임"이라면, DPO는
 
 KL-constrained reward maximization 문제를 변형하면 reward model 없이도 preference loss로 policy를 업데이트할 수 있다. β는 reference policy에서 벗어나는 정도를 조절한다.
 
+```mermaid
+flowchart LR
+    Pair["prompt, chosen, rejected"] --> Logp["policy/ref logprobs"]
+    Logp --> Loss["DPO preference loss"]
+    Loss --> Update["policy update"]
+```
+
+### 손실의 직관
+
+DPO는 policy가 reference 대비 chosen을 rejected보다 더 선호하도록 만든다. 전형적인 형태는 chosen/rejected의 log probability 차이를 비교해 logistic loss를 적용한다.
+
+$$
+-\log\sigma\left(\beta\left[
+\log\frac{\pi_\theta(y^+\mid x)}{\pi_{\text{ref}}(y^+\mid x)}
+-
+\log\frac{\pi_\theta(y^-\mid x)}{\pi_{\text{ref}}(y^-\mid x)}
+\right]\right)
+$$
+
+여기서 reference model은 원래 SFT 모델의 행동 기준점이다. β가 크면 preference를 강하게 반영하지만 reference에서 더 멀어질 수 있다.
+
+### Preference pair 품질
+
+chosen이 명확히 좋고 rejected가 명확히 나쁜 쌍은 학습 신호가 강하지만, 너무 쉬운 쌍만 있으면 세밀한 품질 차이를 배우기 어렵다. 반대로 labeler 간 의견이 갈리는 쌍은 noise가 커진다. response 길이, 포맷, 안전 거절 여부 같은 표면 단서만으로 chosen을 맞힐 수 있으면 모델이 본질적 품질 대신 shortcut을 배울 수 있다.
+
+### DPO와 SFT의 관계
+
+DPO는 보통 좋은 SFT checkpoint 위에서 작동한다. SFT가 지시 형식과 기본 능력을 만들고, DPO가 선호 방향으로 경계를 조정한다. base model에 곧장 DPO를 적용하면 instruction-following 자체가 부족해 preference 신호를 안정적으로 흡수하기 어렵다.
+
 ## 구현 (Implementation)
 
 ```python
@@ -32,6 +62,11 @@ preference_pair = {
 ```
 
 실제 학습은 policy와 reference model의 chosen/rejected logprob를 모두 계산한다.
+
+```python
+def preference_margin(policy_chosen, policy_rejected, ref_chosen, ref_rejected):
+    return (policy_chosen - policy_rejected) - (ref_chosen - ref_rejected)
+```
 
 ## 복잡도 (Complexity)
 

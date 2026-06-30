@@ -4,6 +4,7 @@
 - Prerequisites: [Engineering/Debugging/Minimal-Reproducible-Example.md](Minimal-Reproducible-Example.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -18,6 +19,12 @@
 ## 이론 (Theory)
 
 Step over는 함수 내부로 들어가지 않고 다음 줄로, step into는 함수 내부로, step out은 현재 함수가 끝날 때까지 진행한다. Watch expression은 특정 표현식 값을 계속 보여 준다.
+
+### 관찰 지점 설계
+
+중단점은 멈추고 싶은 줄이 아니라 가설을 구분하는 관찰 지점에 둔다. 입력이 잘못됐는지, 상태 전이가 잘못됐는지, 출력 직전 변환이 잘못됐는지를 나눠 보는 위치가 좋다.
+
+스텝 실행은 강력하지만 느리다. 반복문이나 고빈도 경로에서는 watch expression, conditional breakpoint, logpoint를 사용해 필요한 이벤트에서만 멈추도록 한다.
 
 ## 구현 (Implementation)
 

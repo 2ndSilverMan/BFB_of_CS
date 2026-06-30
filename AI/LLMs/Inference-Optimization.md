@@ -4,6 +4,7 @@
 - Prerequisites: [AI/LLMs/Transformer-Advanced.md](Transformer-Advanced.md), [AI/LLMs/Efficient-Attention.md](Efficient-Attention.md), [AI/MLOps/REST-Serving.md](../MLOps/REST-Serving.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -21,6 +22,35 @@ Prefill은 prompt 전체를 병렬 처리해 KV cache를 만든다. Decode는 �
 
 Speculative decoding은 작은 draft model이 후보 토큰을 제안하고 큰 model이 검증해 step 수를 줄인다. Quantization과 efficient attention은 memory bandwidth와 compute 병목을 줄인다.
 
+```mermaid
+flowchart LR
+    Req["requests"] --> Queue["scheduler"]
+    Queue --> Prefill["prefill"]
+    Prefill --> Cache["KV cache"]
+    Cache --> Decode["decode loop"]
+    Decode --> Stream["stream tokens"]
+```
+
+### 핵심 지표
+
+| 지표 | 의미 | 주된 병목 |
+| --- | --- | --- |
+| TTFT | 첫 토큰까지 시간 | prefill, queueing |
+| TPOT | token당 decode 시간 | KV cache, memory bandwidth |
+| Throughput | 초당 처리 token/request | batching, GPU utilization |
+| Peak memory | 최대 동시 처리 한계 | weights, KV cache |
+| Tail latency | p95/p99 지연 | scheduling, 긴 요청 |
+
+사용자 경험은 평균 tokens/sec보다 TTFT와 tail latency에 더 민감한 경우가 많다. 반대로 offline batch generation은 총 throughput이 더 중요하다.
+
+### Scheduling과 batching
+
+continuous batching은 decode 중인 요청에 새 요청을 합류시켜 GPU 유휴 시간을 줄인다. 하지만 길이가 매우 다른 요청이 섞이면 짧은 요청이 긴 요청 뒤에서 지연될 수 있다. max batch tokens, max sequence length, priority queue, timeout 정책을 함께 조정해야 한다.
+
+### Speculative decoding의 조건
+
+draft model이 빠르고 target model과 충분히 비슷해야 이득이 난다. draft가 제안한 token이 자주 거절되면 검증 비용만 늘어난다. 따라서 acceptance rate, draft latency, target forward 절감량을 함께 측정한다.
+
 ## 구현 (Implementation)
 
 ```python
@@ -32,6 +62,11 @@ serving_metrics = {
 ```
 
 최적화는 단일 요청 latency와 전체 throughput을 구분해 측정해야 한다.
+
+```python
+def kv_cache_capacity_bytes(layers, batch, length, kv_heads, head_dim, dtype_bytes):
+    return 2 * layers * batch * length * kv_heads * head_dim * dtype_bytes
+```
 
 ## 복잡도 (Complexity)
 

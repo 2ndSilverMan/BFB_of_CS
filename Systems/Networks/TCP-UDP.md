@@ -4,6 +4,7 @@
 - Prerequisites: [Systems/Networks/Network-Models.md](Network-Models.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -40,6 +41,10 @@ sequenceDiagram
 
 TCP는 수신 측의 처리 속도에 맞추는 **흐름 제어**와, 네트워크 혼잡을 피하는 **혼잡 제어**(예: 느린 시작)를 함께 수행한다. 두 프로토콜 모두 포트 번호로 같은 호스트 안의 여러 프로그램을 구분한다.
 
+### TCP가 신뢰성을 만드는 방법
+
+TCP는 바이트 스트림에 순서 번호(sequence number)를 붙이고, 받은 쪽은 ACK로 "여기까지 받았다"를 알려 준다. 송신자는 ACK가 오지 않으면 재전송한다. 수신 윈도우는 받는 쪽 버퍼 여유를 나타내고, 혼잡 윈도우는 네트워크에 한 번에 밀어 넣을 수 있는 양을 제한한다.
+
 ## 구현 (Implementation)
 
 UDP는 핸드셰이크 없이 곧바로 보낸다.
@@ -60,6 +65,17 @@ tcp = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 `SOCK_STREAM`이 TCP, `SOCK_DGRAM`이 UDP다.
 
+간단한 재전송 모델:
+
+```text
+send segment seq=100
+wait ACK=150
+if timeout:
+    retransmit seq=100
+```
+
+실제 TCP는 RTT 추정, 중복 ACK, 빠른 재전송, 혼잡 윈도우 조절까지 함께 수행한다.
+
 ## 복잡도 (Complexity)
 
 | 관점 | TCP | UDP |
@@ -69,6 +85,8 @@ tcp = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 | 지연 변동 | 재전송으로 늘 수 있음 | 일정한 편 |
 
 신뢰성에는 비용이 따른다. TCP의 보장은 연결 설정·확인 응답·재전송이라는 추가 지연으로 치른다.
+
+워크드 예제: RTT가 40ms인 네트워크에서 TCP 연결을 새로 열고 첫 요청을 보내면, 3-way handshake에 대략 1 RTT가 들어간다. TLS까지 새로 협상하면 추가 RTT가 붙을 수 있다. 반면 UDP는 첫 패킷을 바로 보낼 수 있지만, 손실되면 애플리케이션이 직접 재시도 정책을 정해야 한다.
 
 ## 응용 (Applications)
 

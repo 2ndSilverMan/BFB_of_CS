@@ -4,6 +4,7 @@
 - Prerequisites: [Systems/Operating-Systems/Scheduling.md](../../Systems/Operating-Systems/Scheduling.md), [Systems/Operating-Systems/Processes-and-Threads.md](../../Systems/Operating-Systems/Processes-and-Threads.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -18,6 +19,12 @@
 ## 이론 (Theory)
 
 CPU-bound 작업은 core 수 근처가 적절한 경우가 많고, I/O-bound 작업은 wait time 때문에 더 많은 concurrency가 필요할 수 있다. Queue가 무한하면 overload가 latency로 숨고, queue가 너무 작으면 burst를 흡수하지 못한다. Backpressure, timeout, cancellation이 함께 설계되어야 한다.
+
+### Pool 크기와 작업 성격
+
+스레드 풀 크기는 CPU-bound와 I/O-bound 작업에서 다르게 정한다. CPU-bound는 core 수 근처가 출발점이고, I/O-bound는 대기 비율에 따라 더 클 수 있다. 하지만 너무 큰 풀은 context switch, memory, lock contention을 늘린다.
+
+Queue length, active thread, task wait time, rejection count를 함께 봐야 한다. Thread 수만 늘려 throughput이 오르지 않으면 downstream 병목이나 lock 경합을 의심한다.
 
 ## 구현 (Implementation)
 
@@ -72,4 +79,3 @@ Task 수가 `n`이고 평균 처리 시간이 `c`라면 이상적 시간은 `n*c
 
 - [Systems/Operating-Systems/Scheduling.md](../../Systems/Operating-Systems/Scheduling.md)
 - [Systems/Parallel-Computing/Multithreading.md](../../Systems/Parallel-Computing/Multithreading.md)
-

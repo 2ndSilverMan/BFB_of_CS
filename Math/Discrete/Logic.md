@@ -4,6 +4,7 @@
 - Prerequisites: 고등학교 수학
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -20,6 +21,14 @@
 - 명세: 함수가 만족해야 하는 입력/출력 조건
 - 증명: 알고리즘이 항상 맞는 결과를 낸다는 설명
 
+```mermaid
+flowchart LR
+    SPEC["명세<br/>입력 조건/출력 조건"] --> COND["조건식"]
+    COND --> CODE["프로그램 분기"]
+    COND --> PROOF["알고리즘 증명"]
+    PROOF --> INVARIANT["불변식"]
+```
+
 ## 이론 (Theory)
 
 명제는 참 또는 거짓으로 판단할 수 있는 문장이다.
@@ -33,6 +42,17 @@
 | `P <-> Q` | 동치 | P와 Q의 참값이 같다 |
 
 함의 `P -> Q`는 P가 거짓일 때 항상 참으로 본다. 이는 처음에는 어색하지만, "전제가 만족되는 모든 경우에 결론이 참인가"를 검사하는 규칙으로 이해하면 된다.
+
+진리표로 보면 함의는 다음처럼 동작한다.
+
+| P | Q | P -> Q |
+|---|---|---|
+| T | T | T |
+| T | F | F |
+| F | T | T |
+| F | F | T |
+
+`P -> Q`가 틀리는 유일한 경우는 P가 참인데 Q가 거짓인 경우다. 그래서 "전제가 성립한 모든 케이스에서 결론이 성립하는가"를 검사하는 도구로 쓴다.
 
 드모르간 법칙은 조건문을 변형할 때 자주 쓰인다.
 
@@ -54,6 +74,10 @@ not (P or Q)  == (not P) and (not Q)
 not (for all x, P(x)) == exists x such that not P(x)
 not (exists x such that P(x)) == for all x, not P(x)
 ```
+
+### 수량자 순서
+
+`∀x ∃y P(x, y)`와 `∃y ∀x P(x, y)`는 다르다. 전자는 "각 x마다 알맞은 y가 있다"이고, 후자는 "모든 x에 통하는 하나의 y가 있다"다. 알고리즘 명세에서 수량자 순서를 바꾸면 요구사항이 완전히 달라질 수 있다.
 
 ## 구현 (Implementation)
 
@@ -77,6 +101,18 @@ def cannot_enter(user):
     return (not user["is_active"]) or user["is_blocked"]
 ```
 
+수량자 검사를 코드로 옮기면 `all`과 `any`가 된다.
+
+```python
+def all_non_negative(values):
+    return all(x >= 0 for x in values)
+
+def has_negative(values):
+    return any(x < 0 for x in values)
+```
+
+`not all_non_negative(values)`는 `has_negative(values)`와 같다. 이것이 `¬∀x P(x) == ∃x ¬P(x)`의 코드 버전이다.
+
 ## 복잡도 (Complexity)
 
 | 연산 | 시간 | 공간 |
@@ -86,6 +122,8 @@ def cannot_enter(user):
 | 길이 n 목록에서 하나라도 만족하는지 검사 | 최악 O(n) | O(1) |
 
 `all`과 `any`는 조건을 만족하거나 실패하는 순간 멈출 수 있지만, 최악의 경우 전체를 확인한다.
+
+워크드 예제: `[1, 2, -3, 4]`에서 `all(x >= 0)`은 세 번째 원소 `-3`에서 즉시 거짓을 반환한다. 최선은 `O(1)`일 수 있지만, `[1,2,3,4]`처럼 모두 조건을 만족하면 끝까지 봐야 하므로 최악은 `O(n)`이다.
 
 ## 응용 (Applications)
 

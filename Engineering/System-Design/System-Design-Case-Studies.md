@@ -4,6 +4,7 @@
 - Prerequisites: [Engineering/System-Design/Approach.md](Approach.md), [Engineering/System-Design/Microservices.md](Microservices.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 

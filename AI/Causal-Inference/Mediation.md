@@ -4,6 +4,7 @@
 - Prerequisites: [AI/Causal-Inference/Causal-DAG.md](Causal-DAG.md), [AI/Causal-Inference/Intervention.md](Intervention.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -21,17 +22,48 @@
 
 Natural direct/indirect effect는 cross-world counterfactual을 포함하므로 강한 식별 가정이 필요하다. Treatment-mediator confounding, mediator-outcome confounding, treatment 이후 confounder가 핵심 위험이다.
 
+### 효과 분해의 언어
+
+Treatment를 $X$, mediator를 $M$, outcome을 $Y$라고 하자. Total effect는 $X$를 바꿨을 때 $Y$가 전체 경로를 통해 얼마나 바뀌는지 묻는다. Direct effect는 $M$을 고정하거나 특정 방식으로 통제했을 때 $X\to Y$ 경로에 남는 효과를 묻는다. Indirect effect는 $X\to M\to Y$ 경로를 통해 전달되는 부분을 묻는다.
+
+Controlled direct effect(CDE)는 mediator를 특정 값 $m$으로 개입해 고정한다.
+
+$$
+CDE(m) = E[Y(1, m) - Y(0, m)]
+$$
+
+Natural direct effect와 natural indirect effect는 "treatment가 바뀌었을 때 mediator가 자연스럽게 가졌을 값"을 섞어 비교한다. 그래서 서로 다른 세계의 반사실을 한 식에 넣는 cross-world 가정이 필요하다.
+
+### Sequential ignorability
+
+전형적인 식별 논리는 두 단계의 무교란성을 요구한다.
+
+- 관측 covariate를 조정하면 treatment 배정이 잠재 결과와 mediator에 대해 as-if random이어야 한다.
+- Treatment와 covariate를 조정하면 mediator가 outcome의 잠재 결과에 대해 as-if random이어야 한다.
+
+두 번째 조건이 특히 강하다. Mediator와 outcome을 함께 일으키는 숨은 요인이 있으면 indirect/direct effect 분해가 깨진다.
+
+### Treatment 이후 confounder
+
+Treatment가 어떤 변수 $L$을 바꾸고, $L$이 mediator와 outcome을 모두 바꾸는 경우가 어렵다. $L$을 조정하면 treatment 효과의 일부 경로를 막을 수 있고, 조정하지 않으면 mediator-outcome confounding이 남는다. 이 경우 단순 회귀 계수 분해보다 g-method, sequential g-formula, structural nested model 같은 도구가 필요할 수 있다.
+
+### 해석상의 안전장치
+
+매개 분석은 "효과가 있다"보다 더 섬세한 메커니즘 주장을 한다. 따라서 분석 전에 DAG로 mediator가 treatment 이후 변수인지, mediator 이전 confounder와 이후 confounder가 무엇인지, direct effect가 controlled인지 natural인지 명시해야 한다.
+
 ## 구현 (Implementation)
 
 ```python
-effects = {
-    "total": "X changes Y through all paths",
-    "direct": "X changes Y not through M",
-    "indirect": "X changes M, then M changes Y",
-}
+def linear_mediation(total_effect, direct_effect):
+    indirect_effect = total_effect - direct_effect
+    return {
+        "total": total_effect,
+        "direct": direct_effect,
+        "indirect": indirect_effect,
+    }
 ```
 
-실제 분석은 DAG로 어떤 confounder를 조정할지 먼저 명시해야 한다.
+이 함수는 선형·가산적 설정의 계산 직관만 보여 준다. 실제 분석에서는 효과 정의, 조정 집합, mediator-outcome confounding 가능성을 먼저 DAG로 고정해야 한다.
 
 ## 복잡도 (Complexity)
 

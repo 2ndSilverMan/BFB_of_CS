@@ -4,6 +4,7 @@
 - Prerequisites: [Attention-in-NLP.md](Attention-in-NLP.md), [Transformer-NLP.md](Transformer-NLP.md), [Language-Model-Basics.md](Language-Model-Basics.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -27,6 +28,34 @@ Encoder는 원문 표현을 만들고, decoder는 target token을 autoregressive
 
 평가에는 BLEU, chrF, COMET 같은 자동 지표와 사람 평가가 쓰인다. 자동 지표는 편리하지만 의미 보존과 자연스러움을 완벽히 반영하지 못한다.
 
+```mermaid
+flowchart LR
+    Source["source text"] --> Enc["encoder / prompt"]
+    Enc --> Dec["decoder"]
+    Dec --> Hyp["translation"]
+    Hyp --> Eval["adequacy + fluency + terminology"]
+```
+
+### 번역 품질의 축
+
+| 축 | 질문 |
+| --- | --- |
+| Adequacy | 원문의 의미를 빠뜨리지 않았는가 |
+| Fluency | 목표 언어로 자연스러운가 |
+| Terminology | 전문 용어와 이름이 일관적인가 |
+| Faithfulness | 원문에 없는 내용을 추가하지 않았는가 |
+| Formatting | 숫자, 단위, markup을 보존했는가 |
+
+문서 번역에서는 한 문장만 잘 번역하는 것보다 용어, 높임말, 대명사, 문체 일관성이 중요하다.
+
+### Decoding과 길이 편향
+
+beam search는 후보를 넓게 보지만 짧은 번역을 선호하는 편향이 생길 수 있어 length penalty를 쓴다. 너무 큰 beam은 다양성을 줄이고 부자연스러운 고확률 문장을 고를 수 있다. 번역에서는 숫자, 이름, 부정 표현을 별도 검증하는 후처리가 유용하다.
+
+### 데이터와 도메인
+
+일반 병렬 말뭉치로 학습한 모델은 법률, 의료, 특허, 게임 localization에서 용어를 틀릴 수 있다. glossary, translation memory, domain adaptation, human post-editing workflow가 품질을 좌우한다.
+
 ## 구현 (Implementation)
 
 디코딩은 보통 greedy 또는 beam search로 수행한다.
@@ -43,6 +72,13 @@ def greedy_decode(start_token, step, max_len):
 ```
 
 실제 번역에서는 subword tokenization, length penalty, terminology constraint, post-editing workflow가 중요하다.
+
+```python
+def preserve_placeholder(source, translation, placeholder):
+    if placeholder in source and placeholder not in translation:
+        return False
+    return True
+```
 
 ## 복잡도 (Complexity)
 

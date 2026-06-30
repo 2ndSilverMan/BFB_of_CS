@@ -4,6 +4,7 @@
 - Prerequisites: [AI/Deep-Learning/Transformer.md](../Deep-Learning/Transformer.md), [AI/NLP/Word-Embeddings.md](Word-Embeddings.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -26,6 +27,32 @@ attention은 순서를 모르므로 positional encoding을 더해 위치를 알�
 - **encoder(BERT)**: 양방향 attention. masked language modeling으로 가린 토큰을 복원.
 - **decoder(GPT)**: causal mask로 미래를 가림. 다음 토큰 예측(autoregressive)으로 학습.
 - **encoder-decoder**: encoder가 입력을 인코딩하고 decoder가 cross-attention으로 참조하며 출력 생성(번역·요약).
+
+```mermaid
+flowchart LR
+    Tokens["token ids"] --> Emb["token + position embeddings"]
+    Emb --> Blocks["Transformer blocks"]
+    Blocks --> Rep["contextual representations"]
+    Rep --> Head["task or LM head"]
+```
+
+### Encoder, decoder, encoder-decoder 선택
+
+| 구조 | Mask | 강한 과제 |
+| --- | --- | --- |
+| Encoder-only | bidirectional | 분류, NER, reranking, embedding |
+| Decoder-only | causal | 생성, 대화, in-context learning |
+| Encoder-decoder | encoder 양방향, decoder causal | 번역, 요약, 입력 기반 생성 |
+
+구조 선택은 모델 크기보다 먼저 학습 목표와 serving 패턴을 결정한다. encoder는 입력 이해에 강하고, decoder는 autoregressive 생성과 KV cache에 자연스럽다.
+
+### Contextual embedding
+
+Transformer 표현은 layer마다 의미가 다르다. 낮은 layer는 표면·구문 정보, 높은 layer는 과제·의미 정보가 더 강하게 나타나는 경향이 있다. embedding으로 사용할 때는 `[CLS]`, mean pooling, 마지막 layer, 여러 layer 평균 중 무엇이 좋은지 task별로 평가한다.
+
+### 긴 문맥의 한계
+
+길이 제곱 attention 비용뿐 아니라 위치 인코딩, 학습 길이, retrieval/chunking, lost-in-the-middle 문제가 함께 작동한다. 긴 context window는 "넣을 수 있음"을 뜻하지 "항상 잘 활용함"을 뜻하지 않는다.
 
 ## 구현 (Implementation)
 

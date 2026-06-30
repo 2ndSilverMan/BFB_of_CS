@@ -4,6 +4,7 @@
 - Prerequisites: [Engineering/Performance/Benchmarking-Basics.md](Benchmarking-Basics.md), [Systems/Operating-Systems/Scheduling.md](../../Systems/Operating-Systems/Scheduling.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -18,6 +19,12 @@ CPU 프로파일링은 프로그램이 CPU 시간을 어디서 소비하는지 c
 ## 이론 (Theory)
 
 On-CPU와 off-CPU 시간을 구분한다. Self time은 함수 자체, inclusive time은 child call을 포함한다. Sampling frequency가 너무 낮으면 짧은 hotspot을 놓치고 너무 높으면 overhead가 커진다. Release-like workload와 symbol·stack unwinding 품질이 중요하다.
+
+### 프로파일 해석
+
+CPU profile은 시간이 어디서 소비됐는지를 보여 주지만 원인을 자동으로 말해주지는 않는다. Hot function이 진짜 문제인지, 하위 호출의 누적 결과인지, sampling bias인지 구분해야 한다. Wall-clock profile과 CPU-time profile도 의미가 다르다.
+
+최적화는 hot path, 호출 빈도, per-call cost, 제거 가능성을 함께 본다. 1% 함수보다 30% 함수가 먼저지만, 30%가 본질적 I/O 대기라면 CPU 최적화로 해결되지 않는다.
 
 ## 구현 (Implementation)
 

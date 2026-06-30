@@ -4,6 +4,7 @@
 - Prerequisites: [AI/LLMs/Prompt-Engineering.md](Prompt-Engineering.md), [AI/LLMs/GPT-Family.md](GPT-Family.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -21,6 +22,34 @@ Few-shot 예시는 task format, label mapping, reasoning style, output schema를
 
 In-context learning의 원인은 완전히 하나로 설명되지 않는다. Pretraining 중 접한 패턴의 meta-learning, implicit Bayesian inference, induction head 등 여러 관점이 있다.
 
+```mermaid
+flowchart LR
+    Q["query"] --> R["retrieve examples"]
+    R --> P["prompt with demonstrations"]
+    P --> M["LLM"]
+    M --> Y["task output"]
+```
+
+### 예시 선택 기준
+
+few-shot 예시는 단순히 많을수록 좋은 것이 아니다. 좋은 예시는 target 입력과 유사하면서도 label과 형식의 다양성을 보여 주고, 모델이 따라야 할 판단 경계를 드러낸다.
+
+| 기준 | 의미 |
+| --- | --- |
+| 유사성 | 현재 입력과 도메인·난이도가 비슷한가 |
+| 다양성 | edge case와 label balance를 포함하는가 |
+| 간결성 | context 예산을 낭비하지 않는가 |
+| 형식 일관성 | 출력 schema와 구분자가 동일한가 |
+| 정답 품질 | 예시 자체에 오류가 없는가 |
+
+### Label bias와 verbalizer
+
+분류 prompt에서는 label 이름이 결과를 바꿀 수 있다. 예를 들어 "positive/negative", "yes/no", "A/B"는 pretraining 빈도와 어감이 다르다. label 순서도 편향을 만들 수 있으므로 validation set에서 label verbalizer와 예시 순서를 바꿔 민감도를 확인한다.
+
+### Dynamic few-shot
+
+운영에서는 고정 예시보다 retrieval로 현재 입력과 가까운 예시를 골라 넣는 방식이 자주 쓰인다. 이때 retrieval 기준이 label을 누출하거나 너무 쉬운 near-duplicate만 가져오면 평가가 부풀 수 있다. 예시 저장소는 버전 관리하고, 어떤 예시가 prompt에 들어갔는지 로그로 남긴다.
+
 ## 구현 (Implementation)
 
 ```text
@@ -32,6 +61,12 @@ In-context learning의 원인은 완전히 하나로 설명되지 않는다. Pre
 ```
 
 출력 형식이 중요하면 schema와 counterexample을 함께 넣는다.
+
+```python
+def format_few_shot(examples, query):
+    body = "\n".join(f"입력: {x}\n답: {y}" for x, y in examples)
+    return f"{body}\n입력: {query}\n답:"
+```
 
 ## 복잡도 (Complexity)
 

@@ -4,6 +4,7 @@
 - Prerequisites: [CS-Theory/Computation-Theory/Context-Free.md](../Computation-Theory/Context-Free.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 

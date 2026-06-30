@@ -4,6 +4,7 @@
 - Prerequisites: [Transformer-NLP.md](Transformer-NLP.md), [Question-Answering.md](Question-Answering.md), [GPT.md](GPT.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -26,6 +27,34 @@
 
 평가에는 ROUGE 같은 n-gram overlap 지표와 사람 평가가 쓰인다. 생성 요약에서는 factual consistency와 coverage가 중요하다.
 
+```mermaid
+flowchart LR
+    Docs["source documents"] --> Select["select salient content"]
+    Select --> Compress["compress / rewrite"]
+    Compress --> Check["faithfulness check"]
+    Check --> Summary["summary + citations"]
+```
+
+### 좋은 요약의 조건
+
+| 조건 | 의미 |
+| --- | --- |
+| Coverage | 핵심 정보가 빠지지 않음 |
+| Conciseness | 불필요한 반복 제거 |
+| Faithfulness | 원문에 없는 사실을 만들지 않음 |
+| Coherence | 독립적으로 읽혀도 자연스러움 |
+| Usefulness | 사용자의 질문이나 목적에 맞음 |
+
+길이 제한이 강할수록 무엇을 버릴지가 품질을 결정한다. query-focused 요약은 일반 요약보다 사용자의 관심사와 citation alignment가 중요하다.
+
+### Hallucination 줄이기
+
+생성식 요약은 원문 밖 지식을 섞거나 숫자를 바꿀 수 있다. 문장별 근거 span 연결, 추출식 초안 후 재작성, entailment 검증, 금지된 추론 규칙, human review가 도움이 된다. 특히 법률·의료·재무 요약은 불확실하거나 원문에 없는 내용을 명시적으로 배제해야 한다.
+
+### Multi-document 요약
+
+여러 문서에서는 중복 제거뿐 아니라 서로 다른 시점의 업데이트, 출처 간 충돌, 같은 entity의 다른 이름을 처리해야 한다. 최신성과 신뢰도 우선순위를 정하지 않으면 요약이 모순된 문장을 함께 담을 수 있다.
+
 ## 구현 (Implementation)
 
 간단한 추출식 요약은 문장 점수 상위 몇 개를 선택한다.
@@ -43,6 +72,11 @@ print(extractive_summary(sentences, scores))
 ```
 
 실제 시스템은 길이 제한, 중복 제거, 출처 표시, 금칙 정보 제거를 함께 고려한다.
+
+```python
+def compression_ratio(source_tokens, summary_tokens):
+    return len(summary_tokens) / max(len(source_tokens), 1)
+```
 
 ## 복잡도 (Complexity)
 

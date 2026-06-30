@@ -4,6 +4,7 @@
 - Prerequisites: [Policy-Gradient.md](Policy-Gradient.md), [Value-Functions.md](Value-Functions.md), [Function-Approximation.md](Function-Approximation.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -31,6 +32,30 @@ $$
 
 Actor는 $\delta_t\nabla_\theta\log\pi_\theta(a_t\mid s_t)$ 방향으로 업데이트된다.
 
+### Actor와 critic의 결합
+
+Actor는 정책 분포를 바꾸고, critic은 그 정책 아래의 가치를 추정한다. Actor가 바뀌면 critic의 target도 바뀌고, critic이 틀리면 actor가 잘못된 방향으로 업데이트될 수 있다. 이 상호 의존성이 actor-critic 튜닝을 어렵게 만든다.
+
+실무에서는 actor learning rate와 critic learning rate, value loss coefficient, entropy coefficient, rollout length를 함께 조정한다.
+
+### Advantage 추정
+
+TD error는 한 step advantage 추정으로 볼 수 있다. 더 긴 horizon 정보를 섞고 싶으면 n-step return이나 GAE를 사용한다. GAE는 $\lambda$로 bias-variance 균형을 조절한다.
+
+$$
+\hat A_t^{GAE}=\sum_{l=0}^{\infty}(\gamma\lambda)^l\delta_{t+l}
+$$
+
+$\lambda$가 0에 가까우면 TD(0)에 가깝고, 1에 가까우면 Monte Carlo return에 가까워진다.
+
+### Entropy regularization
+
+Actor가 너무 빨리 결정적 정책으로 수렴하면 탐험이 줄어 local optimum에 갇힐 수 있다. Entropy bonus는 정책 분포가 너무 좁아지는 것을 막는다. 하지만 entropy coefficient가 너무 크면 학습된 좋은 행동도 충분히 exploit하지 못한다.
+
+### Shared encoder의 장단점
+
+Actor와 critic이 같은 feature extractor를 공유하면 계산이 줄고 representation을 함께 배울 수 있다. 반대로 actor와 critic의 목표가 달라 gradient 간섭이 생길 수 있다. 복잡한 환경에서는 shared trunk와 separate head를 쓰되, loss scale을 신중히 맞춘다.
+
 ## 구현 (Implementation)
 
 TD error를 advantage로 쓰는 업데이트 신호는 다음처럼 계산된다.
@@ -45,6 +70,16 @@ print(td_advantage(1.0, value=0.4, next_value=0.7, gamma=0.99, done=False))
 ```
 
 실제 알고리즘은 actor loss, critic loss, entropy bonus를 함께 최적화하는 경우가 많다.
+
+```python
+def actor_critic_losses(log_prob, advantage, value, target, entropy, entropy_coef=0.01):
+    actor_loss = -log_prob * advantage
+    critic_loss = (value - target) ** 2
+    entropy_bonus = -entropy_coef * entropy
+    return actor_loss, critic_loss, entropy_bonus
+```
+
+Actor loss는 정책 개선, critic loss는 평가 정확도, entropy 항은 탐험을 각각 담당한다.
 
 ## 복잡도 (Complexity)
 

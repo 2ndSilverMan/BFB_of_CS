@@ -4,6 +4,7 @@
 - Prerequisites: [AI/Causal-Inference/Potential-Outcomes.md](Potential-Outcomes.md), [AI/Causal-Inference/Confounding.md](Confounding.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -25,6 +26,26 @@ $$ATE=E[Y(1)-Y(0)]$$
 
 ATE 외에 ATT, ATC, CATE처럼 대상 집단이나 조건을 바꾼 효과도 중요하다.
 
+```mermaid
+flowchart LR
+    Define["define treatment"] --> Estimand["ATE / ATT / CATE"]
+    Estimand --> Identify["identify from design/assumptions"]
+    Identify --> Estimate["estimate"]
+    Estimate --> Validate["sensitivity / robustness"]
+```
+
+### Treatment를 잘 정의하기
+
+처치는 "광고를 봤다"처럼 애매하면 안 된다. 노출 위치, 시간, 강도, 대상, compliance, competing treatment를 정의해야 한다. 처치 버전이 여러 개이면 같은 $T=1$ 안에서도 다른 효과가 섞여 SUTVA가 흔들린다.
+
+### 효과의 scale
+
+연속 outcome이면 평균 차이가 자연스럽지만, binary outcome에서는 risk difference, risk ratio, odds ratio가 모두 가능하다. scale을 바꾸면 효과 해석과 aggregation이 달라진다. 제품 실험에서는 절대 효과와 상대 효과를 함께 보는 편이 좋다.
+
+### Heterogeneity
+
+ATE가 작아도 subgroup에는 큰 양/음 효과가 있을 수 있다. CATE 분석은 유용하지만 subgroup을 많이 탐색하면 false discovery가 늘어나므로 사전 정의와 holdout 검증이 필요하다.
+
 ## 구현 (Implementation)
 
 ```python
@@ -33,6 +54,11 @@ def ate(mean_y_treated, mean_y_control):
 ```
 
 이 단순 차이는 무작위 배정이거나 적절한 조정이 끝난 뒤에야 인과 효과로 해석할 수 있다.
+
+```python
+def risk_ratio(p_treated, p_control):
+    return p_treated / p_control
+```
 
 ## 복잡도 (Complexity)
 

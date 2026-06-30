@@ -4,6 +4,7 @@
 - Prerequisites: [AI/LLMs/Transformer-Advanced.md](Transformer-Advanced.md), [Engineering/Performance/Benchmarking-Basics.md](../../Engineering/Performance/Benchmarking-Basics.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -21,6 +22,34 @@
 
 MQA/GQA는 query head는 여러 개 유지하되 key/value head를 공유해 KV cache memory를 줄인다.
 
+```mermaid
+flowchart LR
+    Full["full attention"] --> Exact["exact but faster: FlashAttention"]
+    Full --> Sparse["sparse/window patterns"]
+    Full --> KV["KV cache reduction: MQA/GQA"]
+    Full --> Approx["linear/low-rank approximations"]
+```
+
+### 정확 계산과 근사 계산을 구분하기
+
+| 기법 | 결과가 full attention과 같은가 | 주로 줄이는 것 |
+| --- | --- | --- |
+| FlashAttention | 같음 | HBM memory IO와 activation memory |
+| Sliding-window | 다름 | score matrix 범위 |
+| Sparse/block attention | 다름 | 계산하는 attention edge 수 |
+| MQA/GQA | 구조가 다름 | KV cache memory |
+| Linear attention | 다름 | length 제곱 비용 |
+
+FlashAttention은 attention 수식을 바꾸지 않고 softmax를 block 단위로 안정적으로 누적한다. 반면 sparse나 linear attention은 모델이 볼 수 있는 정보 경로 자체를 바꾸므로 품질 평가가 반드시 필요하다.
+
+### Benchmark protocol
+
+attention 최적화는 sequence length, batch size, head 수, dtype, causal 여부, GPU 종류에 따라 결과가 크게 달라진다. latency는 prefill과 decode를 나누어 보고, throughput은 tokens/sec와 requests/sec를 함께 기록한다. memory peak를 보지 않으면 더 빠른 kernel이 실제 serving batch를 키우지 못하는 경우를 놓칠 수 있다.
+
+### 긴 context 품질
+
+계산만 줄여도 모델이 긴 문맥을 잘 쓰는 것은 아니다. long-context 학습 데이터, 위치 인코딩 scaling, retrieval chunking, lost-in-the-middle 평가가 함께 필요하다. sliding-window attention은 매우 먼 token을 직접 보지 못하므로 global token, recurrence, retrieval을 결합하기도 한다.
+
 ## 구현 (Implementation)
 
 ```python
@@ -32,6 +61,11 @@ costs = {
 ```
 
 효율화는 throughput, latency, memory, 품질을 함께 측정해야 한다.
+
+```python
+def sliding_attention_edges(length, window):
+    return sum(min(i + 1, window) for i in range(length))
+```
 
 ## 복잡도 (Complexity)
 

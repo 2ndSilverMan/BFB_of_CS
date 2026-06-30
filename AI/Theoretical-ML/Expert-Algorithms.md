@@ -4,6 +4,7 @@
 - Prerequisites: [Regret-Minimization.md](Regret-Minimization.md), [Math/Probability-Statistics/Expectation.md](../../Math/Probability-Statistics/Expectation.md), [Convex-Learning.md](Convex-Learning.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -31,6 +32,26 @@ $$
 
 가 된다. 즉 평균 후회는 0으로 간다.
 
+### Potential function 관점
+
+Hedge 분석은 전체 weight 합을 potential로 놓고, 한편으로는 알고리즘 손실을 상계하고 다른 한편으로는 최고 전문가의 weight를 하계한다. Multiplicative update는 손실이 큰 전문가의 weight를 지수적으로 줄여 potential 성장을 통제한다.
+
+이 분석은 boosting, mirror descent, exponential family 업데이트와 깊게 연결된다.
+
+### 학습률 $\eta$
+
+$\eta$가 크면 최근 손실에 빠르게 반응하지만 noise에 민감해진다. $\eta$가 작으면 안정적이지만 좋은 전문가로 이동하는 속도가 느리다. 고전적 regret bound는 $T$와 $K$를 알고 $\eta\approx\sqrt{\log K/T}$로 잡는 형태가 많다.
+
+실전에서는 doubling trick이나 adaptive learning rate를 사용해 horizon을 미리 몰라도 작동하게 만든다.
+
+### Full-information과 bandit feedback
+
+전문가 문제에서는 모든 전문가의 손실 벡터를 관측한다고 가정한다. Bandit setting에서는 내가 선택한 전문가의 손실만 본다. 이 차이 때문에 bandit 알고리즘은 관측되지 않은 손실을 추정해야 하고 exploration이 필수다.
+
+### 전문가 집합의 품질
+
+Hedge는 최고 전문가와의 상대 성능을 보장한다. 전문가들이 모두 나쁘면 절대 성능도 나쁘다. 따라서 좋은 expert pool 구성, 다양성, 중복 제거, sleeping expert처럼 상황별 사용 가능성을 다루는 확장이 중요하다.
+
 ## 구현 (Implementation)
 
 손실 벡터를 모두 관측할 수 있는 full-information 설정의 Hedge는 간단하다.
@@ -52,6 +73,14 @@ def hedge_weights(loss_rows, eta):
 ```
 
 선택한 행동의 손실만 관측하는 bandit 설정에서는 중요도 가중 추정이 필요하다.
+
+```python
+def normalize(weights):
+    total = sum(weights)
+    return [w / total for w in weights]
+```
+
+전문가 알고리즘의 핵심 state는 expert별 weight이며, 확률 분포로 정규화해 행동 선택에 사용한다.
 
 ## 복잡도 (Complexity)
 

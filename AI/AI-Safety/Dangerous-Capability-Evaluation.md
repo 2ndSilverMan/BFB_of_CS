@@ -4,6 +4,7 @@
 - Prerequisites: [AI/AI-Safety/Capability-Evaluation.md](Capability-Evaluation.md), [AI/AI-Safety/Red-Teaming.md](Red-Teaming.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -21,6 +22,32 @@
 
 위험 평가는 안전한 sandbox, access control, expert review, dual-use handling을 요구한다. 결과는 release gate, mitigation priority, monitoring plan에 연결되어야 한다.
 
+### Capability, propensity, enablement
+
+위험 역량 평가는 세 가지를 분리한다.
+
+- Capability: 모델이 조건만 맞으면 위험 작업을 수행할 수 있는가
+- Propensity: 일반 사용 상황에서 그런 행동을 하려는 경향이 있는가
+- Enablement: 도구, 지식, scaffolding, 사용자 맥락이 실제 피해 가능성을 얼마나 키우는가
+
+모델이 안전 정책 때문에 거절하더라도 latent capability가 있을 수 있고, capability가 있어도 guardrail과 tool restriction 때문에 enablement가 낮을 수 있다. Release decision은 세 축을 함께 본다.
+
+### Elicitation 절차
+
+강한 모델의 능력은 기본 prompt에서 드러나지 않을 수 있다. Elicitation은 안전한 범위 안에서 프롬프트, 역할, 도구, 반복, decomposed task를 조정해 latent capability의 상한을 측정하는 절차다.
+
+하지만 elicitation은 dual-use 정보를 만들 수 있으므로 승인된 evaluator, sandbox, logging, output handling policy가 필요하다. 공개 보고서는 세부 절차를 그대로 노출하지 않고 위험 수준과 완화 결과를 요약한다.
+
+### Threshold와 release gate
+
+Dangerous capability eval은 단순 연구 결과가 아니라 gate에 연결되어야 한다. 예를 들어 특정 domain에서 threshold를 넘으면 tool access 제한, 추가 red team, 외부 전문가 검토, staged rollout, monitoring 강화가 자동으로 요구될 수 있다.
+
+Threshold는 domain별로 다르게 정한다. Cyber, bio, persuasion, autonomy는 피해 경로와 전문 검토 방식이 다르기 때문이다.
+
+### 정보 보안과 재현성의 균형
+
+과학적 평가는 재현성이 중요하지만, 위험 역량 평가는 상세 공개가 오용을 돕는 경우가 있다. 내부에는 충분히 재현 가능한 evidence를 남기고, 외부에는 비식별화된 방법론·범위·결론·완화 조치를 공개하는 식으로 균형을 잡는다.
+
 ## 구현 (Implementation)
 
 ```python
@@ -33,6 +60,17 @@ risk_eval = {
 ```
 
 평가 프롬프트와 결과물은 민감할 수 있으므로 접근 권한과 공개 범위를 제한한다.
+
+```python
+def release_controls_for_threshold(result):
+    if result["severity"] == "critical" and result["capability_confirmed"]:
+        return ["block_release", "external_expert_review", "mitigation_required"]
+    if result["severity"] == "high":
+        return ["staged_rollout", "tool_restriction", "monitoring"]
+    return ["standard_monitoring"]
+```
+
+평가 결과는 발견 보고서에서 끝나지 않고 배포 통제와 직접 연결되어야 한다.
 
 ## 복잡도 (Complexity)
 

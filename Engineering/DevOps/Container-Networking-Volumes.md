@@ -4,6 +4,7 @@
 - Prerequisites: [Engineering/DevOps/Docker-Basics.md](Docker-Basics.md), [Systems/Networks/Network-Models.md](../../Systems/Networks/Network-Models.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -18,6 +19,12 @@
 ## 이론 (Theory)
 
 Bridge network는 host 안의 container들을 가상 network로 묶고, port publishing은 host port를 container port에 연결한다. Container끼리는 같은 network에서 service name으로 통신할 수 있다. Volume은 Docker가 관리하는 저장 공간이고, bind mount는 host path를 직접 연결한다. 영구 데이터, backup, permission, SELinux/AppArmor 같은 보안 맥락을 고려한다.
+
+### 네트워크와 저장소의 수명주기
+
+컨테이너 네트워크는 service discovery, port publishing, bridge/overlay boundary를 분리해 이해해야 한다. `localhost`가 host인지 container 자신인지 헷갈리면 연결 오류가 자주 난다.
+
+Volume은 container보다 오래 산다. 백업, migration, 권한, fsync, 데이터 손상 복구를 고려하지 않고 임시 저장소처럼 쓰면 장애 시 복구가 어렵다.
 
 ## 구현 (Implementation)
 
@@ -67,4 +74,3 @@ Network hop, NAT, DNS lookup, filesystem driver, mount 방식이 성능과 디�
 
 - [Systems/Networks/Network-Models.md](../../Systems/Networks/Network-Models.md)
 - [Systems/Operating-Systems/File-Systems.md](../../Systems/Operating-Systems/File-Systems.md)
-

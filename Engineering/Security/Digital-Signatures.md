@@ -4,6 +4,7 @@
 - Prerequisites: [Engineering/Security/Hash-Functions.md](Hash-Functions.md), [Engineering/Security/Asymmetric-Encryption.md](Asymmetric-Encryption.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -28,6 +29,18 @@ $$
 안전성 목표는 공격자가 선택한 메시지의 서명을 받아 볼 수 있어도 새 메시지에 대한 유효한 서명을 만들기 어렵게 하는 EUF-CMA로 모델링한다. RSA-PSS, ECDSA, EdDSA 등이 대표적이다. 알고리즘마다 해시 선택, 인코딩, 난수 또는 결정적 nonce 규칙이 다르므로 원시 연산을 섞지 않는다.
 
 서명은 개인키 통제와 검증 정책이 온전할 때 출처 인증과 무결성을 제공한다. 법적 의미의 부인 방지는 키 공유, 키 탈취, 인증서 정책과 감사 기록까지 고려해야 하므로 수학적 검증 하나로 자동 보장되지 않는다.
+
+### Canonicalization
+
+서명 검증은 바이트 단위로 이뤄진다. JSON, XML, URL query처럼 표현 방식이 여러 개인 데이터는 서명 전 canonical form을 정해야 한다. 공백, 필드 순서, 숫자 표현, Unicode 정규화가 달라지면 같은 의미라도 다른 서명 대상이 된다.
+
+### Context binding
+
+서명 메시지에는 프로토콜 이름, 버전, 용도, 만료, 대상 audience를 포함한다. 그렇지 않으면 한 문맥에서 받은 유효한 서명을 다른 문맥에서 재사용하는 cross-protocol replay가 가능할 수 있다.
+
+### 키 수명주기
+
+서명 키는 생성, 저장, 접근 승인, 사용 로그, 회전, 폐기 절차가 필요하다. 코드 서명 키나 릴리스 키는 HSM/KMS, 다자 승인, 짧은 유효 기간 인증서, 투명 로그를 함께 쓰는 경우가 많다.
 
 ## 구현 (Implementation)
 

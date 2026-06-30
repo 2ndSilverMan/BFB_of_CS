@@ -4,6 +4,7 @@
 - Prerequisites: [Engineering/DevOps/Git/Git-Basics.md](Git/Git-Basics.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -18,6 +19,12 @@ Git 저장소는 파일별 변경분 상자라기보다 스냅샷 조각들을 �
 ## 이론 (Theory)
 
 Blob은 파일 내용, tree는 directory 구조, commit은 tree와 parent·author·message를 가리킨다. Ref는 branch와 tag 이름을 commit hash에 매핑한다. Loose object가 많아지면 packfile로 압축해 저장한다. Index는 다음 commit에 들어갈 tree를 준비하는 staging structure다.
+
+### 객체 모델로 사고하기
+
+Git의 commit은 snapshot을 가리키는 객체이고, branch는 commit을 가리키는 이동 가능한 ref다. 이 모델을 이해하면 reset, rebase, merge, reflog가 훨씬 덜 무섭다. 대부분의 "사라진 변경"은 객체가 즉시 지워진 것이 아니라 ref에서 도달하지 못하게 된 상태다.
+
+위험한 작업 전에는 현재 ref와 작업 트리 상태를 기록한다. Reflog는 로컬 안전망이지만 영구 백업은 아니다.
 
 ## 구현 (Implementation)
 
@@ -69,4 +76,3 @@ Object 조회는 hash 기반이라 빠르지만, history traversal은 commit gra
 
 - [Engineering/DevOps/Git/Git-Basics.md](Git/Git-Basics.md)
 - [Engineering/DevOps/Git/Git-Undoing-Changes.md](Git/Git-Undoing-Changes.md)
-

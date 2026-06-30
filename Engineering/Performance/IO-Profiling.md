@@ -4,6 +4,7 @@
 - Prerequisites: [Systems/Operating-Systems/IO-and-Drivers.md](../../Systems/Operating-Systems/IO-and-Drivers.md), [Systems/Networks/TCP-UDP.md](../../Systems/Networks/TCP-UDP.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -18,6 +19,12 @@ I/O 프로파일링은 disk, network, filesystem, database 같은 외부 자원 
 ## 이론 (Theory)
 
 I/O 병목은 queue depth, service time, wait time, bandwidth, syscall 수, retry, timeout으로 드러난다. Disk는 sequential/random access와 fsync가 중요하고, network는 RTT, packet loss, connection reuse, serialization cost가 중요하다. Off-CPU profiling은 thread가 sleep·block된 stack을 보여 준다.
+
+### I/O 대기와 처리량
+
+I/O 병목은 CPU 사용률이 낮아 보이면서 latency가 높게 나타날 수 있다. Disk, network, database, remote API 중 어디에서 대기하는지 span과 syscall, queue time을 분리해야 한다.
+
+Batching, async I/O, connection pooling, compression, caching은 I/O 비용을 줄일 수 있지만 tail latency와 backpressure를 함께 봐야 한다. 대기를 숨기는 것이 대기 원인을 제거하는 것은 아니다.
 
 ## 구현 (Implementation)
 
@@ -74,4 +81,3 @@ I/O 시간은 데이터 크기뿐 아니라 요청 수, seek, RTT, queueing에 �
 
 - [Systems/Operating-Systems/IO-and-Drivers.md](../../Systems/Operating-Systems/IO-and-Drivers.md)
 - [Systems/Networks/TCP-UDP.md](../../Systems/Networks/TCP-UDP.md)
-

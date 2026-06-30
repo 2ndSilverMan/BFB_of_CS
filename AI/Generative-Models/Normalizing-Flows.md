@@ -4,6 +4,7 @@
 - Prerequisites: [Math/Linear-Algebra/Determinant.md](../../Math/Linear-Algebra/Determinant.md), [Math/Probability-Statistics/Distributions.md](../../Math/Probability-Statistics/Distributions.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -23,6 +24,33 @@ $$\log p_X(x)=\log p_Z(f^{-1}(x))+\log\left|\det \frac{\partial f^{-1}}{\partial
 
 따라서 flow layer는 invertible해야 하며 Jacobian determinant를 효율적으로 계산할 수 있어야 한다. Coupling layer, autoregressive flow, invertible convolution 등이 대표 설계다.
 
+```mermaid
+flowchart LR
+    Z["base noise z"] --> F1["invertible layer"]
+    F1 --> F2["invertible layer"]
+    F2 --> X["data sample x"]
+    X --> Inv["inverse + log det"]
+```
+
+### Flow layer의 세 조건
+
+좋은 flow layer는 forward sampling, inverse density evaluation, log-determinant 계산이 모두 가능해야 한다. 일반 neural network는 표현력이 높아도 inverse나 determinant가 어려워 flow layer로 바로 쓸 수 없다.
+
+| 요구 | 이유 |
+| --- | --- |
+| Invertibility | $x$와 $z$를 서로 변환 |
+| Efficient log-det | likelihood 계산 |
+| Expressivity | 복잡한 분포 표현 |
+| Stable numerics | scale 폭주 방지 |
+
+### Exact likelihood의 함정
+
+flow는 exact likelihood를 계산할 수 있지만, likelihood가 사람이 보는 sample quality와 항상 일치하지 않는다. 이미지에서는 배경 texture나 low-level 통계가 likelihood를 지배할 수 있고, anomaly detection에서도 이상 샘플이 높은 likelihood를 받을 수 있다.
+
+### Dequantization
+
+이미지 pixel은 discrete 값인데 flow는 continuous density를 모델링한다. 그래서 uniform 또는 variational dequantization으로 pixel 값을 연속 공간에 올려야 한다. 이 과정을 빼면 likelihood 해석이 왜곡된다.
+
 ## 구현 (Implementation)
 
 ```python
@@ -36,6 +64,11 @@ def flow_log_prob(x, inverse_layers, base_log_prob):
 ```
 
 학습은 negative log likelihood를 최소화한다.
+
+```python
+def negative_log_likelihood(log_prob):
+    return -log_prob
+```
 
 ## 복잡도 (Complexity)
 

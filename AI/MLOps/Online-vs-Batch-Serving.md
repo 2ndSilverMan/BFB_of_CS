@@ -4,6 +4,7 @@
 - Prerequisites: [AI/MLOps/Model-Registry.md](Model-Registry.md), [Engineering/System-Design/Scalability.md](../../Engineering/System-Design/Scalability.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -21,6 +22,35 @@
 
 Hybrid pattern도 흔하다. 배치로 후보나 feature를 미리 만들고, 온라인에서 context를 반영해 rerank한다.
 
+```mermaid
+flowchart LR
+    Data["input data"] --> Batch["batch scoring"]
+    Data --> Online["online scoring"]
+    Batch --> Cache["precomputed cache"]
+    Cache --> Online
+    Online --> User["user response"]
+```
+
+### 선택 기준
+
+| 기준 | 온라인이 유리 | 배치가 유리 |
+| --- | --- | --- |
+| Freshness | 초·분 단위 필요 | 시간·일 단위 충분 |
+| Latency | 즉시 응답 필요 | downstream이 비동기 |
+| 비용 | QPS가 낮거나 가치가 큼 | 대량을 묶어 처리 가능 |
+| 장애 허용 | fallback 설계 필요 | 재시도와 backfill 가능 |
+| Feature | 실시간 context 필요 | 사전 계산 feature 충분 |
+
+서비스 요구가 섞이면 hybrid가 자연스럽다. 추천에서는 배치로 후보를 만들고 온라인에서 최신 행동을 반영해 rerank하는 식이다.
+
+### 배치 추론의 안전 조건
+
+배치도 운영 시스템이다. output partition을 원자적으로 publish하고, 같은 job을 두 번 실행해도 결과가 중복되지 않아야 하며, model/data version을 output에 남겨야 한다. 실패한 partition만 재실행할 수 있게 checkpoint와 manifest를 둔다.
+
+### 온라인 fallback
+
+온라인 모델이 timeout이나 feature lookup 실패를 만나면 빈 응답보다 degrade된 안전 응답이 나을 수 있다. fallback은 rule, cached score, previous model, batch precompute 등으로 설계하되, fallback 발생률도 monitoring한다.
+
 ## 구현 (Implementation)
 
 ```python
@@ -33,6 +63,11 @@ def choose_serving_mode(freshness, latency_ms, volume):
 ```
 
 실제 설계에서는 SLA, cost budget, feature availability, failure blast radius를 함께 본다.
+
+```python
+def publish_key(model_version, partition):
+    return f"predictions/{model_version}/{partition}"
+```
 
 ## 복잡도 (Complexity)
 

@@ -4,6 +4,7 @@
 - Prerequisites: [AI/Generative-Models/Normalizing-Flows.md](Normalizing-Flows.md), [AI/Deep-Learning/CNN.md](../Deep-Learning/CNN.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -23,6 +24,25 @@ $$y_a=x_a,\quad y_b=x_b\odot \exp(s(x_a))+t(x_a)$$
 
 처럼 변환한다. Jacobian이 triangular이므로 log determinant는 $s(x_a)$의 합으로 계산된다. Glow는 invertible 1×1 convolution 등으로 channel mixing을 강화한다.
 
+```mermaid
+flowchart LR
+    X["x split into xa, xb"] --> Coupling["affine coupling"]
+    Coupling --> Mix["permutation / invertible 1x1 conv"]
+    Mix --> Next["next flow layer"]
+```
+
+### Coupling layer의 장단점
+
+한 coupling layer는 일부 차원을 그대로 둔다. 이것은 inverse와 determinant를 쉽게 만들지만 표현력을 제한한다. 여러 layer 사이에 mask, permutation, invertible 1x1 convolution을 넣어 모든 차원이 충분히 변환되도록 한다.
+
+### Scale 안정성
+
+affine coupling의 $\exp(s)$는 scale을 크게 키울 수 있어 numerical instability가 생길 수 있다. clamp, bounded activation, actnorm, careful initialization으로 log-det와 inverse 계산을 안정화한다.
+
+### Multi-scale 구조
+
+이미지 flow는 squeeze로 공간 해상도를 channel로 옮기고, 일부 latent를 중간에 factor-out하는 multi-scale 구조를 쓴다. 이는 메모리와 계산을 줄이면서 local/global 정보를 단계적으로 모델링한다.
+
 ## 구현 (Implementation)
 
 ```python
@@ -33,6 +53,11 @@ def affine_coupling(x_b, scale, shift):
 ```
 
 Mask나 channel split을 바꿔 여러 layer가 전체 차원을 점진적으로 변환하게 한다.
+
+```python
+def inverse_affine_coupling(y_b, scale, shift):
+    return (y_b - shift) * exp(-scale)
+```
 
 ## 복잡도 (Complexity)
 

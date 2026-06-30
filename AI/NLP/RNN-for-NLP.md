@@ -4,6 +4,7 @@
 - Prerequisites: [AI/Deep-Learning/RNN-LSTM-GRU.md](../Deep-Learning/RNN-LSTM-GRU.md), [Text-Preprocessing.md](Text-Preprocessing.md), [Word-Embeddings.md](Word-Embeddings.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -27,6 +28,35 @@ $$
 
 RNN은 자연스럽게 순서를 반영하지만, 긴 시퀀스를 순차 처리해야 하므로 병렬화가 어렵다. Transformer가 많은 NLP 작업에서 주류가 된 이유 중 하나다.
 
+```mermaid
+flowchart LR
+    Tok1["token 1"] --> H1["h1"]
+    H1 --> H2["h2"]
+    Tok2["token 2"] --> H2
+    H2 --> H3["h3"]
+    Tok3["token 3"] --> H3
+    H3 --> Out["output"]
+```
+
+### NLP 과제별 출력 설계
+
+| 과제 | 출력 위치 | 예 |
+| --- | --- | --- |
+| Sequence classification | 마지막 state 또는 pooling | 감성 분석 |
+| Token classification | 각 time step | NER, POS tagging |
+| Language modeling | 각 위치의 다음 token | 문자/단어 LM |
+| Seq2seq | encoder state와 decoder | 번역, 요약 |
+
+마지막 hidden state 하나만 쓰면 긴 문서의 초반 정보가 압축 중 사라질 수 있다. pooling, attention, hierarchical encoder가 대안이 된다.
+
+### BiRNN과 causal 제약
+
+BiRNN은 왼쪽과 오른쪽 문맥을 모두 보므로 NER처럼 전체 문장이 주어진 task에 적합하다. 그러나 실시간 생성이나 causal LM에서는 미래 token을 볼 수 없기 때문에 그대로 사용할 수 없다.
+
+### 실전 학습 문제
+
+RNN은 길이가 긴 batch에서 padding 낭비가 커질 수 있어 bucketing을 사용한다. gradient clipping은 exploding gradient를 줄이고, packed sequence나 mask는 padding token이 loss에 영향을 주지 않게 한다.
+
 ## 구현 (Implementation)
 
 개념적으로는 토큰을 하나씩 처리하며 상태를 갱신한다.
@@ -42,6 +72,13 @@ def rnn_forward(tokens, init_state, step):
 ```
 
 실제 모델은 embedding lookup, recurrent layer, dropout, output projection을 조합한다.
+
+```python
+def masked_average(states, mask):
+    total = sum(s for s, m in zip(states, mask) if m)
+    count = sum(1 for m in mask if m)
+    return total / max(count, 1)
+```
 
 ## 복잡도 (Complexity)
 

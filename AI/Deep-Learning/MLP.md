@@ -4,6 +4,7 @@
 - Prerequisites: [AI/Machine-Learning/Logistic-Regression.md](../Machine-Learning/Logistic-Regression.md), [Math/Linear-Algebra/Matrices.md](../../Math/Linear-Algebra/Matrices.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -23,6 +24,38 @@ $$z^{(l)}=W^{(l)}h^{(l-1)}+b^{(l)},\qquad h^{(l)}=\phi(z^{(l)})$$
 
 다. 활성화가 없으면 여러 선형층의 합성도 하나의 선형변환이므로 깊이의 표현력이 생기지 않는다. 충분한 폭의 MLP는 적절한 조건에서 연속함수를 근사할 수 있지만, 효율적인 학습과 일반화까지 자동 보장하는 정리는 아니다.
 
+```mermaid
+flowchart LR
+    X["입력 x"] --> A1["Affine: xW1 + b1"]
+    A1 --> H1["Activation"]
+    H1 --> A2["Affine: hW2 + b2"]
+    A2 --> Y["logit 또는 예측값"]
+```
+
+### Shape와 파라미터 해석
+
+입력 배치가 $X\in\mathbb{R}^{B\times d_{in}}$이고 hidden width가 $h$이면 첫 층은 $W_1\in\mathbb{R}^{d_{in}\times h}$, $b_1\in\mathbb{R}^{h}$를 가진다. 출력 차원이 $c$이면 둘째 층은 $W_2\in\mathbb{R}^{h\times c}$, $b_2\in\mathbb{R}^{c}$다. 이때 전체 파라미터 수는
+
+$$d_{in}h+h+hc+c$$
+
+다. tabular 모델에서 입력 feature 수가 크거나 hidden width를 크게 잡으면 파라미터가 빠르게 늘어나므로, 데이터 수와 regularization을 함께 보아야 한다.
+
+### 초기화, 대칭, 활성화 분포
+
+모든 hidden unit을 같은 값으로 초기화하면 각 unit이 같은 gradient를 받아 끝까지 같은 역할을 한다. 그래서 무작위 초기화는 단순한 관례가 아니라 대칭을 깨기 위한 필수 장치다. ReLU 계열에는 He 초기화, tanh 계열에는 Xavier/Glorot 초기화가 흔히 쓰이며, 목적은 층을 지나도 activation과 gradient scale이 급격히 사라지거나 폭주하지 않게 하는 것이다.
+
+### 표현력, 최적화, 일반화의 분리
+
+MLP가 충분한 함수를 표현할 수 있다는 말은 세 가지를 보장하지 않는다.
+
+| 질문 | 확인해야 할 것 |
+| --- | --- |
+| 표현할 수 있는가 | depth, width, activation, 입력 feature |
+| 학습할 수 있는가 | 초기화, optimizer, learning rate, normalization |
+| 일반화하는가 | 데이터 수, regularization, 검증 성능, 분포 차이 |
+
+따라서 "모델이 작아서 못 맞춘다"와 "모델은 충분하지만 학습이 불안정하다"와 "훈련은 맞추지만 검증에서 무너진다"를 분리해 진단해야 한다.
+
 ## 구현 (Implementation)
 
 ```python
@@ -39,6 +72,11 @@ def forward(x, w1, b1, w2, b2):
 ```
 
 가중치는 대칭을 깨도록 무작위 초기화하고, 출력층 활성화와 손실은 과제에 맞춘다.
+
+```python
+def mlp_param_count(d_in, hidden, d_out):
+    return d_in * hidden + hidden + hidden * d_out + d_out
+```
 
 ## 복잡도 (Complexity)
 

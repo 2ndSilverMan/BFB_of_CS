@@ -4,6 +4,7 @@
 - Prerequisites: [Engineering/DevOps/Cloud-Computing.md](Cloud-Computing.md), [Engineering/DevOps/Git/Git-Basics.md](Git/Git-Basics.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -18,6 +19,12 @@ Terraform은 provider API를 통해 cloud와 infrastructure resource를 선언�
 ## 이론 (Theory)
 
 Terraform configuration은 provider, resource, data source, variable, output, module로 구성된다. State는 실제 resource와 configuration의 매핑을 저장하므로 안전하게 관리해야 한다. `plan`은 변경 예측, `apply`는 적용, `destroy`는 제거다. Remote state와 locking은 팀 작업에서 중요하다.
+
+### State와 drift
+
+Terraform의 핵심 자산은 state다. Remote backend, state locking, 접근 제어, secret 노출 방지, 백업이 필수다. 실제 인프라가 수동 변경되면 drift가 생기므로 plan 결과를 정기적으로 확인하고 예외 변경을 코드로 되돌린다.
+
+Module은 재사용을 돕지만 추상화가 과하면 provider의 중요한 의미를 숨긴다. 입력/출력, version constraint, lifecycle rule을 명확히 한다.
 
 ## 구현 (Implementation)
 
@@ -72,4 +79,3 @@ Resource 수와 provider API dependency가 늘수록 plan 시간이 길어지고
 
 - [Engineering/DevOps/Cloud-Computing.md](Cloud-Computing.md)
 - [Engineering/DevOps/GitHub/GitHub-Code-Review.md](GitHub/GitHub-Code-Review.md)
-

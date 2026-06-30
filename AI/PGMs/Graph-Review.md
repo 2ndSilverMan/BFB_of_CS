@@ -4,6 +4,7 @@
 - Prerequisites: [Math/Discrete/Graph-Theory.md](../../Math/Discrete/Graph-Theory.md), [Math/Probability-Statistics/Probability-Basics.md](../../Math/Probability-Statistics/Probability-Basics.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -28,6 +29,30 @@ PGM에서 자주 쓰는 그래프 용어는 다음과 같다.
 - clique: 무방향 그래프에서 모든 노드 쌍이 연결된 부분집합
 
 방향 그래프는 조건부 확률의 곱으로 결합분포를 인수분해하기 좋다. 무방향 그래프는 대칭적인 상호작용과 국소 compatibility를 표현하기 좋다.
+
+```mermaid
+flowchart LR
+    Variables["random variables"] --> DAG["directed graph / BN"]
+    Variables --> UG["undirected graph / MRF"]
+    Variables --> FG["factor graph"]
+    DAG --> CI["conditional independence"]
+    UG --> CI
+    FG --> Inference["message passing / elimination"]
+```
+
+### 그래프 문법별 의미
+
+| 그래프 | 간선 의미 | 대표 모델 |
+| --- | --- | --- |
+| DAG | 부모가 자식의 조건부 분포를 정함 | Bayesian network, causal DAG |
+| Undirected | 대칭적 compatibility 또는 Markov blanket | MRF |
+| Factor graph | 변수와 factor의 명시적 연결 | BP, factorized inference |
+
+같은 변수 집합이라도 어떤 그래프 문법을 쓰느냐에 따라 독립성 판정과 추론 알고리즘이 달라진다.
+
+### Treewidth 직관
+
+그래프가 sparse해도 긴 cycle이나 조밀한 부분구조 때문에 추론 중 큰 factor가 생길 수 있다. treewidth는 변수 소거 과정에서 만들어지는 가장 큰 중간 clique 크기와 관련되며, 정확 추론의 실질 난이도를 좌우한다.
 
 ## 구현 (Implementation)
 

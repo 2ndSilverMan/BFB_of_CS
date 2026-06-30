@@ -94,6 +94,12 @@ class PureFunctionTests(unittest.TestCase):
     def test_count_table_columns(self):
         self.assertEqual(vd.count_table_columns("| a | b |"), 2)
 
+    def test_depth_tier(self):
+        self.assertEqual(vd.depth_tier("Deep-dive (자기완결)"), "Deep-dive")
+        self.assertEqual(vd.depth_tier("Standard"), "Standard")
+        self.assertEqual(vd.depth_tier("  Deep-dive  "), "Deep-dive")
+        self.assertEqual(vd.depth_tier(""), "")
+
     def test_metadata_block(self):
         lines = [
             "# 제목 (Title)",
@@ -269,6 +275,41 @@ class SummaryCountTests(unittest.TestCase):
         self.assertEqual(
             sync_summary_counts.status_columns(header),
             {"Draft": 1, "Review": 2, "Planned": 3},
+        )
+
+
+class DepthFieldTests(unittest.TestCase):
+    def setUp(self):
+        self.root = Path("repo")
+        self.path = self.root / "Programming" / "X.md"
+
+    def _doc(self, depth=None):
+        lines = [
+            "# X (Title)",
+            "",
+            "- Level: Beginner",
+            "- Prerequisites: 없음",
+            "- Status: Draft",
+            "- Reviewed-by: -",
+        ]
+        if depth is not None:
+            lines.append(f"- Depth: {depth}")
+        lines += ["", "---", ""]
+        return lines
+
+    def test_absent_depth_ok(self):
+        issues = vd.check_topic_metadata(self.path, self.root, self._doc())
+        self.assertFalse(any(i.type == "BadMetadataDepth" for i in issues))
+
+    def test_valid_depth_with_note_passes(self):
+        issues = vd.check_topic_metadata(self.path, self.root, self._doc("Deep-dive (자기완결)"))
+        self.assertFalse(any(i.type == "BadMetadataDepth" for i in issues))
+
+    def test_invalid_depth_detected(self):
+        issues = vd.check_topic_metadata(self.path, self.root, self._doc("Encyclopedic"))
+        self.assertTrue(
+            any(i.type == "BadMetadataDepth" and "Encyclopedic" in i.message for i in issues),
+            msg=f"issues: {issues}",
         )
 
 

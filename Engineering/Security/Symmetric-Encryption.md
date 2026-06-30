@@ -4,6 +4,7 @@
 - Prerequisites: [Engineering/Security/Hash-Functions.md](Hash-Functions.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -26,6 +27,20 @@ $$
 AES는 128비트 블록과 128·192·256비트 키를 사용하는 표준 블록 암호다. GCM 모드는 AES를 인증 암호로 구성한다. ChaCha20은 스트림 암호이며 Poly1305 인증자와 결합한다.
 
 가장 중요한 운용 규칙은 **같은 키에서 nonce를 재사용하지 않는 것**이다. GCM과 ChaCha20-Poly1305 모두 nonce 재사용 시 기밀성과 무결성이 심각하게 깨질 수 있다. nonce는 비밀일 필요는 없지만 키별로 유일해야 한다. 키 생성·저장·회전과 실패 시 평문을 반환하지 않는 인증 태그 검증도 알고리즘 선택만큼 중요하다.
+
+### Nonce 설계
+
+Nonce는 비밀이 아니라 유일성이 핵심이다. Random nonce를 쓰면 충분한 길이와 충돌 확률을 계산해야 하고, counter nonce를 쓰면 재시작·동시성·샤딩에서 중복이 나지 않게 해야 한다. 분산 시스템에서는 key scope를 좁히거나 prefix를 할당해 충돌 영역을 분리한다.
+
+### Envelope encryption
+
+대용량 데이터는 데이터 키(DEK)로 암호화하고, DEK는 KMS/HSM의 키 암호화 키(KEK)로 감싼다. 이렇게 하면 데이터 전체를 재암호화하지 않고도 KEK 회전과 접근 제어를 운영할 수 있다.
+
+암호문 포맷에는 알고리즘, 키 ID, nonce, AAD 버전, ciphertext, tag를 명확히 담는다.
+
+### 오류 처리
+
+복호화 실패는 인증 실패로 취급하고 평문 일부도 반환하지 않는다. 실패 원인을 상세히 외부에 노출하면 oracle이 될 수 있으므로 로그에는 상관 ID와 내부 진단 정보를 남기되 클라이언트 응답은 단순화한다.
 
 ## 구현 (Implementation)
 

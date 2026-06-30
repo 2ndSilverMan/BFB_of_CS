@@ -4,6 +4,7 @@
 - Prerequisites: [GD-Convergence.md](GD-Convergence.md), [Non-Convex-Convergence.md](Non-Convex-Convergence.md), [AI/Machine-Learning/Regularization.md](../Machine-Learning/Regularization.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -20,6 +21,24 @@
 선형 회귀에서 underdetermined 시스템 $Xw=y$는 해가 많다. 작은 초기값에서 gradient descent를 쓰면 명시적으로 L2 정규화를 넣지 않아도 minimum-norm solution에 도달한다. 이는 알고리즘의 경로가 해 선택에 영향을 준다는 단순하고 강력한 예다.
 
 분류 문제에서는 separable data에 logistic loss를 gradient descent로 최적화할 때 가중치 norm은 계속 커질 수 있지만 방향은 max-margin classifier 쪽으로 수렴하는 결과가 알려져 있다. 딥러닝에서는 이 현상이 더 복잡하지만, optimizer와 architecture가 일반화 성질에 영향을 준다는 점은 핵심이다.
+
+### Minimum-norm bias
+
+Underdetermined linear regression에서 $Xw=y$를 만족하는 해가 무한히 많을 때, 0 초기화의 gradient descent는 row space 안에서만 움직인다. 따라서 null space 성분이 생기지 않고 minimum Euclidean norm 해로 수렴한다.
+
+이 예시는 명시적 L2 penalty가 없어도 optimization path가 해 선택을 제한할 수 있음을 보여 준다.
+
+### Max-margin bias
+
+선형 분류에서 데이터가 separable이면 logistic loss의 infimum은 0이지만 finite minimizer는 없다. Gradient descent는 weight norm을 계속 키우면서도 방향은 max-margin separator로 수렴할 수 있다. 일반화와 margin이 연결되므로, 이 방향 선택은 중요한 implicit bias다.
+
+### SGD noise와 batch size
+
+SGD의 stochastic noise는 단순한 계산 오차가 아니라 어떤 basin이나 해를 선택하는지에 영향을 줄 수 있다. 작은 batch는 noise가 커서 sharp한 해에서 빠져나올 가능성이 있고, 큰 batch는 더 deterministic하게 움직인다. 다만 "flat minimum이 항상 일반화가 좋다"는 식의 단순화는 조심해야 한다.
+
+### Architecture bias
+
+암묵적 규제는 optimizer만이 아니라 architecture에서도 온다. CNN은 locality와 weight sharing을, Transformer는 attention 기반 token interaction을, normalization layer는 scale 동역학을 통해 특정 함수 family를 더 쉽게 학습하게 만든다.
 
 ## 구현 (Implementation)
 
@@ -38,6 +57,17 @@ print(gradient_step(w, grad, eta=0.1))
 ```
 
 실험적으로는 optimizer, batch size, initialization, learning rate schedule을 바꿔 일반화 차이를 비교한다.
+
+```python
+experiment_grid = {
+    "optimizer": ["sgd", "adam"],
+    "batch_size": [32, 256],
+    "initialization_scale": [0.01, 0.1],
+    "explicit_weight_decay": [0.0],
+}
+```
+
+명시적 regularization을 고정하고 학습 절차만 바꾸면 implicit bias를 관찰하기 쉽다.
 
 ## 복잡도 (Complexity)
 

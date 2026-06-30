@@ -4,6 +4,7 @@
 - Prerequisites: [AI/Deep-Learning/MLP.md](MLP.md), [AI/Machine-Learning/Regularization.md](../Machine-Learning/Regularization.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -23,6 +24,33 @@ $$\tilde h_i=\frac{m_i}{q}h_i$$
 
 로 훈련한다. 그러면 $E[\tilde h_i]=h_i$여서 추론 때 추가 scale 변경이 필요 없다. dropout rate가 너무 크면 정보와 gradient가 과도하게 사라져 underfitting할 수 있다.
 
+```mermaid
+flowchart LR
+    H["activation h"] --> M["Bernoulli mask"]
+    M --> S["scale by 1 / keep_prob"]
+    S --> T["training output"]
+    H --> E["eval output: unchanged"]
+```
+
+### Dropout이 주는 규제 효과
+
+dropout은 특정 hidden unit 조합에만 의존하는 co-adaptation을 줄인다. 매 step마다 다른 부분 네트워크를 학습하는 효과가 있어 ensemble의 근사처럼 해석할 수 있다. 다만 실제 ensemble처럼 독립 모델을 학습하는 것은 아니며, 공유 파라미터 하나에 noise를 넣는 방법이다.
+
+### 어디에 넣을 것인가
+
+| 위치 | 기대 효과 | 주의점 |
+| --- | --- | --- |
+| MLP hidden layer | 과적합 완화 | rate가 크면 underfitting |
+| Classification head | 작은 downstream 데이터에서 안정화 | backbone 표현까지 무너뜨리지 않도록 작게 시작 |
+| Attention weight | 특정 token 의존 완화 | causal mask와 별개의 noise임 |
+| Residual branch | 깊은 모델 regularization | stochastic depth와 구분 |
+
+CNN의 early convolution layer에는 dropout보다 data augmentation, weight decay, BatchNorm 조합이 더 효과적인 경우가 많다. 반대로 작은 tabular MLP나 classifier head에서는 dropout이 단순하고 강한 baseline이 될 수 있다.
+
+### BatchNorm과 train/eval 모드
+
+Dropout과 BatchNorm은 모두 train/eval 모드에 따라 동작이 달라진다. Dropout 뒤의 activation 분포가 흔들리면 BatchNorm의 batch 통계도 영향을 받으므로 위치와 rate를 조심해야 한다. 검증 시 dropout을 끄지 않으면 예측이 매번 달라지고, BatchNorm도 train 모드면 batch 구성에 따라 결과가 달라진다.
+
 ## 구현 (Implementation)
 
 ```python
@@ -32,10 +60,14 @@ import numpy as np
 def dropout(x, rate, training, rng):
     if not training or rate == 0:
         return x
+    if not 0 <= rate < 1:
+        raise ValueError("rate must be in [0, 1)")
     keep = 1.0 - rate
     mask = rng.random(x.shape) < keep
     return x * mask / keep
 ```
+
+Monte Carlo dropout처럼 추론 때 일부러 dropout을 켜서 여러 번 예측하고 분산을 불확실성 근사로 쓰는 방법도 있다. 이 경우에는 일반 inference와 다르므로 실험 목적을 명확히 기록해야 한다.
 
 ## 복잡도 (Complexity)
 

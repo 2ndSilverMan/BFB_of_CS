@@ -4,6 +4,7 @@
 - Prerequisites: [Bayesian-Networks.md](Bayesian-Networks.md), [Math/Discrete/Graph-Theory.md](../../Math/Discrete/Graph-Theory.md), [Math/Probability-Statistics/Probability-Basics.md](../../Math/Probability-Statistics/Probability-Basics.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -32,6 +33,32 @@ collider:   A → B ← C
 - collider나 그 후손을 관측하면 그 경로는 열린다.
 
 모든 경로가 막히면 $X$와 $Y$는 $Z$에 의해 d-separated라고 한다. 베이지안 네트워크의 Markov property에 따라, 그래프가 분포에 충실하다는 적절한 가정 아래 d-분리는 조건부 독립성 $X\perp Y\mid Z$를 읽는 도구가 된다.
+
+```mermaid
+flowchart LR
+    X["X"] --> Paths["all paths to Y"]
+    Z["conditioned set Z"] --> Paths
+    Paths --> Blocked["blocked?"]
+    Blocked --> CI["conditional independence claim"]
+```
+
+### 세 패턴 요약
+
+| 패턴 | 조건화하지 않음 | 가운데 노드 조건화 |
+| --- | --- | --- |
+| Chain $A\to B\to C$ | 열림 | 막힘 |
+| Fork $A\leftarrow B\to C$ | 열림 | 막힘 |
+| Collider $A\to B\leftarrow C$ | 막힘 | 열림 |
+
+collider는 가장 자주 실수하는 패턴이다. 공통 결과나 선택 기준을 조건화하면 원래 독립인 원인들 사이에 의존이 생길 수 있다.
+
+### Faithfulness 주의
+
+d-분리는 그래프가 함의하는 독립성을 알려 준다. 실제 분포에서는 파라미터가 우연히 상쇄되어 그래프상 연결된 변수들이 독립처럼 보일 수 있다. 구조 학습에서는 이런 faithfulness 가정의 한계를 염두에 둔다.
+
+### 인과 조정과의 연결
+
+backdoor path를 막으려면 confounder 경로를 차단하되 collider를 열지 않아야 한다. "관련 있어 보이는 변수를 많이 넣기"가 좋은 조정 전략이 아닌 이유가 여기에 있다.
 
 ## 구현 (Implementation)
 

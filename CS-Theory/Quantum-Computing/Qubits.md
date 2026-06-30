@@ -4,6 +4,7 @@
 - Prerequisites: [Math/Linear-Algebra/Vectors.md](../../Math/Linear-Algebra/Vectors.md), [Math/Linear-Algebra/Matrices.md](../../Math/Linear-Algebra/Matrices.md), [Math/Probability-Statistics/Probability-Basics.md](../../Math/Probability-Statistics/Probability-Basics.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -21,6 +22,15 @@ $$
 
 큐비트는 “0과 1을 동시에 몰래 들고 있는 동전”이라기보다, 측정 결과의 확률과 간섭 가능성을 담은 복소수 벡터다. 측정하기 전에는 진폭(amplitude)이 계산에 참여하고, 측정하면 확률적으로 0 또는 1이 나온다.
 
+```mermaid
+flowchart LR
+    ZERO["|0>"] --> H["Hadamard H"]
+    H --> SUPER["(|0> + |1>) / sqrt(2)"]
+    SUPER --> MEASURE["measure"]
+    MEASURE --> P0["0 with 1/2"]
+    MEASURE --> P1["1 with 1/2"]
+```
+
 ## 이론 (Theory)
 
 계산 기저에서
@@ -35,6 +45,10 @@ $$
 전역 위상(global phase)은 관측 결과를 바꾸지 않는다. 즉 $|\psi\rangle$와 $e^{i\theta}|\psi\rangle$는 물리적으로 같은 상태로 본다. 반면 상대 위상은 간섭에 영향을 주므로 계산적으로 중요하다.
 
 $n$개의 큐비트 상태 공간은 텐서곱으로 만들어지며 차원이 $2^n$이다. 이 때문에 고전 컴퓨터로 일반 양자 상태를 그대로 시뮬레이션하면 메모리가 지수적으로 증가한다. 양자 게이트는 상태 벡터의 norm을 보존하는 unitary 변환으로 표현된다.
+
+### 중첩과 확률 혼합의 차이
+
+상태 $(|0\rangle+|1\rangle)/\sqrt2$는 측정 확률만 보면 "0과 1이 각각 50%"인 동전과 같다. 하지만 Hadamard 같은 게이트를 한 번 더 적용하면 간섭 때문에 다시 $|0\rangle$로 돌아갈 수 있다. 고전적 확률 혼합에는 이런 상대 위상 간섭이 없다.
 
 ## 구현 (Implementation)
 
@@ -58,9 +72,24 @@ print(measurement_probs(alpha, beta))
 
 상태 벡터 시뮬레이터에서는 $n$큐비트 상태를 길이 $2^n$ 복소수 배열로 저장한다.
 
+Hadamard 적용 예:
+
+```python
+def hadamard(alpha, beta):
+    s = 2 ** 0.5
+    return (alpha + beta) / s, (alpha - beta) / s
+
+print(hadamard(1, 0))  # |0> -> (|0> + |1>) / sqrt(2)
+print(hadamard(*hadamard(1, 0)))  # 다시 |0> 근처
+```
+
+두 번째 Hadamard에서 $|1\rangle$ 진폭이 상쇄된다. 이것이 간섭이다.
+
 ## 복잡도 (Complexity)
 
 단일 큐비트 계산은 작지만, $n$큐비트 상태를 일반적으로 표현하려면 $2^n$개의 복소수 진폭이 필요하다. 따라서 고전 시뮬레이션의 메모리와 연산 비용은 큐비트 수에 지수적으로 증가한다. 실제 양자 하드웨어에서는 측정 결과가 확률적이므로 통계적 추정을 위해 반복 실행이 필요하다.
+
+워크드 예제: 30큐비트 상태 벡터는 $2^{30}\approx10^9$개 복소수 진폭이 필요하다. 복소수 하나를 16바이트로 잡으면 약 16GB다. 40큐비트는 여기에 1024배가 되어 일반 단일 머신 메모리를 훌쩍 넘는다.
 
 ## 응용 (Applications)
 

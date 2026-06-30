@@ -4,6 +4,7 @@
 - Prerequisites: [Reward-Hacking.md](Reward-Hacking.md), [AI/NLP/GPT.md](../NLP/GPT.md), [AI/Reinforcement-Learning/Policy.md](../Reinforcement-Learning/Policy.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -27,6 +28,43 @@ RLHF(Reinforcement Learning from Human Feedback)는 인간 선호 데이터를 �
 
 Constitutional AI는 인간 피드백 일부를 원칙 기반 critique와 revision으로 대체하거나 보강한다. 핵심은 “어떤 원칙을 쓰는가”, “원칙이 충돌할 때 어떻게 판단하는가”, “모델이 원칙을 피상적으로만 따르지 않는가”를 계속 평가하는 것이다.
 
+### Preference model의 의미
+
+선호 모델은 "정답"을 학습하는 모델이 아니라 특정 지침과 라벨러 집단이 더 선호한 응답의 패턴을 학습한다. 따라서 reward model score는 사실성, 안전성, 친절함, 간결함, 문체 선호가 뒤섞인 proxy다.
+
+선호 데이터 품질은 다음 요소에 크게 좌우된다.
+
+- Prompt 분포가 실제 사용과 고위험 사례를 포함하는가
+- Chosen/rejected 차이가 명확하고 지침과 일관되는가
+- 라벨러가 필요한 전문성을 갖고 있는가
+- 안전 거절과 유용한 대안 제시가 함께 평가되는가
+- Reward model holdout이 policy optimization에 오염되지 않았는가
+
+### Policy optimization과 KL 제약
+
+RLHF에서 정책을 reward model에 맞춰 너무 강하게 최적화하면 reward model의 취약점을 파고들 수 있다. 그래서 기준 모델(reference model)에서 너무 멀어지지 않도록 KL penalty를 둔다.
+
+$$
+\max_\pi E[r_\phi(x,y)] - \beta KL(\pi(\cdot\mid x)\|\pi_{ref}(\cdot\mid x))
+$$
+
+KL 제약은 완전한 안전장치가 아니다. Reference model 자체의 결함도 남고, reward model이 선호하는 피상적 패턴으로 drift할 수 있다. 하지만 과격한 policy shift를 줄이는 실용적 제어 장치다.
+
+### Constitutional AI의 평가 포인트
+
+Constitutional AI에서 원칙은 라벨러를 대체하는 자동 진리표가 아니다. 원칙 간 충돌, 문화·도메인 차이, 애매한 요청에서의 우선순위가 필요하다. 좋은 constitution은 다음 속성을 가져야 한다.
+
+- 적용 범위와 예외가 명확하다.
+- 원칙 충돌 시 tie-break rule이 있다.
+- 모델 자기비판이 실제 오류 수정으로 이어지는지 측정한다.
+- 원칙을 말로만 언급하고 행동은 바뀌지 않는지 red team한다.
+
+### PPO, DPO, RLAIF의 위치
+
+PPO 기반 RLHF는 reward model을 학습한 뒤 정책을 강화학습으로 최적화한다. DPO류 방법은 preference pair에서 직접 정책을 업데이트해 파이프라인을 단순화한다. RLAIF는 인간 대신 AI 피드백을 사용해 비용을 줄일 수 있지만, 평가자의 편향과 오류가 증폭될 수 있다.
+
+방법이 달라도 공통 위험은 같다. 선호 데이터가 무엇을 대표하는지, reward/proxy를 얼마나 최적화했는지, holdout human evaluation이 유지되는지 봐야 한다.
+
 ## 구현 (Implementation)
 
 선호 데이터는 보통 쌍대 비교 형태로 저장한다.
@@ -47,6 +85,19 @@ def preference_loss(chosen_score, rejected_score):
 ```
 
 실제 학습은 대규모 데이터, 품질 관리, policy optimization, safety evaluation이 결합된 파이프라인이다.
+
+```python
+def preference_record_ok(example):
+    return all([
+        example.get("prompt"),
+        example.get("chosen"),
+        example.get("rejected"),
+        example.get("rubric_id"),
+        example["chosen"] != example["rejected"],
+    ])
+```
+
+데이터 스키마에 `rubric_id`, `risk_domain`, `annotator_expertise`, `disagreement_reason`을 남기면 나중에 reward model 실패를 추적하기 쉽다.
 
 ## 복잡도 (Complexity)
 

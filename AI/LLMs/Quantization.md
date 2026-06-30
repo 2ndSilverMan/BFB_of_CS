@@ -4,6 +4,7 @@
 - Prerequisites: [AI/MLOps/Model-Optimization.md](../MLOps/Model-Optimization.md), [AI/LLMs/Transformer-Advanced.md](Transformer-Advanced.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -21,6 +22,37 @@
 
 Post-training quantization은 학습 후 바로 적용하고, quantization-aware training은 양자화 오차를 학습 중 반영한다. LLM에서는 outlier channel과 activation range가 품질 저하의 주요 원인이다.
 
+```mermaid
+flowchart LR
+    FP["floating-point weights"] --> Cal["calibration / scale"]
+    Cal --> Q["low-bit representation"]
+    Q --> Kernel["quantized kernel"]
+    Kernel --> Eval["quality + latency eval"]
+```
+
+### 기본 매핑
+
+대칭 양자화에서는 보통
+
+$$q=\operatorname{clip}(\operatorname{round}(x/s), q_{\min}, q_{\max}),\qquad \hat x=sq$$
+
+처럼 scale $s$로 실수를 정수 격자에 올리고, 계산 시 필요하면 dequantize한다. group-wise quantization은 일정 channel 묶음마다 scale을 따로 두어 outlier 영향을 줄인다.
+
+### 무엇을 양자화하는가
+
+| 대상 | 메모리 이득 | 위험 |
+| --- | --- | --- |
+| Weight-only | 크다 | activation 병목은 남음 |
+| Weight + activation | 더 큼 | calibration과 kernel 난이도 증가 |
+| KV cache | 긴 context에서 큼 | attention 품질 저하 가능 |
+| Optimizer state | 학습 메모리 감소 | 훈련 안정성 영향 |
+
+LLM serving에서는 weight memory보다 KV cache가 병목인 상황도 많다. 긴 context와 큰 batch에서는 KV cache quantization이 throughput을 좌우할 수 있다.
+
+### 평가 프로토콜
+
+양자화 후에는 perplexity만 보지 말고 downstream task, 장문 문맥, 수학·코딩, 안전 거절, format following을 함께 본다. 작은 수치 차이가 특정 도메인에서는 큰 품질 저하로 나타날 수 있고, calibration set이 배포 입력과 다르면 error가 커진다.
+
 ## 구현 (Implementation)
 
 ```python
@@ -30,6 +62,11 @@ def quantize_symmetric(x, scale):
 ```
 
 실제 구현은 calibration data, group size, clipping, dequantization kernel을 함께 관리한다.
+
+```python
+def weight_memory_gib(params, bits):
+    return params * bits / 8 / (1024 ** 3)
+```
 
 ## 복잡도 (Complexity)
 

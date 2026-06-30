@@ -4,6 +4,7 @@
 - Prerequisites: [Engineering/Debugging/Memory-Errors.md](Memory-Errors.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -18,6 +19,12 @@ Valgrind와 AddressSanitizer(ASan)는 C/C++ 프로그램의 메모리 오류를 
 ## 이론 (Theory)
 
 Valgrind는 가상 실행 환경에서 메모리 접근을 추적해 강력하지만 느리다. ASan은 컴파일러 instrumentation으로 redzone과 shadow memory를 사용해 빠르게 오류를 잡는다.
+
+### 도구 선택과 한계
+
+AddressSanitizer는 빠르고 CI에 넣기 좋지만 모든 leak이나 data race를 다 잡지는 않는다. Valgrind는 느리지만 별도 재컴파일 없이 깊은 메모리 분석에 유용한 경우가 있다. ThreadSanitizer, UBSan, LeakSanitizer처럼 오류 유형별 도구를 구분해 쓴다.
+
+Sanitizer는 테스트가 실행한 경로에서만 효과가 있다. Coverage가 낮으면 결함도 실행되지 않는다. Fuzzing이나 boundary test와 결합하면 발견력이 커진다.
 
 ## 구현 (Implementation)
 

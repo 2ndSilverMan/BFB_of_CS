@@ -4,6 +4,7 @@
 - Prerequisites: [Algorithms/Complexity.md](../../Algorithms/Complexity.md), [Programming/Arrays-and-Strings.md](../../Programming/Arrays-and-Strings.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -28,6 +29,20 @@ $n$비트 암호학적 해시 $H$가 목표로 하는 핵심 성질은 다음과
 현재 일반적인 무결성 용도에는 SHA-256, SHA-384, SHA-3 계열을 사용한다. MD5와 SHA-1은 충돌 저항성이 깨졌으므로 보안 목적의 새 설계에 쓰지 않는다.
 
 비밀번호는 빠른 일반 해시로 저장하지 않는다. 사용자별 salt와 함께 Argon2id, scrypt, bcrypt, PBKDF2 같은 의도적으로 비싼 비밀번호 해시/KDF를 사용한다. 메시지 인증에는 $\operatorname{HMAC}(K,m)$처럼 비밀키를 포함한 구조를 사용한다.
+
+### Domain separation
+
+같은 해시 함수를 여러 목적에 재사용할 때는 문맥을 분리해야 한다. 예를 들어 `user-password`, `file-integrity`, `api-signature-v1` 같은 도메인 라벨을 입력에 포함하면 한 문맥의 값이 다른 문맥에서 재사용되는 위험을 줄일 수 있다.
+
+KDF의 `info`, 서명 메시지의 protocol prefix, HMAC의 명확한 message format은 모두 domain separation의 실무 형태다.
+
+### Hash, MAC, KDF의 구분
+
+해시는 공개 검증 가능한 지문이고, MAC은 비밀키를 가진 당사자만 만들 수 있는 인증 태그이며, KDF는 비밀 재료에서 목적별 키를 유도한다. 셋을 혼동하면 설계가 약해진다. 특히 `hash(secret || message)` 같은 직접 조립보다 HMAC이나 HKDF 같은 검증된 구조를 사용한다.
+
+### 마이그레이션
+
+해시 알고리즘은 시간이 지나며 약해질 수 있다. 저장 포맷에는 알고리즘 ID, salt, cost parameter를 포함해 새 알고리즘으로 점진적 재해싱이 가능하게 만든다. 비밀번호는 사용자가 로그인할 때 최신 KDF 설정으로 재저장하는 lazy migration을 자주 쓴다.
 
 ## 구현 (Implementation)
 

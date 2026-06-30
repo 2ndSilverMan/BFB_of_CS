@@ -4,6 +4,7 @@
 - Prerequisites: [Engineering/DevOps/Terraform-Basics.md](Terraform-Basics.md), [Systems/Operating-Systems/Linux/Linux-Shell-Basics.md](../../Systems/Operating-Systems/Linux/Linux-Shell-Basics.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -18,6 +19,12 @@ Ansible은 inventory에 있는 host에 SSH 등으로 접속해 playbook에 정�
 ## 이론 (Theory)
 
 Inventory는 대상 host와 group을 정의하고, playbook은 play와 task 목록을 담는다. Module은 package 설치, file 배치, service 재시작 같은 작업을 idempotent하게 수행한다. Variable, role, handler로 재사용성과 구조를 높인다. Terraform이 resource provisioning에 강하다면 Ansible은 OS와 application configuration에 강하다.
+
+### Idempotency
+
+Ansible playbook은 여러 번 실행해도 같은 결과가 되어야 한다. Shell command를 남발하면 변경 감지와 재실행 안정성이 약해진다. 가능한 한 module을 사용하고, `changed_when`, `failed_when`, handler, check mode로 의도를 명시한다.
+
+Inventory와 variable precedence는 운영 사고의 단골 원인이다. 환경별 값, secret, host group을 분리하고 dry-run과 제한된 rollout로 검증한다.
 
 ## 구현 (Implementation)
 
@@ -70,4 +77,3 @@ Host 수가 늘수록 병렬 실행, SSH 연결, inventory 관리, secret 배포
 
 - [Systems/Operating-Systems/Linux/Linux-Shell-Basics.md](../../Systems/Operating-Systems/Linux/Linux-Shell-Basics.md)
 - [Engineering/DevOps/Terraform-Basics.md](Terraform-Basics.md)
-

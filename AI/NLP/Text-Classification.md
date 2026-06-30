@@ -4,6 +4,7 @@
 - Prerequisites: [Text-Preprocessing.md](Text-Preprocessing.md), [Word-Embeddings.md](Word-Embeddings.md), [AI/Machine-Learning/Logistic-Regression.md](../Machine-Learning/Logistic-Regression.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -26,6 +27,33 @@
 
 다중 클래스와 다중 라벨 문제를 구분해야 한다. 클래스 불균형이 있으면 accuracy만으로 평가하면 위험하다.
 
+```mermaid
+flowchart LR
+    Text["text"] --> Tok["tokenize"]
+    Tok --> Rep["representation"]
+    Rep --> Clf["classifier"]
+    Clf --> Eval["metrics + calibration"]
+```
+
+### 문제 유형 구분
+
+| 유형 | 출력 | 손실/평가 |
+| --- | --- | --- |
+| Binary | 하나의 yes/no label | BCE, precision/recall |
+| Multiclass | 상호 배타 class 하나 | softmax CE, macro F1 |
+| Multilabel | 여러 label 동시 가능 | sigmoid BCE, label별 F1 |
+| Hierarchical | 상하위 label | 계층 일관성, path metric |
+
+문제 유형을 잘못 잡으면 threshold, loss, metric이 모두 어긋난다. 예를 들어 문서 태깅은 multiclass가 아니라 multilabel인 경우가 많다.
+
+### Leakage와 중복
+
+텍스트 분류는 같은 문서의 복사본, 템플릿, 사용자별 반복 문구 때문에 leakage가 흔하다. train/test split은 문장 단위보다 사용자, 문서, 시간, conversation 기준으로 나누어야 할 수 있다. 전처리 vocabulary나 TF-IDF도 train split에서 fit한 뒤 validation/test에 적용해야 한다.
+
+### Threshold와 calibration
+
+운영에서는 확률 score를 바로 class로 바꾸지 말고 validation set에서 threshold를 정한다. 특히 moderation, fraud, medical triage처럼 false positive와 false negative 비용이 다르면 class별 threshold와 abstention 정책이 필요하다.
+
 ## 구현 (Implementation)
 
 간단한 bag-of-words feature는 단어 count로 만들 수 있다.
@@ -42,6 +70,11 @@ print(bow("great product great price"))
 ```
 
 실무에서는 train/validation/test split, label leakage, 중복 문서 제거가 중요하다.
+
+```python
+def predict_with_threshold(score, threshold=0.5):
+    return 1 if score >= threshold else 0
+```
 
 ## 복잡도 (Complexity)
 

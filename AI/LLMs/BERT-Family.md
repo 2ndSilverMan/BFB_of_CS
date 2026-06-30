@@ -4,6 +4,7 @@
 - Prerequisites: [AI/LLMs/Pretraining.md](Pretraining.md), [AI/NLP/BERT.md](../NLP/BERT.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -20,6 +21,33 @@ GPT가 왼쪽에서 오른쪽으로 이어 쓰는 모델이라면, BERT는 문�
 Masked LM은 일부 토큰을 `[MASK]`로 가리고 원래 토큰을 예측한다. Encoder self-attention은 모든 위치가 서로를 볼 수 있어 bidirectional context를 사용한다.
 
 Sentence pair classification, token classification, span extraction 같은 downstream task는 `[CLS]` representation이나 token representation 위에 head를 얹어 fine-tuning한다.
+
+```mermaid
+flowchart LR
+    T["input tokens"] --> M["mask 일부 token"]
+    M --> E["encoder self-attention"]
+    E --> P["masked token prediction"]
+    E --> H["task-specific head"]
+```
+
+### Task head 선택
+
+| 과제 | 주로 쓰는 표현 | 출력 |
+| --- | --- | --- |
+| 문장 분류 | `[CLS]` 또는 pooled embedding | class logits |
+| NER/POS | 각 token embedding | token별 tag |
+| 추출형 QA | token embedding | start/end position |
+| Reranking | query-document joint encoding | relevance score |
+
+token classification에서는 subword tokenization 때문에 word-level label을 어떤 subword에 붙일지 정해야 한다. span QA에서는 답이 문서 안의 연속 구간이라는 가정이 있어 생성형 QA와 평가 방식이 다르다.
+
+### Bi-encoder와 cross-encoder
+
+BERT 계열은 검색에서 두 방식으로 자주 쓰인다. bi-encoder는 query와 document를 따로 embedding해 벡터 검색이 빠르지만 상호작용이 제한된다. cross-encoder는 query와 document를 한 입력으로 넣어 모든 token 상호작용을 보므로 정확하지만 후보마다 forward가 필요해 느리다. 실무에서는 bi-encoder로 후보를 넓게 가져오고 cross-encoder로 reranking하는 2단 구조가 흔하다.
+
+### Pooling과 calibration
+
+`[CLS]` embedding이 항상 좋은 sentence embedding은 아니다. mean pooling, contrastive sentence embedding fine-tuning, domain-specific calibration이 필요한 경우가 많다. 분류 head의 score도 곧 잘 보정된 확률은 아니므로 threshold 기반 의사결정에서는 calibration curve나 validation threshold를 확인한다.
 
 ## 구현 (Implementation)
 

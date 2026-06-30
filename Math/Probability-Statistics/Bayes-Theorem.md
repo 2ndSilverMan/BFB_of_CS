@@ -4,6 +4,7 @@
 - Prerequisites: [Math/Probability-Statistics/Probability-Basics.md](Probability-Basics.md), [Math/Probability-Statistics/Distributions.md](Distributions.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -20,6 +21,15 @@ $H$는 가설, $D$는 관측 데이터다. 분모는 모든 가설 아래 데이
 ## 직관 (Intuition)
 
 검사가 정확해 보여도 질병 자체가 매우 드물면 양성인 사람 중 실제 환자 비율은 생각보다 낮을 수 있다. 베이즈 정리는 검사 성능뿐 아니라 검사 전 질병 빈도인 기저율을 함께 계산하게 한다.
+
+```mermaid
+flowchart LR
+    PRIOR["사전확률 P(H)"] --> UPDATE["우도 P(D|H)로 갱신"]
+    LIKE["관측 데이터 D"] --> UPDATE
+    UPDATE --> POST["사후확률 P(H|D)"]
+    ALT["다른 가설들"] --> EVID["증거 P(D)"]
+    EVID --> POST
+```
 
 ## 이론 (Theory)
 
@@ -38,6 +48,10 @@ $$
 
 라고 쓴다. 사전분포와 우도를 곱한 형태가 같은 분포족의 사후분포를 만들면 켤레사전분포라 하며 계산이 단순해진다.
 
+### 자연빈도 관점
+
+확률식이 헷갈릴 때는 10,000명 같은 자연빈도로 바꾸면 직관이 좋아진다. 유병률 1%, 민감도 99%, 위양성률 5%라면 10,000명 중 실제 환자는 100명이다. 그중 약 99명이 양성이다. 비환자 9,900명 중 5%인 495명도 양성이다. 양성 전체는 594명이고, 실제 환자는 99명이므로 양성 후 질병 확률은 $99/594 \approx 16.7\%$다.
+
 ## 구현 (Implementation)
 
 유병률 1%, 민감도 99%, 위양성률 5%인 검사의 양성 후 질병 확률을 계산한다.
@@ -53,9 +67,24 @@ print(round(posterior(0.01, 0.99, 0.05), 3))  # 약 0.167
 
 양성이라는 관측이 확률을 1%에서 약 16.7%로 크게 올리지만 99%로 만들지는 않는다.
 
+odds 형태로도 계산할 수 있다.
+
+```python
+prior = 0.01
+prior_odds = prior / (1 - prior)
+likelihood_ratio = 0.99 / 0.05
+posterior_odds = prior_odds * likelihood_ratio
+posterior_prob = posterior_odds / (1 + posterior_odds)
+print(round(posterior_prob, 3))  # 0.167
+```
+
+likelihood ratio는 "양성 결과가 환자에게서 비환자보다 몇 배 더 잘 나오는가"를 나타낸다.
+
 ## 복잡도 (Complexity)
 
 유한 가설 $k$개의 사후확률 계산은 `O(k)`다. 고차원 연속 모형에서는 정규화 상수 $p(D)$ 적분이 어려워 MCMC, 변분 추론, 중요도 샘플링 같은 근사법을 사용한다.
+
+워크드 예제의 유한 가설은 `환자/비환자` 두 개라 `O(2)`이다. 하지만 가설이 질병 100종이라면 각 질병에 대한 `P(D|H_i)P(H_i)`를 모두 계산하고 정규화해야 하므로 `O(k)`가 된다.
 
 ## 응용 (Applications)
 

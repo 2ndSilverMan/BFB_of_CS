@@ -4,6 +4,7 @@
 - Prerequisites: [Bayesian-Networks.md](Bayesian-Networks.md), [Math/Probability-Statistics/Markov-Chains.md](../../Math/Probability-Statistics/Markov-Chains.md), [Belief-Propagation.md](Belief-Propagation.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -31,6 +32,32 @@ $$
 
 로 쓸 수 있다. 주요 추론 문제는 filtering $P(Z_t\mid x_{1:t})$, smoothing $P(Z_t\mid x_{1:T})$, decoding $\arg\max z_{1:T}P(z_{1:T}\mid x_{1:T})$이다. Viterbi 알고리즘은 가장 가능성 높은 상태열을 동적 계획법으로 찾는다.
 
+```mermaid
+flowchart LR
+    Z1["Z1"] --> Z2["Z2"] --> Z3["Z3"]
+    Z1 --> X1["X1"]
+    Z2 --> X2["X2"]
+    Z3 --> X3["X3"]
+```
+
+### 세 가지 질의
+
+| 질의 | 의미 | 알고리즘 |
+| --- | --- | --- |
+| Filtering | 현재까지 관측으로 현재 상태 추정 | forward |
+| Smoothing | 전체 관측으로 과거 상태 추정 | forward-backward |
+| Decoding | 가장 가능성 높은 상태열 | Viterbi |
+
+각 시점별 최빈 상태를 따로 고른 결과와 Viterbi 전체 경로는 다를 수 있다. Viterbi는 전이 일관성을 고려한 sequence-level 최적화다.
+
+### 수치 안정성
+
+긴 sequence에서는 확률 곱이 underflow를 만든다. 로그 확률을 쓰거나 forward message를 매 step scaling해야 한다. scaling factor를 저장하면 likelihood도 복원할 수 있다.
+
+### 모델 가정
+
+HMM은 상태 전이가 1차 Markov이고, 관측이 현재 상태에만 의존한다고 가정한다. 관측 간 장기 의존이나 상태 지속시간이 복잡하면 semi-Markov model, factorial HMM, neural sequence model을 고려한다.
+
 ## 구현 (Implementation)
 
 Viterbi의 핵심은 이전 최적 점수에서 현재 전이와 방출 확률을 곱해 갱신하는 것이다.
@@ -57,6 +84,13 @@ print(viterbi_step(prev, transition, emission))
 ```
 
 실제 구현은 underflow 방지를 위해 로그 확률을 사용한다.
+
+```python
+def logsumexp(values):
+    import math
+    m = max(values)
+    return m + math.log(sum(math.exp(v - m) for v in values))
+```
 
 ## 복잡도 (Complexity)
 

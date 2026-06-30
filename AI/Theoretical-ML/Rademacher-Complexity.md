@@ -4,6 +4,7 @@
 - Prerequisites: [VC-Dimension.md](VC-Dimension.md), [Math/Probability-Statistics/Expectation.md](../../Math/Probability-Statistics/Expectation.md), [AI/Machine-Learning/Overfitting.md](../Machine-Learning/Overfitting.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -34,6 +35,26 @@ $$
 형태의 일반화 경계를 얻는다.
 
 VC 차원이 최악 경우 조합적 표현력을 보는 반면, Rademacher 복잡도는 실제 표본 위치와 함수 값 스케일을 반영한다. 그래서 margin, norm constraint, kernel, 신경망 norm bound 같은 분석에서 자주 등장한다.
+
+### Symmetrization 직관
+
+일반화 오차는 실제 분포 평균과 표본 평균의 차이다. 직접 분포를 다루기 어렵기 때문에 독립적인 ghost sample을 도입하고, 두 표본의 차이를 무작위 부호로 대칭화한다. 이 과정에서 Rademacher 변수가 등장한다.
+
+무작위 부호와 크게 상관될 수 있는 함수 클래스는 표본 noise에도 잘 맞출 수 있으므로 uniform convergence가 느슨해진다.
+
+### 데이터 의존성
+
+VC 차원은 클래스 전체의 최악 경우 능력을 본다. Rademacher 복잡도는 주어진 표본 $S$ 위에서 함수들이 얼마나 다양한 값을 낼 수 있는지 본다. 같은 함수 클래스라도 표본 위치가 제한적이면 경험적 Rademacher 복잡도가 작을 수 있다.
+
+이 데이터 의존성 때문에 norm-constrained model이나 margin classifier 분석에서 유용하다.
+
+### Loss composition과 contraction
+
+실제 경계는 함수 $f$가 아니라 손실 $\ell(f(x), y)$에 대해 필요하다. 손실이 Lipschitz이면 contraction lemma로 $\ell\circ F$의 복잡도를 $F$의 복잡도로 제어할 수 있다.
+
+### Margin과 norm
+
+선형 모델에서 weight norm을 제한하고 입력 norm이 bounded이면 Rademacher 복잡도를 작게 묶을 수 있다. 이는 파라미터 수가 많아도 norm이나 margin이 일반화와 관련될 수 있다는 직관을 준다.
 
 ## 구현 (Implementation)
 
@@ -67,6 +88,13 @@ print(round(empirical_rademacher(functions, [0.1, 0.4, 0.9]), 3))
 ```
 
 큰 모델에서는 함수 클래스 전체를 열거할 수 없으므로 norm bound나 Lipschitz 성질을 이용해 상계를 구한다.
+
+```python
+def linear_rademacher_bound(radius_x, radius_w, n):
+    return radius_x * radius_w / (n ** 0.5)
+```
+
+이 단순 bound는 입력 norm과 weight norm이 작고 표본 수가 클수록 복잡도 항이 줄어드는 직관을 보여 준다.
 
 ## 복잡도 (Complexity)
 

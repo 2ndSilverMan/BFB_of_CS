@@ -4,6 +4,7 @@
 - Prerequisites: [Engineering/DevOps/Cloud-Computing.md](Cloud-Computing.md), [Systems/Distributed-Systems/Message-Queues-Event-Streaming.md](../../Systems/Distributed-Systems/Message-Queues-Event-Streaming.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -18,6 +19,12 @@
 ## 이론 (Theory)
 
 FaaS는 HTTP request, queue message, object upload, schedule 같은 event로 함수를 실행한다. 장점은 자동 scaling, 사용량 기반 과금, 운영 부담 감소다. 단점은 cold start, 실행 시간 제한, local debugging 난도, vendor lock-in, distributed tracing 필요성이다. Stateless function과 external state store 조합이 기본이다.
+
+### 운영상의 장단점
+
+서버리스는 서버 관리를 줄이지만 cold start, execution timeout, concurrency limit, vendor-specific event model, observability 분산이라는 대가가 있다. 짧고 stateless한 event 처리에는 좋지만 긴 연결이나 예측 가능한 고부하에는 비용/성능을 따져야 한다.
+
+권한은 함수 단위로 최소화하고, retry와 idempotency를 설계한다. Event source가 중복 전달할 수 있으면 side effect는 deduplication key를 가져야 한다.
 
 ## 구현 (Implementation)
 
@@ -67,4 +74,3 @@ object uploaded -> function validates metadata
 
 - [Systems/Distributed-Systems/Message-Queues-Event-Streaming.md](../../Systems/Distributed-Systems/Message-Queues-Event-Streaming.md)
 - [Engineering/DevOps/Distributed-Tracing.md](Distributed-Tracing.md)
-

@@ -4,6 +4,7 @@
 - Prerequisites: [Transactions-and-ACID.md](Transactions-and-ACID.md), [Concurrency-Control.md](Concurrency-Control.md), [Systems/Operating-Systems/File-Systems.md](../Operating-Systems/File-Systems.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 

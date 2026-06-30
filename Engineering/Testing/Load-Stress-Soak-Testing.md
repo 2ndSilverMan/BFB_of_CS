@@ -4,6 +4,7 @@
 - Prerequisites: [Engineering/Performance/Benchmarking-Basics.md](../Performance/Benchmarking-Basics.md), [Engineering/System-Design/Scalability.md](../System-Design/Scalability.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -18,6 +19,12 @@
 ## 이론 (Theory)
 
 성능 테스트는 workload model, arrival rate, concurrency, think time, data distribution을 정의해야 한다. 평균 latency보다 percentile과 error rate가 중요하다. System under test와 dependency capacity를 분리해 본다.
+
+### 세 테스트의 목적 차이
+
+Load test는 예상 부하에서 SLO를 만족하는지 확인한다. Stress test는 한계를 넘어 어디서 어떻게 무너지는지 찾는다. Soak test는 긴 시간 동안 memory leak, connection leak, cache growth, log volume 같은 누적 문제를 찾는다.
+
+결과 해석에는 latency percentile, error rate, saturation, queue length, GC, DB lock, downstream dependency를 함께 봐야 한다. 평균 latency만 보면 tail failure를 놓친다.
 
 ## 구현 (Implementation)
 

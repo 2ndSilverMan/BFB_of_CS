@@ -4,6 +4,7 @@
 - Prerequisites: [Systems/Computer-Architecture/Data-Representation.md](Data-Representation.md), [Math/Discrete/Logic.md](../../Math/Discrete/Logic.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 

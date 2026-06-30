@@ -4,6 +4,7 @@
 - Prerequisites: [Systems/Operating-Systems/Processes-and-Threads.md](../Operating-Systems/Processes-and-Threads.md), [Systems/Distributed-Systems/System-Models.md](../Distributed-Systems/System-Models.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 

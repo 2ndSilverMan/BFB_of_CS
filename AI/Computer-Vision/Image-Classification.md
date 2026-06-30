@@ -4,6 +4,7 @@
 - Prerequisites: [AI/Computer-Vision/Image-Basics.md](Image-Basics.md), [AI/Deep-Learning/CNN.md](../Deep-Learning/CNN.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -19,6 +20,26 @@
 
 logit $z_k$를 $p_k=e^{z_k}/\sum_j e^{z_j}$로 변환하고 cross-entropy를 최소화한다. top-1 accuracy 외 class imbalance에서는 precision, recall, macro F1, confusion matrix를 함께 본다. augmentation은 label을 보존하는 변환이라는 가정을 모델에 주입한다.
 
+```mermaid
+flowchart LR
+    Image["image"] --> Aug["augmentation"]
+    Aug --> Backbone["backbone"]
+    Backbone --> Head["classification head"]
+    Head --> Metrics["metrics + calibration"]
+```
+
+### Augmentation의 label-preserving 가정
+
+random crop, flip, color jitter, blur, mixup은 모두 label이 유지된다는 가정을 둔다. 의료영상에서 좌우 반전은 해부학적 의미를 바꿀 수 있고, 상품 분류에서 crop은 class를 결정하는 로고를 잘라낼 수 있다. augmentation은 도메인 지식으로 검토해야 한다.
+
+### Dataset split
+
+같은 물체를 다른 각도에서 찍은 사진, 같은 환자의 이미지, 같은 생산 batch 이미지를 서로 다른 split에 넣으면 성능이 부풀 수 있다. 분류 split은 이미지 단위가 아니라 object, patient, user, time, site 기준이 필요할 수 있다.
+
+### Calibration과 abstention
+
+softmax confidence는 잘 보정된 확률이 아닐 수 있다. 고위험 시스템에서는 temperature scaling, confidence threshold, human review queue, out-of-distribution detector를 함께 둔다.
+
 ## 구현 (Implementation)
 
 ```python
@@ -29,6 +50,11 @@ def top1(logits):
 def accuracy(targets, logits_batch):
     correct = sum(top1(logits) == y for y, logits in zip(targets, logits_batch))
     return correct / len(targets)
+```
+
+```python
+def topk(logits, k=5):
+    return sorted(range(len(logits)), key=logits.__getitem__, reverse=True)[:k]
 ```
 
 ## 복잡도 (Complexity)

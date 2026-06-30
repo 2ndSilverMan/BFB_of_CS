@@ -4,6 +4,7 @@
 - Prerequisites: [Math/Probability-Statistics/Bayes-Theorem.md](../../Math/Probability-Statistics/Bayes-Theorem.md), [AI/Machine-Learning/Logistic-Regression.md](../Machine-Learning/Logistic-Regression.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -31,6 +32,33 @@ $$
 P(w\mid y)=\frac{count(w,y)+\alpha}{\sum_{w'}count(w',y)+\alpha |V|}
 $$
 
+```mermaid
+flowchart LR
+    Text["features"] --> Counts["class-conditional counts"]
+    Counts --> Smooth["smoothing"]
+    Smooth --> LogProb["log probabilities"]
+    LogProb --> Class["argmax class"]
+```
+
+### 변형 선택
+
+| 변형 | Feature | 사용 예 |
+| --- | --- | --- |
+| Multinomial NB | count/frequency | 문서 단어 count |
+| Bernoulli NB | binary presence | 짧은 문서, 등장 여부 |
+| Gaussian NB | continuous value | 단순 연속 feature |
+| Complement NB | class complement count | 불균형 텍스트 |
+
+텍스트에서는 multinomial NB가 강한 baseline이고, feature를 TF-IDF로 바꿀 때는 확률적 해석이 조금 약해질 수 있지만 실용적으로 잘 작동하기도 한다.
+
+### 독립 가정과 결정 경계
+
+단어들은 실제로 독립이 아니지만, log probability를 더하면 선형 score가 되어 고차원 희소 텍스트에서 강력하다. 독립 가정이 틀려도 argmax 분류가 괜찮을 수 있지만, posterior probability는 과신되는 경향이 있다.
+
+### OOV와 vocabulary pruning
+
+희귀 단어를 모두 vocabulary에 넣으면 noise와 메모리가 늘고, 너무 많이 제거하면 의미 단서를 잃는다. `<UNK>` 처리, min frequency, class별 informative token 검토가 필요하다.
+
 ## 구현 (Implementation)
 
 로그 확률을 쓰면 underflow를 피할 수 있다.
@@ -52,6 +80,11 @@ print("spam" if spam > ham else "ham")
 ```
 
 실무에서는 tokenization, vocabulary pruning, smoothing 값이 성능에 영향을 준다.
+
+```python
+def laplace(count, total, vocab_size, alpha=1.0):
+    return (count + alpha) / (total + alpha * vocab_size)
+```
 
 ## 복잡도 (Complexity)
 

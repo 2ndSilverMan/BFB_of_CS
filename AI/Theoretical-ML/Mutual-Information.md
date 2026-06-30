@@ -4,6 +4,7 @@
 - Prerequisites: [Math/Probability-Statistics/Information-Theory.md](../../Math/Probability-Statistics/Information-Theory.md), [MDL.md](MDL.md), [Generalization-Bounds.md](Generalization-Bounds.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -33,6 +34,32 @@ $$
 
 이는 입력 정보는 압축하면서 라벨 관련 정보는 보존하려는 목적이다. 일반화 분석에서는 학습 알고리즘 출력 $W$와 훈련 데이터 $S$의 상호 정보량 $I(W;S)$가 작으면 일반화 gap을 제어할 수 있다는 형태의 경계도 연구된다.
 
+### 데이터 처리 부등식
+
+데이터 처리 부등식은 $X\to Z\to T$처럼 후처리된 변수 $T$가 원래 표현 $Z$보다 $X$에 대한 정보를 더 많이 가질 수 없다는 원리다.
+
+$$
+I(X;T)\le I(X;Z)
+$$
+
+표현 학습에서는 layer를 거치며 어떤 정보가 보존되고 어떤 정보가 버려지는지 해석할 때 이 원리가 자주 쓰인다. 단, deterministic neural network와 연속 변수에서는 정보량이 무한대가 되거나 측정이 민감해질 수 있다.
+
+### Information bottleneck의 tradeoff
+
+$I(X;Z)$를 줄이면 입력의 불필요한 세부사항을 버리는 압축이 되고, $I(Z;Y)$를 키우면 라벨 예측에 필요한 정보가 보존된다. $\beta$는 이 둘의 균형을 조절한다.
+
+하지만 실제 딥러닝에서 bottleneck을 직접 최적화하려면 상호 정보량 추정이 어렵다. Variational approximation, noise injection, contrastive bound 같은 우회가 필요하다.
+
+### 알고리즘 안정성과 정보량
+
+학습된 가중치 $W$가 훈련 데이터 $S$에 너무 많은 정보를 담으면 특정 샘플을 외웠을 가능성이 커진다. $I(W;S)$ 기반 일반화 경계는 학습 알고리즘의 data dependence를 측정하려는 시도다.
+
+이 관점은 compression과도 연결된다. 훈련 결과를 짧게 기술할 수 있으면 데이터에 대한 의존이 제한되고 일반화 gap을 제어하기 쉬워진다.
+
+### 추정의 함정
+
+고차원 연속 변수의 상호 정보량 추정은 estimator choice에 매우 민감하다. InfoNCE 같은 contrastive bound는 유용하지만, batch size와 negative sampling에 의존하는 하한이다. 따라서 "MI가 커졌다/작아졌다"는 실험 주장은 추정 방법과 함께 읽어야 한다.
+
 ## 구현 (Implementation)
 
 이산 변수의 상호 정보량은 빈도표에서 추정할 수 있다.
@@ -60,6 +87,14 @@ print(round(mutual_information([0, 0, 1, 1], [0, 0, 1, 1]), 3))
 ```
 
 연속 고차원 변수의 상호 정보량 추정은 어렵고, variational bound나 contrastive objective가 자주 쓰인다.
+
+```python
+def pointwise_mutual_information(pxy, px, py):
+    import math
+    return math.log(pxy / (px * py))
+```
+
+상호 정보량은 pointwise dependence를 joint distribution에 대해 평균낸 값으로 볼 수 있다.
 
 ## 복잡도 (Complexity)
 

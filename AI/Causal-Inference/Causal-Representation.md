@@ -4,6 +4,7 @@
 - Prerequisites: [AI/Causal-Inference/SCM.md](SCM.md), [AI/Deep-Learning/Self-Supervised.md](../Deep-Learning/Self-Supervised.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -21,17 +22,48 @@
 
 Invariant risk minimization, domain generalization, disentanglement, object-centric learning은 관련 아이디어다. 하지만 invariant feature가 항상 causal feature는 아니며, shortcut이 invariant하게 보일 수도 있다.
 
+### 식별 가능성의 벽
+
+관측 데이터 하나만으로는 latent causal factor를 고유하게 복원하기 어렵다. 같은 joint distribution을 설명하는 서로 다른 latent variableization이 존재할 수 있기 때문이다. 그래서 causal representation learning은 보통 추가 정보를 요구한다.
+
+- 명시적 intervention이나 weak supervision
+- 여러 environment에서 바뀌는 distribution
+- 시간 순서와 독립 noise 가정
+- sparse mechanism 또는 modularity
+- object-level inductive bias
+
+이 추가 정보가 무엇인지 밝히지 않으면 representation을 "인과적"이라고 부르는 주장이 약해진다.
+
+### Invariant mechanism
+
+인과 변수의 장점은 환경이 바뀌어도 일부 메커니즘이 안정적으로 남는다는 데 있다. 예를 들어 물체의 모양이 label의 원인이고 배경은 dataset shortcut이라면, 배경 분포가 바뀌어도 모양 기반 예측은 더 안정적일 수 있다.
+
+하지만 invariance는 필요 조건에 가까울 뿐 충분조건은 아니다. 어떤 shortcut도 모든 training environment에서 우연히 안정적이면 invariant feature처럼 보인다. 따라서 환경 선택, stress test, intervention validation이 중요하다.
+
+### Disentanglement와 causal factor의 차이
+
+Disentanglement는 latent dimension을 해석 가능한 축으로 분리하려는 목표다. Causal factor는 개입했을 때 downstream variable을 바꾸는 구조적 변수다. 축이 예쁘게 분리되어도 개입 의미가 없으면 causal representation이 아니다.
+
+반대로 causal factor는 반드시 독립 latent dimension 하나에 대응하지 않을 수 있다. 여러 factor가 조합되어 mechanism을 만들거나, 관측 방식 때문에 factor가 얽혀 보일 수 있다.
+
+### 평가 기준
+
+좋은 causal representation 주장은 prediction accuracy만으로 평가하기 어렵다. 다음 질문을 함께 봐야 한다.
+
+- 새로운 environment에서 성능이 유지되는가?
+- 알려진 intervention을 가했을 때 representation이 예상한 방향으로 변하는가?
+- Counterfactual query에 대해 구조적으로 일관된 답을 내는가?
+- Shortcut을 제거하거나 바꾼 stress test에서도 안정적인가?
+
 ## 구현 (Implementation)
 
 ```python
-objective = {
-    "predictive": "fit labels",
-    "invariance": "stable across environments",
-    "disentanglement": "separate latent factors",
-}
+def invariant_penalty(environment_losses):
+    mean_loss = sum(environment_losses) / len(environment_losses)
+    return sum((loss - mean_loss) ** 2 for loss in environment_losses)
 ```
 
-환경 정의와 개입 정보가 약하면 representation 해석에 특히 주의해야 한다.
+이 예시는 환경별 loss가 크게 달라지는 representation에 penalty를 주는 직관이다. 실제 IRM·domain generalization 목적함수는 모델 구조와 gradient constraint를 더 엄격하게 정의한다.
 
 ## 복잡도 (Complexity)
 

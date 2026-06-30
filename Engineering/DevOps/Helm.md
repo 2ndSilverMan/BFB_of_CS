@@ -4,6 +4,7 @@
 - Prerequisites: [Engineering/DevOps/Kubernetes-Basics.md](Kubernetes-Basics.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -18,6 +19,12 @@ Helm은 Kubernetes manifest를 chart라는 패키지로 묶고, values로 환경
 ## 이론 (Theory)
 
 Chart는 templates, values.yaml, Chart.yaml로 구성된다. Template은 Go template 문법으로 rendering되고, release는 cluster에 설치된 chart instance다. `helm upgrade --install`은 없으면 설치하고 있으면 갱신한다. Chart version과 app version을 구분하고, values schema와 lint로 실수를 줄인다.
+
+### Chart를 API로 보기
+
+Helm chart의 `values.yaml`은 배포 API다. 값 이름, 기본값, secret 처리, backward compatibility를 신중히 관리한다. Template가 복잡해질수록 rendering 결과를 `helm template`과 policy check로 검증해야 한다.
+
+Chart upgrade는 Kubernetes object diff와 hook side effect를 함께 본다. Stateful workload는 chart 버전보다 데이터 migration과 rollback 가능성이 더 중요하다.
 
 ## 구현 (Implementation)
 
@@ -69,4 +76,3 @@ Template가 복잡해질수록 재사용성은 늘지만 읽기 어려워진다.
 
 - [Engineering/DevOps/Kubernetes-Advanced.md](Kubernetes-Advanced.md)
 - [Engineering/DevOps/Deployment-Strategies.md](Deployment-Strategies.md)
-

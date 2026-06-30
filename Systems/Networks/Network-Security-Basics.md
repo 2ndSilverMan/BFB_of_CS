@@ -4,6 +4,7 @@
 - Prerequisites: [Systems/Networks/TCP-UDP.md](TCP-UDP.md), [Systems/Networks/HTTP.md](HTTP.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 

@@ -4,6 +4,7 @@
 - Prerequisites: [Math/Probability-Statistics/Information-Theory.md](../../Math/Probability-Statistics/Information-Theory.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -15,6 +16,14 @@
 
 스무고개처럼 가장 잘 구분되는 질문부터 던져 데이터를 작은 그룹으로 나눈다. "나이 < 30?", "방문 횟수 < 3?" 같은 규칙이 이어지므로 예측 경로를 사람이 읽기 쉽다.
 
+```mermaid
+flowchart TD
+    ROOT["feature <= threshold?"] -->|yes| L["left child"]
+    ROOT -->|no| R["right child"]
+    L --> LL["leaf: class distribution"]
+    R --> RR["next split or leaf"]
+```
+
 ## 이론 (Theory)
 
 분류에서는 불순도 감소가 큰 분할을 고른다. Gini impurity와 entropy는
@@ -24,6 +33,31 @@ $$G=1-\sum_k p_k^2,\qquad H=-\sum_k p_k\log_2p_k$$
 이고, 부모 불순도에서 자식 불순도의 가중평균을 뺀 값이 gain이다. 회귀 트리는 보통 평균제곱오차 감소를 사용한다. 모든 후보 분할에서 현재 가장 좋은 greedy 선택을 하므로 전역 최적 트리를 보장하지 않는다.
 
 깊이, 잎의 최소 표본 수, 가지치기는 과적합을 제어한다. 연속 특징은 임계값, 범주 특징은 집합 분할로 처리한다.
+
+### 불순도 감소 계산
+
+부모 노드의 불순도를 $I(parent)$, 왼쪽/오른쪽 자식 표본 수를 $n_L,n_R$라 하면 gain은
+
+$$
+I(parent)-\frac{n_L}{n}I(left)-\frac{n_R}{n}I(right)
+$$
+
+이다. greedy tree 학습은 각 노드에서 이 gain이 가장 큰 분할을 고른다. 이 선택은 국소적으로 좋아도 전체 트리의 전역 최적을 보장하지 않는다.
+
+### 가지치기와 stopping
+
+| 제어 | 효과 |
+|---|---|
+| max_depth | 규칙 길이 제한 |
+| min_samples_leaf | 작은 잎의 과적합 방지 |
+| min_impurity_decrease | 의미 없는 분할 억제 |
+| cost-complexity pruning | 성능과 트리 크기 균형 |
+
+검증 성능과 트리 크기를 함께 봐야 해석 가능성과 일반화 사이의 균형을 잡을 수 있다.
+
+### 결측값과 범주형 특징
+
+트리는 스케일링에는 둔감하지만 결측값과 범주형 처리에는 민감하다. 라이브러리에 따라 surrogate split, missing branch, one-hot, ordinal encoding 정책이 달라진다. 특히 범주형을 임의 정수로 바꾸면 존재하지 않는 순서가 생길 수 있다.
 
 ## 구현 (Implementation)
 
@@ -42,6 +76,14 @@ print(predict_tree({"age": 25}, tree))
 
 실제 학습은 검증된 라이브러리로 수행하고 결측값·범주형 처리 정책을 확인한다.
 
+Gini impurity는 클래스 비율에서 바로 계산할 수 있다.
+
+```python
+def gini(counts):
+    total = sum(counts)
+    return 1 - sum((c / total) ** 2 for c in counts if total)
+```
+
 ## 복잡도 (Complexity)
 
 균형 트리의 예측은 깊이 $h$에 대해 `O(h)`, 최악 `O(n)`이다. 정렬을 재사용하는 전형적 학습은 표본 $n$, 특징 $d$에 대해 대략 `O(dn log n)`이나 구현과 트리 깊이에 따라 달라진다.
@@ -59,6 +101,8 @@ print(predict_tree({"age": 25}, tree))
 - feature importance가 인과 효과를 뜻하지 않는다.
 - 정규화가 거의 필요 없지만 과적합 제어는 필요하다.
 - 작은 데이터 변화로 트리 구조가 크게 바뀔 수 있다.
+- 축에 평행한 분할을 하므로 회전된 선형 경계는 비효율적인 계단형 규칙으로 표현될 수 있다.
+- 높은 cardinality 범주형 feature는 분할 gain을 부풀려 importance가 과대평가될 수 있다.
 
 ## TMI
 
@@ -71,6 +115,8 @@ print(predict_tree({"age": 25}, tree))
 - 세 클래스 분포의 Gini impurity를 계산하라.
 - 깊이 제한을 바꾸며 훈련·검증 성능을 비교하라.
 - 한 예측이 루트에서 잎까지 거치는 규칙을 문장으로 설명하라.
+- 같은 데이터에서 `min_samples_leaf`를 바꾸며 잎의 클래스 확률 calibration을 비교하라.
+- ordinal encoding한 범주형 feature가 잘못된 순서 가정을 만들 수 있는 예를 들어라.
 
 ## 이어서 읽기 (Reading Path)
 

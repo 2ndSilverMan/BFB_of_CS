@@ -4,6 +4,7 @@
 - Prerequisites: [Systems/Databases/Query-Optimization.md](../../Systems/Databases/Query-Optimization.md), [Systems/Databases/Indexes-and-B-Tree.md](../../Systems/Databases/Indexes-and-B-Tree.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -20,6 +21,12 @@
 ## 이론 (Theory)
 
 Optimizer는 통계와 비용 모델로 plan을 고른다. Index scan, table scan, nested loop join, hash join, sort, materialization 같은 operator를 읽어야 한다. Selectivity가 낮은 index는 도움이 작고, 복합 index는 column 순서가 중요하다. N+1 query, lock wait, transaction isolation도 성능 원인이다.
+
+### Query plan 중심 사고
+
+DB 성능은 SQL 문자열보다 실행 계획이 말해 준다. Index scan, sequential scan, join order, estimated rows와 actual rows 차이를 확인한다. 통계가 낡거나 predicate selectivity가 틀리면 optimizer가 나쁜 계획을 고를 수 있다.
+
+인덱스는 읽기를 빠르게 하지만 쓰기 비용과 저장 공간을 늘린다. 자주 쓰는 query, cardinality, covering index, partial index, migration 비용을 함께 고려한다.
 
 ## 구현 (Implementation)
 
@@ -74,4 +81,3 @@ Index lookup은 보통 `O(log n)`이고 full scan은 `O(n)`이다. 하지만 ran
 
 - [Systems/Databases/Query-Optimization.md](../../Systems/Databases/Query-Optimization.md)
 - [Systems/Databases/Indexes-and-B-Tree.md](../../Systems/Databases/Indexes-and-B-Tree.md)
-

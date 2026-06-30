@@ -4,6 +4,7 @@
 - Prerequisites: [Engineering/Testing/Unit-Test-Principles.md](../Testing/Unit-Test-Principles.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -25,6 +26,12 @@
 6. Fix, negative test, adjacent impact 검증
 
 Observation, inference, action log를 분리하면 같은 실패를 반복하지 않는다. Binary search는 commit, input, pipeline stage를 절반씩 줄이는 강력한 실험이다.
+
+### 실험 로그와 반증
+
+과학적 디버깅에서 가장 중요한 산출물은 수정 코드가 아니라 실험 로그다. 관찰한 사실, 세운 가설, 바꾼 변수, 결과를 분리해 기록하면 같은 추측을 반복하지 않는다. 좋은 실험은 가설을 확인하는 것뿐 아니라 틀렸을 때 후보 공간을 줄여야 한다.
+
+수정 후에는 원인에 가까운 regression test와 주변 negative case를 함께 남긴다. 증상만 사라졌는지, root cause가 제거됐는지 구분하는 마지막 방어선이다.
 
 ## 구현 (Implementation)
 

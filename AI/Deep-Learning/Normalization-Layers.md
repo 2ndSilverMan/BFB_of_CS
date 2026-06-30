@@ -4,6 +4,7 @@
 - Prerequisites: [AI/Deep-Learning/Backpropagation.md](Backpropagation.md), [Math/Probability-Statistics/Expectation.md](../../Math/Probability-Statistics/Expectation.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -21,6 +22,33 @@ $$\hat x=\frac{x-\mu}{\sqrt{\sigma^2+\varepsilon}},\qquad y=\gamma\hat x+\beta$$
 
 BatchNorm은 훈련 중 mini-batch 통계를 사용하고 추론에는 running statistics를 쓴다. 작은 batch나 분포 변화에 민감할 수 있다. LayerNorm은 토큰·샘플 내부 feature 축을 정규화해 batch 크기와 독립적이며 Transformer에 적합하다. GroupNorm은 channel을 그룹으로 나눈다.
 
+```mermaid
+flowchart LR
+    X["activation x"] --> Stat["mean / variance"]
+    Stat --> Norm["normalize"]
+    Norm --> Scale["learned gamma, beta"]
+    Scale --> Y["normalized activation"]
+```
+
+### 어떤 축을 정규화하는가
+
+정규화 층의 차이는 수식보다 "어떤 원소끼리 평균과 분산을 공유하는가"에서 결정된다.
+
+| 방법 | 통계 축 | 강한 사용처 | 주의점 |
+| --- | --- | --- | --- |
+| BatchNorm | batch와 공간 축 | CNN, 큰 batch 학습 | train/eval 차이와 작은 batch |
+| LayerNorm | 샘플 내부 feature 축 | Transformer, RNN | channel별 contrast가 줄 수 있음 |
+| GroupNorm | channel group과 공간 축 | detection, 작은 batch CNN | group 수 선택 필요 |
+| RMSNorm | root mean square | 대규모 Transformer | 평균 중심화는 하지 않음 |
+
+### train/eval 모드와 running statistics
+
+BatchNorm은 훈련 중 batch 통계를 이용해 정규화하고 running mean/variance를 업데이트한다. 평가 모드에서는 이 running statistics를 사용한다. 그래서 validation이나 inference에서 train 모드가 켜져 있으면 batch 구성에 따라 예측이 흔들리고, 반대로 학습 중 eval 모드가 켜져 있으면 현재 batch 통계를 반영하지 못한다.
+
+### Pre-norm과 post-norm
+
+Transformer block에서 LayerNorm을 residual branch 앞에 두면 pre-norm, 뒤에 두면 post-norm이라고 부른다. pre-norm은 깊은 모델에서 gradient 흐름이 안정적인 편이고, post-norm은 원래 Transformer 구조에 가깝지만 깊이가 커질수록 학습 안정화가 더 까다로울 수 있다.
+
 ## 구현 (Implementation)
 
 ```python
@@ -31,6 +59,12 @@ def layer_norm(x, gamma, beta, eps=1e-5):
     mean = x.mean(axis=-1, keepdims=True)
     var = ((x - mean) ** 2).mean(axis=-1, keepdims=True)
     return gamma * (x - mean) / np.sqrt(var + eps) + beta
+```
+
+```python
+def rms_norm(x, weight, eps=1e-8):
+    rms = np.sqrt((x ** 2).mean(axis=-1, keepdims=True) + eps)
+    return weight * x / rms
 ```
 
 ## 복잡도 (Complexity)

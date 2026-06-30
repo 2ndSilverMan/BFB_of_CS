@@ -4,6 +4,7 @@
 - Prerequisites: 없음
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -18,6 +19,12 @@
 ## 이론 (Theory)
 
 DEBUG는 개발·상세 진단, INFO는 정상 주요 이벤트, WARN은 자동 복구 가능하지만 주의할 상태, ERROR는 요청 실패나 개입이 필요한 오류에 쓴다. 로그 수준은 alert와 직접 연결하기보다 metric과 error budget과 함께 본다.
+
+### 레벨 정책
+
+로그 레벨은 심각도보다 운영 행동을 기준으로 정한다. `error`는 사람이 보거나 알림으로 이어질 수 있는 실패, `warn`은 자동 복구됐지만 추세를 봐야 하는 상태, `info`는 주요 business/event 흐름, `debug`는 임시 진단 세부 정보에 둔다.
+
+레벨이 높을수록 cardinality와 빈도를 더 엄격히 제한한다. 반복되는 expected error를 `error`로 남기면 알림 피로가 생기고, 실제 장애를 묻어 버린다.
 
 ## 구현 (Implementation)
 

@@ -4,6 +4,7 @@
 - Prerequisites: [Convex-Learning.md](Convex-Learning.md), [GD-Convergence.md](GD-Convergence.md), [AI/Deep-Learning/Loss-Functions.md](../Deep-Learning/Loss-Functions.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -27,6 +28,32 @@ $$
 이는 전역 최적해 보장이 아니라 first-order stationary point에 가까워진다는 보장이다. 더 강한 second-order stationary point 보장을 얻으려면 saddle point의 음의 곡률 방향을 탈출하는 perturbation이나 stochasticity가 필요할 수 있다.
 
 딥러닝에서는 overparameterization, neural tangent kernel 근사, Polyak-Lojasiewicz 조건, strict saddle property, landscape connectivity 같은 가정 아래 더 강한 결과가 연구된다.
+
+### First-order와 second-order stationarity
+
+First-order stationary point는 gradient norm이 작다는 뜻이다. 하지만 saddle point도 gradient가 0일 수 있다. Second-order stationary point는 Hessian의 큰 음의 고유값이 없어, 명확한 하강 곡률 방향도 없다는 더 강한 조건이다.
+
+비볼록 분석에서 전역 최적해 대신 이런 stationarity 개념을 목표로 삼는 이유는 일반 문제에서 전역 최적성이 너무 어렵기 때문이다.
+
+### Strict saddle과 noise
+
+Strict saddle property가 있으면 최적이 아닌 stationary point에는 음의 곡률 방향이 존재한다. 작은 perturbation이나 SGD noise는 이 방향을 통해 saddle을 탈출하는 데 도움을 줄 수 있다.
+
+그러나 모든 딥러닝 loss가 깨끗한 strict saddle 구조를 갖는 것은 아니다. Plateau, symmetry, degeneracy가 많아 분석이 복잡하다.
+
+### PL 조건
+
+Polyak-Lojasiewicz 조건은 convexity보다 약하지만 gradient norm이 function suboptimality를 제어하게 해 준다.
+
+$$
+\frac{1}{2}\|\nabla f(x)\|^2 \ge \mu(f(x)-f^\*)
+$$
+
+PL 조건이 있으면 비볼록이어도 gradient descent가 전역 최적값으로 수렴하는 형태의 결과를 얻을 수 있다.
+
+### Overparameterization
+
+과매개변수 모델은 해가 많아 최적화가 쉬워질 수 있다. Neural tangent kernel 관점에서는 충분히 넓은 네트워크가 초기화 근처에서 거의 선형 모델처럼 움직인다고 보고 수렴을 분석한다. 하지만 이 설명이 모든 feature learning 현상을 포착하는 것은 아니다.
 
 ## 구현 (Implementation)
 
@@ -53,6 +80,16 @@ print(round(x, 3), round(f(x), 3), round(abs(grad(x)), 3))
 ```
 
 실제 신경망에서는 loss뿐 아니라 gradient norm, validation performance, sharpness, seed별 편차를 함께 본다.
+
+```python
+def stationarity_report(grad_norm, hessian_min_eig=None):
+    report = {"first_order_small": grad_norm < 1e-3}
+    if hessian_min_eig is not None:
+        report["negative_curvature"] = hessian_min_eig < -1e-3
+    return report
+```
+
+비볼록 문제에서는 "loss가 낮다"와 "좋은 stationary point다"를 분리해 봐야 한다.
 
 ## 복잡도 (Complexity)
 

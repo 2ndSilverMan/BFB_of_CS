@@ -4,6 +4,7 @@
 - Prerequisites: [AI/MLOps/REST-Serving.md](REST-Serving.md), [Engineering/Performance/Benchmarking-Basics.md](../../Engineering/Performance/Benchmarking-Basics.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -19,12 +20,46 @@
 
 Quantization은 FP32를 FP16·INT8 등으로 바꾸며 calibration 또는 quantization-aware training을 사용한다. Pruning은 weight·channel을 제거하지만 irregular sparsity가 실제 hardware speedup으로 이어지지 않을 수 있다. Distillation은 teacher distribution을 student가 모방한다.
 
+```mermaid
+flowchart LR
+    Base["baseline model"] --> Candidate["optimized candidate"]
+    Candidate --> Bench["benchmark"]
+    Candidate --> Eval["quality eval"]
+    Bench --> Gate["acceptance gate"]
+    Eval --> Gate
+```
+
+### 최적화 기법별 tradeoff
+
+| 기법 | 줄이는 것 | 위험 |
+| --- | --- | --- |
+| Quantization | memory, bandwidth | calibration error, kernel 의존 |
+| Pruning | parameter/FLOP | 실제 speedup 부재 |
+| Distillation | model size | teacher bias 복사 |
+| Operator fusion | memory traffic | runtime별 호환성 |
+| Compilation | graph overhead | dynamic shape 취약 |
+
+최적화는 목표 하드웨어와 runtime에서 측정해야 한다. 노트북 CPU에서 빠른 변경이 production GPU에서도 빠르다는 보장은 없다.
+
+### Acceptance gate
+
+품질 하락 허용치, p50/p95/p99 latency, throughput, memory peak, cold start, model size, segment별 성능을 gate로 둔다. 평균 accuracy만 통과하고 rare class recall이 무너지면 배포 모델로는 실패다.
+
+### Export와 semantic parity
+
+ONNX, TensorRT, CoreML 같은 runtime으로 export하면 operator 구현, dtype, padding, rounding이 달라질 수 있다. 최적화 전후로 같은 입력 샘플에 대한 logits 또는 prediction diff를 비교해 semantic parity를 확인한다.
+
 ## 구현 (Implementation)
 
 ```python
 def accept_candidate(baseline, candidate):
     return (candidate["p99_ms"] <= baseline["p99_ms"] * 0.7
             and candidate["accuracy"] >= baseline["accuracy"] - 0.01)
+```
+
+```python
+def relative_speedup(baseline_ms, candidate_ms):
+    return baseline_ms / candidate_ms
 ```
 
 ## 복잡도 (Complexity)

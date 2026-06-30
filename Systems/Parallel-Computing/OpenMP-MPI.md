@@ -4,6 +4,7 @@
 - Prerequisites: [Multithreading.md](Multithreading.md), [Parallel-Models.md](Parallel-Models.md), [Systems/Distributed-Systems/System-Models.md](../Distributed-Systems/System-Models.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 

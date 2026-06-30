@@ -4,6 +4,7 @@
 - Prerequisites: [Engineering/Testing/Testing-Pyramid.md](Testing-Pyramid.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -20,6 +21,12 @@ Test는 code를 비추는 작은 실험이다. 준비, 행동, 검증이 한눈�
 AAA는 Arrange-Act-Assert 구조다. FIRST는 Fast, Independent, Repeatable, Self-validating, Timely를 강조한다. Boundary와 representative equivalence class를 고르고 happy path뿐 아니라 error contract를 검증한다.
 
 Mock은 interaction이 contract인 경계에서 제한적으로 쓰고 내부 호출 순서를 과도하게 고정하지 않는다. Time, random, network는 injectable dependency로 제어한다.
+
+### Contract 중심 테스트
+
+좋은 단위 테스트는 내부 구현 순서가 아니라 외부에서 관찰 가능한 contract를 고정한다. 입력, 출력, 예외, 상태 변화, side effect 경계를 명확히 하고, refactor 중 바뀌어도 되는 내부 호출 순서는 가능한 한 고정하지 않는다.
+
+Mock은 네트워크, 시간, 파일 시스템, 결제 API처럼 process 밖 경계에 유용하다. 같은 process 내부 협력 객체를 과도하게 mock하면 설계가 취약해지고 테스트가 구현 복제본이 된다.
 
 ## 구현 (Implementation)
 

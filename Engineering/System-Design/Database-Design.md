@@ -4,6 +4,7 @@
 - Prerequisites: [Systems/Databases/Relational-Model-and-SQL.md](../../Systems/Databases/Relational-Model-and-SQL.md), [Systems/Distributed-Systems/Partitioning.md](../../Systems/Distributed-Systems/Partitioning.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 

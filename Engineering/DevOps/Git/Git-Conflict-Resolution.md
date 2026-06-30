@@ -4,6 +4,7 @@
 - Prerequisites: [Engineering/DevOps/Git/Git-Remotes.md](Git-Remotes.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -18,6 +19,12 @@ Git 충돌은 두 이력에서 같은 파일의 같은 영역을 서로 다르�
 ## 이론 (Theory)
 
 Merge conflict는 conflict marker로 표시된다. `<<<<<<<`, `=======`, `>>>>>>>` 사이를 읽고 최종 파일을 직접 만든 뒤 `git add`로 해결 표시를 한다. Rebase 중 충돌은 각 commit을 재적용하는 과정에서 반복적으로 나타날 수 있으며, 해결 후 `git rebase --continue`를 실행한다.
+
+### 충돌 해결의 검증
+
+충돌은 텍스트 병합 실패일 뿐 의미 병합 성공을 보장하지 않는다. 충돌 마커를 제거한 뒤에는 관련 테스트, 빌드, 가능하면 변경 영역의 동작 확인을 해야 한다. 특히 양쪽 변경이 같은 API contract를 다르게 바꿨다면 semantic conflict가 남을 수 있다.
+
+큰 충돌은 파일별로 해결하고, resolution commit을 작게 유지한다. 자동 포매팅은 충돌 해결과 분리하면 리뷰가 쉬워진다.
 
 ## 구현 (Implementation)
 
@@ -70,4 +77,3 @@ Merge conflict는 conflict marker로 표시된다. `<<<<<<<`, `=======`, `>>>>>>
 
 - [Engineering/Testing/](../../Testing/)
 - [GitHub 코드 리뷰](../GitHub/GitHub-Code-Review.md)
-

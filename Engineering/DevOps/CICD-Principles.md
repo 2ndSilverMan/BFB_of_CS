@@ -4,6 +4,7 @@
 - Prerequisites: [Engineering/DevOps/GitHub/GitHub-Actions.md](GitHub/GitHub-Actions.md), [Engineering/Testing/Testing-Pyramid.md](../Testing/Testing-Pyramid.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -18,6 +19,12 @@ CI/CD는 변경을 자주 통합하고 자동 검증하며, 검증된 artifact�
 ## 이론 (Theory)
 
 CI는 main에 통합하기 전 build, test, lint, security check를 자동 실행한다. CD는 continuous delivery와 continuous deployment로 나뉜다. Delivery는 언제든 배포 가능한 상태를 만들고 사람이 승인하며, deployment는 검증 후 자동 배포까지 한다. 핵심은 immutable artifact, reproducible pipeline, fast feedback, rollback path다.
+
+### Pipeline을 제품처럼 운영하기
+
+CI/CD 파이프라인은 코드 품질의 생산 라인이다. 빠른 feedback, 재현 가능한 build, hermetic dependency, secret 격리, artifact provenance, rollback 가능성이 핵심이다. 실패한 pipeline은 product outage처럼 원인과 MTTR을 추적할 가치가 있다.
+
+좋은 gate는 느린 테스트를 무작정 늘리는 것이 아니라 위험도에 맞춰 unit, integration, security scan, deploy validation을 배치한다.
 
 ## 구현 (Implementation)
 
@@ -67,4 +74,3 @@ Pipeline은 실패하면 멈추고, 같은 artifact를 환경별로 재빌드하
 
 - [Engineering/Testing/Testing-Pyramid.md](../Testing/Testing-Pyramid.md)
 - [Engineering/DevOps/GitHub/GitHub-Actions.md](GitHub/GitHub-Actions.md)
-

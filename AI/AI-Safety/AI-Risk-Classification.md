@@ -4,6 +4,7 @@
 - Prerequisites: [AI/AI-Safety/Alignment-Overview.md](Alignment-Overview.md), [AI/AI-Safety/Dangerous-Capability-Evaluation.md](Dangerous-Capability-Evaluation.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -21,6 +22,38 @@ AI 위험 분류 체계는 AI 시스템의 위해 가능성을 risk tier로 나�
 
 분류 체계는 금지/제한, 고위험, 제한적 위험, 낮은 위험처럼 구간화할 수 있다. 단, 같은 모델도 배포 맥락에 따라 위험 등급이 달라질 수 있다.
 
+### 위험은 capability와 context의 함수다
+
+동일한 모델도 어디에 연결되는지에 따라 risk tier가 달라진다. 텍스트 요약 모델이 개인 메모를 정리하는 경우와 의료 기록을 요약해 진료 결정을 보조하는 경우는 영향 범위가 다르다. 따라서 risk classification은 모델 카드만 보지 않고 deployment card를 함께 봐야 한다.
+
+중요 입력은 다음과 같다.
+
+- Domain: 의료, 금융, 고용, 교육, 법률, 인프라 등 권리·안전 영향 영역인가
+- Autonomy: 사람이 승인하는가, 모델이 직접 행동하는가
+- Tool access: 코드 실행, 외부 메시지, 결제, 데이터 수정 권한이 있는가
+- Exposure: 영향을 받는 사용자 수와 취약 집단 여부
+- Reversibility: 잘못된 결정이 복구 가능한가
+- Evidence: 평가·모니터링·감사 로그가 충분한가
+
+### Tier와 control mapping
+
+Risk tier는 이름표가 아니라 control set을 선택하는 입력이다. 낮은 tier는 기본 문서화와 모니터링이면 충분할 수 있지만, 높은 tier는 독립 평가, adversarial testing, human oversight, incident reporting, post-market monitoring이 필요하다.
+
+예시 mapping은 다음과 같다.
+
+- Low: 기본 모델 카드, 일반 품질 테스트, 사용자 피드백 채널
+- Moderate: domain-specific eval, abuse monitoring, release review
+- High: 독립 red team, human-in-the-loop, logging, rollback plan, formal approval
+- Prohibited or restricted: 출시 금지, 기능 제거, 권한 차단, 법무·윤리 검토
+
+### 규제 프레임워크와 내부 분류
+
+EU AI Act는 위험 기반 접근을 사용하고, unacceptable/high/transparency/minimal risk 같은 구간과 고위험 시스템 의무를 둔다. NIST AI RMF는 자발적 위험관리 프레임워크로, 조직이 AI 위험을 식별·측정·관리하는 절차를 세우는 데 초점을 둔다.
+
+법적 분류와 내부 안전 분류는 일치하지 않을 수 있다. 어떤 시스템이 특정 관할권에서 법적으로 low risk처럼 보이더라도, 조직 내부 threat model에서는 high operational risk일 수 있다. 반대로 법적 의무가 강한 영역은 성능이 좋아도 문서화와 감사를 생략할 수 없다.
+
+규제 문서는 계속 변하므로 운영 문서에는 관할권, 기준일, 제품 버전, 판단 근거를 함께 남긴다.
+
 ## 구현 (Implementation)
 
 ```python
@@ -34,6 +67,17 @@ risk_record = {
 ```
 
 Risk tier는 평가 깊이, release approval, monitoring 강도를 결정한다.
+
+```python
+def tier_requires_independent_review(record):
+    return (
+        record["tier"] in {"high_risk", "restricted"}
+        or record["domain"] in {"employment", "healthcare", "law_enforcement"}
+        or record["autonomy"] == "fully_autonomous"
+    )
+```
+
+자동 점수는 triage에 쓰고, 경계 사례는 사람이 판단 근거를 기록해야 한다.
 
 ## 복잡도 (Complexity)
 

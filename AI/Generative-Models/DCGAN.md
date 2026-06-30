@@ -4,6 +4,7 @@
 - Prerequisites: [AI/Generative-Models/GAN-Basics.md](GAN-Basics.md), [AI/Deep-Learning/CNN.md](../Deep-Learning/CNN.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -21,6 +22,26 @@ DCGAN류 설계는 strided convolution, transposed convolution, normalization, �
 
 Checkerboard artifact는 upsampling 방식과 kernel/stride 조합에서 생길 수 있다. Batch normalization은 안정화에 도움을 주지만 discriminator 마지막 층이나 generator 출력층에는 조심스럽게 사용한다.
 
+```mermaid
+flowchart LR
+    Z["latent z"] --> Dense["project to small feature map"]
+    Dense --> Up["upsample blocks"]
+    Up --> Img["generated image"]
+    Img --> Disc["CNN discriminator"]
+```
+
+### Generator/Discriminator 균형
+
+generator와 discriminator의 capacity가 크게 불균형하면 학습이 흔들린다. discriminator가 너무 빨리 real/fake를 완벽히 구분하면 generator가 유용한 gradient를 받기 어렵고, 반대로 discriminator가 약하면 품질 신호가 부정확하다.
+
+### Upsampling artifact
+
+transposed convolution의 kernel/stride 조합이 출력 픽셀에 불균일하게 기여하면 checkerboard artifact가 생길 수 있다. nearest/bilinear upsampling 뒤 convolution을 적용하거나 kernel/stride를 신중히 맞추면 완화된다.
+
+### 이미지 정규화
+
+DCGAN 구현은 이미지 값을 `[-1, 1]`로 정규화하고 generator 출력에 `tanh`를 쓰는 경우가 많다. 데이터 전처리와 출력 activation 범위가 맞지 않으면 discriminator가 쉬운 단서를 학습한다.
+
 ## 구현 (Implementation)
 
 ```python
@@ -33,6 +54,11 @@ generator_shape = [
 ```
 
 실제 모델은 latent sampling, generator/discriminator update ratio, image normalization을 함께 고정한다.
+
+```python
+def normalize_to_tanh_range(pixel):
+    return pixel / 127.5 - 1.0
+```
 
 ## 복잡도 (Complexity)
 

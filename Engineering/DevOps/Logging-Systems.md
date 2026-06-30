@@ -4,6 +4,7 @@
 - Prerequisites: [Engineering/Debugging/Structured-Logging.md](../Debugging/Structured-Logging.md), [Engineering/DevOps/Metrics-Alerts.md](Metrics-Alerts.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -18,6 +19,12 @@
 ## 이론 (Theory)
 
 로그 pipeline은 agent, collector, transport, storage, query UI로 구성된다. ELK/Elastic Stack은 search 중심, Loki는 label과 log stream 중심 접근을 제공한다. Structured logging은 JSON field로 검색성을 높인다. Cardinality, retention, sampling, PII masking, cost control이 중요하다. 로그는 metric·trace와 correlation ID로 연결될 때 가치가 커진다.
+
+### 수집보다 질
+
+로깅 시스템은 많이 모으는 것보다 질문에 답할 수 있게 모으는 것이 중요하다. 구조화 필드, retention, sampling, privacy masking, index cardinality, 비용을 함께 설계한다. 모든 로그를 영구 저장하는 전략은 비용과 개인정보 위험을 키운다.
+
+운영 로그는 metrics와 trace에 연결되어야 한다. Incident 중에는 특정 request, tenant, release, region을 빠르게 좁힐 수 있어야 한다.
 
 ## 구현 (Implementation)
 
@@ -72,4 +79,3 @@
 
 - [Engineering/Debugging/Structured-Logging.md](../Debugging/Structured-Logging.md)
 - [Engineering/Debugging/Distributed-Log-Correlation.md](../Debugging/Distributed-Log-Correlation.md)
-

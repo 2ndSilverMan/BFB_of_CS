@@ -4,6 +4,7 @@
 - Prerequisites: [Systems/Networks/TCP-UDP.md](../Networks/TCP-UDP.md), [Replication.md](Replication.md), [Time-and-Ordering.md](Time-and-Ordering.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 

@@ -4,6 +4,7 @@
 - Prerequisites: [AI/Deep-Learning/Transfer-Learning.md](Transfer-Learning.md), [Math/Optimization/SGD.md](../../Math/Optimization/SGD.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -26,6 +27,34 @@ pretrained 가중치는 이미 좋은 위치에 있는 "거의 다 맞춰진" �
 
 파라미터 효율 fine-tuning(PEFT)은 원 가중치를 거의 고정하고 작은 추가 모듈만 학습한다. 예를 들어 LoRA는 가중치 갱신을 저랭크 분해 $\Delta W = BA$ ($\operatorname{rank}(BA)\ll \dim$)로 근사해 학습·저장 비용을 크게 줄인다.
 
+```mermaid
+flowchart TD
+    D["target 데이터"] --> A{"데이터와 자원"}
+    A -->|매우 적음| H["head-only 또는 PEFT"]
+    A -->|충분함| P["partial/full fine-tuning"]
+    H --> V["validation + drift check"]
+    P --> V
+```
+
+### Full fine-tuning, partial fine-tuning, PEFT
+
+| 방식 | 학습 파라미터 | 장점 | 위험 |
+| --- | --- | --- | --- |
+| Head-only | 새 head | 빠르고 안정적 | 표현 mismatch를 못 고침 |
+| Partial fine-tuning | 상위 layer 일부 | 비용과 적응력 균형 | unfreeze 범위 선택 필요 |
+| Full fine-tuning | 전체 모델 | domain shift 대응력 큼 | forgetting과 과적합 |
+| LoRA/Adapter | 작은 추가 모듈 | 저장·배포 효율 | rank와 삽입 위치에 민감 |
+
+fine-tuning은 "더 많이 풀수록 좋다"가 아니라 target 데이터가 표현을 안전하게 갱신할 만큼 충분한지의 문제다. 데이터가 적다면 작은 learning rate, early stopping, weight decay, augmentation, validation split 품질이 특히 중요하다.
+
+### Learning rate와 forgetting 진단
+
+pretrained backbone의 loss가 초반에 급격히 나빠지거나 validation 성능이 head-only보다 떨어지면 learning rate가 크거나 너무 많은 층을 풀었을 수 있다. layer-wise learning rate decay는 아래층을 더 작게, 위층을 더 크게 갱신해 source 표현을 보존하면서 target head에 적응하게 한다.
+
+### 데이터 위생
+
+LLM instruction tuning이나 domain fine-tuning에서는 중복 샘플, benchmark contamination, train/test conversation leakage가 성능을 과대평가할 수 있다. 작은 데이터셋일수록 split 기준과 deduplication 로그가 fine-tuning 결과의 신뢰도를 좌우한다.
+
 ## 구현 (Implementation)
 
 ```python
@@ -38,6 +67,11 @@ for epoch in range(num_epochs):
     if epoch == 1:
         unfreeze(model.backbone.layer4)   # gradual unfreezing
     train_one_epoch(model, optim)
+```
+
+```python
+def layerwise_lr(base_lr, depth, decay=0.8):
+    return [base_lr * (decay ** (depth - i - 1)) for i in range(depth)]
 ```
 
 ## 복잡도 (Complexity)

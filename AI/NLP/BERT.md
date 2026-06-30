@@ -4,6 +4,7 @@
 - Prerequisites: [AI/Deep-Learning/Transformer.md](../Deep-Learning/Transformer.md), [AI/NLP/Language-Model-Basics.md](Language-Model-Basics.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -23,6 +24,33 @@ $$L=-\sum_{i\in M}\log p(x_i\mid x_{\setminus M})$$
 
 를 최소화한다. encoder self-attention은 causal mask가 없어 모든 입력 위치를 볼 수 있다. BERT류 모델은 representation·understanding task에 강하지만 왼쪽부터 긴 문장을 생성하는 목적에는 decoder model이 더 자연스럽다.
 
+```mermaid
+flowchart LR
+    Text["input text"] --> Mask["mask selected tokens"]
+    Mask --> Enc["Transformer encoder"]
+    Enc --> MLM["predict masked tokens"]
+    Enc --> Head["task head"]
+```
+
+### Fine-tuning head
+
+| 과제 | Head | Loss |
+| --- | --- | --- |
+| Sequence classification | pooled output + linear | cross-entropy |
+| Token classification | token별 linear | token cross-entropy |
+| Extractive QA | start/end linear heads | span loss |
+| Sentence embedding | pooling + contrastive | contrastive/ranking loss |
+
+task head는 작지만 성능은 pooling, learning rate, sequence length, label 품질에 민감하다. 작은 데이터에서는 layer-wise learning rate decay나 freezing이 안정적일 수 있다.
+
+### `[MASK]` mismatch
+
+사전학습에는 `[MASK]` token이 등장하지만 실제 downstream 입력에는 보통 등장하지 않는다. BERT recipe는 일부 token을 원래 token이나 random token으로 두어 이 mismatch를 완화한다. 그래도 BERT는 left-to-right 생성보다 bidirectional representation에 더 적합하다.
+
+### Domain adaptation
+
+법률, 의료, 코드처럼 도메인 언어가 다른 경우 continued pretraining이 도움이 될 수 있다. 다만 domain corpus 품질, tokenizer coverage, catastrophic forgetting, downstream 평가셋 오염을 함께 관리해야 한다.
+
 ## 구현 (Implementation)
 
 ```python
@@ -36,6 +64,14 @@ def mask_tokens(tokens, positions, mask_token="[MASK]"):
 
 
 print(mask_tokens(["나는", "밥을", "먹는다"], [1]))
+```
+
+```python
+task_heads = {
+    "classification": "pooled_output",
+    "ner": "token_outputs",
+    "extractive_qa": "start_end_logits",
+}
 ```
 
 ## 복잡도 (Complexity)

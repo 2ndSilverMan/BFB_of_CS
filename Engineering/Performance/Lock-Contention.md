@@ -4,6 +4,7 @@
 - Prerequisites: [Systems/Operating-Systems/Synchronization.md](../../Systems/Operating-Systems/Synchronization.md), [Systems/Parallel-Computing/Multithreading.md](../../Systems/Parallel-Computing/Multithreading.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -18,6 +19,12 @@
 ## 이론 (Theory)
 
 Critical section 길이, lock acquisition 빈도, thread 수, scheduler preemption이 경합을 만든다. 완화 방법은 lock splitting, sharding, read-write lock, batching, immutable snapshot, atomic operation, queue 기반 설계가 있다. Lock-free는 deadlock을 줄일 수 있지만 ABA 문제, memory ordering, starvation 같은 난도가 높다.
+
+### 경합 줄이기
+
+락 경합은 critical section이 길거나, lock granularity가 너무 넓거나, hot counter를 모든 스레드가 갱신할 때 생긴다. 해결은 critical section 축소, lock striping, read-write lock, thread-local aggregation, lock-free 구조 중 실제 병목에 맞춰 선택한다.
+
+Lock-free가 항상 빠르거나 단순한 것은 아니다. ABA 문제, memory ordering, retry loop가 생기므로 먼저 profile로 경합을 확인하고 더 단순한 구조 변경을 검토한다.
 
 ## 구현 (Implementation)
 
@@ -72,4 +79,3 @@ def aggregate(shards):
 
 - [Systems/Operating-Systems/Synchronization.md](../../Systems/Operating-Systems/Synchronization.md)
 - [Systems/Operating-Systems/Deadlock.md](../../Systems/Operating-Systems/Deadlock.md)
-

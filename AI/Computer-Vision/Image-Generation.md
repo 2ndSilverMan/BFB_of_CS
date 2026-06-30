@@ -4,6 +4,7 @@
 - Prerequisites: [AI/Generative-Models/GAN-Basics.md](../Generative-Models/GAN-Basics.md), [AI/Generative-Models/DDPM.md](../Generative-Models/DDPM.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -21,6 +22,26 @@ VAE는 latent variable과 likelihood lower bound를 사용해 부드러운 laten
 
 조건부 생성은 class, text, mask, depth, pose 같은 조건을 입력으로 사용한다. 평가는 fidelity, diversity, condition adherence, safety를 함께 보며 FID·precision/recall류 지표와 사람 평가가 함께 쓰인다.
 
+```mermaid
+flowchart LR
+    Cond["text / mask / class / image"] --> Gen["generative model"]
+    Noise["noise / latent"] --> Gen
+    Gen --> Image["generated image"]
+    Image --> Eval["fidelity / diversity / alignment / safety"]
+```
+
+### 평가 축 분리
+
+좋은 생성 모델은 사실적으로 보이는 것만으로 충분하지 않다. fidelity는 이미지 품질, diversity는 샘플 다양성, alignment는 조건 준수, safety는 유해·저작권·개인정보 위험을 본다. FID는 편리하지만 prompt alignment나 특정 객체 수 정확도를 직접 보지 않는다.
+
+### 조건부 생성과 제어
+
+text-to-image는 prompt 해석에 민감하고, image-to-image는 원본 구조 보존과 변화 강도 사이의 tradeoff가 있다. inpainting은 mask 경계와 주변 맥락 일관성이 중요하며, pose/depth/control 조건은 더 강한 공간 제어를 제공한다.
+
+### 데이터와 권리 문제
+
+생성 모델은 학습 데이터의 편향, 워터마크, 특정 스타일, 개인정보를 재현할 수 있다. 데이터 출처, opt-out, memorization audit, safety filter, provenance metadata가 모델 품질만큼 중요하다.
+
 ## 구현 (Implementation)
 
 ```python
@@ -29,6 +50,11 @@ def denoise_step(x_t, noise_pred, alpha):
 ```
 
 실제 diffusion sampler는 noise schedule, guidance, scheduler, latent decoder 등을 포함한다.
+
+```python
+def guidance(uncond, cond, scale):
+    return uncond + scale * (cond - uncond)
+```
 
 ## 복잡도 (Complexity)
 

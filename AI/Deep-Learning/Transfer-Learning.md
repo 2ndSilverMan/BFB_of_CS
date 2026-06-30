@@ -4,6 +4,7 @@
 - Prerequisites: [AI/Deep-Learning/CNN.md](CNN.md), [AI/Deep-Learning/Backpropagation.md](Backpropagation.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -24,6 +25,33 @@ transfer learning은 한 과제(source)에서 학습한 표현을 다른 과제(
 
 source와 target의 분포 차이(domain shift)가 클수록 전이 이득이 줄고, 음의 전이(negative transfer)가 날 수도 있다. 일반적으로 저수준 층일수록 과제 독립적이라 freeze하기 좋고, 고수준 층일수록 과제 특화라 갱신 대상이 된다.
 
+```mermaid
+flowchart LR
+    S["source pretraining"] --> B["pretrained backbone"]
+    B --> F["freeze 또는 partial unfreeze"]
+    F --> H["target head"]
+    H --> T["target validation"]
+```
+
+### 전략 선택 기준
+
+| 상황 | 먼저 시도할 전략 | 이유 |
+| --- | --- | --- |
+| target 데이터가 매우 적음 | feature extraction | 과적합과 forgetting 위험이 작음 |
+| target이 source와 유사함 | partial fine-tuning | 상위 표현만 맞춰도 충분한 경우가 많음 |
+| target이 source와 다름 | 더 많은 층 unfreeze 또는 재사전학습 | 고수준 표현이 맞지 않을 수 있음 |
+| 자원이 제한됨 | PEFT 또는 head-only | 저장과 학습 비용 절감 |
+
+전이 학습의 핵심은 "가져온 표현이 target에 유용한가"를 검증하는 것이다. pretrained 모델이 크거나 유명하다는 이유만으로 항상 이득이 생기지는 않는다.
+
+### Domain shift와 negative transfer
+
+source와 target의 입력 통계, label 정의, 촬영 장비, 텍스트 스타일, 시간 범위가 다르면 backbone feature가 오히려 잘못된 prior가 될 수 있다. 이때는 head-only 성능과 from-scratch 작은 모델 성능을 baseline으로 두고, fine-tuning이 실제로 이득인지 비교한다.
+
+### BatchNorm 상태
+
+backbone을 freeze해도 BatchNorm running statistics는 별도의 상태다. 작은 target batch에서 BN 통계를 갱신하면 불안정할 수 있고, source 통계를 그대로 쓰면 target 분포와 어긋날 수 있다. 그래서 BN layer를 eval로 둘지, affine parameter만 학습할지, 통계를 재추정할지 실험 로그에 명시해야 한다.
+
 ## 구현 (Implementation)
 
 ```python
@@ -35,6 +63,11 @@ for p in model.backbone.parameters():   # feature extractor 고정
 model.head = NewHead(num_classes=10)    # target 과제용 head 교체
 optimizer = SGD(model.head.parameters(), lr=1e-3)
 # 이후 일부 backbone을 풀어(unfreeze) 작은 lr로 fine-tuning할 수 있다
+```
+
+```python
+def count_trainable_params(model):
+    return sum(p.numel() for p in model.parameters() if p.requires_grad)
 ```
 
 ## 복잡도 (Complexity)

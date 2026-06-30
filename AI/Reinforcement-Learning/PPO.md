@@ -4,6 +4,7 @@
 - Prerequisites: [Actor-Critic.md](Actor-Critic.md), [Policy-Gradient.md](Policy-Gradient.md), [Math/Optimization/SGD.md](../../Math/Optimization/SGD.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -31,6 +32,34 @@ $$
 
 확률비가 너무 커지거나 작아지는 업데이트를 잘라 정책 변화 폭을 제한한다. 보통 value loss와 entropy bonus를 함께 더해 학습한다.
 
+### Clipping의 방향
+
+Advantage가 양수이면 해당 행동의 확률을 올리고 싶다. 하지만 ratio가 $1+\epsilon$보다 커지면 더 올리는 이득을 제한한다. Advantage가 음수이면 해당 행동의 확률을 낮추고 싶지만, ratio가 $1-\epsilon$보다 작아지는 업데이트를 제한한다.
+
+이 min-clip 구조는 "좋은 방향의 과도한 업데이트"를 막는 데 초점이 있다. 나쁜 방향 업데이트를 모두 막는 것은 아니므로 KL divergence와 성능 regression을 함께 모니터링한다.
+
+### PPO 학습 루프
+
+PPO는 보통 다음 흐름을 따른다.
+
+1. 현재 정책으로 rollout batch를 수집한다.
+2. Value target과 advantage를 계산한다.
+3. Old log probability를 저장한다.
+4. 같은 batch로 여러 epoch mini-batch SGD를 수행한다.
+5. KL, entropy, value loss, explained variance를 모니터링한다.
+
+같은 batch를 너무 오래 반복하면 on-policy 가정이 약해진다. 그래서 epoch 수, clip range, target KL이 중요하다.
+
+### Value clipping과 normalization
+
+많은 구현은 policy clipping뿐 아니라 value function 변화도 제한하거나, advantage normalization, reward normalization을 사용한다. 이런 세부사항은 논문 핵심 수식보다 성능에 더 큰 영향을 줄 때가 있다.
+
+PPO를 비교할 때는 network architecture, rollout length, minibatch size, epoch 수, entropy coefficient, value loss coefficient, reward scaling을 함께 확인해야 한다.
+
+### RLHF에서의 PPO
+
+LLM RLHF에서 PPO는 reward model 점수를 올리면서 reference policy와 너무 멀어지지 않도록 KL penalty를 함께 사용한다. 이때 reward hacking, length bias, refusal style drift, reward model overoptimization을 별도 평가해야 한다.
+
 ## 구현 (Implementation)
 
 clipped surrogate의 한 샘플 값은 다음처럼 계산할 수 있다.
@@ -45,6 +74,13 @@ print(ppo_clip_loss_ratio(1.4, advantage=2.0))
 ```
 
 실제 구현은 이 값을 maximize하므로 프레임워크 loss에서는 부호를 반대로 둔다.
+
+```python
+def approx_kl(old_log_prob, new_log_prob):
+    return old_log_prob - new_log_prob
+```
+
+PPO 구현에서는 clipped objective만 보지 말고 approximate KL이 target보다 커지는지도 추적한다.
 
 ## 복잡도 (Complexity)
 

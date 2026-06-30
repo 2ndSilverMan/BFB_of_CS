@@ -4,6 +4,7 @@
 - Prerequisites: [CAP-Theorem.md](CAP-Theorem.md), [Replication.md](Replication.md), [Partitioning.md](Partitioning.md), [Message-Queues-Event-Streaming.md](Message-Queues-Event-Streaming.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 

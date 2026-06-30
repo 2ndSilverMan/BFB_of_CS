@@ -4,6 +4,7 @@
 - Prerequisites: [Math/Optimization/Gradient-Descent.md](../../Math/Optimization/Gradient-Descent.md), [Math/Optimization/Convex-Optimization.md](../../Math/Optimization/Convex-Optimization.md), [Double-Descent.md](Double-Descent.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -52,6 +53,26 @@ $$
 
 같은 stationary point 수렴 경계를 얻는다.
 
+### Descent lemma의 역할
+
+$L$-smooth 조건은 한 step 이동 후 함수값이 얼마나 증가할 수 있는지 상계한다. $y=x-\eta\nabla f(x)$를 넣으면, $\eta$가 충분히 작을 때 gradient norm에 비례한 감소를 보장할 수 있다.
+
+이 작은 부등식이 대부분의 gradient descent 수렴 증명의 출발점이다.
+
+### 학습률 범위
+
+Quadratic $f(x)=\frac{1}{2}x^\top Ax$에서는 eigenvalue가 수렴 속도를 결정한다. 가장 큰 eigenvalue가 smoothness $L$, 가장 작은 양의 eigenvalue가 strong convexity $\mu$에 대응한다. 학습률이 너무 크면 큰 곡률 방향에서 진동하거나 발산한다.
+
+실무의 learning rate schedule은 이론적 고정 학습률보다 복잡하지만, "곡률이 큰 방향에서는 작게 움직여야 한다"는 원리는 그대로다.
+
+### 조건수
+
+조건수 $\kappa=L/\mu$가 크면 좁고 긴 계곡이 생긴다. Gradient descent는 최적점 방향으로 곧장 가지 못하고 지그재그로 내려갈 수 있다. Preconditioning, momentum, adaptive method는 이런 geometry를 보정하려는 시도다.
+
+### SGD 수렴과 noise
+
+SGD는 full gradient의 noisy estimate를 사용한다. Convex setting에서는 적절한 step size schedule로 기대 regret이나 optimization error를 줄일 수 있다. 딥러닝에서는 noise가 단순한 방해가 아니라 implicit regularization에도 영향을 준다.
+
 ## 구현 (Implementation)
 
 2차 함수에서는 수렴 조건을 직접 관찰할 수 있다.
@@ -72,6 +93,13 @@ print(gradient_descent_quadratic(a=4.0, x0=1.0, eta=0.6, steps=5))  # 너무 큼
 ```
 
 여기서 $L=4$이고 안정적인 학습률은 대략 $0<\eta<2/L$ 범위다. 일반적인 보수적 분석은 $\eta\le1/L$를 자주 사용한다.
+
+```python
+def stable_quadratic_step_size(largest_curvature):
+    return 1.0 / largest_curvature
+```
+
+이론적 학습률은 보수적 기준점이며, 실제 학습에서는 line search나 schedule로 조정한다.
 
 ## 복잡도 (Complexity)
 

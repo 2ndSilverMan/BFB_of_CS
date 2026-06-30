@@ -4,6 +4,7 @@
 - Prerequisites: [AI/MLOps/Experiment-Tracking.md](Experiment-Tracking.md), [AI/MLOps/ML-Pipeline.md](ML-Pipeline.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -21,6 +22,37 @@ Entry에는 artifact digest, model signature, framework/runtime, training run, d
 
 Rollback은 이전 artifact뿐 아니라 preprocessing·feature·schema compatibility를 함께 복원해야 한다.
 
+```mermaid
+flowchart LR
+    Train["training run"] --> Register["register version"]
+    Register --> Validate["validation gate"]
+    Validate --> Stage["staging alias"]
+    Stage --> Prod["production alias"]
+    Prod --> Rollback["rollback alias"]
+```
+
+### Registry entry의 최소 요건
+
+| 항목 | 목적 |
+| --- | --- |
+| Artifact digest | 불변 모델 식별 |
+| Training run | code/data/config lineage |
+| Signature | 입력·출력 schema 호환성 |
+| Evaluation report | 승격 근거 |
+| Runtime image | serving 재현성 |
+| Owner/approver | 책임과 감사 |
+| Limitations | 사용 금지 조건 |
+
+모델 파일만 저장하는 것은 registry가 아니라 artifact archive에 가깝다. registry는 배포 결정을 설명할 수 있어야 한다.
+
+### Alias와 stage
+
+version은 immutable이고 `staging`, `production`, `shadow`, `archived` 같은 alias만 이동한다. alias 이동은 원자적이어야 하며, 누가 어떤 근거로 이동했는지 audit log가 남아야 한다.
+
+### Compatibility check
+
+rollback은 이전 model artifact만 되돌리는 일이 아니다. feature schema, preprocessing image, tokenizer, label mapping, threshold, postprocessing이 함께 호환되어야 한다. registry는 이런 주변 artifact의 digest도 참조해야 한다.
+
 ## 구현 (Implementation)
 
 ```yaml
@@ -31,6 +63,11 @@ training_run: run-9482
 data_version: customer-churn-v7
 signature: {input: feature-schema-v4, output: probability}
 status: validated
+```
+
+```python
+def can_promote(report):
+    return report["quality_passed"] and report["signature_compatible"] and report["approved"]
 ```
 
 ## 복잡도 (Complexity)

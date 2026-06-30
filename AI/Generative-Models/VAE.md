@@ -4,6 +4,7 @@
 - Prerequisites: [Math/Probability-Statistics/Bayes-Theorem.md](../../Math/Probability-Statistics/Bayes-Theorem.md), [AI/Deep-Learning/Backpropagation.md](../Deep-Learning/Backpropagation.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -24,6 +25,28 @@ D_{KL}(q_\phi(z\mid x)\|p(z))$$
 
 다. Gaussian encoder는 $z=\mu+\sigma\odot\epsilon$, $\epsilon\sim N(0,I)$의 reparameterization trick으로 sampling을 통과해 gradient를 전달한다.
 
+```mermaid
+flowchart LR
+    X["x"] --> Enc["encoder"]
+    Enc --> Mu["mu, logvar"]
+    Mu --> Sample["reparameterize z"]
+    Sample --> Dec["decoder"]
+    Dec --> Rec["reconstruction"]
+    Mu --> KL["KL to prior"]
+```
+
+### ELBO 두 항의 균형
+
+재구성 항은 입력을 잘 설명하도록 하고, KL 항은 posterior가 prior와 너무 멀어지지 않게 한다. KL이 너무 강하면 latent가 정보를 담지 못하고, 너무 약하면 prior에서 샘플링했을 때 decoder가 본 적 없는 영역을 만나 품질이 나빠진다.
+
+### Posterior collapse
+
+강한 autoregressive decoder는 latent $z$를 무시하고도 $x$를 잘 모델링할 수 있다. 이때 KL이 0에 가까워지고 latent가 쓸모없어지는 posterior collapse가 생긴다. KL annealing, free bits, decoder 약화, skip connection 제한 등이 대응책이다.
+
+### Likelihood 선택
+
+binary image에는 Bernoulli likelihood, continuous image에는 Gaussian 또는 discretized logistic likelihood를 쓰는 식으로 reconstruction loss는 데이터 분포 가정이다. MSE를 쓰면 blur가 생기기 쉬운 이유도 평균적 예측을 선호하는 likelihood와 연결된다.
+
 ## 구현 (Implementation)
 
 ```python
@@ -36,6 +59,11 @@ def reparameterize(mean, log_variance, rng):
 ```
 
 전체 loss는 reconstruction loss와 KL term의 합이며 데이터 likelihood 선택에 맞춰야 한다.
+
+```python
+def gaussian_kl(mean, log_variance):
+    return 0.5 * np.sum(np.exp(log_variance) + mean ** 2 - 1.0 - log_variance)
+```
 
 ## 복잡도 (Complexity)
 

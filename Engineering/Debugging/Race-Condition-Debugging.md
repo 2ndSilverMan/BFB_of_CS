@@ -4,6 +4,7 @@
 - Prerequisites: [Systems/Operating-Systems/Synchronization.md](../../Systems/Operating-Systems/Synchronization.md), [Engineering/Debugging/Scientific-Debugging.md](Scientific-Debugging.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -18,6 +19,12 @@
 ## 이론 (Theory)
 
 Data race는 동기화 없이 같은 메모리에 하나 이상 쓰기가 포함된 동시 접근이다. Atomicity, visibility, ordering 문제가 함께 나타난다. ThreadSanitizer 같은 도구가 도움을 줄 수 있다.
+
+### 재현이 어려운 이유
+
+Race condition은 thread scheduling, CPU core, timing, I/O latency에 민감하다. 로그를 추가하면 timing이 바뀌어 버그가 사라지는 observer effect도 생긴다. 그래서 deterministic scheduler, stress loop, randomized delay, thread sanitizer가 유용하다.
+
+원인 분석은 공유 상태, happens-before 관계, lock/atomic 사용, memory visibility를 분리해서 본다. 해결 후에는 같은 interleaving을 최대한 재현하는 regression test나 sanitizer CI를 남긴다.
 
 ## 구현 (Implementation)
 

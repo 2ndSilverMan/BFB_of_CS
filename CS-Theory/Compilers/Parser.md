@@ -4,6 +4,7 @@
 - Prerequisites: [CS-Theory/Compilers/Lexer.md](Lexer.md), [CS-Theory/Computation-Theory/Context-Free.md](../Computation-Theory/Context-Free.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -14,6 +15,16 @@
 ## 직관 (Intuition)
 
 `1 + 2 * 3`은 토큰을 왼쪽부터 단순 나열한 것만으로 뜻이 정해지지 않는다. 곱셈이 덧셈보다 먼저라는 문법 규칙에 따라 `1 + (2 * 3)` 구조를 만들어야 결과가 `7`이 된다. 파서는 평평한 토큰 열을 의미 있는 나무로 접는다.
+
+```mermaid
+flowchart TD
+    TOK["INT 1 PLUS INT 2 STAR INT 3"] --> PARSER["parser"]
+    PARSER --> AST["+"] 
+    AST --> N1["1"]
+    AST --> MUL["*"]
+    MUL --> N2["2"]
+    MUL --> N3["3"]
+```
 
 ## 이론 (Theory)
 
@@ -37,6 +48,10 @@ $$
 | Earley / CYK | 일반 CFG | 폭넓은 문법을 처리하지만 비용이 큼 |
 
 LL(1) 파서는 한 토큰 미리보기로 적용할 생성 규칙을 결정해야 한다. 직접 왼쪽 재귀가 있는 $E \rightarrow E + T \mid T$는 재귀 하강 파서가 무한 재귀하므로 반복 형태나 오른쪽 재귀로 변환한다. 모호한 문법은 같은 입력에 여러 파스 트리를 허용하므로 우선순위와 결합 규칙을 문법에 반영해야 한다.
+
+### 우선순위는 문법 구조다
+
+`E -> T ((+|-) T)*`, `T -> F ((*|/) F)*`처럼 레벨을 나누면 `T`가 먼저 묶이고, 그 결과가 `E`에서 더해진다. 그래서 `1 + 2 * 3`은 `+(1, *(2,3))`가 된다. 우선순위를 후처리로 억지로 고치기보다 문법이나 Pratt binding power에 명시하는 편이 안전하다.
 
 ## 구현 (Implementation)
 
@@ -74,9 +89,13 @@ print(Parser([("INT", 1), ("PLUS", "+"), ("INT", 2)]).parse())
 
 실전 파서는 예상 토큰 집합과 원본 위치를 활용해 오류를 보고하고, 세미콜론이나 닫는 괄호 같은 동기화 지점까지 건너뛰어 여러 오류를 한 번에 찾기도 한다.
 
+워크드 trace: `1 + 2 + 3`을 위 파서에 넣으면 처음 `node=("integer",1)`을 만들고, 첫 `PLUS` 뒤 오른쪽 `2`를 읽어 `("add", 1, 2)`가 된다. 다시 `PLUS`를 만나 오른쪽 `3`을 읽고 `("add", ("add",1,2), 3)`을 만든다. 즉 덧셈이 왼쪽 결합으로 파싱된다.
+
 ## 복잡도 (Complexity)
 
 결정적인 LL/LR 문법의 파서는 토큰 수 $n$에 대해 보통 시간 `O(n)`이다. 재귀 하강 파서의 호출 스택은 중첩 깊이 $h$에 대해 `O(h)`, AST 저장은 `O(n)`이다. 일반 CFG 파싱은 Earley의 경우 보통 `O(n^3)` 최악 시간이며 문법 특성에 따라 더 빨라질 수 있다.
+
+표현식 파서에서 같은 토큰을 되돌아가며 여러 번 시도하는 백트래킹을 남발하면 선형성이 깨질 수 있다. 실전 파서는 lookahead, 우선순위 파싱, memoization(packrat) 같은 장치로 이를 제어한다.
 
 ## 응용 (Applications)
 

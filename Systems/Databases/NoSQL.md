@@ -4,6 +4,7 @@
 - Prerequisites: [Relational-Model-and-SQL.md](Relational-Model-and-SQL.md), [Indexes-and-B-Tree.md](Indexes-and-B-Tree.md), [Systems/Distributed-Systems/CAP-Theorem.md](../Distributed-Systems/CAP-Theorem.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 

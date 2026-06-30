@@ -4,6 +4,7 @@
 - Prerequisites: [AI/Deep-Learning/Transformer.md](../Deep-Learning/Transformer.md), [AI/NLP/Language-Model-Basics.md](../NLP/Language-Model-Basics.md), [AI/Computer-Vision/Image-Classification.md](Image-Classification.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -21,6 +22,27 @@ Contrastive image-text pretraining은 matching되는 이미지와 문장의 embe
 
 ViT는 이미지를 patch token sequence로 바꾸어 Transformer에 넣는다. Grounding 과제에서는 텍스트 span과 image region의 alignment가 중요하다. Multimodal 모델은 modality별 encoder, projection layer, fusion module의 설계가 핵심이다.
 
+```mermaid
+flowchart LR
+    Image["image/video"] --> Vision["vision encoder"]
+    Text["text"] --> TextEnc["text encoder / LLM"]
+    Vision --> Fuse["projection / fusion"]
+    TextEnc --> Fuse
+    Fuse --> Task["retrieval / VQA / caption / grounding"]
+```
+
+### Contrastive와 generative VLM
+
+contrastive 모델은 이미지와 텍스트 embedding 공간을 맞춰 retrieval과 zero-shot classification에 강하다. generative VLM은 visual token을 LLM에 연결해 captioning, VQA, multimodal chat을 수행한다. 두 방식은 평가 지표와 실패 모드가 다르다.
+
+### Grounding과 hallucination
+
+VLM이 "이미지를 봤다"고 해서 모든 객체, 수량, 공간 관계를 정확히 이해하는 것은 아니다. caption은 그럴듯하지만 이미지에 없는 내용을 말할 수 있다. grounding 평가에서는 텍스트 span과 region, counting, OCR, spatial relation을 별도로 테스트한다.
+
+### 데이터 품질과 안전
+
+image-text pair는 웹 alt-text처럼 noisy할 수 있다. 이미지의 민감정보, 얼굴, 위치 정보, 편향적 caption은 privacy와 fairness 문제를 만든다. 멀티모달 안전성은 텍스트 prompt injection과 이미지 내 텍스트/OCR 지시가 섞일 수 있어 더 까다롭다.
+
 ## 구현 (Implementation)
 
 ```python
@@ -30,6 +52,11 @@ def contrastive_score(image_embedding, text_embedding):
 ```
 
 Embedding은 보통 normalize한 뒤 cosine similarity나 scaled dot product로 비교한다.
+
+```python
+def zero_shot_class(scores, labels):
+    return labels[max(range(len(scores)), key=scores.__getitem__)]
+```
 
 ## 복잡도 (Complexity)
 

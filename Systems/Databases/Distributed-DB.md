@@ -4,6 +4,7 @@
 - Prerequisites: [NoSQL.md](NoSQL.md), [Systems/Distributed-Systems/Replication.md](../Distributed-Systems/Replication.md), [Systems/Distributed-Systems/Partitioning.md](../Distributed-Systems/Partitioning.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 

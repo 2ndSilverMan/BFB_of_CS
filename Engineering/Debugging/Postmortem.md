@@ -4,6 +4,7 @@
 - Prerequisites: [Engineering/Debugging/Error-Tracking.md](Error-Tracking.md), [Engineering/Debugging/Scientific-Debugging.md](Scientific-Debugging.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -18,6 +19,12 @@
 ## 이론 (Theory)
 
 좋은 postmortem은 impact, detection, timeline, root/contributing factors, what went well, what went poorly, action items를 포함한다. Action item은 owner와 due date가 있어야 한다.
+
+### Blameless와 accountability
+
+Blameless postmortem은 책임을 없애자는 뜻이 아니라 개인 비난 대신 시스템 개선에 집중하자는 뜻이다. 누가 실수했는가보다 어떤 조건이 그 실수를 가능하게 했고, 탐지와 복구가 왜 늦었는지를 묻는다.
+
+좋은 action item은 구체적 owner, deadline, 검증 방법이 있다. "주의하기"는 action item이 아니라 희망사항이다. Runbook, alert, test, guardrail, 자동화로 바뀌어야 재발 방지 효과가 있다.
 
 ## 구현 (Implementation)
 

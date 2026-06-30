@@ -4,6 +4,7 @@
 - Prerequisites: [Parallel-Models.md](Parallel-Models.md), [Multithreading.md](Multithreading.md), [Engineering/Performance/Benchmarking-Basics.md](../../Engineering/Performance/Benchmarking-Basics.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 

@@ -4,6 +4,7 @@
 - Prerequisites: [AI/Causal-Inference/SCM.md](SCM.md), [AI/Causal-Inference/Intervention.md](Intervention.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -25,6 +26,25 @@ SCM에서는 반사실 추론을 세 단계로 설명한다.
 
 잠재 결과 $Y(1), Y(0)$도 반사실 표현이다. 관측 데이터만으로 개인 수준 반사실을 정확히 알기는 어렵고, 강한 모델 가정이 필요하다.
 
+```mermaid
+flowchart LR
+    Observe["observe factual world"] --> Abduct["abduct exogenous state"]
+    Abduct --> Act["replace intervention"]
+    Act --> Predict["predict counterfactual outcome"]
+```
+
+### 개별 반사실과 평균 효과
+
+ATE는 population 평균 효과라 관측 연구에서도 특정 가정 아래 추정 가능할 수 있다. 반면 "이 한 사람에게 쿠폰을 주지 않았다면"은 그 사람의 외생 요인을 모델링해야 하므로 더 강한 SCM 가정이 필요하다.
+
+### 검증의 어려움
+
+반사실은 관측되지 않으므로 직접 검증하기 어렵다. 대신 factual prediction, randomized experiment의 aggregate effect, sensitivity analysis, domain expert review로 모델을 간접 점검한다.
+
+### XAI와의 구분
+
+입력을 조금 바꿔 모델 prediction이 어떻게 바뀌는지 보는 counterfactual explanation은 인과적 반사실과 다를 수 있다. 모델 내부 decision boundary 설명과 실제 세계 개입 효과를 구분해야 한다.
+
 ## 구현 (Implementation)
 
 ```python
@@ -33,6 +53,11 @@ def counterfactual_y(observed_u, do_x):
 ```
 
 핵심은 관측된 개인에 맞는 외생 요인을 어떻게 추론할지다.
+
+```python
+def factual_residual(y, x, coef):
+    return y - coef * x
+```
 
 ## 복잡도 (Complexity)
 

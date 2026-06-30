@@ -4,6 +4,7 @@
 - Prerequisites: [Engineering/Performance/CPU-Profiling.md](CPU-Profiling.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -18,6 +19,12 @@
 ## 이론 (Theory)
 
 프로파일러는 일정 주기로 thread stack을 수집한다. 동일한 stack trace를 aggregate한 뒤 root에서 leaf까지 쌓아 그린다. On-CPU flame graph는 CPU 소비를, off-CPU flame graph는 block·sleep 시간을, allocation flame graph는 allocation source를 보여 준다. Symbol과 stack unwinding 품질이 나쁘면 그래프가 깨진다.
+
+### 읽는 법
+
+플레임 그래프의 폭은 누적 시간이고 높이는 호출 깊이다. 위쪽에 있다고 더 중요하다는 뜻이 아니라, 넓은 프레임이 더 많은 샘플을 차지했다는 뜻이다. 같은 함수가 여러 호출 경로에 흩어져 있으면 전체 폭을 합쳐 봐야 한다.
+
+Diff flame graph는 최적화 전후의 변화량을 보는 데 유용하다. 단일 run의 그래프보다 같은 workload에서 baseline과 비교해야 regression을 정확히 잡는다.
 
 ## 구현 (Implementation)
 
@@ -68,4 +75,3 @@ main;handle_request;render 25
 
 - [Engineering/Performance/CPU-Profiling.md](CPU-Profiling.md)
 - [Engineering/Debugging/Stack-Traces.md](../Debugging/Stack-Traces.md)
-

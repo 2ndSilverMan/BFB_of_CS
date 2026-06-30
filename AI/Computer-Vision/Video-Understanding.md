@@ -4,6 +4,7 @@
 - Prerequisites: [AI/Computer-Vision/Image-Classification.md](Image-Classification.md), [AI/Computer-Vision/Optical-Flow.md](Optical-Flow.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -21,6 +22,26 @@ Video model은 2D CNN으로 프레임 feature를 뽑아 temporal pooling을 하�
 
 Sampling strategy가 매우 중요하다. 짧은 clip은 세부 motion을 잘 보고, 긴 clip은 context를 더 잘 본다. Label은 video-level, clip-level, frame-level로 달라질 수 있다.
 
+```mermaid
+flowchart LR
+    Video["video"] --> Sample["frame/clip sampling"]
+    Sample --> Encode["spatial encoder"]
+    Encode --> Temporal["temporal model"]
+    Temporal --> Task["classification / localization / retrieval"]
+```
+
+### Label granularity
+
+video-level label은 전체 영상에 하나의 label을 붙이지만, 실제 사건은 몇 초만 지속될 수 있다. clip-level, frame-level, temporal segment label은 더 정확하지만 annotation 비용이 크다. weak supervision에서는 모델이 label과 관련 없는 배경 shortcut을 배울 수 있다.
+
+### Sampling tradeoff
+
+stride가 크면 긴 시간을 볼 수 있지만 빠른 동작을 놓칠 수 있고, stride가 작으면 motion은 잘 보지만 context가 짧다. multi-clip/multi-view evaluation은 정확도를 올리지만 비용이 커진다. fps와 frame decoding 방식도 재현성에 포함해야 한다.
+
+### Multimodal video
+
+영상 이해에는 audio, subtitle, OCR, metadata가 강한 신호가 될 수 있다. 다만 modality 간 시간 동기화가 틀어지면 action boundary와 event timing이 어긋난다.
+
 ## 구현 (Implementation)
 
 ```python
@@ -30,6 +51,11 @@ prediction = temporal_head(features)
 ```
 
 실제 학습에서는 fps, stride, clip length, augmentation, multi-view evaluation을 명확히 기록한다.
+
+```python
+def temporal_windows(num_frames, window, stride):
+    return [(i, min(i + window, num_frames)) for i in range(0, num_frames, stride)]
+```
 
 ## 복잡도 (Complexity)
 

@@ -4,6 +4,7 @@
 - Prerequisites: [Engineering/DevOps/CICD-Principles.md](CICD-Principles.md), [Engineering/Debugging/Canary-Feature-Flags.md](../Debugging/Canary-Feature-Flags.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -18,6 +19,12 @@
 ## 이론 (Theory)
 
 Rolling 배포는 instance를 조금씩 교체한다. Blue-green은 구버전과 신버전 환경을 나란히 두고 traffic switch로 전환한다. Canary는 작은 사용자·traffic 비율부터 시작해 metric을 보며 확대한다. Feature flag는 배포와 기능 노출을 분리한다. 모든 전략은 health check, rollback, database migration 호환성을 함께 고려해야 한다.
+
+### 호환성과 관측성
+
+배포 전략은 traffic switching보다 compatibility가 먼저다. API, DB schema, message format, cache key, background job이 구버전과 신버전에서 동시에 동작해야 rolling/canary가 안전하다. Expand-contract migration은 이 문제를 줄이는 기본 패턴이다.
+
+Canary는 metric이 있어야 의미가 있다. Error rate, latency, saturation, business KPI, log anomaly를 단계별 중단 조건에 연결한다.
 
 ## 구현 (Implementation)
 
@@ -67,4 +74,3 @@ canary rollout:
 
 - [Engineering/Debugging/Canary-Feature-Flags.md](../Debugging/Canary-Feature-Flags.md)
 - [Engineering/DevOps/Metrics-Alerts.md](Metrics-Alerts.md)
-

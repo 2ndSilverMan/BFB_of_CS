@@ -4,6 +4,7 @@
 - Prerequisites: [Engineering/System-Design/Scalability.md](Scalability.md), [Systems/Distributed-Systems/Replication.md](../../Systems/Distributed-Systems/Replication.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -17,11 +18,33 @@ Cache는 비싼 원본 계산·저장소보다 가까운 곳에 재사용 가능
 
 자주 쓰는 책을 창고가 아닌 책상에 둔다. 빠르지만 책상 사본이 원본과 달라질 수 있고 공간이 차면 무엇을 치울지 정해야 한다.
 
+```mermaid
+sequenceDiagram
+    participant App
+    participant Cache
+    participant DB
+    App->>Cache: get(key)
+    Cache-->>App: miss
+    App->>DB: read(key)
+    DB-->>App: value
+    App->>Cache: set(key, value, ttl)
+    App-->>App: return value
+```
+
 ## 이론 (Theory)
 
 Cache-aside는 miss 시 application이 원본을 읽어 cache에 넣는다. Read-through/write-through는 cache layer가 원본 접근을 감싼다. Write-back은 빠르지만 durability·flush 복잡성이 크다.
 
 Hit ratio만 보지 않고 hit/miss latency를 포함한 평균과 tail을 본다. TTL은 stale 기간과 origin load를 교환한다. Cache stampede는 인기 key 만료 시 동시 miss가 backend를 덮치는 현상으로 request coalescing, jitter, stale-while-revalidate로 완화한다.
+
+### 일관성 정책
+
+| 패턴 | 읽기 | 쓰기 | 위험 |
+|---|---|---|---|
+| cache-aside | 앱이 miss 처리 | DB 갱신 후 cache 삭제/갱신 | 삭제 실패, stale read |
+| write-through | cache를 거쳐 DB 기록 | cache와 DB 동시 기록 | 쓰기 지연 증가 |
+| write-back | cache 먼저 기록, 나중에 flush | 빠름 | cache 장애 시 데이터 손실 |
+| stale-while-revalidate | 오래된 값을 잠시 제공 | 비동기 갱신 | 오래된 응답 허용 필요 |
 
 ## 구현 (Implementation)
 
@@ -37,9 +60,33 @@ def get_with_cache(cache, store, key, ttl):
 
 Negative caching과 `None` value 구분, concurrency control은 실제 구현에서 추가한다.
 
+stampede 완화의 핵심은 같은 key miss를 하나의 origin 요청으로 합치는 것이다.
+
+```python
+inflight = {}
+
+def get_singleflight(cache, store, key, ttl):
+    value = cache.get(key)
+    if value is not None:
+        return value
+    if key in inflight:
+        return inflight[key]()       # 실제 구현은 future/promise 대기
+    def load():
+        value = store.get(key)
+        cache.set(key, value, ttl=ttl)
+        return value
+    inflight[key] = load
+    try:
+        return load()
+    finally:
+        inflight.pop(key, None)
+```
+
 ## 복잡도 (Complexity)
 
 Hash cache lookup은 평균 `O(1)`이지만 network cache는 round trip이 있다. 공간은 entry 수·object size·replication에 비례하며 eviction 유지 비용이 추가된다.
+
+워크드 예제: hit latency 2ms, miss latency 80ms, hit ratio 90%라면 평균은 `0.9*2 + 0.1*80 = 9.8ms`다. hit ratio가 99%면 `2.78ms`로 내려간다. 하지만 큰 object miss가 tail을 지배할 수 있어 p95/p99도 함께 봐야 한다.
 
 ## 응용 (Applications)
 

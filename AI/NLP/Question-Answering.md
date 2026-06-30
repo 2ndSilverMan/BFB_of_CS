@@ -4,6 +4,7 @@
 - Prerequisites: [BERT.md](BERT.md), [GPT.md](GPT.md), [Relation-Extraction.md](Relation-Extraction.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -26,6 +27,27 @@
 
 평가에는 exact match, token-level F1, answer faithfulness, citation correctness가 쓰인다. 생성형 QA에서는 hallucination과 근거 불일치가 핵심 위험이다.
 
+```mermaid
+flowchart LR
+    Q["question"] --> Ret["retriever"]
+    Ret --> Ctx["candidate context"]
+    Ctx --> Reader["reader / generator"]
+    Reader --> Ans["answer"]
+    Ans --> Cite["citation / abstention"]
+```
+
+### Answerability와 abstention
+
+QA 시스템은 답을 아는 질문만 받지 않는다. 문서에 답이 없거나 질문 전제가 틀린 경우에는 모른다고 답해야 한다. extractive QA에서는 no-answer score를 두고, generative QA에서는 citation 요구와 abstention threshold를 둔다.
+
+### Retriever와 reader 분리 평가
+
+open-domain QA 실패는 retriever 문제일 수도 reader/generator 문제일 수도 있다. 먼저 gold 문서가 top-k에 들어오는지 recall@k를 보고, 그다음 reader가 주어진 근거에서 답을 찾는지 평가한다. 둘을 분리하지 않으면 개선 방향을 잘못 잡는다.
+
+### 근거 충실성
+
+생성 답변은 자연스러워도 문서에 없는 내용을 만들 수 있다. 답변 문장별 citation, quote span, entailment check, human review를 통해 원문 근거와 일치하는지 확인한다. 중요한 도메인에서는 답보다 근거 검증 가능성이 더 중요하다.
+
 ## 구현 (Implementation)
 
 Extractive QA는 시작/끝 위치 점수를 고르는 문제로 볼 수 있다.
@@ -44,6 +66,11 @@ def best_span(start_scores, end_scores, max_len=10):
 ```
 
 Open-domain QA에서는 retrieval 품질이 reader/generator 성능만큼 중요하다.
+
+```python
+def recall_at_k(retrieved_ids, gold_id, k):
+    return gold_id in retrieved_ids[:k]
+```
 
 ## 복잡도 (Complexity)
 

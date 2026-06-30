@@ -4,6 +4,7 @@
 - Prerequisites: 없음
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -18,6 +19,12 @@
 ## 이론 (Theory)
 
 좋은 MRE는 minimal, complete, reproducible해야 한다. 입력, 기대 결과, 실제 결과, 환경, 실행 방법을 포함한다. 줄이는 과정에서 버그가 사라지면 직전에 제거한 요소가 단서다.
+
+### 최소화 전략
+
+MRE를 줄일 때는 code, data, environment, dependency를 따로 줄인다. 한 번에 여러 축을 바꾸면 무엇이 재현 조건인지 모른다. 입력은 delta debugging처럼 절반씩 줄이고, 환경은 container나 lockfile로 고정한다.
+
+좋은 MRE는 공개 가능한 형태여야 한다. 민감 데이터는 구조를 유지한 synthetic data로 바꾸고, API key나 내부 URL은 제거하되 오류를 재현하는 schema와 timing은 남긴다.
 
 ## 구현 (Implementation)
 

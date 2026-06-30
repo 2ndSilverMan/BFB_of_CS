@@ -4,6 +4,7 @@
 - Prerequisites: [AI/Machine-Learning/Bias-Variance.md](../Machine-Learning/Bias-Variance.md), [Generalization-Bounds.md](Generalization-Bounds.md), [Math/Probability-Statistics/Expectation.md](../../Math/Probability-Statistics/Expectation.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -40,6 +41,28 @@ $$
 
 이 분해는 모델 복잡도를 올리면 보통 bias는 줄고 variance는 늘 수 있음을 보여준다. 그러나 현대 과매개변수 모델에서는 double descent처럼 고전적 U자 곡선만으로 설명되지 않는 현상도 나타난다.
 
+### 분해가 성립하는 조건
+
+고전적 bias-variance 분해는 주로 squared loss 회귀에서 가장 깔끔하다. Classification error, cross-entropy, ranking loss에서는 같은 형태로 바로 분해되지 않는다. 그래도 "체계적 오차"와 "표본 민감도"라는 직관은 넓게 쓰인다.
+
+분해는 한 점 $x$에서의 예측 분포를 본다. 전체 risk는 입력 분포에 대해 이 값을 다시 평균낸 것이다. 따라서 특정 영역에서 variance가 크면 전체 평균에서는 작아 보여도 safety-critical slice에서는 문제가 될 수 있다.
+
+### Learning curve 해석
+
+High bias 모델은 train error와 validation error가 둘 다 높고, 데이터가 늘어도 큰 개선이 없다. High variance 모델은 train error는 낮지만 validation error가 높고, 데이터를 더 모으면 gap이 줄 수 있다.
+
+이 패턴은 regularization, model capacity, data augmentation, feature quality를 조정할 때 유용한 진단이다.
+
+### Ensemble과 variance 감소
+
+서로 독립적이거나 덜 상관된 모델을 평균내면 variance가 줄어든다. Bagging과 random forest는 이 원리를 사용한다. 다만 모델 오류가 강하게 상관되어 있으면 평균의 이득이 작다.
+
+딥러닝 ensemble도 불확실성과 성능을 개선할 수 있지만, 계산 비용이 크고 분포 이동에서 모든 모델이 같은 shortcut을 공유하면 실패할 수 있다.
+
+### Double descent와의 관계
+
+Double descent는 bias-variance 관점을 버리게 하는 현상이라기보다, "복잡도"를 파라미터 수 하나로 보지 말아야 함을 보여 준다. Overparameterized 영역에서는 optimizer가 선택하는 해의 norm, margin, feature spectrum, implicit regularization이 variance를 다시 낮출 수 있다.
+
 ## 구현 (Implementation)
 
 여러 bootstrap 표본으로 모델 예측의 분산을 추정하는 식의 진단을 할 수 있다.
@@ -63,6 +86,13 @@ print(round(bias ** 2, 3), round(var, 3))
 ```
 
 실제 문제에서는 $f^\*$를 모르므로 bias를 직접 측정하기 어렵고, synthetic data나 validation behavior로 간접 분석한다.
+
+```python
+def generalization_gap(train_error, validation_error):
+    return validation_error - train_error
+```
+
+Gap이 크면 variance나 distribution mismatch를 의심하고, 둘 다 높으면 bias나 feature 부족을 의심한다.
 
 ## 복잡도 (Complexity)
 

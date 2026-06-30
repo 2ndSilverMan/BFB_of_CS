@@ -4,6 +4,7 @@
 - Prerequisites: [Structural-Patterns.md](Structural-Patterns.md), [Engineering/Software-Design/SOLID.md](SOLID.md), [Programming/Functions-and-Recursion.md](../../Programming/Functions-and-Recursion.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 

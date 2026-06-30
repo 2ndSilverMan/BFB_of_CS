@@ -4,6 +4,7 @@
 - Prerequisites: [Systems/Distributed-Systems/Message-Queues-Event-Streaming.md](../../Systems/Distributed-Systems/Message-Queues-Event-Streaming.md), [AI/MLOps/Data-Versioning.md](Data-Versioning.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -21,6 +22,28 @@ Batch는 bounded data를 다루므로 재실행과 backfill이 상대적으로 �
 
 ML feature는 aggregation window와 freshness가 중요하다. 동일 feature를 batch와 streaming으로 따로 구현하면 값이 어긋나기 쉬우므로 transformation 정의를 공유하거나 검증을 둔다.
 
+```mermaid
+flowchart LR
+    Events["events"] --> Stream["stream processor"]
+    Events --> Batch["batch backfill"]
+    Stream --> Online["online feature/state"]
+    Batch --> Offline["offline feature table"]
+    Online --> Reconcile["offline-online reconciliation"]
+    Offline --> Reconcile
+```
+
+### Event time, processing time, watermark
+
+event time은 사건이 실제 발생한 시간이고 processing time은 시스템이 처리한 시간이다. 네트워크 지연, 모바일 offline, upstream retry 때문에 두 시간은 자주 다르다. watermark는 "이 시점 이전 이벤트는 대부분 도착했다"고 보고 window를 닫는 기준이다. lateness 정책은 feature 값과 label alignment를 직접 바꾼다.
+
+### Exactly-once의 실제 의미
+
+스트리밍에서 exactly-once는 source, processor, sink가 모두 협력해야 하는 end-to-end 성질이다. processor가 checkpoint를 해도 sink가 idempotent하지 않으면 중복 write가 생긴다. 그래서 event id, dedup key, upsert sink, transactional publish가 필요하다.
+
+### Batch와 streaming reconciliation
+
+streaming feature는 빠르지만 장애와 late event에 취약하고, batch backfill은 느리지만 더 완전한 데이터를 반영한다. 같은 feature를 두 경로로 만들 때는 주기적으로 diff를 계산해 허용 오차를 넘으면 online state를 보정한다.
+
 ## 구현 (Implementation)
 
 ```python
@@ -31,6 +54,11 @@ def update_count(state, event):
 ```
 
 실제 streaming job은 checkpoint, deduplication key, watermark, schema evolution, poison event 처리를 포함한다.
+
+```python
+def should_drop_late(event_time, watermark):
+    return event_time <= watermark
+```
 
 ## 복잡도 (Complexity)
 

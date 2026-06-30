@@ -4,6 +4,7 @@
 - Prerequisites: [AI/Deep-Learning/MLP.md](MLP.md), [AI/Deep-Learning/Backpropagation.md](Backpropagation.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -30,6 +31,32 @@ $$c_t = f_t \odot c_{t-1} + i_t \odot \tanh(W_c[\cdot]),\qquad h_t = o_t \odot \
 
 forget gate $f_t$가 1에 가까우면 cell state가 거의 그대로 흘러 gradient가 보존된다. GRU는 gate를 둘(update, reset)로 줄이고 cell state를 없애 파라미터가 적지만 비슷한 성능을 낸다.
 
+```mermaid
+flowchart LR
+    X1["x1"] --> H1["h1"]
+    H0["h0"] --> H1
+    X2["x2"] --> H2["h2"]
+    H1 --> H2
+    X3["x3"] --> H3["h3"]
+    H2 --> H3
+    H3 --> Y["sequence output"]
+```
+
+### Gradient가 사라지고 폭발하는 이유
+
+BPTT에서는 같은 recurrent matrix가 시간축으로 반복해서 곱해진다. 단순화하면 먼 과거의 gradient는 $W_{hh}^k$와 비슷한 항을 포함한다. 고윳값 크기가 1보다 작으면 반복 곱으로 신호가 작아지고, 1보다 크면 커진다. LSTM의 cell state는 덧셈 경로와 forget gate를 통해 이 곱셈 경로를 완화한다.
+
+| 문제 | 증상 | 대표 처방 |
+| --- | --- | --- |
+| Vanishing gradient | 먼 과거 정보 반영 실패 | LSTM/GRU, residual, attention |
+| Exploding gradient | loss가 갑자기 NaN 또는 발산 | gradient clipping, 작은 learning rate |
+| Long sequence memory | GPU memory 증가 | truncated BPTT, checkpointing |
+| 느린 학습 | time step 병렬화 어려움 | Transformer나 convolutional sequence model 고려 |
+
+### 출력 형태 선택
+
+sequence classification은 마지막 hidden state나 pooled hidden states를 사용한다. sequence labeling은 각 time step의 $h_t$마다 출력을 만든다. encoder-decoder 구조에서는 encoder의 마지막 state를 decoder 초기 상태로 넘기거나 attention으로 전체 encoder state를 참조한다. 과제의 label granularity가 sequence 단위인지 token 단위인지 먼저 정해야 loss shape가 명확해진다.
+
 ## 구현 (Implementation)
 
 ```python
@@ -43,6 +70,13 @@ def run_rnn(xs, h0, params):
         h = rnn_step(x_t, h, *params)
         outputs.append(h)
     return outputs            # 각 step의 hidden state
+```
+
+```python
+def clip_global_norm(grads, max_norm, eps=1e-12):
+    total = sum((g * g).sum() for g in grads) ** 0.5
+    scale = min(1.0, max_norm / (total + eps))
+    return [g * scale for g in grads]
 ```
 
 ## 복잡도 (Complexity)

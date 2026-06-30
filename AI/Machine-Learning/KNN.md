@@ -4,6 +4,7 @@
 - Prerequisites: [Math/Linear-Algebra/Vectors.md](../../Math/Linear-Algebra/Vectors.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -15,6 +16,14 @@ k-NN은 새 입력과 가장 가까운 훈련 표본 $k$개를 찾아 다수결�
 
 새 동네의 성격을 알고 싶다면 가장 가까운 이웃 몇 곳을 살펴본다. 가까움이 의미 있는 특징 공간이라면 주변 표본의 레이블이 좋은 단서가 된다.
 
+```mermaid
+flowchart LR
+    QUERY["query x"] --> DIST["모든 train point와 거리 계산"]
+    DIST --> TOPK["가까운 k개 선택"]
+    TOPK --> VOTE["분류: vote<br/>회귀: 평균"]
+    VOTE --> PRED["예측"]
+```
+
 ## 이론 (Theory)
 
 Euclidean distance는
@@ -24,6 +33,27 @@ $$d(x,z)=\sqrt{\sum_{j=1}^{d}(x_j-z_j)^2}$$
 이다. 분류는 이웃의 최빈 레이블, 회귀는 평균을 사용한다. 거리의 역수로 가중할 수도 있다. 작은 $k$는 복잡한 경계를 만들어 분산이 크고, 큰 $k$는 부드럽지만 편향이 커진다.
 
 특징 단위가 다르면 큰 스케일 특징이 거리를 지배하므로 표준화가 중요하다. 고차원에서는 거리들이 비슷해지는 차원의 저주로 성능이 악화될 수 있다.
+
+### metric 선택이 모델 선택이다
+
+거리 함수는 "무엇이 비슷한가"에 대한 가정이다.
+
+| 데이터 | 흔한 거리 |
+|---|---|
+| 표준화된 연속 특징 | Euclidean, Manhattan |
+| 텍스트/임베딩 | cosine distance |
+| 이진 sparse feature | Jaccard, Hamming |
+| 상관 구조가 있는 연속 특징 | Mahalanobis |
+
+거리 선택이 잘못되면 k-NN은 아무리 많은 데이터를 저장해도 잘못된 이웃을 찾는다.
+
+### k 선택과 tie 처리
+
+$k=1$은 매우 유연해 훈련 잡음에 민감하고, 큰 $k$는 경계를 부드럽게 하지만 소수 클래스나 국소 구조를 놓칠 수 있다. tie가 생기면 거리 가중 투표, 클래스 prior, 고정된 tie-break 정책이 필요하다. 이 정책은 재현성과 fairness에 영향을 줄 수 있다.
+
+### 차원의 저주
+
+차원이 커지면 가까운 점과 먼 점의 거리 차이가 줄어드는 경향이 있어 "근처"라는 개념이 약해진다. feature selection, metric learning, PCA/embedding, approximate nearest neighbor 인덱싱이 자주 함께 쓰인다.
 
 ## 구현 (Implementation)
 
@@ -44,6 +74,16 @@ def predict_knn(train_x, train_y, query, k=3):
 print(predict_knn([[0], [1], [5], [6]], [0, 0, 1, 1], [4.5]))
 ```
 
+거리 가중 투표는 가까운 이웃의 영향력을 키운다.
+
+```python
+def weighted_vote(neighbors, eps=1e-9):
+    scores = {}
+    for dist, label in neighbors:
+        scores[label] = scores.get(label, 0.0) + 1.0 / (dist + eps)
+    return max(scores, key=scores.get)
+```
+
 ## 복잡도 (Complexity)
 
 학습은 저장만 하면 `O(nd)` 공간이다. brute-force 예측은 질의 하나에 거리 계산 `O(nd)`와 선택 비용이 든다. KD-tree·ball tree·근사 최근접 탐색은 데이터와 차원에 따라 질의를 가속한다.
@@ -61,6 +101,8 @@ print(predict_knn([[0], [1], [5], [6]], [0, 0, 1, 1], [4.5]))
 - $k$가 홀수면 모든 다중 클래스 tie가 사라지는 것은 아니다.
 - 거리 metric과 스케일 선택은 모델의 핵심 가정이다.
 - 고차원에서 더 많은 특징이 반드시 도움이 되지는 않는다.
+- train set이 커질수록 예측 latency와 메모리 비용이 커진다. 배포 요구사항을 먼저 확인해야 한다.
+- 클래스 불균형이 심하면 다수 클래스 이웃이 vote를 지배할 수 있다.
 
 ## TMI
 
@@ -73,6 +115,8 @@ print(predict_knn([[0], [1], [5], [6]], [0, 0, 1, 1], [4.5]))
 - $k=1,3,5$에서 같은 질의의 예측을 비교하라.
 - 특징 하나의 단위를 1000배 키웠을 때 거리와 예측이 어떻게 변하는지 확인하라.
 - 거리 가중 회귀 k-NN을 구현하라.
+- cosine distance와 Euclidean distance가 같은 임베딩 쌍에 대해 다른 순위를 줄 수 있는 예를 만들어라.
+- 클래스 불균형 데이터에서 k-NN의 decision boundary가 어떻게 이동하는지 관찰하라.
 
 ## 이어서 읽기 (Reading Path)
 

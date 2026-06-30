@@ -4,6 +4,7 @@
 - Prerequisites: [Systems/Networks/IP-and-Routing.md](IP-and-Routing.md), [Systems/Networks/TCP-UDP.md](TCP-UDP.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 

@@ -4,6 +4,7 @@
 - Prerequisites: [Engineering/Debugging/Logging-Levels.md](Logging-Levels.md), [Engineering/Debugging/Distributed-Log-Correlation.md](Distributed-Log-Correlation.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -18,6 +19,12 @@
 ## 이론 (Theory)
 
 좋은 error event에는 stack trace, release version, environment, user/session fingerprint, request ID, breadcrumbs가 포함된다. Grouping은 같은 root cause를 묶어 noise를 줄인다.
+
+### Grouping과 triage
+
+에러 트래킹은 exception을 모으는 것보다 같은 root cause를 한 issue로 묶는 grouping이 중요하다. Stack frame, error type, message, release version, fingerprint가 grouping 품질을 좌우한다.
+
+Triage에서는 발생 횟수만 보지 않는다. 영향 사용자 수, 결제/권한/데이터 손상 여부, 새 릴리스와의 상관, 재현 가능성, workaround 유무를 함께 보고 우선순위를 정한다.
 
 ## 구현 (Implementation)
 

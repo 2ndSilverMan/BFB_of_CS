@@ -4,6 +4,7 @@
 - Prerequisites: [Engineering/DevOps/Metrics-Alerts.md](Metrics-Alerts.md), [Engineering/DevOps/Distributed-Tracing.md](Distributed-Tracing.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -18,6 +19,12 @@ SLI는 체온계 숫자, SLO는 정상 체온 범위, SLA는 그 범위를 지�
 ## 이론 (Theory)
 
 좋은 SLI는 사용자 경험과 직접 연결된다. 예를 들어 availability, successful request ratio, p95 latency, freshness가 있다. SLO는 일정 기간 동안 SLI가 만족해야 하는 목표다. Error budget은 100%에서 SLO를 뺀 허용 실패량이며, release velocity와 reliability trade-off를 조정하는 도구다. SLA는 법적·상업적 책임을 동반하므로 SLO보다 보수적으로 잡는 경우가 많다.
+
+### Error budget 운영
+
+SLO는 목표 숫자가 아니라 의사결정 장치다. Error budget을 빠르게 쓰고 있으면 release 속도를 줄이고 reliability work를 우선한다. Budget이 충분하면 개선 실험과 기능 배포를 진행할 여지가 있다.
+
+SLI는 사용자가 느끼는 경험과 가까워야 한다. 내부 CPU나 pod restart보다 request success rate, p95 latency, freshness, durability 같은 user-facing metric이 더 좋은 출발점이다.
 
 ## 구현 (Implementation)
 
@@ -68,4 +75,3 @@ SLO window, traffic volume, low-traffic service, dependency failure attribution�
 
 - [Engineering/DevOps/Metrics-Alerts.md](Metrics-Alerts.md)
 - [Engineering/Performance/Benchmarking-Basics.md](../Performance/Benchmarking-Basics.md)
-

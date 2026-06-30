@@ -4,6 +4,7 @@
 - Prerequisites: [Variable-Elimination.md](Variable-Elimination.md), [Bayesian-Networks.md](Bayesian-Networks.md), [Math/Probability-Statistics/Probability-Basics.md](../../Math/Probability-Statistics/Probability-Basics.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -31,6 +32,25 @@ f(\mathbf{x}_{N(f)})
 $$
 
 트리에서는 잎에서 루트로, 다시 루트에서 잎으로 메시지를 보내면 정확한 belief를 얻는다. 그래프에 cycle이 있으면 loopy belief propagation으로 반복 적용할 수 있지만, 수렴과 정확성은 보장되지 않을 수 있다.
+
+```mermaid
+flowchart LR
+    Leaf["leaf messages"] --> Root["collect to root"]
+    Root --> Down["distribute back"]
+    Down --> Belief["node beliefs"]
+```
+
+### 변수 소거와의 관계
+
+트리에서 BP는 여러 질의를 효율적으로 재사용하는 변수 소거로 볼 수 있다. 한 노드의 marginal을 구할 때 필요한 하위 factor 계산을 메시지로 저장하고, 모든 노드에 대해 같은 계산을 반복하지 않는다.
+
+### 메시지 정규화
+
+메시지는 scale이 계속 커지거나 작아질 수 있어 보통 정규화한다. 정규화는 belief를 안정적으로 계산하기 위한 수치적 장치이며, 최종 marginal은 다시 normalize한다.
+
+### Loopy BP 사용 시 점검
+
+cycle이 있는 그래프에서는 damping, update schedule, convergence criterion이 중요하다. 수렴해도 정확 marginal이 아닐 수 있으므로 작은 문제의 exact inference나 샘플링 결과와 비교해 sanity check를 한다.
 
 ## 구현 (Implementation)
 

@@ -4,6 +4,7 @@
 - Prerequisites: [AI/AI-Safety/Adversarial-Examples.md](Adversarial-Examples.md), [Math/Optimization/Convex-Optimization.md](../../Math/Optimization/Convex-Optimization.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -21,6 +22,34 @@
 
 보증 반경, 정확도, 계산 비용 사이에는 tradeoff가 있다. 큰 모델과 고차원 입력에서는 tight한 certificate를 얻기 어렵다.
 
+### Empirical defense와 certificate
+
+경험적 방어는 "우리가 시도한 공격이 실패했다"를 말한다. Certified robustness는 "명시한 반경 안의 모든 perturbation에 대해 예측이 변하지 않는다"를 말하려 한다. 둘 사이에는 큰 차이가 있다.
+
+Certificate는 보통 보수적이다. 보증을 얻지 못했다고 반드시 취약하다는 뜻은 아니고, 보증을 얻었다고 threat model 밖 공격까지 막는 것도 아니다. 따라서 certified accuracy와 clean accuracy를 함께 보고한다.
+
+### Randomized smoothing
+
+Randomized smoothing은 기본 분류기 위에 noise를 평균내는 smoothed classifier를 만든다. 직관적으로 입력 주변의 noisy sample들이 같은 class로 많이 분류되면, 그 주변 반경 안에서 class가 유지된다는 확률적 보증을 준다.
+
+장점은 비교적 큰 모델에도 적용할 수 있다는 점이고, 단점은 많은 sampling 비용과 norm/threat model 제한이다.
+
+### Bound propagation과 relaxation
+
+Interval bound propagation, linear relaxation, convex relaxation은 입력 perturbation이 각 layer를 통과하며 만들 수 있는 activation 범위를 계산한다. 정확한 범위를 계산하기 어렵기 때문에 relaxation을 쓰며, relaxation이 느슨하면 실제로는 강건해도 certificate를 못 받을 수 있다.
+
+인증 방법을 비교할 때는 보증 반경, certified accuracy, 계산 시간, clean accuracy, 적용 가능한 모델 구조를 함께 본다.
+
+### 보고 기준
+
+강건성 certificate는 다음 항목을 같이 기록한다.
+
+- Norm과 radius
+- Certified accuracy와 clean accuracy
+- Verification method
+- 실패한 sample 비율과 원인
+- Threat model 밖에서의 한계
+
 ## 구현 (Implementation)
 
 ```python
@@ -32,6 +61,14 @@ certificate = {
 ```
 
 인증 결과는 threat model과 norm을 명확히 함께 보고해야 한다.
+
+```python
+def certified_accuracy(results, radius):
+    certified = [r for r in results if r["correct"] and r["radius"] >= radius]
+    return len(certified) / len(results)
+```
+
+`radius`를 바꿔가며 curve를 그리면 어느 강도까지 보증이 유지되는지 볼 수 있다.
 
 ## 복잡도 (Complexity)
 

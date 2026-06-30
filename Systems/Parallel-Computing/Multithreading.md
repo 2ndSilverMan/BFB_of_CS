@@ -4,6 +4,7 @@
 - Prerequisites: [Systems/Parallel-Computing/Parallel-Models.md](Parallel-Models.md), [Systems/Operating-Systems/Synchronization.md](../Operating-Systems/Synchronization.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 

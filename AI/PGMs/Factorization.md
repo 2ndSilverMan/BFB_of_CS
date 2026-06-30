@@ -4,6 +4,7 @@
 - Prerequisites: [Graph-Review.md](Graph-Review.md), [Math/Probability-Statistics/Probability-Basics.md](../../Math/Probability-Statistics/Probability-Basics.md), [Math/Probability-Statistics/Bayes-Theorem.md](../../Math/Probability-Statistics/Bayes-Theorem.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -42,6 +43,26 @@ P(X)=\frac{1}{Z}\prod_{C\in\mathcal{C}}\phi_C(X_C)
 $$
 
 형태로 쓴다. 여기서 $Z$는 정규화 상수(partition function)다.
+
+```mermaid
+flowchart LR
+    Joint["large joint table"] --> Factors["small factors"]
+    Factors --> Product["multiply compatible assignments"]
+    Product --> Marginalize["sum out variables"]
+    Marginalize --> Query["query distribution"]
+```
+
+### Factor operation 세 가지
+
+PGM 추론의 핵심 연산은 factor product, restriction/evidence application, marginalization이다. evidence를 먼저 반영하면 factor scope와 table 크기를 줄일 수 있다. 변수 소거와 belief propagation은 이 기본 연산을 다른 순서로 배치한 알고리즘이다.
+
+### Factor는 확률이 아닐 수 있다
+
+Bayesian network의 CPD factor는 조건부 확률이지만, MRF의 potential은 정규화 전 compatibility 점수다. 따라서 factor 값을 개별적으로 확률처럼 해석하면 안 되고, 전체 곱과 partition function을 통해 분포가 된다.
+
+### 독립성 가정의 비용과 이득
+
+factor scope를 작게 두면 파라미터와 추론 비용이 줄지만, 실제 의존성을 놓칠 수 있다. scope를 크게 두면 표현력은 늘지만 데이터 요구량과 계산 비용이 증가한다.
 
 ## 구현 (Implementation)
 

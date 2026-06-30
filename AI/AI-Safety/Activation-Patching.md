@@ -4,6 +4,7 @@
 - Prerequisites: [AI/AI-Safety/Mechanistic-Interpretability.md](Mechanistic-Interpretability.md), [AI/Causal-Inference/Intervention.md](../Causal-Inference/Intervention.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -21,6 +22,37 @@ Activation patching은 신경망 내부 activation을 다른 입력에서 나온
 
 Patch granularity는 layer, attention head, MLP neuron, residual stream position 등으로 나뉜다. 단, activation 간 상호작용과 distribution shift 때문에 결과를 과해석하면 안 된다.
 
+### Clean/corrupted pair 설계
+
+좋은 patching 실험은 clean input과 corrupted input이 목표 feature만 다르도록 설계한다. 예를 들어 factual recall에서 clean prompt는 정답을 요구하고, corrupted prompt는 핵심 subject만 바꿔 다른 답을 요구하게 만들 수 있다.
+
+나쁜 pair는 여러 요소가 동시에 바뀐다. 문장 길이, 토큰화, 위치, 문법, 주제 난이도가 함께 바뀌면 patch 효과가 무엇을 의미하는지 모호해진다.
+
+### Metric 선택
+
+Patching 결과는 보통 logit difference로 측정한다.
+
+$$
+\Delta = logit(y_{correct}) - logit(y_{distractor})
+$$
+
+Patch 후 $\Delta$가 corrupted run보다 clean run에 가까워지면 해당 activation이 목표 계산에 기여한다는 신호다. Classification accuracy처럼 이산 metric만 보면 작은 logit 변화가 가려질 수 있다.
+
+### Patch, ablation, path patching
+
+Activation patching은 clean activation을 넣어 기능을 복원하는 실험이다. Ablation은 component를 제거하거나 평균값으로 바꿔 기능이 사라지는지 본다. Path patching은 특정 sender component에서 receiver component로 가는 경로만 바꿔 회로 연결을 더 좁힌다.
+
+세 방법은 서로 보완적이다. 복원 실험만으로는 충분하지 않고, 제거 실험과 control patch를 함께 봐야 한다.
+
+### Control 실험
+
+과해석을 막기 위해 다음 control이 필요하다.
+
+- 무작위 layer/position patch
+- 같은 layer의 무관 token position patch
+- 의미는 같지만 표면 형태가 다른 prompt pair
+- Patch 값의 norm이나 분포가 비정상적으로 바뀌지 않는지 확인
+
 ## 구현 (Implementation)
 
 ```python
@@ -30,6 +62,16 @@ def patch_activation(corrupted_cache, clean_cache, layer, position):
 ```
 
 실제 실험은 patch 전후 logit difference나 task metric 변화를 기록한다.
+
+```python
+def patch_effect(clean_metric, corrupted_metric, patched_metric):
+    denominator = clean_metric - corrupted_metric
+    if abs(denominator) < 1e-12:
+        return 0.0
+    return (patched_metric - corrupted_metric) / denominator
+```
+
+`1.0`에 가까우면 clean performance를 많이 복원한 것이고, `0.0`에 가까우면 patch가 거의 영향을 주지 않은 것이다.
 
 ## 복잡도 (Complexity)
 

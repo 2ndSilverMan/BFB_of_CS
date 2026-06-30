@@ -4,6 +4,7 @@
 - Prerequisites: [AI/Reinforcement-Learning/MDP.md](MDP.md), [Math/Probability-Statistics/Expectation.md](../../Math/Probability-Statistics/Expectation.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -31,6 +32,32 @@ $$Q^\*(s,a)=\sum_{s',r}p(s',r\mid s,a)\big[r+\gamma \max_{a'}Q^\*(s',a')\big]$$
 
 벨만 연산자는 $\gamma$-수축(contraction)이라, 반복 적용하면 유일한 고정점으로 수렴한다. 이것이 value iteration·TD 학습의 이론적 근거다.
 
+### $V$와 $Q$의 역할
+
+$V^\pi(s)$는 상태의 좋음을 말하고, $Q^\pi(s,a)$는 특정 행동까지 고정했을 때의 좋음을 말한다. 환경 모델을 알고 있으면 $V$만 있어도 다음 상태 기대값을 계산해 행동을 고를 수 있다. 환경 모델을 모르면 행동 선택에는 $Q$가 더 직접적이다.
+
+$$
+Q^\pi(s,a)=\sum_{s',r}p(s',r\mid s,a)\left[r+\gamma V^\pi(s')\right]
+$$
+
+이 관계는 actor-critic에서도 중요하다. Critic이 $V$나 $Q$를 추정하고, actor가 그 정보를 이용해 정책을 바꾼다.
+
+### Bellman operator 관점
+
+정책 평가 연산자 $T^\pi$를
+
+$$
+(T^\pi V)(s)=\sum_a\pi(a\mid s)\sum_{s',r}p(s',r\mid s,a)[r+\gamma V(s')]
+$$
+
+라고 쓰면, $V^\pi$는 $T^\pi V=V$를 만족하는 고정점이다. 최적 연산자 $T^\*$는 행동에 대해 max를 취한다. 이 관점은 DP, TD, Q-learning을 모두 "Bellman target에 가까워지는 과정"으로 묶어 준다.
+
+### Bootstrapping target
+
+Bellman 방정식은 실제 return 전체를 기다리지 않고 다음 상태의 현재 추정치를 사용할 수 있게 한다. 이것이 bootstrapping이다. Bootstrapping은 sample efficiency를 높이지만, target이 자기 추정에 의존하므로 편향과 불안정성을 만들 수 있다.
+
+Monte Carlo는 전체 return을 쓰고, TD는 한 걸음 reward와 다음 가치 추정치를 섞는다. 이 차이가 bias-variance tradeoff의 핵심이다.
+
 ## 구현 (Implementation)
 
 ```python
@@ -46,6 +73,16 @@ def value_iteration(states, actions, P, R, gamma, tol=1e-6):
         if delta < tol:                 # 수축이라 수렴 보장
             return V
 ```
+
+```python
+def bellman_backup(q_values, rewards, probs, gamma):
+    expected = 0.0
+    for reward, prob, next_qs in zip(rewards, probs, q_values):
+        expected += prob * (reward + gamma * max(next_qs))
+    return expected
+```
+
+Backup은 "현재 추정치를 사용해 더 나은 target을 만든다"는 RL 알고리즘의 기본 동작이다.
 
 ## 복잡도 (Complexity)
 

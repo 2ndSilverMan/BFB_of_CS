@@ -4,6 +4,7 @@
 - Prerequisites: [AI/Causal-Inference/Intervention.md](Intervention.md), [Math/Probability-Statistics/Hypothesis-Testing.md](../../Math/Probability-Statistics/Hypothesis-Testing.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -23,10 +24,41 @@ $$(\bar Y_{treated,post}-\bar Y_{treated,pre})-(\bar Y_{control,post}-\bar Y_{co
 
 Parallel trends는 관측 불가능한 counterfactual trend에 대한 가정이다. Pre-trend 확인, event study, placebo test가 가정 점검에 도움을 준다. Staggered adoption에서는 treatment timing과 heterogeneous effect 때문에 더 주의해야 한다.
 
+### 2x2 DiD와 회귀 표현
+
+가장 단순한 2집단 2기간 설정에서는 다음 회귀의 상호작용 계수가 DiD 추정량이다.
+
+$$
+Y_{it} = \alpha + \gamma Treat_i + \lambda Post_t + \tau(Treat_i\times Post_t) + \epsilon_{it}
+$$
+
+$\tau$는 treated group이 post period에 추가로 경험한 변화다. 이 값은 "treated group의 관측된 post 결과"와 "parallel trends가 맞다면 treatment 없이 보였을 counterfactual 결과"의 차이로 해석된다.
+
+### Parallel trends를 읽는 법
+
+Parallel trends는 treatment 이전 수준(level)이 같다는 뜻이 아니라 trend가 같다는 뜻이다. treated group이 원래 더 높은 매출을 갖고 있어도, treatment가 없었다면 control group과 같은 방향과 속도로 움직였을 것이라고 믿을 수 있으면 DiD가 가능하다.
+
+Pre-trend가 비슷하다는 것은 필요한 sanity check지만 충분조건은 아니다. 정책 도입 직전에 treated group이 이미 다르게 움직이기 시작했거나, treatment를 예상한 행동 변화가 있었다면 DiD는 편향될 수 있다.
+
+### Event study와 동적 효과
+
+Event study는 treatment 시점을 기준으로 여러 lead/lag 계수를 추정한다. Treatment 이전 lead 계수가 0에 가까우면 parallel trends 주장에 힘을 보태고, treatment 이후 lag 계수는 효과가 즉시 나타나는지, 지연되는지, 사라지는지를 보여 준다.
+
+단, lead 계수가 유의하지 않다고 해서 가정이 증명되는 것은 아니다. 표본이 작거나 noise가 크면 위반을 발견하지 못할 수 있다.
+
+### Staggered adoption의 함정
+
+집단마다 treatment 도입 시점이 다르면 단순 two-way fixed effects(TWFE)는 이미 treatment를 받은 집단을 아직 받지 않은 집단의 control처럼 사용하는 문제가 생길 수 있다. 효과가 시간이나 cohort별로 다르면 가중치가 직관과 다르게 작동하고, 심하면 음의 가중치가 생겨 해석이 흐려진다.
+
+이런 경우에는 cohort-time ATT, not-yet-treated control, interaction-weighted event study처럼 treatment timing을 명시적으로 다루는 추정량을 검토한다.
+
 ## 구현 (Implementation)
 
 ```python
-did = (treated_post - treated_pre) - (control_post - control_pre)
+def did_estimate(treated_pre, treated_post, control_pre, control_post):
+    treated_change = treated_post - treated_pre
+    control_change = control_post - control_pre
+    return treated_change - control_change
 ```
 
 회귀에서는 group fixed effect와 time fixed effect를 포함해 표현하는 경우가 많다.

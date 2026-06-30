@@ -4,6 +4,7 @@
 - Prerequisites: [AI/Causal-Inference/Confounding.md](../Causal-Inference/Confounding.md), [Math/Probability-Statistics/Hypothesis-Testing.md](../../Math/Probability-Statistics/Hypothesis-Testing.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -21,6 +22,34 @@ AI 공정성은 모델의 예측과 의사결정이 특정 개인이나 집단�
 
 인과적 공정성은 민감 속성 자체보다 proxy, mediator, confounder, counterfactual dependence를 분석한다. 단순히 민감 속성을 제거해도 proxy variable이 남으면 bias가 사라지지 않는다.
 
+### 대표 metric의 충돌
+
+Demographic parity는 예측 양성률이 집단 간 비슷한지 본다. Equalized odds는 실제 label이 주어졌을 때 false positive rate와 false negative rate가 집단 간 비슷한지 본다. Calibration은 같은 예측 점수라면 실제 위험이 집단 간 비슷해야 한다고 본다.
+
+이 metric들은 base rate가 다른 현실적 상황에서 동시에 만족하기 어렵다. 그래서 "어떤 metric이 맞는가"는 수학만이 아니라 피해 유형과 도메인 가치 판단의 문제다.
+
+### 편향의 공급망
+
+Bias는 모델 학습 단계에서만 생기지 않는다.
+
+- Historical bias: 과거 의사결정이 이미 불공정하다.
+- Measurement bias: label이나 feature가 집단별로 다르게 측정된다.
+- Sampling bias: 특정 집단이 데이터에 과소대표된다.
+- Label bias: 라벨러 판단이나 제도 기록이 편향되어 있다.
+- Deployment bias: 모델 output이 현장 절차와 만나 다른 영향을 만든다.
+
+따라서 mitigation도 데이터 보강, label audit, threshold 조정, human review, appeal process, monitoring을 함께 본다.
+
+### 인과적 관점
+
+민감 속성 $A$를 제거해도 proxy $X$가 $A$의 정보를 담으면 모델은 여전히 집단 차이를 사용할 수 있다. 인과 DAG는 어떤 변수가 confounder인지, mediator인지, proxy인지 구분하는 데 도움을 준다.
+
+Counterfactual fairness는 개인의 민감 속성만 바꾼 대체 세계에서 예측이 유지되는지 묻는다. 하지만 이 질문은 SCM 가정에 크게 의존하므로, 어떤 경로를 허용하고 금지할지 명시해야 한다.
+
+### 운영 절차
+
+공정성 평가는 출시 전 한 번으로 끝나지 않는다. 데이터 분포, 사용자 집단, 정책, 현장 사용 방식이 변하면 bias도 변한다. 따라서 fairness dashboard, subgroup drift, complaint/appeal log, periodic audit를 운영에 넣어야 한다.
+
 ## 구현 (Implementation)
 
 ```python
@@ -32,6 +61,17 @@ fairness_report = {
 ```
 
 평가는 전체 평균이 아니라 집단별·교차집단별 slice로 본다.
+
+```python
+def false_positive_rate(predictions, labels):
+    negatives = [i for i, label in enumerate(labels) if label == 0]
+    if not negatives:
+        return None
+    false_positives = sum(predictions[i] == 1 for i in negatives)
+    return false_positives / len(negatives)
+```
+
+집단별 metric은 표본 수와 confidence interval을 함께 보고해야 한다.
 
 ## 복잡도 (Complexity)
 

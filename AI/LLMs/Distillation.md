@@ -4,6 +4,7 @@
 - Prerequisites: [AI/Deep-Learning/Transfer-Learning.md](../Deep-Learning/Transfer-Learning.md), [AI/LLMs/Instruction-Tuning.md](Instruction-Tuning.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -21,6 +22,34 @@
 
 Teacher가 틀리거나 편향되면 student도 이를 배운다. 또한 teacher output을 training data로 사용할 때 license, privacy, contamination을 검토해야 한다.
 
+```mermaid
+flowchart LR
+    Prompt["prompts"] --> Teacher["teacher model"]
+    Teacher --> Data["synthetic responses / logits"]
+    Data --> Filter["quality filter"]
+    Filter --> Student["student training"]
+    Student --> Eval["cost-quality eval"]
+```
+
+### 증류 신호의 종류
+
+| 방식 | 필요한 접근 | 장점 | 위험 |
+| --- | --- | --- | --- |
+| Response distillation | teacher 출력 텍스트 | 구현 쉬움 | teacher 오류 복사 |
+| Logits distillation | teacher logits | 풍부한 분포 신호 | API/저장 비용 큼 |
+| Reasoning distillation | 풀이 trace | 다단계 과제 도움 | 불충실한 추론 학습 가능 |
+| Preference distillation | 선호쌍 또는 ranking | 행동 양식 이전 | 선호 편향 복사 |
+
+고전 분류 증류에서는 teacher 확률 $p_T$와 student 확률 $p_S$ 사이의 KL divergence를 줄인다. 온도 $T$를 높이면 분포가 부드러워져 class 간 상대적 정보를 더 많이 전달한다.
+
+### Synthetic data 품질 관리
+
+teacher output은 생성 직후 그대로 학습하기보다 중복 제거, format validation, factuality check, safety filter, 난이도 균형을 거친다. 특히 teacher가 모르는 도메인에서 그럴듯한 오답을 대량 생성하면 student가 confidence 높은 오류를 배울 수 있다.
+
+### Student 평가
+
+student는 teacher와 같은 답을 내는가보다 배포 제약 안에서 충분히 좋은가가 핵심이다. latency, memory, 비용, benchmark 성능, long-tail 실패 사례를 teacher와 나란히 비교한다. teacher보다 작기 때문에 특정 능력은 압축 중 사라질 수 있다.
+
 ## 구현 (Implementation)
 
 ```python
@@ -32,6 +61,11 @@ distill_sample = {
 ```
 
 Logits 접근이 가능하면 token distribution KL을, 없으면 generated response SFT를 사용할 수 있다.
+
+```python
+def distill_record(prompt, teacher_response, source):
+    return {"prompt": prompt, "response": teacher_response, "teacher": source}
+```
 
 ## 복잡도 (Complexity)
 

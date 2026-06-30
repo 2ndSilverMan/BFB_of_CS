@@ -4,6 +4,7 @@
 - Prerequisites: [AI/MLOps/Reproducibility.md](Reproducibility.md), [Engineering/DevOps/Git/README.md](../../Engineering/DevOps/Git/README.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -19,6 +20,34 @@
 
 Snapshot 방식은 재현이 쉽지만 저장이 크고, recipe+source 방식은 공간을 아끼지만 source immutability와 deterministic transform이 필요하다. Content hash, manifest, object storage URI, schema, partition, label policy를 함께 관리한다. 개인 삭제 요청과 retention은 immutability 정책에 예외 workflow가 필요하다.
 
+```mermaid
+flowchart LR
+    Source["source data"] --> Manifest["manifest"]
+    Code["transform code"] --> Manifest
+    Config["config"] --> Manifest
+    Manifest --> Dataset["dataset version"]
+    Dataset --> Model["model lineage"]
+```
+
+### Snapshot과 recipe 방식
+
+| 방식 | 장점 | 단점 |
+| --- | --- | --- |
+| Full snapshot | 재현이 단순함 | 저장 비용 큼 |
+| Incremental snapshot | 변경분 저장 | compaction과 cleanup 필요 |
+| Recipe + source | 공간 효율 | source와 transform 재현성 필요 |
+| Time-travel table | 쿼리 편의 | table engine에 종속 |
+
+대규모 조직에서는 원본은 time-travel 또는 immutable partition으로 관리하고, 학습용 dataset은 manifest로 row/partition/split을 고정하는 조합이 흔하다.
+
+### Manifest에 들어갈 정보
+
+dataset id만으로는 부족하다. source URI, partition 범위, schema version, transform commit, split seed, label guideline version, row count, checksum, 생성 시간, owner, 접근 등급을 함께 남겨야 한다. 특히 train/validation/test split은 dataset version의 일부로 고정해야 한다.
+
+### 삭제 요청과 재현성
+
+개인정보 삭제나 법적 retention 요구는 immutable snapshot과 충돌할 수 있다. 이 경우 원본 삭제, 파생 dataset 재생성, 영향받은 모델 식별, 재학습 필요성 판단까지 이어지는 예외 workflow가 필요하다. 재현성은 중요하지만 privacy 정책을 우회하는 근거가 될 수 없다.
+
 ## 구현 (Implementation)
 
 ```yaml
@@ -29,6 +58,13 @@ transform_commit: abc123
 schema_version: 4
 row_count: 1250031
 split_manifest: splits-v7.json
+```
+
+```python
+required_manifest_fields = [
+    "dataset_id", "sources", "schema_version", "transform_commit",
+    "row_count", "split_manifest", "checksum",
+]
 ```
 
 ## 복잡도 (Complexity)

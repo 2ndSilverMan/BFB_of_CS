@@ -4,6 +4,7 @@
 - Prerequisites: [Math/Linear-Algebra/Matrices.md](../../Math/Linear-Algebra/Matrices.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -19,6 +20,27 @@
 
 RGB는 빛의 가산 혼합이고 HSV·Lab은 색을 다른 좌표로 표현한다. resizing은 nearest, bilinear 등 interpolation을 사용하며 aliasing을 줄이려면 downsampling 전에 low-pass filtering이 필요하다. 표준화는 channel별 $x'=(x-\mu)/\sigma$로 수행할 수 있다.
 
+```mermaid
+flowchart LR
+    File["image file"] --> Decode["decode + orientation"]
+    Decode --> Color["color/channel order"]
+    Color --> Resize["resize/crop"]
+    Resize --> Norm["normalize"]
+    Norm --> Tensor["model tensor"]
+```
+
+### 좌표계와 layout
+
+이미지 좌표는 보통 왼쪽 위가 원점이고 $x$는 가로, $y$는 세로 방향이다. 하지만 tensor shape는 `H x W x C` 또는 `C x H x W`로 표현되어 좌표 순서와 다르다. bounding box도 `xyxy`, `xywh`, normalized coordinate 등 형식이 다양하므로 annotation과 모델 입출력 계약을 고정해야 한다.
+
+### 색 공간과 감마
+
+sRGB 값은 물리적 빛 세기에 선형이 아니다. 단순 평균으로 grayscale을 만들거나 색 보정을 할 때 gamma와 color profile을 무시하면 미세한 차이가 생길 수 있다. 의료·위성·산업 영상처럼 sensor 값의 물리적 의미가 중요한 영역에서는 일반 RGB 전처리 가정을 그대로 쓰면 안 된다.
+
+### 학습/추론 전처리 일치
+
+pretrained model은 특정 resize, crop, channel order, mean/std normalization을 기대한다. 학습 때와 추론 때 전처리가 다르면 모델은 조용히 성능이 떨어진다. 전처리 코드는 model artifact와 같은 version으로 묶어 배포한다.
+
 ## 구현 (Implementation)
 
 ```python
@@ -29,6 +51,11 @@ def normalize_pixel(rgb):
 def grayscale(rgb):
     r, g, b = rgb
     return 0.2126 * r + 0.7152 * g + 0.0722 * b
+```
+
+```python
+def hwc_to_chw(image):
+    return list(zip(*[iter(sum(image, []))] * len(image[0][0])))
 ```
 
 ## 복잡도 (Complexity)

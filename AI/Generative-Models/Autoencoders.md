@@ -4,6 +4,7 @@
 - Prerequisites: [AI/Deep-Learning/MLP.md](../Deep-Learning/MLP.md), [AI/Deep-Learning/Backpropagation.md](../Deep-Learning/Backpropagation.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -28,6 +29,26 @@ $$\min_{\theta,\phi}\ \mathbb{E}_x\big[\lVert x - g_\phi(f_\theta(x))\rVert^2\bi
 
 오토인코더는 일반적으로 latent 공간이 매끄러운 생성 분포를 이루지 않는다. 이를 확률적으로 정식화해 샘플링 가능하게 만든 것이 VAE다.
 
+```mermaid
+flowchart LR
+    X["input x"] --> Enc["encoder"]
+    Enc --> Z["latent code z"]
+    Z --> Dec["decoder"]
+    Dec --> Xhat["reconstruction x_hat"]
+```
+
+### 병목의 의미
+
+undercomplete AE는 latent 차원을 줄여 압축을 강제하고, sparse/denoising/contractive AE는 차원이 충분히 커도 제약을 통해 유용한 표현을 만들려 한다. 병목이 없거나 decoder가 너무 강하면 입력을 거의 복사하는 항등 함수가 되어 representation learning 효과가 약해질 수 있다.
+
+### 이상 탐지에서의 주의점
+
+정상 데이터만으로 학습한 AE는 정상 패턴을 잘 복원하고 비정상을 못 복원한다는 가정으로 anomaly score를 만든다. 하지만 비정상도 단순하거나 정상과 비슷하면 잘 복원될 수 있고, 정상 데이터의 rare mode를 이상으로 오탐할 수 있다. threshold는 validation anomaly 또는 운영 비용 기준으로 정해야 한다.
+
+### Latent 공간 진단
+
+재구성 오차만 보지 말고 latent interpolation, nearest neighbor, downstream linear probe, cluster structure를 함께 확인한다. 좋은 재구성이 곧 좋은 semantic representation을 뜻하지 않는다.
+
 ## 구현 (Implementation)
 
 ```python
@@ -36,6 +57,13 @@ def autoencoder_loss(x, encoder, decoder, noise=None):
     z = encoder(x_in)
     x_hat = decoder(z)
     return mse(x_hat, x)                            # 깨끗한 x로 복원
+```
+
+```python
+def anomaly_score(x, encoder, decoder):
+    z = encoder(x)
+    x_hat = decoder(z)
+    return mse(x_hat, x)
 ```
 
 ## 복잡도 (Complexity)

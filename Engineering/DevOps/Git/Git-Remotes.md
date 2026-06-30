@@ -4,6 +4,7 @@
 - Prerequisites: [Engineering/DevOps/Git/Git-Branches-Merging-Rebasing.md](Git-Branches-Merging-Rebasing.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -18,6 +19,12 @@
 ## 이론 (Theory)
 
 `origin/main` 같은 remote-tracking branch는 마지막 fetch 시점의 원격 상태를 로컬에 기록한 이름이다. `git fetch`는 원격 정보를 가져오지만 working tree를 바꾸지 않는다. `git pull`은 fetch 후 merge 또는 rebase를 수행한다. Upstream은 현재 branch가 기본으로 추적할 원격 branch를 뜻한다.
+
+### Remote와 신뢰 경계
+
+Remote는 단순 URL이 아니라 협업과 권한의 경계다. `origin`, upstream fork, deploy remote가 무엇을 의미하는지 명확히 하고, push 권한과 branch protection을 맞춘다.
+
+Fetch는 객체를 가져오지만 작업 트리를 바꾸지 않는다. Pull은 fetch와 merge/rebase를 결합하므로 팀의 기본 pull 전략을 정해 불필요한 merge commit이나 rebase 사고를 줄인다.
 
 ## 구현 (Implementation)
 
@@ -70,4 +77,3 @@ git push -u origin feature/login
 
 - [GitHub 저장소와 권한](../GitHub/GitHub-Repositories.md)
 - [Engineering/DevOps/](../)
-

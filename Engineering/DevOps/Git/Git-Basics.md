@@ -4,6 +4,7 @@
 - Prerequisites: [Programming/](../../../Programming/)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -18,6 +19,12 @@ Git은 파일 변화의 스냅샷을 커밋으로 저장하고, 커밋 그래프
 ## 이론 (Theory)
 
 기본 영역은 working tree, index, repository다. `git status`는 세 영역의 차이를 보여 주고, `git add`는 변경을 index에 올리며, `git commit`은 index를 새 커밋으로 기록한다. 커밋은 부모 커밋을 가리켜 이력 그래프를 만든다.
+
+### 세 영역
+
+Git 초보 실수의 대부분은 working tree, index, repository를 구분하지 못해서 생긴다. 파일을 수정한 상태, stage한 상태, commit된 상태는 서로 다르다. `status`와 `diff`, `diff --staged`를 습관적으로 확인하면 사고가 줄어든다.
+
+Commit은 작고 설명 가능한 단위가 좋다. 빌드 가능성, 테스트 가능성, 리뷰 가능성을 기준으로 나누면 이후 revert와 bisect가 쉬워진다.
 
 ## 구현 (Implementation)
 
@@ -71,4 +78,3 @@ git log --oneline
 
 - [Engineering/DevOps/](../)
 - [Engineering/Software-Design/](../../Software-Design/)
-

@@ -4,6 +4,7 @@
 - Prerequisites: [Math/Linear-Algebra/Matrices.md](../../Math/Linear-Algebra/Matrices.md), [AI/Deep-Learning/MLP.md](MLP.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -24,6 +25,30 @@ $$\operatorname{Attention}(Q,K,V)=
 
 다. $\sqrt{d_k}$는 dot product 크기가 커져 softmax가 포화되는 것을 완화한다. mask $M$은 padding이나 미래 token을 차단한다. multi-head attention은 서로 다른 projection 공간에서 여러 관계를 병렬로 학습한 뒤 결합한다.
 
+```mermaid
+flowchart LR
+    X["입력 sequence"] --> Q["Query"]
+    X --> K["Key"]
+    X --> V["Value"]
+    Q --> S["QK^T / sqrt(dk)"]
+    K --> S
+    S --> W["softmax weights"]
+    V --> O["weighted sum"]
+    W --> O
+```
+
+### Shape bookkeeping
+
+self-attention에서 입력이 $X\in\mathbb{R}^{B\times n\times d_{model}}$이면 projection 후 $Q,K,V$는 보통 $B\times h\times n\times d_k$ 형태로 나뉜다. score matrix는 $B\times h\times n\times n$이므로 sequence length $n$이 커질 때 메모리 병목이 먼저 드러난다. multi-head는 단순히 head 수를 늘리는 것이 아니라 각 head의 $d_k$를 줄여 전체 차원을 유지하는 방식이 흔하다.
+
+### Mask의 의미
+
+padding mask는 실제 token이 아닌 위치를 보지 않게 하고, causal mask는 현재 위치가 미래 위치를 보지 않게 한다. 둘을 동시에 써야 하는 autoregressive batch도 많다. mask는 softmax 전에 매우 작은 값을 더하는 방식으로 구현하는데, softmax 뒤에 0을 곱하면 이미 정규화에 미래 token이 참여했을 수 있어 의미가 달라진다.
+
+### Attention weight 해석의 한계
+
+attention weight가 높은 token은 해당 forward pass에서 value 가중합에 많이 기여했다는 뜻이다. 그러나 이것만으로 "모델이 이 token 때문에 답했다"는 인과 설명이 되지는 않는다. projection, residual path, MLP block, layer stacking이 모두 최종 출력에 영향을 주기 때문이다.
+
 ## 구현 (Implementation)
 
 ```python
@@ -35,8 +60,10 @@ def softmax(x):
     return e / e.sum(axis=-1, keepdims=True)
 
 
-def attention(q, k, v):
+def attention(q, k, v, mask=None):
     scores = q @ k.T / np.sqrt(q.shape[-1])
+    if mask is not None:
+        scores = scores + mask
     weights = softmax(scores)
     return weights @ v, weights
 ```
@@ -44,6 +71,8 @@ def attention(q, k, v):
 ## 복잡도 (Complexity)
 
 길이 $n$, hidden size $d$의 full self-attention은 score matrix 때문에 시간·공간 `O(n^2d)`와 `O(n^2)`가 중심이다. 긴 문맥에는 sparse, local, linear attention 등 근사를 사용한다.
+
+autoregressive 추론에서는 새 token마다 과거 $K,V$를 다시 계산하지 않도록 KV cache를 둔다. 이때 한 step의 attention은 새 query와 누적 key/value 사이에서 계산되므로 prefill과 decode 단계의 비용 구조가 다르다.
 
 ## 응용 (Applications)
 

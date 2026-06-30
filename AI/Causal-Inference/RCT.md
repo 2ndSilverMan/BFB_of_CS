@@ -4,6 +4,7 @@
 - Prerequisites: [AI/Causal-Inference/Intervention.md](Intervention.md), [Math/Probability-Statistics/Hypothesis-Testing.md](../../Math/Probability-Statistics/Hypothesis-Testing.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -21,6 +22,27 @@
 
 실험 설계에서는 unit of randomization, sample size, power, blocking/stratification, interference, noncompliance, attrition을 고려한다. Online experiment에서는 metric 정의, guardrail, sequential monitoring도 중요하다.
 
+```mermaid
+flowchart LR
+    Eligible["eligible units"] --> Randomize["random assignment"]
+    Randomize --> Treat["treatment"]
+    Randomize --> Control["control"]
+    Treat --> Outcome["outcome"]
+    Control --> Outcome
+```
+
+### 분석 원칙
+
+Intention-to-treat(ITT)는 실제 순응 여부와 무관하게 배정 기준으로 비교한다. 이는 randomization의 장점을 보존한다. treatment-on-treated는 실제 처치를 받은 효과에 가까우나 noncompliance가 선택적으로 발생하면 bias가 생길 수 있다.
+
+### 설계 체크리스트
+
+unit of randomization, exposure logging, primary metric, guardrail metric, minimum detectable effect, duration, stopping rule, exclusion rule을 실험 전에 고정한다. 온라인 실험에서는 SRM과 logging loss를 매일 확인한다.
+
+### Interference와 cluster randomization
+
+한 사용자의 treatment가 다른 사용자의 outcome에 영향을 주면 개별 randomization 가정이 깨진다. 소셜 네트워크, marketplace, 광고 경매에서는 cluster randomization이나 switchback design이 필요할 수 있다.
+
 ## 구현 (Implementation)
 
 ```python
@@ -29,6 +51,13 @@ def assign(user_id, p=0.5):
 ```
 
 실제 시스템에서는 stable assignment, exposure logging, sample ratio mismatch 점검이 필요하다.
+
+```python
+def intent_to_treat(rows):
+    treat = [r["y"] for r in rows if r["assigned"] == 1]
+    ctrl = [r["y"] for r in rows if r["assigned"] == 0]
+    return sum(treat) / len(treat) - sum(ctrl) / len(ctrl)
+```
 
 ## 복잡도 (Complexity)
 

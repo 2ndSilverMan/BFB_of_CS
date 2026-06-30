@@ -4,6 +4,7 @@
 - Prerequisites: [AI/Deep-Learning/Backpropagation.md](Backpropagation.md), [Math/Linear-Algebra/Matrices.md](../../Math/Linear-Algebra/Matrices.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -27,6 +28,33 @@ $$\left\lfloor\frac{H+2P-K}{S}\right\rfloor+1$$
 
 이다. pooling이나 strided convolution은 해상도를 줄인다.
 
+```mermaid
+flowchart LR
+    X["입력 feature map"] --> K["shared kernel"]
+    K --> F["local feature map"]
+    F --> D["deeper receptive field"]
+    D --> H["classification 또는 dense prediction head"]
+```
+
+### Output shape와 receptive field
+
+CNN 설계에서 가장 자주 나는 오류는 공간 크기와 channel 크기를 섞는 것이다. 일반적인 image tensor를 `B x C x H x W`로 두면 convolution은 주로 `C`를 섞고 `H, W` 위를 이동한다. padding을 늘리면 경계 정보를 더 보존하고, stride를 키우면 해상도를 줄이며, dilation은 kernel 원소 사이 간격을 벌려 파라미터 증가 없이 receptive field를 넓힌다.
+
+| 설계 요소 | 주로 바꾸는 것 | 주의점 |
+| --- | --- | --- |
+| Kernel size | local pattern 범위 | 너무 크면 비용과 overfitting 위험 증가 |
+| Stride | 출력 해상도 | 세부 위치 정보 손실 |
+| Padding | 경계 처리와 shape | zero padding이 경계 artifact를 만들 수 있음 |
+| Dilation | receptive field | sparse한 sampling으로 격자 artifact 가능 |
+
+### Equivariance와 invariance
+
+convolution은 같은 kernel을 모든 위치에 적용하므로 입력이 이동하면 feature map도 비슷하게 이동하는 translation equivariance를 갖는다. 하지만 이것이 곧 classification 결과가 완전히 불변이라는 뜻은 아니다. pooling, stride, global average pooling, data augmentation이 결합되어야 최종 예측이 위치 변화에 더 둔감해진다.
+
+### 파라미터 절약의 본질
+
+같은 입력 크기를 MLP로 펼치면 위치마다 다른 가중치가 필요하지만, CNN은 kernel을 공유한다. 이 가정은 "어느 위치에서든 같은 종류의 local pattern이 의미 있다"는 inductive bias다. 이미지와 spectrogram에는 강하지만, feature 순서가 임의적인 tabular 데이터에는 무리한 가정일 수 있다.
+
 ## 구현 (Implementation)
 
 ```python
@@ -41,9 +69,17 @@ print(conv1d([1, 2, 3, 4], [1, -1]))
 
 실전에서는 tensor library의 검증·최적화된 convolution을 사용한다.
 
+```python
+def conv_out_size(length, kernel, padding=0, stride=1, dilation=1):
+    effective_kernel = dilation * (kernel - 1) + 1
+    return (length + 2 * padding - effective_kernel) // stride + 1
+```
+
 ## 복잡도 (Complexity)
 
 출력 $H_oW_o$, kernel $K_hK_w$, 입출력 channel $C_i,C_o$에 대해 직접 convolution은 `O(H_oW_oK_hK_wC_iC_o)`다. 파라미터는 `O(K_hK_wC_iC_o)`다.
+
+depthwise separable convolution은 먼저 channel별 공간 convolution을 하고, 그다음 1x1 convolution으로 channel을 섞는다. 대략 `O(H_oW_oK_hK_wC_i + H_oW_oC_iC_o)`로 줄어 모바일 모델에서 자주 쓰인다.
 
 ## 응용 (Applications)
 

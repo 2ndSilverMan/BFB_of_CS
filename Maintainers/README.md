@@ -9,6 +9,7 @@
 | 문서 | 용도 |
 |---|---|
 | [Content-Backlog.md](Content-Backlog.md) | 전체 프로젝트의 본문 작성 우선순위 |
+| [Documentation-Depth-Plan.md](Documentation-Depth-Plan.md) | Draft 문서를 Review/Deep-dive로 심화하기 위한 선정 기준과 작업 순서 |
 | [Coverage-Matrix.md](Coverage-Matrix.md) | 로드맵별 필수 문서와 완료 기준 연결 |
 | [Topic-Classification.md](Topic-Classification.md) | 모든 예정 주제의 Required/Optional/Deferred 분류 |
 | [Reference-Coverage.md](Reference-Coverage.md) | 책, 강의, 논문, 용어 사전의 분야별 보강 상태 |
@@ -34,9 +35,10 @@
 ## 작업 흐름
 
 1. [Content-Backlog.md](Content-Backlog.md)에서 다음 작성 대상을 고른다.
-2. 해당 주제가 로드맵 필수 문서라면 [Coverage-Matrix.md](Coverage-Matrix.md)를 확인한다.
-3. 핵심 경로 밖의 주제라면 [Topic-Classification.md](Topic-Classification.md)의 분류를 확인한다.
-4. 참조 자료를 보강한다면 [Reference-Coverage.md](Reference-Coverage.md)를 함께 갱신한다.
-5. [Legal-and-Copyright-Policy.md](Legal-and-Copyright-Policy.md)에 맞게 저작권, 라이선스, 개인정보, 보안 리스크를 확인한다.
-6. 템플릿에 맞춰 주제 문서를 작성하고 상위 README의 `Status`를 갱신한다.
-7. [Project-Readiness.md](Project-Readiness.md)의 검증 명령으로 구조를 검수한다.
+2. 기존 문서를 깊게 만들거나 `Deep-dive` 후보를 고른다면 [Documentation-Depth-Plan.md](Documentation-Depth-Plan.md)를 확인한다.
+3. 해당 주제가 로드맵 필수 문서라면 [Coverage-Matrix.md](Coverage-Matrix.md)를 확인한다.
+4. 핵심 경로 밖의 주제라면 [Topic-Classification.md](Topic-Classification.md)의 분류를 확인한다.
+5. 참조 자료를 보강한다면 [Reference-Coverage.md](Reference-Coverage.md)를 함께 갱신한다.
+6. [Legal-and-Copyright-Policy.md](Legal-and-Copyright-Policy.md)에 맞게 저작권, 라이선스, 개인정보, 보안 리스크를 확인한다.
+7. 템플릿에 맞춰 주제 문서를 작성하고 상위 README의 `Status`를 갱신한다.
+8. [Project-Readiness.md](Project-Readiness.md)의 검증 명령으로 구조를 검수한다.

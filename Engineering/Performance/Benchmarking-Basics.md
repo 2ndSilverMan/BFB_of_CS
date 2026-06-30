@@ -4,6 +4,7 @@
 - Prerequisites: [Algorithms/Complexity.md](../../Algorithms/Complexity.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -18,6 +19,12 @@
 ## 이론 (Theory)
 
 Latency는 요청 하나의 시간, throughput은 단위 시간 처리량이다. 평균만으로 tail을 숨길 수 있어 median, p95, p99를 함께 본다. warmup, cache, JIT, CPU frequency, background load, input size를 통제하고 baseline과 동일 환경에서 비교한다.
+
+### 측정 설계
+
+좋은 벤치마크는 질문이 명확하다. throughput을 비교하는지, p99 latency를 낮추려는지, CPU 사용량을 줄이는지에 따라 workload와 지표가 달라진다. 입력 분포, warmup, 반복 수, 격리된 환경, baseline commit, raw sample 보관을 미리 정한다.
+
+성능 차이는 통계적 변동과 구분해야 한다. 여러 run의 분포와 confidence interval을 보고, 작은 차이는 운영적으로 의미가 있는지 함께 판단한다.
 
 ## 구현 (Implementation)
 

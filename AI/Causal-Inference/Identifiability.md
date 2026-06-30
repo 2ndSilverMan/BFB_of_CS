@@ -4,6 +4,7 @@
 - Prerequisites: [Do-Calculus.md](Do-Calculus.md), [SCM.md](SCM.md), [Potential-Outcomes.md](Potential-Outcomes.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -35,6 +36,26 @@ $$
 
 반대로 관측되지 않은 공통 원인 $U$가 $X$와 $Y$를 동시에 만들고, 이를 막을 관측 변수가 없다면 단순 관측분포만으로는 효과가 식별되지 않을 수 있다. 이때는 도구 변수, frontdoor 구조, 추가 실험, 민감도 분석 같은 보조 전략이 필요하다.
 
+```mermaid
+flowchart LR
+    CausalQuery["causal query"] --> Assumptions["graph + observed variables"]
+    Assumptions --> ID["identifiable?"]
+    ID -->|yes| Estimand["observable estimand"]
+    ID -->|no| Design["new design / bounds / sensitivity"]
+```
+
+### 식별 불가능할 때의 선택지
+
+식별이 안 되면 분석을 포기하는 것이 아니라 질문을 바꾸거나 설계를 바꾼다. 추가 confounder를 수집하거나, instrument/natural experiment를 찾거나, RCT를 설계하거나, bounds와 sensitivity analysis로 가능한 효과 범위를 제시한다.
+
+### Positivity와 실질 식별
+
+그래프상 식별 가능해도 특정 strata에서 treatment variation이 없으면 실질적으로 추정이 어렵다. 이것은 수학적 식별과 finite-sample estimability의 간극이다.
+
+### 보고 방식
+
+식별 결과는 estimand, 필요한 가정, 관측 변수, 금지된 조정 변수, 추정 방법과 분리해 보고한다. "회귀를 돌렸다"는 식별 논증이 아니다.
+
 ## 구현 (Implementation)
 
 식별된 estimand가 있으면 추정은 별도 문제다. 아래는 backdoor 식별 이후 plug-in 방식으로 계산하는 예다.
@@ -57,6 +78,11 @@ print(identified_effect(p_z, p_y_given_xz, 1))
 ```
 
 이 계산은 식별 가정이 맞다는 전제에서만 인과 효과 추정으로 해석된다.
+
+```python
+def identifiable(has_open_backdoor, observed_adjustment):
+    return (not has_open_backdoor) or observed_adjustment
+```
 
 ## 복잡도 (Complexity)
 

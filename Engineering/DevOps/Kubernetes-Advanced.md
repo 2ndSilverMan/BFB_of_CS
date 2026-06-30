@@ -4,6 +4,7 @@
 - Prerequisites: [Engineering/DevOps/Kubernetes-Basics.md](Kubernetes-Basics.md), [Systems/Distributed-Systems/System-Models.md](../../Systems/Distributed-Systems/System-Models.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -18,6 +19,12 @@ Pod를 띄우는 것이 시작이라면, 운영은 트래픽을 들이고, 늘�
 ## 이론 (Theory)
 
 Ingress는 HTTP routing을 cluster 외부에 노출하고, HPA는 metric에 따라 replica 수를 조정한다. StatefulSet은 stable network identity와 persistent volume claim을 제공해 상태ful workload에 맞다. ConfigMap과 Secret은 image와 설정을 분리한다. RBAC은 service account 권한을 최소화한다. Readiness/liveness probe는 traffic 수신과 재시작 판단을 분리한다.
+
+### 운영 안정성 축
+
+Kubernetes 고급 운영은 object를 더 많이 아는 것보다 failure mode를 제어하는 일이다. Request/limit, readiness/liveness/startup probe, PDB, HPA, rollout strategy, network policy, RBAC, admission control이 서로 맞아야 한다.
+
+Cluster 변경은 workload 변경만큼 위험하다. CRD, controller, CNI, storage class, ingress controller 업그레이드는 staging cluster와 rollback 계획이 필요하다.
 
 ## 구현 (Implementation)
 
@@ -74,4 +81,3 @@ Controller가 많아질수록 desired state 상호작용을 이해해야 한다.
 
 - [Engineering/DevOps/Kubernetes-Basics.md](Kubernetes-Basics.md)
 - [Systems/Distributed-Systems/Replication.md](../../Systems/Distributed-Systems/Replication.md)
-

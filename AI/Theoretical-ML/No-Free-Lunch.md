@@ -4,6 +4,7 @@
 - Prerequisites: [PAC-Learning.md](PAC-Learning.md), [Shattering.md](Shattering.md), [Generalization-Bounds.md](Generalization-Bounds.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -22,6 +23,26 @@ No-Free-Lunch 정리는 아무런 가정 없이 모든 문제와 모든 분포�
 따라서 충분한 구조가 없으면 모든 가능한 목표 함수에 대해 작은 일반화 오차를 보장할 수 없다. PAC 학습에서는 이를 피하기 위해 가설 클래스 $H$를 제한하거나, VC 차원 같은 capacity가 유한하다는 조건을 둔다.
 
 샘플 복잡도 하한은 특정 문제를 학습하려면 최소한 어느 정도 표본이 필요하다는 결과다. 상한이 “이만큼이면 충분하다”를 말한다면, 하한은 “이보다 적으면 어떤 알고리즘도 보장하기 어렵다”를 말한다.
+
+### Inductive bias의 필연성
+
+No-Free-Lunch의 핵심 메시지는 좋은 학습기가 특정 문제군에 맞는 inductive bias를 가져야 한다는 것이다. 선형 모델은 선형 분리 가능성을, CNN은 지역성과 translation equivariance를, Transformer는 sequence token 간 attention 구조를 가정한다.
+
+이 bias가 현실 구조와 맞으면 적은 데이터로 일반화할 수 있고, 맞지 않으면 큰 모델도 엉뚱한 방향으로 일반화할 수 있다.
+
+### 상한과 하한의 짝
+
+학습 이론에서 상한은 특정 알고리즘이나 가설 클래스가 충분한 표본에서 잘된다는 보장이다. 하한은 어떤 알고리즘도 그보다 적은 정보로는 보장할 수 없다는 한계다. 둘이 비슷하면 이론이 문제의 난이도를 잘 포착했다고 볼 수 있다.
+
+PAC 학습에서 VC 차원 기반 상한과 하한이 같은 차수로 맞는 경우, VC 차원이 분포 독립 학습 가능성의 핵심량임을 알 수 있다.
+
+### 실제 문제에서의 의미
+
+현실 문제는 모든 가능한 라벨링이 똑같이 그럴듯하지 않다. 이미지, 언어, 물리, 사회 데이터에는 구조가 있다. 딥러닝이 성공하는 이유는 NFL을 무시해서가 아니라, architecture, pretraining, data augmentation, optimization bias가 현실 구조에 맞는 가정을 제공하기 때문이다.
+
+### OOD와 NFL
+
+훈련 분포 밖 영역의 라벨은 데이터가 직접 말해주지 않는다. OOD 일반화 주장은 causal mechanism, invariance, smoothness, domain relation 같은 추가 가정이 있어야 한다. NFL은 이 추가 가정 없이 OOD 성능을 약속할 수 없다는 경고로 읽을 수 있다.
 
 ## 구현 (Implementation)
 
@@ -48,6 +69,13 @@ print(fa("c"), fb("c"))
 ```
 
 두 목표 함수는 훈련 데이터에서는 같지만 unseen point에서는 다르다.
+
+```python
+def agrees_on_training(f, g, train_points):
+    return all(f(x) == g(x) for x in train_points)
+```
+
+훈련 데이터에서 구분되지 않는 목표들이 테스트 영역에서 다를 수 있다는 점이 하한 논증의 출발점이다.
 
 ## 복잡도 (Complexity)
 

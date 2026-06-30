@@ -4,6 +4,7 @@
 - Prerequisites: [AI/Causal-Inference/Intervention.md](Intervention.md), [AI/Machine-Learning/Cross-Validation.md](../Machine-Learning/Cross-Validation.md), [AI/Machine-Learning/Regularization.md](../Machine-Learning/Regularization.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -21,18 +22,46 @@ ML은 복잡한 패턴 예측에 강하다. 하지만 인과 추론에서는 "�
 
 Double machine learning은 nuisance estimation error가 target parameter에 1차로 영향을 덜 주도록 orthogonal score를 구성한다. Causal forest, meta-learner(S/T/X/R-learner)는 heterogeneous effect를 모델링한다.
 
+### 예측 문제와 인과 문제의 분리
+
+인과적 ML에서 ML 모델은 보통 target이 아니라 부품이다. Outcome model $m(x)=E[Y\mid X=x]$, propensity model $e(x)=P(D=1\mid X=x)$, treatment effect model $\tau(x)$를 학습하더라도 최종 질문은 "어떤 estimand가 어떤 가정 아래 식별되는가"다.
+
+따라서 validation metric도 둘로 나뉜다. 예측 성능은 nuisance model의 품질을 보는 데 필요하지만, treatment effect 추정의 편향·분산·overlap·민감도까지 대신 보장하지는 않는다.
+
+### Orthogonalization과 Double ML
+
+부분 선형 모형의 대표 형태는 다음과 같다.
+
+$$
+Y = \theta D + g(X) + \epsilon,\qquad D = m(X) + v
+$$
+
+Double ML은 먼저 $Y$와 $D$에서 covariate로 설명되는 부분을 제거한 residual을 만들고, residualized treatment로 residualized outcome을 설명한다. Cross-fitting을 사용하면 같은 데이터로 nuisance model을 학습하고 target score를 평가하는 overfitting bias를 줄일 수 있다.
+
+핵심은 orthogonal score다. Nuisance model이 조금 틀려도 target parameter $\theta$에 미치는 1차 영향이 작아지도록 score를 설계한다.
+
+### CATE와 정책 학습
+
+CATE는 $E[Y(1)-Y(0)\mid X=x]$다. CATE가 양수인 사람에게 treatment를 주는 정책을 만들 수 있지만, 실제 정책은 비용, capacity, fairness, uncertainty를 함께 고려해야 한다. 작은 subgroup에서 큰 효과처럼 보이는 결과는 탐색적 분석과 multiple testing 문제일 수 있다.
+
+정책 학습에서는 value를 직접 평가해야 한다. Randomized experiment가 있으면 inverse propensity weighting이나 doubly robust estimator를 쓸 수 있고, 관측 데이터에서는 unconfoundedness와 overlap 가정이 여전히 필요하다.
+
+### Overlap과 trimming
+
+Propensity가 0이나 1에 가까우면 한쪽 treatment 상태를 거의 관측하지 못한다. 이 구간의 CATE는 모델 extrapolation에 크게 의존한다. Propensity 분포를 보고 trimming, overlap weighting, 정책 적용 범위 제한을 검토해야 한다.
+
 ## 구현 (Implementation)
 
 ```python
-pipeline = [
-    "estimate propensity e(x)",
-    "estimate outcome m(x)",
-    "construct orthogonal score",
-    "cross-fit to reduce overfitting bias",
-]
+def aipw_score(y, d, mu0, mu1, propensity):
+    eps = 1e-6
+    e = propensity.clip(eps, 1 - eps)
+    treated = d * (y - mu1) / e
+    control = (1 - d) * (y - mu0) / (1 - e)
+    return (mu1 - mu0) + treated - control
 ```
 
-예측 검증과 인과 추정 검증은 분리해야 한다.
+`mu0`, `mu1`, `propensity`는 holdout fold에서 평가된 nuisance prediction이어야 한다. 이 score의 평균은 unconfoundedness와 overlap 아래 ATE의 doubly robust 추정량이 된다.
 
 ## 복잡도 (Complexity)
 

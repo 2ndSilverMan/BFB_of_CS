@@ -4,6 +4,7 @@
 - Prerequisites: [CS-Theory/Computation-Theory/Complexity-Classes.md](Complexity-Classes.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -14,6 +15,14 @@ NP-완전(NP-complete) 문제는 **NP 안에서 가장 어려운 문제들**이�
 ## 직관 (Intuition)
 
 수천 개의 어려운 문제가 알고 보면 "같은 난이도의 한 문제"의 변장이라면? NP-완전 문제들이 그렇다 — 외판원 문제, 그래프 색칠, 스도쿠가 서로 변환 가능해, 하나를 빠르게 풀면 전부 빠르게 풀린다. 그래서 어떤 새 문제가 NP-완전임을 보이면, "이건 (아마도) 빠른 정확해가 없다"는 강력한 신호가 된다.
+
+```mermaid
+flowchart LR
+    SAT["SAT<br/>known NP-complete"] --> X["새 문제 X"]
+    X --> SOLVER["X solver"]
+    SOLVER --> SATSOLVE["SAT도 해결"]
+    HARD["어려운 문제를 X로 바꿈"] --> X
+```
 
 ## 이론 (Theory)
 
@@ -32,6 +41,10 @@ NP-완전(NP-complete) 문제는 **NP 안에서 가장 어려운 문제들**이�
 2. 이미 알려진 NP-완전 문제 $Y$에 대해 $Y \le_p X$ (환원)
 
 카프(Karp)가 1972년 21개 문제를 이렇게 줄줄이 NP-완전으로 증명한 뒤, 현재 수천 개가 알려져 있다(3-SAT, 정점 덮개, 해밀턴 경로, 부분집합 합, 배낭 등).
+
+### 환원 방향
+
+새 문제 $X$가 어렵다는 것을 보이려면 이미 어려운 문제 $Y$를 $X$로 바꾼다. 즉 $Y \le_p X$다. 반대로 $X \le_p Y$를 보이면 "X는 Y보다 어렵지 않다"는 상한에 가까운 정보를 준다. 이 방향 혼동이 NP-완전성 증명의 가장 흔한 실수다.
 
 ## 구현 (Implementation)
 
@@ -56,6 +69,17 @@ print(verify_sat(clauses, {1: True, 2: False, 3: True}))   # True
 
 푸는 것은 어렵지만(변수 `n`개에 최악 `O(2^n)`), 검증은 다항 시간임이 NP-완전성의 출발점이다.
 
+부분집합 합 검증도 같은 구조다.
+
+```python
+def verify_subset_sum(values, chosen_indexes, target):
+    return sum(values[i] for i in chosen_indexes) == target
+
+print(verify_subset_sum([3, 8, 10, 14], [0, 2], 13))  # True
+```
+
+증명서는 선택한 인덱스 집합이다. 답이 주어지면 합을 한 번 계산해 다항 시간에 검증할 수 있으므로 이 문제는 NP에 속한다.
+
 ## 복잡도 (Complexity)
 
 | 항목 | 의미 |
@@ -65,6 +89,8 @@ print(verify_sat(clauses, {1: True, 2: False, 3: True}))   # True
 | 함의 | 하나라도 다항 시간 해 → P=NP |
 
 NP-완전임이 P≠NP를 증명하는 것은 아니다. 다만 "다항 시간 해가 있을 가망이 매우 낮다"는 실용적 결론을 준다.
+
+워크드 예제: 변수 30개의 SAT를 무차별 대입하면 최악 $2^{30}\approx10^9$개 할당을 봐야 한다. 하지만 어떤 할당 하나가 증명서로 주어지면 각 절을 한 번씩 확인하면 된다. "찾기"와 "검증"의 비용 차이가 NP의 핵심 직관이다.
 
 ## 응용 (Applications)
 

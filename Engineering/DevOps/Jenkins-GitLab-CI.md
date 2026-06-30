@@ -4,6 +4,7 @@
 - Prerequisites: [Engineering/DevOps/CICD-Principles.md](CICD-Principles.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -18,6 +19,12 @@ Jenkins와 GitLab CI는 commit·merge request·schedule 같은 event에 따라 b
 ## 이론 (Theory)
 
 Jenkins는 controller와 agent 구조, plugin ecosystem, Jenkinsfile 기반 pipeline을 사용한다. GitLab CI는 `.gitlab-ci.yml`, stage, job, runner, artifact, environment를 중심으로 동작한다. 공통 관심사는 runner 격리, credential 관리, cache, artifact 보존 기간, manual approval, pipeline reuse다.
+
+### Runner와 secret 경계
+
+CI 도구의 핵심 위험은 runner 권한과 secret 노출이다. PR from fork, untrusted branch, protected environment, deployment token을 구분한다. Build log와 artifact에 secret이 남지 않도록 masking과 least privilege를 적용한다.
+
+Pipeline 정의는 코드와 함께 리뷰하고, 재사용 template에는 버전 pinning을 둔다. CI 변경은 배포 경로를 바꾸는 일이므로 애플리케이션 코드만큼 중요하다.
 
 ## 구현 (Implementation)
 
@@ -78,4 +85,3 @@ test:
 
 - [Engineering/DevOps/CICD-Principles.md](CICD-Principles.md)
 - [Engineering/DevOps/GitHub/GitHub-Actions.md](GitHub/GitHub-Actions.md)
-

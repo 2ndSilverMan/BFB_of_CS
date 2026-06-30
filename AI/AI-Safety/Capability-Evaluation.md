@@ -4,6 +4,7 @@
 - Prerequisites: [Alignment-Overview.md](Alignment-Overview.md), [AI/MLOps/Model-Monitoring.md](../MLOps/Model-Monitoring.md), [AI/Machine-Learning/Cross-Validation.md](../Machine-Learning/Cross-Validation.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -27,6 +28,36 @@ AI 역량 평가는 모델이 어떤 작업을 얼마나 안정적으로 수행�
 
 MMLU, BIG-Bench 같은 benchmark는 역사적으로 널리 쓰인 평가 모음이지만, 단일 점수로 모델의 전체 역량이나 안전성을 요약할 수는 없다. 특히 에이전트형 시스템은 tool access, memory, time budget, scaffolding에 따라 결과가 크게 달라진다.
 
+### 평가 대상의 분해
+
+역량 평가는 먼저 측정하려는 construct를 분해해야 한다. "추론 능력" 같은 넓은 단어는 너무 모호하다. 수학 증명 검증, 다단계 계획, 코드 수정, 정보 검색, 도구 사용, 지시 충돌 처리처럼 관찰 가능한 task family로 나눈다.
+
+각 task family에는 다음을 정한다.
+
+- 성공 기준과 실패 기준
+- 허용되는 도구와 시간 예산
+- 채점 방식과 사람 검토 필요 여부
+- 예상되는 contamination 위험
+- 실제 제품 사용과의 관련성
+
+이 과정을 거치지 않으면 benchmark 점수는 높지만 제품 위험을 설명하지 못하는 평가가 된다.
+
+### Contamination과 memorization
+
+평가 문제가 학습 데이터나 prompt tuning 데이터에 포함되어 있으면 점수가 과대평가된다. 특히 공개 benchmark는 시간이 지날수록 contamination 위험이 커진다. Contamination check는 exact match뿐 아니라 paraphrase, solution trace, answer-only leakage까지 고려해야 한다.
+
+Dynamic benchmark, private holdout, temporal split, canary item은 contamination 위험을 줄인다. 하지만 private 평가도 반복 사용하면 모델 개발 과정에 간접적으로 새어 들어갈 수 있으므로 access control과 usage log가 필요하다.
+
+### Agent evaluation
+
+에이전트 평가에서는 모델 자체와 scaffolding을 분리해야 한다. 같은 base model도 planner, memory, retrieval, tool permission, retry budget, reflection loop가 바뀌면 성능과 위험이 크게 달라진다.
+
+따라서 agent eval report에는 model version뿐 아니라 system prompt, tool list, tool permission, environment seed, time budget, human intervention rule을 함께 기록한다.
+
+### 통계적 보고
+
+평가 점수는 표본 추정치다. 작은 benchmark에서 1~2문제 차이는 실제 성능 차이가 아닐 수 있다. Bootstrap confidence interval, paired comparison, McNemar test 같은 도구로 버전 차이의 불확실성을 함께 보고한다.
+
 ## 구현 (Implementation)
 
 객관식 평가의 최소 scoring loop는 다음처럼 생겼다.
@@ -48,6 +79,20 @@ print(accuracy(examples, lambda q, choices: "4"))
 ```
 
 실제 평가 harness는 prompt template, decoding setting, refusal handling, logging, bootstrap confidence interval, contamination check를 함께 관리한다.
+
+```python
+def eval_record(model, benchmark, score, ci_low, ci_high):
+    return {
+        "model": model,
+        "benchmark": benchmark,
+        "score": score,
+        "confidence_interval": [ci_low, ci_high],
+        "prompt_template_version": "p1",
+        "contamination_checked": True,
+    }
+```
+
+점수만 저장하지 말고 평가 조건을 함께 저장해야 regression과 재현이 가능하다.
 
 ## 복잡도 (Complexity)
 

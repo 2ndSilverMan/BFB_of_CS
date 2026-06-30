@@ -4,6 +4,7 @@
 - Prerequisites: [Text-Classification.md](Text-Classification.md), [RNN-for-NLP.md](RNN-for-NLP.md), [BERT.md](BERT.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -27,6 +28,26 @@ OpenAI   B-ORG
 ```
 
 모델은 token representation 위에 token classifier를 올리거나, label transition 제약을 위해 CRF layer를 붙일 수 있다. 평가에는 entity-level precision, recall, F1이 중요하다. 토큰 하나만 맞고 span 경계가 틀리면 entity-level로는 오답일 수 있다.
+
+```mermaid
+flowchart LR
+    Text["text"] --> Tokens["tokens + offsets"]
+    Tokens --> Tags["BIO/BIOES tags"]
+    Tags --> Spans["entity spans"]
+    Spans --> Eval["entity-level F1"]
+```
+
+### Span 경계가 핵심이다
+
+NER은 token별 label accuracy가 아니라 정확한 span과 type을 맞히는 문제다. `New York University`에서 `New York`만 잡으면 token 일부는 맞아도 entity-level로는 틀릴 수 있다. 평가 스크립트가 partial match를 허용하는지 exact match만 보는지 명확히 해야 한다.
+
+### Subword와 character offset
+
+Transformer tokenizer는 한 단어를 여러 subword로 나눈다. 보통 첫 subword에만 label을 주거나 모든 subword에 같은 label을 복제한다. 하지만 최종 결과는 원문 character offset으로 복원해야 검색, 마스킹, UI 하이라이트가 정확해진다.
+
+### 도메인과 label schema
+
+일반 NER의 PERSON/ORG/LOC만으로는 의료 질병명, 법률 조항, 제품명, 계좌번호 같은 도메인 entity를 다루기 어렵다. entity type 정의가 겹치면 annotator agreement가 낮아지고 모델도 애매한 boundary를 배운다.
 
 ## 구현 (Implementation)
 
@@ -53,6 +74,11 @@ def extract_entities(tokens, tags):
 ```
 
 실무에서는 subword tokenization과 원문 character offset 매핑을 신중히 처리해야 한다.
+
+```python
+def span_text(text, start, end):
+    return text[start:end]
+```
 
 ## 복잡도 (Complexity)
 

@@ -4,6 +4,7 @@
 - Prerequisites: [Mechanistic-Interpretability.md](Mechanistic-Interpretability.md), [AI/Deep-Learning/Activation-Functions.md](../Deep-Learning/Activation-Functions.md), [Math/Linear-Algebra/Vectors.md](../../Math/Linear-Algebra/Vectors.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -25,6 +26,34 @@ $$
 
 또는 top-k 활성화처럼 각 입력에서 켜지는 feature 수를 직접 제한한다. 해석 가능성에서 중요한 것은 낮은 복원 오차와 높은 sparsity 사이의 균형이다. feature가 너무 많이 켜지면 해석이 어렵고, 너무 적게 켜지면 중요한 정보를 잃는다.
 
+### Overcomplete dictionary
+
+SAE는 원래 activation 차원보다 더 많은 latent feature를 둘 수 있다. 이를 overcomplete dictionary라고 한다. 목적은 하나의 좌표에 겹쳐 들어간 feature를 더 많은 축으로 펼쳐, 각 입력에서 소수 feature만 활성화되게 만드는 것이다.
+
+하지만 latent 수를 늘리면 feature 후보가 많아지고, 비슷한 feature가 중복되거나 dead feature가 늘 수 있다. 따라서 reconstruction loss, sparsity, feature activation frequency를 함께 본다.
+
+### Feature 해석 절차
+
+SAE feature를 해석할 때는 보통 다음 단계를 따른다.
+
+1. Feature가 강하게 켜지는 top activating examples를 모은다.
+2. 공통 token, 문맥, task pattern을 사람이 또는 보조 모델로 요약한다.
+3. Feature activation과 downstream metric의 상관을 확인한다.
+4. Feature를 ablation하거나 steering해 출력이 예상대로 바뀌는지 본다.
+5. 반례와 negative example을 찾아 feature 이름을 수정한다.
+
+Feature label은 발견이 아니라 가설이다. 이름을 붙인 뒤 개입으로 검증해야 한다.
+
+### Monosemanticity와 polysemanticity
+
+Monosemantic feature는 한 가지 해석 가능한 개념에 주로 대응하는 feature다. Polysemantic feature는 여러 unrelated concept에 반응한다. SAE는 monosemantic feature를 늘리려는 도구지만, 모든 feature가 깨끗하게 분리되지는 않는다.
+
+안전 분석에서는 "독성", "거절", "권한 요청", "비밀 정보" 같은 feature 후보를 찾더라도, 실제 정책 결정에 쓰기 전에 domain별 false positive와 false negative를 측정해야 한다.
+
+### Causal intervention과 연결
+
+SAE feature가 어떤 행동과 관련 있어 보이면, 해당 feature를 줄이거나 키워 출력 변화를 본다. 이때 feature steering은 distribution shift를 만들 수 있으므로, 작은 개입 크기와 control feature 비교가 필요하다.
+
 ## 구현 (Implementation)
 
 아래는 학습 루프의 핵심 손실 형태를 단순화한 예다.
@@ -44,6 +73,14 @@ print(round(sae_loss(activation, reconstruction, latent, 0.05), 3))
 ```
 
 실제 분석에서는 학습된 feature가 언제 켜지는지, 어떤 토큰/문맥에서 활성화되는지, 개입하면 출력이 바뀌는지까지 확인한다.
+
+```python
+def feature_sparsity(latents):
+    active = sum(1 for value in latents if abs(value) > 1e-6)
+    return active / len(latents)
+```
+
+Sparsity는 낮을수록 해석이 쉬울 수 있지만, 너무 낮으면 복원에 필요한 정보를 잃는다.
 
 ## 복잡도 (Complexity)
 

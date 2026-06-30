@@ -4,6 +4,7 @@
 - Prerequisites: [Actor-Critic.md](Actor-Critic.md), [Math/Probability-Statistics/Distributions.md](../../Math/Probability-Statistics/Distributions.md), [AI/Deep-Learning/MLP.md](../Deep-Learning/MLP.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -25,6 +26,36 @@ $$
 
 $\alpha$는 entropy temperature로, 보상과 탐험 사이 균형을 조절한다. SAC는 보통 stochastic actor, 두 개의 Q critic, target network, replay buffer를 사용한다. Double Q 구조는 Q값 과대평가를 줄이는 데 도움을 준다.
 
+### Soft Bellman backup
+
+SAC는 일반 Q값 대신 entropy가 포함된 soft value를 사용한다. 다음 상태에서 단순히 큰 Q를 고르는 것이 아니라, 정책의 로그확률 항을 빼서 entropy 보너스를 반영한다.
+
+$$
+y=r+\gamma\left(\min_i Q_{\phi_i^-}(s',a')-\alpha\log\pi_\theta(a'\mid s')\right)
+$$
+
+여기서 $a'$는 현재 actor에서 샘플링하고, 두 critic 중 작은 값을 써 과대평가를 줄인다.
+
+### Reparameterization trick
+
+연속 행동에서 policy gradient를 낮은 분산으로 학습하려면 stochastic action sampling을 미분 가능하게 표현한다. Gaussian policy에서
+
+$$
+a = \tanh(\mu_\theta(s)+\sigma_\theta(s)\epsilon),\quad \epsilon\sim\mathcal N(0,I)
+$$
+
+처럼 noise를 외부로 분리하면 action에 대한 Q값 경사를 actor parameter로 전달할 수 있다. Tanh squashing을 쓰면 행동 범위를 제한할 수 있지만 log-probability 보정이 필요하다.
+
+### Temperature tuning
+
+$\alpha$가 크면 entropy를 강하게 보상해 더 무작위적인 정책이 된다. 작으면 보상 최적화에 더 집중한다. Automatic entropy tuning은 target entropy와 실제 entropy 차이를 줄이도록 $\alpha$를 학습한다.
+
+Target entropy는 행동 차원과 환경 특성에 따라 정하며, 너무 높은 target은 계속 불필요한 탐험을 유도할 수 있다.
+
+### Off-policy의 장단점
+
+SAC는 replay buffer를 사용해 같은 데이터를 여러 번 학습할 수 있어 sample efficiency가 좋다. 그러나 replay data가 너무 오래되거나 정책 분포와 크게 어긋나면 critic target이 불안정해질 수 있다. Buffer 관리, target network update, reward scale이 중요하다.
+
 ## 구현 (Implementation)
 
 soft target에는 entropy 보정 항이 들어간다.
@@ -40,6 +71,13 @@ print(sac_target(1.0, False, next_q=2.0, next_log_prob=-0.7, gamma=0.99, alpha=0
 ```
 
 실제 구현은 reparameterized Gaussian policy와 squashing 함수, log-probability 보정을 포함한다.
+
+```python
+def clipped_double_q(q1, q2):
+    return min(q1, q2)
+```
+
+두 critic 중 작은 값을 사용하는 것은 positive bias를 줄이는 간단하지만 강력한 안정화 장치다.
 
 ## 복잡도 (Complexity)
 

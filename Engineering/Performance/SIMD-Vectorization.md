@@ -4,6 +4,7 @@
 - Prerequisites: [Systems/Parallel-Computing/SIMD.md](../../Systems/Parallel-Computing/SIMD.md), [Systems/Computer-Architecture/Parallel-Architecture.md](../../Systems/Computer-Architecture/Parallel-Architecture.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -18,6 +19,12 @@ SIMD는 하나의 instruction으로 여러 data lane을 동시에 처리하는 �
 ## 이론 (Theory)
 
 Compiler auto-vectorization은 dependency가 없고 memory access가 규칙적인 loop에서 잘 동작한다. Alignment, stride, branch, aliasing, gather/scatter 비용이 성능을 좌우한다. SIMD 폭이 커도 memory bandwidth가 병목이면 속도가 선형으로 늘지 않는다.
+
+### 벡터화 조건
+
+SIMD는 같은 연산을 여러 데이터에 반복할 때 효과가 크다. 연속 메모리, 정렬, branch가 적은 loop, dependency가 낮은 계산이 벡터화에 유리하다. 반대로 pointer chasing, 불규칙한 gather/scatter, data-dependent branch는 효율을 떨어뜨린다.
+
+컴파일러 자동 벡터화를 믿기만 하지 말고 report와 benchmark를 확인한다. 작은 입력에서는 setup cost가 이득을 상쇄할 수 있다.
 
 ## 구현 (Implementation)
 
@@ -70,4 +77,3 @@ NumPy 같은 array library는 내부에서 vectorized native loop를 사용한�
 
 - [Systems/Parallel-Computing/SIMD.md](../../Systems/Parallel-Computing/SIMD.md)
 - [Systems/Computer-Architecture/Parallel-Architecture.md](../../Systems/Computer-Architecture/Parallel-Architecture.md)
-

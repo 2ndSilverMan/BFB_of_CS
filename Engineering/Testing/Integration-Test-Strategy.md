@@ -4,6 +4,7 @@
 - Prerequisites: [Engineering/Testing/Unit-Test-Principles.md](Unit-Test-Principles.md), [Systems/Databases/Transactions-and-ACID.md](../../Systems/Databases/Transactions-and-ACID.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -20,6 +21,12 @@
 Test scope를 명시하고 실제 dependency, emulator, fake, stub 중 위험에 맞는 대역을 선택한다. DB test는 production과 같은 engine·migration을 우선하고 test isolation을 transaction rollback, unique schema, disposable container로 만든다.
 
 외부 API는 contract test와 제한된 sandbox test를 조합한다. Timeout, retry, duplicate, partial failure를 포함하고 test data cleanup과 parallel execution을 설계한다.
+
+### 경계 우선순위
+
+통합 테스트는 모든 조합을 다 연결하는 것이 아니라 위험한 경계를 실제로 검증하는 것이다. DB transaction, message queue, 외부 API, serialization format, auth middleware, migration은 단위 테스트로 놓치기 쉬운 결함이 많다.
+
+좋은 전략은 각 경계의 contract, test fixture, 격리 방식, failure mode를 정한다. Testcontainers나 ephemeral database를 쓰면 현실성을 높일 수 있지만 suite 시간이 늘어나므로 병렬화와 데이터 cleanup이 중요하다.
 
 ## 구현 (Implementation)
 

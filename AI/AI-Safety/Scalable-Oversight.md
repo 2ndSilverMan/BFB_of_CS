@@ -4,6 +4,7 @@
 - Prerequisites: [AI/AI-Safety/Feedback-Limitations.md](Feedback-Limitations.md), [AI/AI-Safety/Alignment-Overview.md](Alignment-Overview.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -21,6 +22,33 @@ Scalable oversight는 인간이 직접 평가하기 어려운 모델 행동을 �
 
 핵심 위험은 보조 모델도 같은 오류와 편향을 가질 수 있고, 복잡한 절차가 오히려 검증하기 어려워질 수 있다는 점이다.
 
+### Task decomposition
+
+Scalable oversight의 첫 단계는 어려운 작업을 사람이 검증 가능한 단위로 나누는 것이다. 좋은 분해는 각 하위 주장에 evidence, verifier, failure mode를 붙인다. 나쁜 분해는 하위 작업도 원래 작업만큼 모호하거나, 하위 결과를 합치는 과정에서 오류가 숨어든다.
+
+예를 들어 장문 리서치 답변은 claim extraction, source verification, numerical check, counterargument search, final synthesis로 나눌 수 있다.
+
+### Process supervision
+
+Outcome supervision은 최종 답만 평가한다. Process supervision은 중간 단계가 타당한지 평가한다. 수학, 코드, 도구 사용, 장기 계획처럼 최종 답만 보고는 오류 원인을 알기 어려운 task에서 특히 유용하다.
+
+하지만 process label도 비용이 크고, 모델이 "그럴듯한 과정"을 쓰는 법을 배울 수 있다. 중간 단계 검증은 실제 evidence와 tool log에 연결되어야 한다.
+
+### Debate와 critique의 한계
+
+Debate는 두 모델 또는 두 agent가 서로의 오류를 드러내고 인간이 판정하게 하는 접근이다. Critique model은 답변의 결함을 찾는 보조 모델이다. 둘 다 인간 판정을 돕지만, 다음 실패가 가능하다.
+
+- 두 모델이 같은 blind spot을 공유한다.
+- 더 설득력 있는 쪽이 진실한 쪽을 이긴다.
+- 인간이 논쟁의 핵심 기술 내용을 이해하지 못한다.
+- 절차가 길어져 감사 자체가 어려워진다.
+
+따라서 critique는 독립 evidence, tool verification, adversarial prompt set과 결합해야 한다.
+
+### Oversight의 audit trail
+
+감독 절차가 복잡해질수록 결과뿐 아니라 판단 경로를 남겨야 한다. 어떤 하위 작업이 자동 검증됐고, 어떤 부분이 사람이 판정했으며, 어떤 불확실성이 남았는지 기록해야 사후 분석과 개선이 가능하다.
+
 ## 구현 (Implementation)
 
 ```python
@@ -34,6 +62,18 @@ oversight_pipeline = [
 ```
 
 중요한 주장은 external tool이나 독립 모델로 검증하도록 설계한다.
+
+```python
+def oversight_step(claim, verifier, evidence_required):
+    return {
+        "claim": claim,
+        "verifier": verifier,
+        "evidence_required": evidence_required,
+        "status": "pending",
+    }
+```
+
+각 claim을 검증 단위로 쪼개면 사람이 최종 답 전체를 한 번에 믿어야 하는 부담이 줄어든다.
 
 ## 복잡도 (Complexity)
 

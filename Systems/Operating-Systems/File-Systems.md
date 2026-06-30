@@ -4,6 +4,7 @@
 - Prerequisites: [Systems/Operating-Systems/Memory-Management.md](Memory-Management.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 

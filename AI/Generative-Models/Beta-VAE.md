@@ -4,6 +4,7 @@
 - Prerequisites: [AI/Generative-Models/VAE.md](VAE.md), [Math/Probability-Statistics/Information-Theory.md](../../Math/Probability-Statistics/Information-Theory.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -23,6 +24,26 @@ $$E_{q(z|x)}[\log p(x|z)]-\beta D_{KL}(q(z|x)\|p(z))$$
 
 β가 1보다 크면 reconstruction보다 prior matching과 정보 병목이 강해진다. 이 압력은 disentanglement를 도울 수 있지만 재구성 품질을 낮출 수 있다. Factor가 정말 분리되는지는 data generating factor, inductive bias, metric에 크게 의존한다.
 
+```mermaid
+flowchart LR
+    Data["data factors"] --> Enc["encoder"]
+    Enc --> Z["latent dimensions"]
+    Z --> Trav["latent traversal"]
+    Trav --> Eval["disentanglement eval"]
+```
+
+### Capacity 관점
+
+β를 키우면 latent가 담을 수 있는 정보량을 제한하는 효과가 있다. capacity를 너무 낮게 잡으면 재구성이 무너지고, 너무 높으면 factor가 섞일 수 있다. 그래서 β를 고정하기보다 목표 KL capacity를 점진적으로 늘리는 전략을 쓰기도 한다.
+
+### Disentanglement 평가의 한계
+
+MIG, SAP, DCI 같은 metric은 ground-truth factor가 있는 synthetic data에서 유용하지만 실제 데이터에는 factor 정의 자체가 불명확하다. 사람에게 해석 가능한 traversal이 나와도 downstream 제어 가능성과 항상 일치하지 않는다.
+
+### 식별 불가능성
+
+비지도 disentanglement는 추가 inductive bias나 supervision 없이 일반적으로 보장되지 않는다. 데이터의 factor가 독립적이라는 가정이 깨지면 latent 차원을 "하나의 의미"로 분리하기 어렵다.
+
 ## 구현 (Implementation)
 
 ```python
@@ -31,6 +52,12 @@ def beta_vae_loss(reconstruction_loss, kl_divergence, beta):
 ```
 
 β schedule을 점진적으로 올리면 초반 학습 붕괴를 줄일 수 있다.
+
+```python
+def linear_anneal(step, start, end, total_steps):
+    ratio = min(step / total_steps, 1.0)
+    return start + ratio * (end - start)
+```
 
 ## 복잡도 (Complexity)
 

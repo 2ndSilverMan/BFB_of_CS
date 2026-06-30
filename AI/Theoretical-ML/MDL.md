@@ -4,6 +4,7 @@
 - Prerequisites: [Math/Probability-Statistics/Information-Theory.md](../../Math/Probability-Statistics/Information-Theory.md), [Generalization-Bounds.md](Generalization-Bounds.md), [Bias-Variance-Theory.md](Bias-Variance-Theory.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -27,6 +28,26 @@ $$
 
 따라서 MDL은 likelihood와 complexity penalty의 균형으로 볼 수 있다. AIC, BIC 같은 기준도 모델 적합도와 복잡도 penalty를 결합한다는 점에서 비슷한 정신을 공유한다.
 
+### Two-part code와 refined MDL
+
+가장 단순한 MDL은 모델 설명 길이와 데이터 설명 길이를 더하는 two-part code다. 먼저 모델을 보내고, 그 모델이 설명하지 못한 잔차나 예외를 보낸다. 더 정교한 MDL은 normalized maximum likelihood나 stochastic complexity처럼 모델 class 전체의 부호화 비용을 다룬다.
+
+Two-part code는 직관이 좋지만, 실제 길이는 모델을 어떻게 부호화하는지에 의존한다. 그래서 MDL 분석에서는 code choice가 중요하다.
+
+### Likelihood와 압축
+
+확률 모델이 데이터에 높은 확률을 주면 $-\log P(D\mid M)$이 작아지고, 이는 짧은 코드 길이에 해당한다. 따라서 maximum likelihood는 데이터 설명 길이를 줄이는 과정으로 볼 수 있다. 하지만 likelihood만 줄이면 데이터 자체를 외우는 복잡한 모델이 선택될 수 있으므로 $L(M)$이 필요하다.
+
+### Bayesian 관점과의 연결
+
+Bayesian evidence는 likelihood를 prior로 평균낸다. MDL의 description length와 Bayesian의 negative log evidence는 모두 fit과 complexity를 함께 벌주는 효과가 있다. 다만 철학과 세부 formalism은 다르다.
+
+Prior를 짧은 코드에 대응시키면, 단순한 모델에 더 짧은 설명을 주는 관점과 연결된다.
+
+### 딥러닝에서의 압축 관점
+
+딥러닝에서는 파라미터 수가 매우 커도 pruning, quantization, low-rank factorization, weight sharing으로 잘 압축되는 모델이 일반화가 좋다는 가설이 연구된다. 중요한 것은 raw parameter count보다 훈련 후 해가 얼마나 간결하게 기술될 수 있는가다.
+
 ## 구현 (Implementation)
 
 단순한 scoring 함수는 음의 로그우도와 모델 복잡도 penalty를 더한다.
@@ -45,6 +66,13 @@ print(round(mdl_score(120.0, num_params=5, n=1000), 3))
 ```
 
 실제 MDL에서는 모델을 어떻게 부호화할지 정하는 세부 선택이 중요하다.
+
+```python
+def two_part_code_length(model_bits, residual_bits):
+    return model_bits + residual_bits
+```
+
+좋은 모델은 잔차를 줄이지만, 잔차 감소보다 모델 설명 길이 증가가 더 크면 MDL 점수는 나빠질 수 있다.
 
 ## 복잡도 (Complexity)
 

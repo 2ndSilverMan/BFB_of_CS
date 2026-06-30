@@ -4,6 +4,7 @@
 - Prerequisites: [Systems/Operating-Systems/Processes-and-Threads.md](../../Systems/Operating-Systems/Processes-and-Threads.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -18,6 +19,12 @@
 ## 이론 (Theory)
 
 IaaS는 VM·network·disk 같은 기반 자원을 제공하고, PaaS는 application 실행 플랫폼을 제공하며, SaaS는 완성된 software를 제공한다. Region과 availability zone은 장애 격리 단위다. Shared responsibility model은 cloud provider와 사용자 책임을 나눈다. Elasticity, managed service, IAM, encryption, billing visibility가 핵심 운영 요소다.
+
+### 책임 공유 모델
+
+클라우드는 운영 책임을 없애는 것이 아니라 경계를 바꾼다. Provider는 물리 인프라와 managed service 일부를 책임지고, 사용자는 identity, network policy, data classification, configuration, cost, application security를 책임진다. 서비스마다 책임 경계가 다르므로 아키텍처 문서에 명시한다.
+
+클라우드 설계는 region, availability zone, quota, IAM, backup, observability, cost allocation을 함께 다뤄야 한다.
 
 ## 구현 (Implementation)
 

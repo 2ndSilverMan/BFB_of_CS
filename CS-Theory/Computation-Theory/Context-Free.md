@@ -4,6 +4,7 @@
 - Prerequisites: [CS-Theory/Computation-Theory/Regular-Languages.md](Regular-Languages.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 

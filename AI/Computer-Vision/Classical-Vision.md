@@ -4,6 +4,7 @@
 - Prerequisites: [AI/Computer-Vision/Image-Basics.md](Image-Basics.md), [Math/Linear-Algebra/Matrices.md](../../Math/Linear-Algebra/Matrices.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -21,6 +22,31 @@ Edge detection은 intensity gradient가 큰 위치를 찾는다. Corner detectio
 
 Feature matching은 descriptor distance로 후보 대응점을 만들고, RANSAC은 outlier가 섞인 대응점에서 homography나 fundamental matrix 같은 기하 모델을 robust하게 추정한다.
 
+```mermaid
+flowchart LR
+    Image["image"] --> Feature["detect features"]
+    Feature --> Desc["compute descriptors"]
+    Desc --> Match["match descriptors"]
+    Match --> Ransac["RANSAC geometry"]
+    Ransac --> Model["homography / pose / reconstruction"]
+```
+
+### 고전 비전이 강한 조건
+
+고전 비전은 데이터가 적고, 카메라 기하와 물체 구조가 명확하며, 실패 원인을 해석해야 하는 문제에서 여전히 강하다. 예를 들어 문서 스캔 보정, 파노라마 stitching, 카메라 보정, 산업 패턴 정합은 딥러닝 없이도 안정적으로 해결되는 경우가 많다.
+
+### RANSAC 반복 수의 직관
+
+outlier 비율이 높을수록 모든 샘플이 inlier일 확률이 낮아져 더 많은 반복이 필요하다. 성공 확률 $p$, 샘플 크기 $s$, inlier 비율 $w$라면 필요한 반복 수는 대략
+
+$$N=\frac{\log(1-p)}{\log(1-w^s)}$$
+
+로 볼 수 있다. threshold가 너무 작으면 inlier를 버리고, 너무 크면 나쁜 모델도 통과한다.
+
+### 딥러닝과의 결합
+
+딥러닝 detector가 찾은 keypoint를 PnP/RANSAC으로 pose 추정하거나, segmentation mask를 고전 morphology로 다듬는 식의 hybrid pipeline이 흔하다. 학습 모델과 기하 제약을 함께 쓰면 데이터 효율과 안정성을 높일 수 있다.
+
 ## 구현 (Implementation)
 
 ```python
@@ -33,6 +59,12 @@ def is_edge(dx, dy, threshold):
 ```
 
 실제 edge detector는 smoothing, non-maximum suppression, hysteresis threshold 등을 함께 사용한다.
+
+```python
+def ransac_iterations(success_prob, inlier_ratio, sample_size):
+    import math
+    return math.log(1 - success_prob) / math.log(1 - inlier_ratio ** sample_size)
+```
 
 ## 복잡도 (Complexity)
 

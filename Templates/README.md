@@ -8,10 +8,13 @@
 |---|---|---|
 | [섹션 README 템플릿](Section-README-Template.md) | 상위 지식 영역의 허브 | `Math/README.md`, `Systems/README.md`, `CS-Theory/README.md`, `AI/README.md`, `Engineering/README.md` |
 | [주제 인덱스 README 템플릿](Topic-Index-README-Template.md) | 상위/하위 주제 목록과 커버리지 관리 | `Programming/README.md`, `Programming/Languages/README.md`, `Programming/Languages/Python/README.md`, `Data-Structures/README.md`, `Algorithms/README.md`, `Systems/Operating-Systems/Linux/README.md`, `AI/MLOps/README.md`, `Engineering/DevOps/README.md`, `Engineering/DevOps/Git/README.md`, `Engineering/DevOps/GitHub/README.md` |
-| [개별 주제 문서 템플릿](Topic-Template.md) | 개별 개념, 알고리즘, 이론, 기술 문서 작성 | `Linear-Regression.md`, `BFS-DFS.md` |
+| [개별 주제 문서 템플릿](Topic-Template.md) | 개별 개념, 알고리즘, 이론, 기술 문서 작성(기본 tier) | `Linear-Regression.md`, `BFS-DFS.md` |
+| [Deep-dive 주제 문서 템플릿](Deep-Dive-Template.md) | 자기완결 심화(deep-dive) 주제 문서. **소수 핵심·길목 주제에만** 선별 적용 | `Server-Images-and-Snapshots.md` |
 | [로드맵 템플릿](Roadmap-Template.md) | 목적별 학습 순서 | `Roadmaps/*.md` |
 | [참조 목록 템플릿](Reference-List-Template.md) | 책, 강의, 논문 목록 | `Reference/Books.md`, `Reference/Courses.md`, `Reference/Papers.md` |
 | [용어 사전 템플릿](Glossary-Template.md) | 용어 정의와 관련 섹션 연결 | `Reference/Glossary.md` |
+
+대부분의 주제는 기본 주제 템플릿으로 충분하다. 자기완결 심화가 필요한 일부 핵심 주제만 deep-dive 템플릿을 쓰고, 메타데이터에 `Depth: Deep-dive`를 둔다. 두 tier의 정의·품질 바·운영 원칙은 [CONTRIBUTING.md](../CONTRIBUTING.md)의 "문서 깊이(Depth) tier"를 따른다.
 
 문서 구조 검수는 [Maintainers/Scripts/validate_docs.py](../Maintainers/Scripts/validate_docs.py)로 수행한다.
 

@@ -4,6 +4,7 @@
 - Prerequisites: [PAC-Learning.md](PAC-Learning.md), [Math/Discrete/Set-Theory.md](../../Math/Discrete/Set-Theory.md), [Math/Probability-Statistics/Probability-Basics.md](../../Math/Probability-Statistics/Probability-Basics.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -26,6 +27,25 @@ O\left(\frac{d_{VC}\log(1/\epsilon)+\log(1/\delta)}{\epsilon}\right)
 $$
 
 이고, agnostic 설정에서는 보통 $\epsilon^{-2}$ 의존성이 나타난다. 정확한 상수보다 중요한 메시지는 `가설 개수` 대신 `표현 가능한 라벨 패턴의 성장률`이 일반화를 좌우한다는 것이다.
+
+### VC 차원 증명의 두 방향
+
+VC 차원을 증명하려면 보통 두 가지가 필요하다.
+
+- Lower bound: 어떤 $d$개 점 집합을 실제로 shatter할 수 있음을 보인다.
+- Upper bound: 어떤 $d+1$개 점 집합도 shatter할 수 없음을 보인다.
+
+첫 단계는 예시를 구성하는 문제이고, 두 번째는 모든 가능한 점 배치에 대한 불가능성 증명이다. 많은 학생이 lower bound만 보이고 VC 차원을 확정했다고 착각한다.
+
+### 파라미터 수와의 관계
+
+선형 분류기에서는 VC 차원이 파라미터 수와 비슷하게 보이지만, 일반적으로 둘은 같지 않다. 같은 파라미터 수라도 비선형 변환, 활성화 함수, 입력 구조에 따라 라벨 패턴 수가 달라진다.
+
+딥러닝에서는 파라미터 수 기반 VC 상계가 매우 커서 실제 일반화를 설명하기에 너무 느슨한 경우가 많다. 그래서 margin, norm, stability, compression, implicit regularization 같은 다른 관점이 함께 쓰인다.
+
+### 구조적 위험 최소화
+
+VC 이론은 모델 클래스를 점점 큰 family로 두고, 경험 위험과 복잡도 penalty를 함께 최소화하는 structural risk minimization으로 이어진다. 작은 클래스는 bias가 클 수 있고, 큰 클래스는 variance가 커질 수 있다.
 
 ## 구현 (Implementation)
 
@@ -53,6 +73,15 @@ print(shatters(hypotheses, points))  # False: 패턴 (1, 0)을 만들 수 없음
 ```
 
 연속 공간의 실제 VC 차원 증명은 조합론과 기하학을 사용한다. 코드는 개념 확인용이다.
+
+```python
+def vc_candidate_status(can_shatter_d, cannot_shatter_d_plus_one):
+    if can_shatter_d and cannot_shatter_d_plus_one:
+        return "VC dimension proven"
+    return "need both lower and upper bound"
+```
+
+VC 차원 주장은 항상 "가능성 예시"와 "불가능성 상계"가 함께 있어야 완성된다.
 
 ## 복잡도 (Complexity)
 

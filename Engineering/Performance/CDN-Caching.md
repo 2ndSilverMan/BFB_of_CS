@@ -4,6 +4,7 @@
 - Prerequisites: [Systems/Networks/CDN-and-Load-Balancing.md](../../Systems/Networks/CDN-and-Load-Balancing.md), [Engineering/System-Design/Caching.md](../System-Design/Caching.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -20,6 +21,12 @@ CDN 캐싱은 사용자와 가까운 edge server에 static 또는 cache 가능�
 ## 이론 (Theory)
 
 Cache-Control, ETag, Last-Modified, Vary, surrogate key가 cache behavior를 결정한다. TTL이 길면 hit rate는 높지만 stale risk가 커지고, TTL이 짧으면 origin 부하가 늘어난다. Purge, versioned URL, stale-while-revalidate, request collapsing으로 freshness와 availability를 조정한다.
+
+### 계층형 캐싱
+
+CDN은 origin 앞의 캐시 계층이다. Browser cache, edge cache, regional cache, application cache가 함께 있으면 어떤 계층에서 hit/miss가 났는지 추적해야 한다. `Cache-Control`, `ETag`, `Vary`, surrogate key가 정책을 결정한다.
+
+개인화 응답이나 인증된 리소스는 cache key와 privacy boundary가 특히 중요하다. 잘못된 `Vary`나 public cache 설정은 다른 사용자 데이터 노출로 이어질 수 있다.
 
 ## 구현 (Implementation)
 
@@ -69,4 +76,3 @@ Hit request는 edge에서 끝나 origin 비용이 줄지만, miss와 purge 전�
 
 - [Systems/Networks/CDN-and-Load-Balancing.md](../../Systems/Networks/CDN-and-Load-Balancing.md)
 - [Engineering/System-Design/Caching.md](../System-Design/Caching.md)
-

@@ -4,6 +4,7 @@
 - Prerequisites: [MDP.md](MDP.md), [Value-Functions.md](Value-Functions.md), [Policy.md](Policy.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -31,6 +32,34 @@ $$
 
 Policy iteration은 현재 정책을 평가한 뒤 그 가치에 대해 탐욕적으로 정책을 개선한다. Value iteration은 평가와 개선을 한 업데이트에 섞어 최적 Bellman backup을 반복한다.
 
+### Policy evaluation
+
+정책 평가(policy evaluation)는 고정된 정책 $\pi$의 가치 $V^\pi$를 구한다. 정확히 풀려면 선형 방정식을 풀 수 있고, 반복식으로는 다음 업데이트를 수렴할 때까지 적용한다.
+
+$$
+V_{k+1}(s)\leftarrow \sum_a\pi(a\mid s)\sum_{s'}P(s'\mid s,a)[R(s,a,s')+\gamma V_k(s')]
+$$
+
+평가는 control이 아니라 prediction 문제다. "이 정책을 따르면 얼마나 좋은가"를 묻는다.
+
+### Policy improvement
+
+정책 개선은 현재 가치에 대해 greedy 행동을 선택한다.
+
+$$
+\pi_{new}(s)=\arg\max_a\sum_{s'}P(s'\mid s,a)[R(s,a,s')+\gamma V^\pi(s')]
+$$
+
+정책 개선 정리에 의해 새 정책은 기존 정책보다 나쁘지 않다. Policy iteration은 evaluation과 improvement를 번갈아 수행한다.
+
+### Value iteration과 truncated evaluation
+
+Value iteration은 완전한 정책 평가를 기다리지 않고 최적 backup을 반복한다. 이는 policy evaluation을 한두 step만 하고 곧바로 improvement를 섞는 것으로 볼 수 있다. 이 때문에 반복당 비용은 낮지만, 수렴 전의 greedy policy는 불안정할 수 있다.
+
+### Generalized policy iteration
+
+대부분의 RL 알고리즘은 generalized policy iteration(GPI)의 변형이다. Critic은 정책을 평가하고, actor 또는 greedy step은 정책을 개선한다. 두 과정이 완전히 끝나지 않아도 서로 밀고 당기며 좋은 정책으로 이동한다.
+
 ## 구현 (Implementation)
 
 Value iteration의 핵심 업데이트는 다음과 같다.
@@ -51,6 +80,22 @@ def value_iteration_step(states, actions, transition, reward, v, gamma):
 ```
 
 전이확률을 모르는 실제 환경에서는 Monte Carlo나 TD 학습처럼 샘플 기반 방법을 사용한다.
+
+```python
+def greedy_policy_from_value(states, actions, transition, reward, v, gamma):
+    policy = {}
+    for s in states:
+        policy[s] = max(
+            actions,
+            key=lambda a: sum(
+                p * (reward(s, a, sp) + gamma * v[sp])
+                for sp, p in transition(s, a)
+            ),
+        )
+    return policy
+```
+
+DP에서는 환경 모델을 통해 모든 가능한 다음 상태를 합산한다는 점이 샘플 기반 RL과 다르다.
 
 ## 복잡도 (Complexity)
 

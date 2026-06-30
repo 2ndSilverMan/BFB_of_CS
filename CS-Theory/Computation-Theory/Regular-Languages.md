@@ -4,6 +4,7 @@
 - Prerequisites: [Math/Discrete/Logic.md](../../Math/Discrete/Logic.md), [Math/Discrete/](../../Math/Discrete/)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 

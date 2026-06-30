@@ -4,6 +4,7 @@
 - Prerequisites: [Systems/Distributed-Systems/System-Models.md](System-Models.md), [Systems/Databases/Transactions-and-ACID.md](../Databases/Transactions-and-ACID.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 

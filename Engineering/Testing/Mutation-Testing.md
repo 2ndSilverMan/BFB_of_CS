@@ -4,6 +4,7 @@
 - Prerequisites: [Engineering/Testing/Code-Coverage.md](Code-Coverage.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -18,6 +19,12 @@
 ## 이론 (Theory)
 
 Mutation operator는 `>`를 `>=`로 바꾸거나, 조건을 뒤집거나, 반환값을 바꾸는 식이다. 테스트가 mutant를 실패시키면 killed, 통과하면 survived다. Mutation score는 killed mutant 비율이다.
+
+### Mutation score가 말하는 것
+
+Mutation testing은 코드에 작은 결함을 주입했을 때 테스트가 실패하는지 본다. 살아남은 mutant는 테스트가 실행은 했지만 의미 있는 assertion을 하지 않았거나, 해당 동작이 실제 contract가 아니라는 신호일 수 있다.
+
+모든 mutant를 죽이는 것이 목표는 아니다. Equivalent mutant나 의미 없는 변형은 제외해야 한다. 비용이 크므로 core domain logic, security-sensitive code, 돈/권한/상태 전환 로직에 우선 적용한다.
 
 ## 구현 (Implementation)
 

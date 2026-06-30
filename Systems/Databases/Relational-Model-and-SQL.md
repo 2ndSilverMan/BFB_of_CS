@@ -4,6 +4,7 @@
 - Prerequisites: [Data-Structures/](../../Data-Structures/)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 

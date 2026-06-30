@@ -4,6 +4,7 @@
 - Prerequisites: [AI/Computer-Vision/Image-Basics.md](Image-Basics.md), [Math/Linear-Algebra/Vectors.md](../../Math/Linear-Algebra/Vectors.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -21,6 +22,26 @@
 
 하지만 aperture problem 때문에 한 픽셀 주변 정보만으로는 motion이 모호하다. Smoothness prior, multi-scale pyramid, feature matching, deep network를 사용해 모호성을 줄인다.
 
+```mermaid
+flowchart LR
+    F1["frame t"] --> Match["local / learned matching"]
+    F2["frame t+1"] --> Match
+    Match --> Flow["H x W x 2 flow"]
+    Flow --> Consistency["occlusion / consistency check"]
+```
+
+### Flow와 correspondence
+
+forward flow는 현재 픽셀이 다음 프레임 어디로 이동하는지를 나타내고, backward flow는 반대 방향을 나타낸다. 둘이 서로 일관되지 않는 영역은 occlusion이나 disocclusion 후보가 된다. 실제 응용에서는 flow와 함께 validity mask를 저장하는 편이 안전하다.
+
+### 평가 지표
+
+대표 지표는 endpoint error(EPE)로, 예측 flow와 정답 flow vector의 Euclidean distance를 평균낸다. 큰 motion, 얇은 구조, textureless region, 반사/투명 물체는 별도 segment로 봐야 한다.
+
+### 카메라 motion과 scene flow
+
+2D optical flow는 화면상 움직임이라서 카메라가 움직이면 정지한 배경도 flow를 가진다. 실제 3D motion을 알고 싶다면 depth, camera pose, scene flow 같은 추가 정보가 필요하다.
+
 ## 구현 (Implementation)
 
 ```python
@@ -31,6 +52,13 @@ flow_vector = {
 ```
 
 실제 flow map은 `H × W × 2` tensor로 저장하고, occlusion이나 invalid region mask를 함께 둘 수 있다.
+
+```python
+def endpoint_error(pred, target):
+    du = pred[0] - target[0]
+    dv = pred[1] - target[1]
+    return (du * du + dv * dv) ** 0.5
+```
 
 ## 복잡도 (Complexity)
 

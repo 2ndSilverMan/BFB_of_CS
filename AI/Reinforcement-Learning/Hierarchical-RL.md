@@ -4,6 +4,7 @@
 - Prerequisites: [MDP.md](MDP.md), [Policy.md](Policy.md), [Value-Functions.md](Value-Functions.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -25,6 +26,32 @@ Options framework에서 option은 세 요소로 정의된다.
 
 계층 구조는 temporal abstraction을 제공한다. 상위 정책은 primitive action보다 긴 시간 단위로 의사결정할 수 있어 긴 horizon 문제를 줄일 수 있다.
 
+### Temporal abstraction
+
+Option은 여러 primitive action을 묶어 더 긴 시간 단위의 행동처럼 만든다. 상위 정책은 매 step 행동을 고르는 대신 option이 끝날 때 다음 option을 고른다. 이렇게 하면 effective horizon이 줄고, sparse reward 문제에서 탐색이 쉬워질 수 있다.
+
+하지만 option이 너무 길면 환경 변화에 둔감해지고, 너무 짧으면 계층의 장점이 사라진다. 종료 조건은 option의 품질을 좌우한다.
+
+### Option value
+
+Option을 행동처럼 보면 상위 정책은 semi-MDP를 푼다. Option 실행 시간이 variable duration이므로, option 동안 받은 누적 보상과 종료 후 상태 가치를 함께 고려해야 한다.
+
+$$
+Q(s,o)=E\left[\sum_{k=0}^{\tau-1}\gamma^kR_{t+k+1}+\gamma^\tau V(S_{t+\tau})\right]
+$$
+
+여기서 $\tau$는 option duration이다.
+
+### Option discovery
+
+Option은 사람이 설계할 수도 있고 데이터에서 발견할 수도 있다. 자주 지나는 bottleneck state, 다양성을 만드는 skill, goal-conditioned policy, mutual information objective가 option discovery에 쓰인다.
+
+사람에게 의미 있는 subtask가 에이전트에게 좋은 option일 필요는 없다. 좋은 option은 학습과 planning을 실제로 단순화해야 한다.
+
+### 계층적 credit assignment
+
+실패가 났을 때 상위 정책이 나쁜 option을 골랐는지, 하위 policy가 option을 잘못 실행했는지 구분해야 한다. 계층적 RL에서는 reward를 상위와 하위에 어떻게 배분할지, intrinsic reward가 최종 목표와 어긋나지 않는지 조심해야 한다.
+
 ## 구현 (Implementation)
 
 상위 정책이 option을 고르고, option이 종료될 때까지 하위 정책을 실행한다.
@@ -42,6 +69,16 @@ def run_option(env, option, state):
 ```
 
 실제 과제는 좋은 option을 사람이 설계할지, 데이터에서 자동 발견할지다.
+
+```python
+def option_return(rewards, gamma, next_value, duration):
+    total = 0.0
+    for k, reward in enumerate(rewards):
+        total += (gamma ** k) * reward
+    return total + (gamma ** duration) * next_value
+```
+
+Option의 가치는 실행 중 보상과 종료 후 상태 가치를 함께 포함한다.
 
 ## 복잡도 (Complexity)
 

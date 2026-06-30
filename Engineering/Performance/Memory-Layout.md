@@ -4,6 +4,7 @@
 - Prerequisites: [Systems/Computer-Architecture/Memory-Hierarchy.md](../../Systems/Computer-Architecture/Memory-Hierarchy.md), [Engineering/Performance/Cache-Friendly-Code.md](Cache-Friendly-Code.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -18,6 +19,12 @@ CPU cache는 근처 데이터를 한 번에 가져온다. 실제로 같이 쓰�
 ## 이론 (Theory)
 
 AoS는 객체 단위 접근이 쉽고 locality가 좋다. SoA는 특정 field만 대량 처리할 때 cache 효율과 SIMD 가능성이 높다. Padding, alignment, pointer chasing, indirection, object header도 성능에 영향을 준다. Layout 변경은 API·readability·mutation pattern과 함께 평가해야 한다.
+
+### Layout이 성능이 되는 이유
+
+메모리 성능은 데이터가 cache line에 어떻게 배치되는지에 크게 좌우된다. Array of Structs는 객체 단위 접근에 좋고, Struct of Arrays는 특정 필드만 대량 처리할 때 SIMD와 cache locality에 유리하다.
+
+Padding과 alignment는 크기를 늘릴 수 있지만 misaligned access나 false sharing을 줄일 수 있다. 구조체 크기와 hot field 위치는 profile을 보고 조정한다.
 
 ## 구현 (Implementation)
 
@@ -67,4 +74,3 @@ SoA: {x:[...], y:[...], z:[...]}
 
 - [Systems/Computer-Architecture/Memory-Hierarchy.md](../../Systems/Computer-Architecture/Memory-Hierarchy.md)
 - [Systems/Computer-Architecture/Data-Representation.md](../../Systems/Computer-Architecture/Data-Representation.md)
-

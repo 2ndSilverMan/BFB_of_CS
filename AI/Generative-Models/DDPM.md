@@ -4,6 +4,7 @@
 - Prerequisites: [Math/Probability-Statistics/Distributions.md](../../Math/Probability-Statistics/Distributions.md), [AI/Deep-Learning/Loss-Functions.md](../Deep-Learning/Loss-Functions.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -27,6 +28,26 @@ $$x_t=\sqrt{\bar\alpha_t}x_0+\sqrt{1-\bar\alpha_t}\epsilon$$
 
 를 한 번에 sampling할 수 있다. Network $\epsilon_\theta(x_t,t)$는 noise를 예측하며 단순화된 MSE objective를 자주 사용한다. Sampling은 timestep을 역순으로 반복해 비싸다.
 
+```mermaid
+flowchart LR
+    X0["data x0"] --> Noise["forward noising q"]
+    Noise --> XT["near Gaussian noise"]
+    XT --> Reverse["learned reverse denoising"]
+    Reverse --> Sample["generated sample"]
+```
+
+### Parameterization 선택
+
+모델은 noise $\epsilon$, clean sample $x_0$, velocity $v$ 중 무엇을 예측하도록 학습할 수 있다. parameterization은 training stability, guidance behavior, sampler와 맞물린다. 같은 diffusion이라도 prediction target이 다르면 loss scale과 샘플 품질이 달라질 수 있다.
+
+### Noise schedule
+
+β schedule은 각 timestep의 신호대잡음비를 결정한다. 너무 빠르게 noise를 넣으면 중간 단계 학습이 어렵고, 너무 느리면 step 수가 많아진다. cosine schedule 등은 timestep별 학습 난이도를 더 고르게 만들려는 시도다.
+
+### Guidance tradeoff
+
+classifier-free guidance는 조건을 더 따르게 하지만 scale이 너무 크면 saturation, 반복 패턴, 다양성 감소가 생긴다. guidance scale은 품질·다양성·조건 준수의 knob로 보고 task별로 sweep한다.
+
 ## 구현 (Implementation)
 
 ```python
@@ -37,6 +58,11 @@ def add_noise(x0, alpha_bar, rng):
     noise = rng.normal(size=x0.shape)
     xt = np.sqrt(alpha_bar) * x0 + np.sqrt(1 - alpha_bar) * noise
     return xt, noise
+```
+
+```python
+def guided_prediction(uncond, cond, scale):
+    return uncond + scale * (cond - uncond)
 ```
 
 ## 복잡도 (Complexity)

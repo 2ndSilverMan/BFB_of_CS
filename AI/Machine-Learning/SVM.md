@@ -4,6 +4,7 @@
 - Prerequisites: [AI/Machine-Learning/Logistic-Regression.md](Logistic-Regression.md), [Math/Optimization/Convex-Optimization.md](../../Math/Optimization/Convex-Optimization.md), [Math/Linear-Algebra/Vectors.md](../../Math/Linear-Algebra/Vectors.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -14,6 +15,15 @@ SVM은 분류 경계와 가장 가까운 데이터점 사이의 margin을 최대
 ## 직관 (Intuition)
 
 두 클래스를 가르는 선은 많을 수 있다. SVM은 그중 “가장 여유 있게” 가르는 선을 고른다. 경계 근처의 몇 개 점이 결정에 큰 영향을 주며, 이 점들을 support vector라고 부른다.
+
+```mermaid
+flowchart LR
+    DATA["labeled data"] --> MARGIN["margin 최대화"]
+    MARGIN --> SV["support vectors"]
+    SV --> BOUND["decision boundary"]
+    DATA --> KERNEL["kernel trick"]
+    KERNEL --> NB["nonlinear boundary"]
+```
 
 ## 이론 (Theory)
 
@@ -26,6 +36,26 @@ $$
 $$
 
 여기서 두 번째 항은 hinge loss이고, $C$는 margin 크기와 훈련 오류 허용 사이의 trade-off를 조절한다. Kernel trick을 쓰면 $x$를 고차원 특징 공간으로 명시적으로 옮기지 않고도 내적 $K(x,x')$만 계산해 비선형 경계를 만들 수 있다.
+
+### hinge loss와 margin
+
+레이블 $y_i\in\{-1,1\}$에 대해 margin score는 $y_i(w^\top x_i+b)$다.
+
+| margin score | hinge loss |
+|---|---|
+| $\ge 1$ | 0, 충분히 올바른 쪽 |
+| $0$과 $1$ 사이 | 맞지만 margin 안쪽 |
+| $\le 0$ | 오분류 |
+
+SVM은 단순히 맞히는 것보다 경계에서 충분히 떨어지게 만드는 해를 선호한다.
+
+### C와 gamma
+
+$C$가 크면 훈련 오류를 더 강하게 벌점화해 margin이 좁아지고 과적합 위험이 커질 수 있다. RBF kernel의 $\gamma$가 크면 각 support vector의 영향 범위가 좁아져 복잡한 경계를 만든다. 보통 $C$와 $\gamma$는 로그 스케일 grid에서 교차 검증으로 고른다.
+
+### scaling의 중요성
+
+SVM은 내적과 거리 기반 kernel에 민감하다. 한 feature의 단위가 크면 margin과 kernel 값이 그 feature에 지배된다. 선형 SVM과 RBF SVM 모두 표준화가 사실상 기본 전처리다.
 
 ## 구현 (Implementation)
 
@@ -47,6 +77,13 @@ print(predict(w, b, [2.0, 1.0]))
 
 실무에서는 feature scaling이 매우 중요하며, kernel SVM은 데이터가 크면 학습 비용이 빠르게 증가한다.
 
+hinge loss를 직접 계산하면 margin의 의미가 보인다.
+
+```python
+def hinge_loss(y, score):
+    return max(0.0, 1.0 - y * score)
+```
+
 ## 복잡도 (Complexity)
 
 선형 SVM은 대규모 희소 데이터에서도 효율적으로 학습할 수 있다. 일반 kernel SVM은 kernel matrix 때문에 메모리 $O(n^2)$, 학습 시간은 구현과 조건에 따라 더 크게 늘 수 있다. 예측 비용도 support vector 수에 비례한다.
@@ -64,6 +101,8 @@ print(predict(w, b, [2.0, 1.0]))
 - kernel을 쓰면 무조건 성능이 좋아지는 것은 아니다. 비용과 overfitting 위험도 커진다.
 - support vector는 모든 데이터가 아니라 경계 근처에서 결정에 영향을 주는 점들이다.
 - $C$가 클수록 항상 좋은 것은 아니다. 훈련 오류를 지나치게 줄이려 할 수 있다.
+- SVM score는 기본적으로 잘 보정된 확률이 아니다. 확률이 필요하면 calibration이 필요하다.
+- kernel matrix가 커지면 메모리가 먼저 병목이 될 수 있다.
 
 ## TMI
 
@@ -76,6 +115,8 @@ print(predict(w, b, [2.0, 1.0]))
 - hard-margin과 soft-margin SVM의 차이를 설명하라.
 - hinge loss가 0이 되는 조건을 쓰라.
 - RBF kernel에서 gamma가 너무 클 때 생길 수 있는 문제를 설명하라.
+- 같은 데이터에서 feature scaling 전후의 SVM decision boundary를 비교하라.
+- $C$와 $\gamma$를 동시에 키웠을 때 train/validation 성능이 어떻게 변하는지 관찰하라.
 
 ## 이어서 읽기 (Reading Path)
 

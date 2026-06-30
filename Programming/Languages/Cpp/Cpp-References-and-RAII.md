@@ -4,96 +4,106 @@
 - Prerequisites: [C++ 기본 문법](Cpp-Setup-and-Syntax.md), [Programming/Pointers-and-Memory.md](../../Pointers-and-Memory.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
 ## 개념 (Concept)
 
-참조(reference)는 기존 객체의 별칭이고, RAII(Resource Acquisition Is Initialization)는 자원 획득과 해제를 객체 수명에 묶는 C++의 핵심 패턴이다.
+참조는 기존 객체의 **별칭**(null 불가, 재바인딩 불가), RAII(Resource Acquisition Is Initialization)는 **자원 획득·해제를 객체 수명에 묶는** C++의 핵심 패턴이다. RAII가 C++ 예외 안전성과 결정적 자원 관리의 토대다.
 
 ## 직관 (Intuition)
 
-RAII는 "객체가 태어날 때 자원을 잡고, 죽을 때 자동으로 놓는다"는 원칙이다. 덕분에 예외가 발생해도 파일, 메모리, 락 같은 자원이 정리된다.
+RAII = "객체가 태어날 때 자원을 잡고, 죽을 때 자동으로 놓는다". 덕분에 **예외가 던져져도** 스택이 풀리며(unwinding) 소멸자가 호출돼 파일·메모리·락이 정리된다 — `finally` 가 필요 없는 이유.
 
 ## 핵심 문법 (Core Syntax)
 
 ```cpp
-#include <fstream>
+void increment(int& x) { ++x; }            // 참조: 복사 없이 수정
+void read(const std::string& s);           // const&: 복사 없이 읽기
 
-void write_file(const std::string& path) {
+void write(const std::string& path) {
     std::ofstream out(path);
     out << "hello\n";
-} // out의 destructor가 파일을 닫음
-```
-
-참조는 복사를 피하면서 값을 읽거나 수정할 때 쓴다.
-
-```cpp
-void increment(int& x) {
-    ++x;
-}
+}                                           // out의 소멸자가 파일을 닫음
 ```
 
 ## 이론 (Theory)
 
-객체 수명은 생성자와 소멸자에 의해 관리된다. Stack 객체는 scope를 벗어날 때 소멸자가 호출된다. 이 성질이 C++ 예외 안전성과 자원 관리의 기반이다.
+### 1. 수명과 스택 unwinding
+
+스택 객체는 scope를 벗어날 때 **선언의 역순으로** 소멸자가 호출된다. 예외가 전파될 때도 이 unwinding이 일어나 자원이 누수 없이 정리된다 — RAII 객체가 cleanup을 보장한다.
+
+### 2. 인자 전달 규칙
+
+| 의도 | 전달 방식 |
+|---|---|
+| 읽기만(큰 객체) | `const T&` |
+| 수정 | `T&` |
+| 소유권 이전 | `T` (by value) 또는 `T&&` |
+| 작은 값 | `T` (복사가 더 쌈) |
+
+### 3. rvalue 참조와 이동
+
+`T&&` (rvalue 참조)는 "곧 사라질 임시"를 가리켜 **이동(move)** 을 가능케 한다 — 자원을 복사 대신 옮긴다. 자원을 가진 클래스는 **rule of 5**(소멸자/복사 생성·대입/이동 생성·대입)를, 자원이 없으면 **rule of 0**(전부 컴파일러에 위임)를 따른다.
 
 ## 구현 (Implementation)
 
-Resource를 획득하는 생성자와 해제하는 소멸자를 한 쌍으로 설계하고, 함수 인자는 소유권이 없으면 `const&`, 소유권 이동이면 value나 rvalue reference로 표현한다. Scope를 벗어날 때 해제가 실제로 일어나는지 로그나 테스트로 확인한다.
-
 ```cpp
 #include <iostream>
-#include <string>
-
 class Timer {
 public:
-    Timer() { std::cout << "start\n"; }
-    ~Timer() { std::cout << "stop\n"; }   // scope 종료 시 자동 해제
+    Timer()  { std::cout << "start\n"; }   // 획득
+    ~Timer() { std::cout << "stop\n";  }   // 해제(scope 종료·예외 시 자동)
 };
 
 void run(const std::string& label) {       // const&: 복사 없이 읽기
-    Timer t;
+    Timer t;                                // RAII
     std::cout << "work: " << label << "\n";
-}
+}                                           // 여기서 ~Timer() → stop
+// 출력: start / work: ... / stop  (예외가 나도 stop은 보장)
 
-int main() { run("job"); }  // start / work: job / stop 순서로 출력
+std::lock_guard<std::mutex> guard(mtx);     // 락도 RAII로 자동 해제
 ```
 
 ## 복잡도 (Complexity)
 
-RAII 자체는 점근 복잡도를 바꾸지 않지만 cleanup 시점을 결정적으로 만든다. Reference 전달은 큰 객체 복사를 피하지만 lifetime 제약을 만들고, move는 보통 싸지만 type별로 비용이 다를 수 있다.
+| 항목 | 특성 |
+|---|---|
+| RAII | 점근은 그대로, **cleanup 시점을 결정적**으로 |
+| `const&` 전달 | 큰 객체 복사 회피(단, 수명 제약) |
+| move | 보통 싸지만 타입별로 다름(포인터 교환 수준) |
 
 ## 응용 (Applications)
 
-- 파일·소켓·락 자동 정리
-- 복사 비용 줄이기
-- 예외 안전 코드
-- 소유권 모델 설계
+- 파일·소켓·락·메모리 자동 정리, 예외 안전 코드.
+- 복사 비용 절감(`const&`), 소유권·이동 모델 설계.
 
 ## 흔한 오해 (Common Misunderstandings)
 
-- 참조는 null이 될 수 없는 별칭으로 사용하는 것이 일반적이다.
-- 지역 객체의 참조를 반환하면 dangling reference가 된다.
-- RAII는 메모리뿐 아니라 모든 자원에 적용된다.
-- 소멸자에서 예외를 던지는 것은 매우 위험하다.
+- **참조는 null이 될 수 없는 별칭** — 재바인딩도 안 됨(포인터와 다름).
+- **지역 객체 참조 반환은 dangling** — 수명 끝난 스택.
+- **RAII는 메모리만이 아니다** — 모든 자원(락·핸들·트랜잭션).
+- **소멸자에서 예외를 던지면 위험** — unwinding 중 두 번째 예외 → `terminate`.
 
 ## TMI
 
-- `const T&`는 큰 객체를 읽기 전용으로 넘길 때 자주 쓴다.
-- Move semantics는 자원을 복사하지 않고 옮기는 현대 C++ 핵심이다.
-- `std::lock_guard`는 mutex lock을 RAII로 관리한다.
+- `std::lock_guard`/`unique_lock` 은 mutex를, `std::scoped_lock` 은 여러 mutex를 데드락 없이 RAII로 잡는다.
+- 이동 후 원본은 "유효하지만 미지정" 상태 — 다시 대입하거나 소멸만 안전.
+- `[[nodiscard]]` 와 RAII를 결합해 자원 핸들을 실수로 버리는 것을 막는다.
 
 ## 연습 / 확인 문제 (Exercises)
 
-- 참조로 값을 바꾸는 함수를 작성하라.
-- 파일 객체가 scope를 벗어날 때 자동으로 닫히는 이유를 설명하라.
-- Dangling reference 예시를 만들고 피하는 방법을 말하라.
+- 참조로 두 값을 swap하는 함수를 작성하라.
+- `Timer` 가 예외 발생 시에도 "stop"을 출력함을 보여라(스택 unwinding).
+- dangling reference 예시를 만들고 피하는 법을 설명하라.
+- 자원을 가진 클래스에 rule of 5를 적용하라.
 
 ## 이어서 읽기 (Reading Path)
 
 - 이전: [C++ 기본 문법](Cpp-Setup-and-Syntax.md)
 - 다음: [클래스와 템플릿](Cpp-Classes-and-Templates.md)
+- 관련: [스마트 포인터와 메모리](Cpp-Memory-and-Smart-Pointers.md)
 
 ## 참조 (References)
 

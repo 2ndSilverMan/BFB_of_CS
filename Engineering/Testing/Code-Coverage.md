@@ -4,6 +4,7 @@
 - Prerequisites: [Engineering/Testing/Testing-Pyramid.md](Testing-Pyramid.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -18,6 +19,12 @@
 ## 이론 (Theory)
 
 라인 커버리지는 실행된 줄, 브랜치 커버리지는 조건 분기의 양쪽 경로, 조건 커버리지는 복합 조건의 각 부분을 본다. 높은 커버리지는 필요조건에 가깝지만 충분조건은 아니다.
+
+### Coverage의 해석
+
+Coverage는 테스트가 실행한 코드의 양을 말하지, assertion이 의미 있는지를 말하지 않는다. Line coverage가 높아도 결과를 검증하지 않으면 결함을 놓친다. Branch coverage, condition coverage, mutation score를 함께 보면 "실행했다"와 "검증했다"의 간극을 줄일 수 있다.
+
+실무에서는 전체 coverage 숫자보다 위험한 변경 영역의 diff coverage와 critical module coverage를 더 중요하게 본다. Coverage gate는 테스트 작성을 유도하는 guardrail이지 품질의 최종 증명이 아니다.
 
 ## 구현 (Implementation)
 

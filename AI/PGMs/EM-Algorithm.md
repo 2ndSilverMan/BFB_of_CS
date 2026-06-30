@@ -4,6 +4,7 @@
 - Prerequisites: [HMM.md](HMM.md), [Variational-Inference.md](Variational-Inference.md), [Math/Probability-Statistics/MLE.md](../../Math/Probability-Statistics/MLE.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -33,6 +34,26 @@ M-step: E[log pθ(x, z)] 최대화
 
 EM은 각 반복에서 관측 로그우도를 감소시키지 않는다. 하지만 비볼록 문제에서는 local optimum에 수렴할 수 있다.
 
+```mermaid
+flowchart LR
+    Theta["current parameters"] --> Estep["E-step posterior/responsibility"]
+    Estep --> Mstep["M-step update parameters"]
+    Mstep --> Check["likelihood / convergence"]
+    Check --> Theta
+```
+
+### ELBO coordinate ascent
+
+EM은 posterior $q(z)$와 파라미터 $\theta$를 번갈아 최적화하는 ELBO coordinate ascent로 볼 수 있다. E-step은 현재 파라미터에서 정확 posterior를 두고, M-step은 그 posterior 기대 아래 complete-data log likelihood를 최대화한다.
+
+### 초기화와 local optimum
+
+GMM에서는 component 평균 초기화가 나쁘면 빈 cluster, singular covariance, local optimum이 생길 수 있다. 여러 random restart, k-means 초기화, covariance regularization, minimum variance floor가 실무적으로 중요하다.
+
+### Hard EM과 soft EM
+
+soft EM은 각 데이터가 여러 component에 속할 responsibility를 사용한다. hard EM은 가장 가능성 높은 component 하나로 할당해 k-means와 비슷해진다. soft assignment는 불확실성을 보존하지만 비용이 더 든다.
+
 ## 구현 (Implementation)
 
 Gaussian mixture의 E-step은 각 데이터가 어느 component에서 왔는지 responsibility를 계산한다.
@@ -54,6 +75,11 @@ print(e_step_point(likelihoods, priors))
 ```
 
 M-step에서는 responsibility로 가중 평균, 분산, mixture weight를 다시 계산한다.
+
+```python
+def converged(prev_ll, curr_ll, tol=1e-4):
+    return abs(curr_ll - prev_ll) <= tol
+```
 
 ## 복잡도 (Complexity)
 

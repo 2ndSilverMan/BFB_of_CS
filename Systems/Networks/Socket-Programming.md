@@ -4,6 +4,7 @@
 - Prerequisites: [Systems/Networks/TCP-UDP.md](TCP-UDP.md), [Systems/Operating-Systems/Processes-and-Threads.md](../Operating-Systems/Processes-and-Threads.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 

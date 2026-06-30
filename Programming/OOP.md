@@ -4,6 +4,7 @@
 - Prerequisites: [Programming/Functions-and-Recursion.md](Functions-and-Recursion.md), [Programming/Arrays-and-Strings.md](Arrays-and-Strings.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -15,6 +16,24 @@
 
 절차적 코드는 데이터와 함수가 흩어져, 프로그램이 커지면 "이 데이터를 누가 어떻게 바꾸는가"를 추적하기 어렵다. OOP는 관련된 상태와 행동을 한 객체에 모아 경계를 만든다. 그러면 객체는 외부에 "무엇을 할 수 있는가"만 노출하고 내부 구현은 숨겨, 큰 시스템을 부품처럼 조립하고 교체할 수 있다.
 
+```mermaid
+classDiagram
+    class Shape {
+        +area()
+    }
+    class Circle {
+        -r
+        +area()
+    }
+    class Rectangle {
+        -w
+        -h
+        +area()
+    }
+    Shape <|-- Circle
+    Shape <|-- Rectangle
+```
+
 ## 이론 (Theory)
 
 - **캡슐화(encapsulation)**: 상태를 숨기고 공개 인터페이스로만 접근하게 해 불변식(invariant)을 보호한다.
@@ -23,6 +42,15 @@
 - **추상화(abstraction)**: 본질만 드러내고 세부를 감춘다(추상 클래스/인터페이스).
 
 설계 지침으로 "상속보다 합성(composition over inheritance)"과 SOLID 원칙이 자주 인용된다. 다형성은 LSP(리스코프 치환 원칙)에 기대어, 부모 타입 자리에 자식을 넣어도 프로그램이 올바르게 동작해야 한다.
+
+### 상속과 합성
+
+상속은 "A는 B의 한 종류다"가 자연스러울 때 강하다. 합성은 "A는 B를 사용한다"가 자연스러울 때 강하다.
+
+| 선택 | 좋은 경우 | 위험 |
+|---|---|---|
+| 상속 | 공통 인터페이스와 대체 가능성이 명확함 | 부모 구현 변경이 자식에게 전파, 계층 폭발 |
+| 합성 | 기능을 조립·교체해야 함 | 객체 연결이 많아져 구조를 따로 관리해야 함 |
 
 ## 구현 (Implementation)
 
@@ -41,9 +69,26 @@ def total_area(shapes):
     return sum(s.area() for s in shapes)   # 다형성: 타입과 무관하게 area() 호출
 ```
 
+워크드 예제: 새 `Rectangle`을 추가해도 `total_area`는 바뀌지 않는다.
+
+```python
+class Rectangle(Shape):
+    def __init__(self, w, h):
+        self._w = w
+        self._h = h
+    def area(self) -> float:
+        return self._w * self._h
+
+print(total_area([Circle(2), Rectangle(3, 4)]))
+```
+
+분기문으로 `if type == "circle"`를 늘리는 대신, 객체가 자기 면적 계산을 책임진다. 이것이 다형성이 변경 범위를 줄이는 지점이다.
+
 ## 복잡도 (Complexity)
 
 OOP 자체는 알고리즘 복잡도를 바꾸지 않는다. 동적 디스패치는 가상 함수 테이블 조회로 약간의 런타임 비용을 더하지만 보통 무시할 만하다. 진짜 비용·이득은 설계 복잡도다. 적절한 캡슐화는 변경 범위를 줄이지만, 과도한 상속 계층은 이해와 유지보수를 어렵게 한다.
+
+객체가 너무 작게 쪼개지면 호출 경로가 길어지고 상태 추적이 어려워진다. 반대로 거대한 객체 하나가 모든 일을 하면 변경 충돌과 테스트 어려움이 커진다. OOP의 깊이는 문법보다 **책임 경계**를 어디에 두는가에서 나온다.
 
 ## 응용 (Applications)
 

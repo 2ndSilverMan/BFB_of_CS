@@ -4,6 +4,7 @@
 - Prerequisites: [Programming/Variables-and-Types.md](Variables-and-Types.md), [Programming/Control-Flow.md](Control-Flow.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -16,6 +17,15 @@
 배열과 문자열은 "순서가 있는 데이터"를 다루는 가장 기본적인 도구다. 점수 목록, 이름 목록, 입력 텍스트, 파일 경로, 명령어 인자처럼 실제 프로그램의 많은 데이터가 이 형태로 들어온다.
 
 배열은 보통 원소를 바꿀 수 있지만, 문자열은 많은 언어에서 불변 값으로 다룬다. 그래서 문자열을 조금씩 이어 붙이는 코드는 예상보다 비쌀 수 있다.
+
+```mermaid
+flowchart LR
+    A0["index 0"] --> V0["90"]
+    A1["index 1"] --> V1["85"]
+    A2["index 2"] --> V2["100"]
+    BASE["base address"] --> A0
+    A0 --> A1 --> A2
+```
 
 ## 이론 (Theory)
 
@@ -32,6 +42,10 @@
 0-based 인덱스 언어에서는 첫 위치가 `0`이다. 길이가 `n`인 배열의 마지막 인덱스는 `n - 1`이다.
 
 문자열은 문자 배열처럼 순회할 수 있지만, 문자 인코딩 때문에 "보이는 글자 수"와 내부 코드 포인트 수가 다를 수 있다. 입문 단계에서는 ASCII나 단순한 한글 문자열을 기준으로 시작하고, 나중에 Unicode를 따로 다룬다.
+
+### 구간과 반열린 범위
+
+많은 언어는 슬라이스를 `[start, end)`처럼 끝을 포함하지 않는 반열린 범위로 표현한다. 길이는 `end - start`가 되고, 빈 구간은 `start == end`로 자연스럽게 표현된다. 이 관습은 이진 탐색, 투 포인터, 문자열 처리에서 경계 오류를 줄여 준다.
 
 ## 구현 (Implementation)
 
@@ -74,6 +88,24 @@ def square_all(values):
     return result
 ```
 
+투 포인터 예시:
+
+```python
+def has_pair_sum(sorted_values, target):
+    left, right = 0, len(sorted_values) - 1
+    while left < right:
+        s = sorted_values[left] + sorted_values[right]
+        if s == target:
+            return True
+        if s < target:
+            left += 1
+        else:
+            right -= 1
+    return False
+```
+
+정렬된 배열에서 왼쪽과 오른쪽을 동시에 좁힌다. 각 포인터는 한 방향으로만 움직이므로 전체 시간은 `O(n)`이다.
+
 ## 복잡도 (Complexity)
 
 | 연산 | 시간 | 공간 |
@@ -85,6 +117,8 @@ def square_all(values):
 | 길이 n 문자열 생성 | O(n) | O(n) |
 
 슬라이싱은 언어에 따라 새 배열/문자열을 만들 수 있다. 새 값을 만들면 보통 잘라낸 길이만큼 시간과 공간이 든다.
+
+워크드 예제: 길이 5 문자열 `"abcde"`에서 모든 접미사 `text[i:]`를 실제 새 문자열로 만들면 길이는 5,4,3,2,1이라 총 복사량은 15다. 일반화하면 $\sum_{k=1}^{n} k = O(n^2)$다. 문자열 알고리즘에서 무심코 슬라이싱을 반복하면 선형 알고리즘이 이차가 될 수 있다.
 
 ## 응용 (Applications)
 

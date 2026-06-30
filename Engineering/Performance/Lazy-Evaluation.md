@@ -4,6 +4,7 @@
 - Prerequisites: [Algorithms/Complexity.md](../../Algorithms/Complexity.md), [Engineering/Performance/Memoization-Caching.md](Memoization-Caching.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -18,6 +19,12 @@
 ## 이론 (Theory)
 
 Lazy sequence, generator, stream processing은 memory footprint를 낮추고 early termination을 가능하게 한다. 반대로 evaluation timing이 늦어져 exception 위치가 애매해지고, resource lifetime이 길어질 수 있다. Memoized lazy value는 한 번 계산한 결과를 재사용하지만 invalidation 문제가 생긴다.
+
+### 지연의 비용 이동
+
+Lazy evaluation은 계산을 필요한 순간까지 미뤄 불필요한 일을 줄인다. 하지만 비용이 사라지는 것이 아니라 다른 시점으로 이동한다. 늦게 실패하거나, resource lifetime이 길어지거나, 여러 번 순회할 때 같은 계산을 반복할 수 있다.
+
+Streaming pipeline에서는 backpressure와 cancellation을 함께 설계해야 한다. Producer가 무한히 만들고 consumer가 늦으면 메모리 압박이 생긴다.
 
 ## 구현 (Implementation)
 
@@ -68,4 +75,3 @@ def first_even_square(values):
 
 - [Algorithms/Complexity.md](../../Algorithms/Complexity.md)
 - [Engineering/System-Design/Caching.md](../System-Design/Caching.md)
-

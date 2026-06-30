@@ -4,6 +4,7 @@
 - Prerequisites: [Engineering/Testing/Testing-Pyramid.md](Testing-Pyramid.md), [Engineering/Testing/Integration-Test-Strategy.md](Integration-Test-Strategy.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -18,6 +19,12 @@ E2E 테스트는 사용자의 핵심 흐름을 실제 시스템에 가깝게 통
 ## 이론 (Theory)
 
 E2E는 confidence가 높지만 느리고 flaky하기 쉽다. 테스트 데이터, 외부 의존성, 브라우저 timing, 네트워크 상태를 통제해야 한다. 핵심 journey만 적게 유지하고, 세부 경우의 수는 낮은 층 테스트로 내린다.
+
+### E2E의 범위 통제
+
+E2E 테스트는 가장 현실적이지만 가장 비싸고 취약하다. 그래서 모든 edge case를 E2E로 올리기보다 로그인, 결제, 권한, 데이터 생성처럼 사용자의 신뢰에 직결되는 대표 journey를 선택한다. 실패 원인이 backend, frontend, network, data 중 어디인지 빠르게 좁힐 수 있도록 trace와 screenshot, network log를 함께 남긴다.
+
+Flaky E2E는 제품 신뢰를 갉아먹는다. 단순 retry로 숨기지 말고 원인을 time, async wait, shared data, external dependency, browser variance로 분류해 수정한다.
 
 ## 구현 (Implementation)
 

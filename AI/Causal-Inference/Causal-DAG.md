@@ -4,6 +4,7 @@
 - Prerequisites: [AI/PGMs/d-Separation.md](../PGMs/d-Separation.md), [AI/Causal-Inference/SCM.md](SCM.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -25,6 +26,25 @@ DAG는 "정보가 어디로 흐르는가"보다 "개입했을 때 어떤 변수�
 
 인과 효과 식별에서는 treatment에서 outcome으로 가는 causal path는 남기고, treatment로 들어오는 backdoor path는 막는 조정 집합을 찾는다.
 
+```mermaid
+flowchart LR
+    DAG["causal DAG"] --> Paths["causal / backdoor / collider paths"]
+    Paths --> Adjust["choose adjustment set"]
+    Adjust --> Estimate["estimate effect"]
+```
+
+### 조정하면 안 되는 변수
+
+mediator를 조정하면 총효과가 아니라 직접효과에 가까운 다른 estimand가 된다. collider나 collider의 descendant를 조정하면 없던 bias를 만들 수 있다. treatment 이후에 생긴 변수는 대개 baseline confounder가 아니므로 시간 순서를 확인해야 한다.
+
+### DAG 작성 절차
+
+결과를 보고 간선을 그리기보다 domain knowledge로 treatment 이전 변수, outcome 원인, treatment 배정 원인, selection mechanism을 먼저 적는다. 측정되지 않은 변수도 존재하면 latent node로 표시해 식별 불가능성을 드러내는 편이 낫다.
+
+### Markov equivalence와 한계
+
+관측 조건부 독립성만으로는 방향을 모두 정할 수 없다. 같은 d-separation 관계를 공유하는 DAG가 여러 개 있을 수 있으므로, 방향에는 시간, 실험, 물리적 제약 같은 외부 지식이 필요하다.
+
 ## 구현 (Implementation)
 
 ```python
@@ -36,6 +56,11 @@ dag = {
 ```
 
 이 작은 그래프에서는 $Z$가 $X$와 $Y$의 공통 원인이므로 backdoor 조정 후보가 된다.
+
+```python
+def is_baseline(variable, treatment_time, timestamps):
+    return timestamps[variable] < treatment_time
+```
 
 ## 복잡도 (Complexity)
 

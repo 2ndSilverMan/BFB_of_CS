@@ -4,6 +4,7 @@
 - Prerequisites: [Math/Probability-Statistics/Distributions.md](../../Math/Probability-Statistics/Distributions.md), [Math/Optimization/SGD.md](../../Math/Optimization/SGD.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -21,6 +22,27 @@
 
 EBM은 명시적 generator 없이 flexible한 scoring function을 쓸 수 있지만, sampling과 학습 안정성이 어렵다.
 
+```mermaid
+flowchart LR
+    Real["real sample"] --> Energy["energy network"]
+    Neg["negative sample"] --> Energy
+    Energy --> Loss["lower real energy, raise negative energy"]
+    Loss --> Sampler["MCMC / replay buffer"]
+    Sampler --> Neg
+```
+
+### Partition function 문제
+
+확률 $p_\theta(x)=\exp(-E_\theta(x))/Z_\theta$에서 $Z_\theta$는 모든 가능한 $x$에 대해 적분해야 하므로 고차원에서는 계산이 어렵다. 학습 gradient는 이 정규화 상수 때문에 모델 분포에서 뽑은 negative sample을 필요로 한다.
+
+### Negative sampling 품질
+
+negative sample이 너무 쉬우면 모델은 데이터 주변의 미묘한 에너지 지형을 배우지 못한다. 너무 오래 sampling하면 비용이 커진다. replay buffer는 이전 negative sample을 저장해 더 어려운 negative에서 시작하게 해 주지만 stale sample 문제가 있다.
+
+### EBM과 anomaly detection
+
+energy가 낮으면 모델이 그럴듯하다고 보는 샘플이다. anomaly detection에서는 energy나 reconstruction/score를 threshold로 쓸 수 있지만, density model이 low-level 통계에 민감할 수 있어 validation anomaly와 segment별 calibration이 필요하다.
+
 ## 구현 (Implementation)
 
 ```python
@@ -29,6 +51,11 @@ def ebm_loss(energy_real, energy_negative):
 ```
 
 실제 학습은 regularization, negative sampling, step size, replay buffer가 성능을 크게 좌우한다.
+
+```python
+def energy_score(energy):
+    return -energy
+```
 
 ## 복잡도 (Complexity)
 

@@ -4,6 +4,7 @@
 - Prerequisites: [Data-Structures/Hash-Table.md](../../Data-Structures/Hash-Table.md), [Engineering/System-Design/Caching.md](../System-Design/Caching.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -20,6 +21,12 @@
 ## 이론 (Theory)
 
 Cache key는 identity와 dependency를 정확히 표현해야 한다. Eviction은 LRU, LFU, TTL, size cap 등으로 관리한다. Cache hit가 늘면 latency는 줄지만 stale data, memory pressure, stampede, invalidation 복잡도가 생긴다. Memoization은 pure function에 가장 안전하다.
+
+### 캐시의 정확성 조건
+
+캐시는 빠른 정답을 위한 도구이지 오래된 답을 허용하는 변명이 아니다. Key 설계, TTL, invalidation, consistency level, negative caching, stampede 방지가 함께 필요하다. 캐시 키에는 사용자, 권한, locale, feature flag처럼 결과에 영향을 주는 문맥을 포함한다.
+
+Hit rate만 보면 안 된다. 캐시 miss penalty, stale data risk, memory pressure, eviction churn, warmup behavior를 함께 봐야 한다.
 
 ## 구현 (Implementation)
 
@@ -75,4 +82,3 @@ def fib(n: int) -> int:
 
 - [Engineering/System-Design/Caching.md](../System-Design/Caching.md)
 - [Data-Structures/Hash-Table.md](../../Data-Structures/Hash-Table.md)
-

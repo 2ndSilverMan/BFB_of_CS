@@ -4,6 +4,7 @@
 - Prerequisites: [Math/Linear-Algebra/Vectors.md](../../Math/Linear-Algebra/Vectors.md), [AI/NLP/Language-Model-Basics.md](Language-Model-Basics.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -25,6 +26,26 @@ $$\cos(u,v)=\frac{u^\top v}{\|u\|\|v\|}$$
 
 로 방향 유사성을 잰다. GloVe는 전역 co-occurrence 통계를, FastText는 subword n-gram을 활용한다.
 
+```mermaid
+flowchart LR
+    Corpus["corpus"] --> Context["co-occurrence / context windows"]
+    Context --> Train["embedding training"]
+    Train --> Space["vector space"]
+    Space --> Similarity["similarity / retrieval"]
+```
+
+### 고정 embedding과 문맥 embedding
+
+Word2Vec/GloVe 같은 고정 embedding은 token마다 하나의 vector를 가진다. 그래서 "bank"처럼 다의어인 단어의 여러 의미가 하나로 섞인다. BERT/GPT류의 contextual embedding은 같은 token도 문맥에 따라 다른 hidden representation을 만들기 때문에 다의어 처리에 유리하다.
+
+### 유사도와 정규화
+
+cosine similarity는 vector 크기보다 방향을 본다. 빈도나 학습 방식 때문에 norm이 의미를 가질 때도 있으므로, retrieval에서 cosine, dot product, Euclidean distance 중 무엇을 쓸지 검증해야 한다. 대규모 검색에서는 exact nearest neighbor가 비싸므로 ANN index를 사용한다.
+
+### 편향과 데이터 출처
+
+embedding은 corpus의 사회적 편향, 도메인 편중, 시간적 outdated 표현을 담는다. downstream에서 embedding을 쓰면 이런 bias가 분류·추천·검색 순위로 이어질 수 있으므로 segment별 평가와 bias audit이 필요하다.
+
 ## 구현 (Implementation)
 
 ```python
@@ -39,6 +60,12 @@ def cosine(a, b):
 
 
 print(cosine([1, 1, 0], [1, 0.9, 0.1]))
+```
+
+```python
+def nearest(query, vectors, top_k=3):
+    scored = [(word, cosine(query, vector)) for word, vector in vectors.items()]
+    return sorted(scored, key=lambda x: x[1], reverse=True)[:top_k]
 ```
 
 ## 복잡도 (Complexity)

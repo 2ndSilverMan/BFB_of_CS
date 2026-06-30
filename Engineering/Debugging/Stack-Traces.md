@@ -4,6 +4,7 @@
 - Prerequisites: [Programming/Functions-and-Recursion.md](../../Programming/Functions-and-Recursion.md), [Engineering/Debugging/Scientific-Debugging.md](Scientific-Debugging.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -20,6 +21,12 @@
 먼저 exception type·message·cause chain을 읽고, framework 내부 frame을 건너 application code의 가장 가까운 frame으로 간다. 이후 caller 방향으로 input과 invariant가 어디서 깨졌는지 추적한다.
 
 Async task, callback, distributed request에서는 한 stack만으로 전체 경로가 연결되지 않아 trace ID와 async stack support가 필요하다. Optimized build·source map·symbol이 없으면 frame 해석이 제한된다.
+
+### Trace를 읽는 순서
+
+스택 트레이스는 위에서부터 무작정 읽기보다 실패 지점, 최초 애플리케이션 프레임, 경계 호출, 원인 예외를 분리해 본다. Wrapper exception이 많으면 가장 바깥 증상과 가장 안쪽 cause가 다를 수 있다.
+
+비동기/분산 환경에서는 logical stack이 물리적 call stack과 다르다. async task, queue consumer, RPC boundary에서는 trace ID와 causality metadata가 없으면 원인 흐름이 끊긴다.
 
 ## 구현 (Implementation)
 

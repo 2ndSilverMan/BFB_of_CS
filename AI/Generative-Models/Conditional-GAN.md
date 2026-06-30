@@ -4,6 +4,7 @@
 - Prerequisites: [AI/Generative-Models/GAN-Basics.md](GAN-Basics.md), [AI/NLP/Word-Embeddings.md](../NLP/Word-Embeddings.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -21,6 +22,27 @@ Generator는 $G(z, c)$로 noise와 condition을 함께 입력받는다. Discrimi
 
 조건을 무시하는 collapse가 생길 수 있으므로 auxiliary classifier, projection discriminator, reconstruction/consistency loss를 함께 쓰기도 한다.
 
+```mermaid
+flowchart LR
+    Z["noise z"] --> G["G(z, c)"]
+    C["condition c"] --> G
+    G --> X["generated sample"]
+    X --> D["D(x, c)"]
+    C --> D
+```
+
+### Condition injection 위치
+
+class label은 embedding을 noise와 결합하거나 normalization scale/shift로 주입할 수 있다. segmentation mask나 edge map 같은 spatial condition은 channel concat 또는 encoder feature로 넣는다. text condition은 별도 text encoder와 cross-attention이 필요할 수 있다.
+
+### 조건 준수 평가
+
+조건부 생성은 이미지 품질뿐 아니라 condition fidelity를 따로 봐야 한다. class 조건이면 외부 classifier consistency, mask 조건이면 IoU/edge alignment, text 조건이면 image-text score와 human rating을 사용한다. 다양성은 같은 condition에서 여러 noise를 바꿨을 때 충분히 다른 샘플이 나오는지로 본다.
+
+### Shortcut과 label leakage
+
+조건 label이 데이터의 spurious cue와 강하게 연결되어 있으면 generator가 의미 있는 조건을 배우기보다 쉬운 색·배경 단서를 복사할 수 있다. 데이터 증강용 조건부 생성에서는 downstream label이 정말 보존되는지 별도 검증이 필요하다.
+
 ## 구현 (Implementation)
 
 ```python
@@ -29,6 +51,11 @@ def conditional_input(noise, label_embedding):
 ```
 
 실제 구조에서는 noise와 condition의 scale, injection 위치, discriminator conditioning 방식을 실험한다.
+
+```python
+def condition_dropout(condition, drop, null_condition):
+    return null_condition if drop else condition
+```
 
 ## 복잡도 (Complexity)
 

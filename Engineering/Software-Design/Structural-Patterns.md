@@ -4,6 +4,7 @@
 - Prerequisites: [Creational-Patterns.md](Creational-Patterns.md), [Engineering/Software-Design/SOLID.md](SOLID.md), [Programming/OOP.md](../../Programming/OOP.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 

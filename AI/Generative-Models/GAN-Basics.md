@@ -4,6 +4,7 @@
 - Prerequisites: [AI/Deep-Learning/Backpropagation.md](../Deep-Learning/Backpropagation.md), [Math/Optimization/SGD.md](../../Math/Optimization/SGD.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -23,6 +24,29 @@ $$\min_G\max_D E_{x\sim p_{data}}\log D(x)+E_{z\sim p(z)}\log(1-D(G(z)))$$
 
 다. 실제 generator에는 gradient가 더 강한 non-saturating loss를 자주 쓴다. 두 모델의 동적 균형 때문에 mode collapse, oscillation, vanishing gradient가 생길 수 있다. normalization, architecture, learning-rate 균형과 Wasserstein 계열 목적이 안정화를 돕는다.
 
+```mermaid
+flowchart LR
+    Z["noise z"] --> G["generator"]
+    G --> Fake["fake sample"]
+    Real["real sample"] --> D["discriminator"]
+    Fake --> D
+    D --> Loss["adversarial losses"]
+    Loss --> G
+    Loss --> D
+```
+
+### 학습 안정성 진단
+
+GAN loss는 해석이 어렵다. discriminator가 너무 강하면 generator gradient가 약해지고, generator가 일부 mode만 반복하면 discriminator loss가 좋아 보여도 다양성은 무너진다. sample grid, nearest neighbor, FID, precision/recall, class coverage를 함께 본다.
+
+### Mode collapse
+
+mode collapse는 generator가 데이터분포의 일부 mode만 생성하는 실패다. minibatch discrimination, unrolled GAN, WGAN, gradient penalty, spectral normalization, data augmentation이 완화에 쓰인다. 하지만 완전한 해결책이라기보다 안정화 도구로 봐야 한다.
+
+### Privacy와 memorization
+
+GAN이 학습 이미지를 그대로 외워 생성할 수 있다. 특히 작은 dataset이나 고해상도 얼굴 데이터에서는 nearest neighbor audit과 membership inference 위험을 검토해야 한다.
+
 ## 구현 (Implementation)
 
 ```python
@@ -35,6 +59,11 @@ def training_step(real_batch, noise, generator, discriminator, optim_d, optim_g)
 ```
 
 이는 학습 순서를 보여 주는 pseudocode다.
+
+```python
+def alternating_updates(step, d_steps=1):
+    return "discriminator" if step % (d_steps + 1) < d_steps else "generator"
+```
 
 ## 복잡도 (Complexity)
 

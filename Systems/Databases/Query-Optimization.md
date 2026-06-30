@@ -4,6 +4,7 @@
 - Prerequisites: [Systems/Databases/Indexes-and-B-Tree.md](Indexes-and-B-Tree.md), [Systems/Databases/Relational-Model-and-SQL.md](Relational-Model-and-SQL.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 

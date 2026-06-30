@@ -4,6 +4,7 @@
 - Prerequisites: [Engineering/Testing/Unit-Test-Principles.md](Unit-Test-Principles.md), [Engineering/Testing/Boundary-Value-Analysis.md](Boundary-Value-Analysis.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -18,6 +19,12 @@ TDD는 실패하는 테스트를 먼저 쓰고(Red), 최소 구현으로 통과�
 ## 이론 (Theory)
 
 TDD의 핵심은 테스트가 설계 피드백을 준다는 점이다. 테스트하기 어렵다면 의존성이 강하거나 책임이 너무 큰 설계일 수 있다. 단, 모든 작업을 TDD로 해야 한다는 규칙은 아니다.
+
+### TDD의 피드백 루프
+
+TDD의 핵심은 테스트를 먼저 쓰는 의식이 아니라 red-green-refactor 루프를 짧게 유지하는 것이다. Red 단계는 원하는 behavior를 작게 정의하고, green 단계는 가장 단순한 구현으로 통과시키며, refactor 단계는 테스트가 지키는 contract 아래 구조를 개선한다.
+
+TDD가 효과적인 영역은 요구사항을 예제로 명확히 할 수 있고 피드백이 빠른 domain logic이다. UI 픽셀, 외부 시스템 orchestration, 탐색적 프로토타입에는 BDD, contract test, characterization test와 조합하는 편이 낫다.
 
 ## 구현 (Implementation)
 

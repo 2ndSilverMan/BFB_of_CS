@@ -4,6 +4,7 @@
 - Prerequisites: [Systems/Networks/TCP-UDP.md](../../Systems/Networks/TCP-UDP.md), [Systems/Networks/HTTP.md](../../Systems/Networks/HTTP.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -18,6 +19,12 @@
 ## 이론 (Theory)
 
 End-to-end latency는 DNS, TCP/TLS handshake, request queueing, server processing, response transfer로 나뉜다. Keep-alive와 connection pool은 handshake를 줄이고, HTTP/2 multiplexing은 connection당 concurrency를 늘린다. Payload 크기, compression, serialization format, timeout, retry budget이 tail latency에 영향을 준다.
+
+### Latency budget
+
+네트워크 성능은 RTT, DNS, TLS handshake, payload size, serialization, server processing, queueing이 합쳐진 결과다. End-to-end latency budget을 나눠 각 구간의 p95/p99를 추적해야 한다.
+
+Connection reuse, HTTP/2 multiplexing, compression, regional routing은 도움이 되지만 head-of-line blocking, retry storm, payload bloat 같은 부작용을 함께 본다.
 
 ## 구현 (Implementation)
 
@@ -69,4 +76,3 @@ good client defaults:
 
 - [Systems/Networks/TCP-UDP.md](../../Systems/Networks/TCP-UDP.md)
 - [Systems/Networks/HTTP.md](../../Systems/Networks/HTTP.md)
-

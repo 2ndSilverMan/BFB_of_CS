@@ -4,6 +4,7 @@
 - Prerequisites: [Engineering/DevOps/Cloud-Computing.md](Cloud-Computing.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -18,6 +19,12 @@ EC2는 빌린 서버, S3는 객체 창고, RDS는 관리형 데이터베이스, 
 ## 이론 (Theory)
 
 EC2는 instance type, AMI, security group, EBS volume으로 구성된다. S3는 bucket과 object, versioning, lifecycle, policy를 제공한다. RDS는 backup, replication, patching을 관리형으로 제공하지만 schema와 query 책임은 사용자에게 남는다. VPC는 subnet, route table, internet gateway, NAT gateway, security group으로 network 경계를 만든다. IAM은 user, role, policy로 권한을 제어한다.
+
+### 서비스 선택의 운영 기준
+
+AWS 서비스는 기능 이름보다 운영 특성으로 선택한다. Compute는 scaling과 배포 단위, storage는 durability와 access pattern, database는 consistency와 query model, network는 isolation과 ingress path, IAM은 least privilege와 auditability를 기준으로 본다.
+
+서비스 세부 사양과 가격은 변하므로 설계 문서에는 확인 기준일, region, quota, SLA/SLO 가정, 대체 경로를 남긴다.
 
 ## 구현 (Implementation)
 
@@ -68,4 +75,3 @@ VPC -> public load balancer -> private EC2/ECS
 
 - [Engineering/DevOps/Cloud-Computing.md](Cloud-Computing.md)
 - [Engineering/Security/Auth.md](../Security/Auth.md)
-

@@ -4,6 +4,7 @@
 - Prerequisites: [AI/Deep-Learning/Fine-Tuning.md](../Deep-Learning/Fine-Tuning.md), [AI/LLMs/Instruction-Tuning.md](Instruction-Tuning.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -21,6 +22,37 @@ LoRA는 가중치 업데이트 $\Delta W$를 저랭크 행렬 $BA$로 근사한�
 
 QLoRA는 base model을 양자화해 메모리를 줄이고 LoRA adapter만 학습한다. PEFT는 여러 task adapter를 교체하기 쉬운 장점도 있다.
 
+```mermaid
+flowchart LR
+    Base["frozen base model"] --> Layer["target layers"]
+    Layer --> Adapter["small trainable adapter"]
+    Adapter --> Task["task-specific behavior"]
+    Base --> Task
+```
+
+### LoRA 파라미터 수
+
+원래 선형층이 $W\in\mathbb{R}^{d_{out}\times d_{in}}$일 때 LoRA는 $\Delta W=BA$로 두고 $A\in\mathbb{R}^{r\times d_{in}}$, $B\in\mathbb{R}^{d_{out}\times r}$만 학습한다. 추가 파라미터 수는
+
+$$r(d_{in}+d_{out})$$
+
+로, $r$이 작으면 전체 $d_{in}d_{out}$보다 훨씬 작다. rank를 올리면 적응력은 커지지만 메모리, overfitting, adapter 저장 비용도 증가한다.
+
+### Target module 선택
+
+| 대상 | 기대 효과 | 주의점 |
+| --- | --- | --- |
+| Attention Q/V projection | instruction과 style 적응에 흔함 | 너무 좁으면 task 적응 한계 |
+| Attention O projection | attention 결과 혼합 조정 | 비용 증가 |
+| MLP up/down projection | 지식·도메인 패턴 적응력 증가 | 파라미터 증가 |
+| Embedding/head | 특수 token이나 label 공간 조정 | tokenizer와 tied weight 확인 |
+
+작은 데이터에서는 Q/V만으로 시작하고, 성능이 부족하면 MLP까지 넓히는 식의 ablation이 안전하다.
+
+### Adapter 운영
+
+adapter를 merge하면 추론 경로가 단순해지지만, 여러 고객·도메인 adapter를 동적으로 교체하기 어렵다. merge하지 않고 serving하면 adapter routing, version compatibility, base model checksum, adapter 권한 관리가 필요하다. 동일 base 위의 adapter인지 기록하지 않으면 재현이 깨진다.
+
 ## 구현 (Implementation)
 
 ```python
@@ -33,6 +65,11 @@ config = {
 ```
 
 Target module, rank, alpha, dropout 선택이 품질과 비용을 좌우한다.
+
+```python
+def lora_params(d_in, d_out, rank):
+    return rank * (d_in + d_out)
+```
 
 ## 복잡도 (Complexity)
 

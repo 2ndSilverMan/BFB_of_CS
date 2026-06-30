@@ -4,6 +4,7 @@
 - Prerequisites: [Engineering/Software-Design/SOLID.md](../Software-Design/SOLID.md), [Engineering/Testing/Test-Doubles.md](Test-Doubles.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -18,6 +19,12 @@
 ## 이론 (Theory)
 
 테스트하기 쉬운 코드는 대개 결합도가 낮고 응집도가 높다. Pure function은 테스트가 쉽고, side effect는 경계로 밀어내면 통제 가능하다. Dependency inversion은 고수준 정책이 저수준 구현에 직접 의존하지 않게 한다.
+
+### 테스트 가능성은 설계 속성이다
+
+테스트 가능한 코드는 dependency가 명시적이고, side effect가 경계로 밀려 있으며, 핵심 규칙이 순수한 형태로 분리되어 있다. 테스트를 어렵게 만드는 전역 상태, 숨은 시간 의존, 내부에서 직접 생성하는 외부 클라이언트는 설계 냄새일 가능성이 높다.
+
+좋은 설계는 test hook을 억지로 늘리는 것이 아니라 production code의 경계를 선명하게 만든다. Clock, random, network, storage는 interface 뒤에 두고, domain rule은 작은 함수나 service로 분리한다.
 
 ## 구현 (Implementation)
 

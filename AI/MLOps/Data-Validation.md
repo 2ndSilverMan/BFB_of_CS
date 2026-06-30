@@ -4,6 +4,7 @@
 - Prerequisites: [AI/MLOps/Data-Versioning.md](Data-Versioning.md), [Math/Probability-Statistics/Distributions.md](../../Math/Probability-Statistics/Distributions.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -21,6 +22,33 @@
 
 검증 기준은 data version과 함께 관리해야 한다. 새 feature나 source 변경이 있을 때 threshold를 code review 없이 임의로 낮추면 guardrail이 사라진다.
 
+```mermaid
+flowchart LR
+    Batch["incoming data"] --> Schema["schema checks"]
+    Schema --> Semantic["semantic rules"]
+    Semantic --> Stats["statistical checks"]
+    Stats --> Gate["block / warn / pass"]
+```
+
+### 데이터 계약
+
+데이터 검증은 consumer가 producer에게 기대하는 계약이다. 단순 column list보다 타입, 단위, 시간대, null 의미, freshness, primary key, 중복 허용 여부까지 포함해야 한다. 예를 들어 `amount`가 원화인지 달러인지, timestamp가 event time인지 ingestion time인지가 빠지면 schema가 맞아도 모델은 깨질 수 있다.
+
+### Blocking과 warning
+
+| 규칙 유형 | 처리 | 예 |
+| --- | --- | --- |
+| Blocking | pipeline 중단 | label null, 필수 컬럼 누락 |
+| Warning | 알림 후 진행 | 특정 범주의 비율 변화 |
+| Quarantine | 샘플 격리 | PII 의심 값, 비정상 payload |
+| Manual review | owner 승인 필요 | 신규 category 대량 등장 |
+
+모든 alert가 blocking이면 운영이 멈추고, 모든 alert가 warning이면 guardrail이 무력화된다. 규칙마다 owner, SLA, escalation 경로가 있어야 한다.
+
+### 학습과 서빙의 검증 차이
+
+학습 데이터 검증은 batch 전체의 분포와 label 품질을 볼 수 있지만, online request 검증은 latency budget 안에서 빠르게 판단해야 한다. serving에서는 schema/type/range 같은 cheap check를 앞단에 두고, drift나 segment 분석은 비동기 모니터링으로 넘긴다.
+
 ## 구현 (Implementation)
 
 ```python
@@ -36,6 +64,11 @@ if report.has_blocking_errors():
 ```
 
 Blocking rule과 warning rule을 구분해 pipeline 중단 조건을 명확히 둔다.
+
+```python
+def is_blocking(report):
+    return any(issue["severity"] == "block" for issue in report["issues"])
+```
 
 ## 복잡도 (Complexity)
 

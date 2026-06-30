@@ -4,6 +4,7 @@
 - Prerequisites: [Systems/Computer-Architecture/Pipelining.md](../../Systems/Computer-Architecture/Pipelining.md), [Engineering/Performance/Cache-Friendly-Code.md](Cache-Friendly-Code.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -18,6 +19,12 @@ CPU는 길을 걷기 전에 갈림길을 맞힌다. 갈림길이 규칙적이면
 ## 이론 (Theory)
 
 Modern CPU는 branch history와 pattern table로 taken/not-taken을 예측한다. Data-dependent branch가 random하면 miss rate가 올라간다. 조건문을 없애는 branchless programming, data sorting, lookup table, vectorization이 도움이 될 수 있지만, 불필요한 branchless 코드는 readability와 compiler optimization을 해칠 수 있다.
+
+### 예측 가능성과 데이터 분포
+
+분기 예측 실패는 pipeline flush를 만들 수 있다. 정렬된 데이터나 편향된 조건은 예측이 쉽고, 랜덤한 조건은 어렵다. 따라서 같은 코드도 입력 분포에 따라 성능이 달라진다.
+
+Branchless code는 항상 빠른 것이 아니다. 불필요한 연산이 늘거나 readability가 떨어질 수 있다. 예측 실패가 실제 병목인지 profile counter로 확인한 뒤 적용한다.
 
 ## 구현 (Implementation)
 
@@ -71,4 +78,3 @@ Big-O는 그대로여도 branch miss penalty 때문에 상수 비용이 크게 �
 
 - [Systems/Computer-Architecture/Pipelining.md](../../Systems/Computer-Architecture/Pipelining.md)
 - [Systems/Computer-Architecture/CPU-and-ISA.md](../../Systems/Computer-Architecture/CPU-and-ISA.md)
-

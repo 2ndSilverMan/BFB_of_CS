@@ -4,6 +4,7 @@
 - Prerequisites: [Programming/Functions-and-Recursion.md](../../Programming/Functions-and-Recursion.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -24,6 +25,12 @@
 | E2E | 전체 user flow | 높은 현실성 | 느림, flaky, 진단 어려움 |
 
 비율은 제품과 architecture에 따라 달라진다. 핵심은 feedback speed, confidence, maintenance cost의 균형이며 모든 test가 독립적이고 deterministic하도록 노력한다.
+
+### 포트폴리오 설계 기준
+
+테스트 피라미드는 단순 비율표가 아니라 결함을 가장 싼 층에서 잡기 위한 투자 원칙이다. 작은 domain rule은 unit에서, 외부 경계 contract는 integration에서, 사용자 신뢰에 직결되는 핵심 journey는 E2E에서 검증한다. 같은 버그를 재현할 수 있다면 더 낮은 층의 deterministic regression test로 내리는 것이 장기 유지비를 줄인다.
+
+CI에서는 층별 실행 주기를 다르게 둘 수 있다. Unit은 모든 push, integration은 PR gate, E2E와 장기 성능 테스트는 merge 전 또는 nightly로 운영하되, release-blocking 기준과 flaky 처리 정책을 명확히 둔다.
 
 ## 구현 (Implementation)
 

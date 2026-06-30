@@ -4,74 +4,89 @@
 - Prerequisites: [Quantum-Gates.md](Quantum-Gates.md), [Entanglement.md](Entanglement.md), [Algorithms/Complexity.md](../../Algorithms/Complexity.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
 ## 개념 (Concept)
 
-양자 회로는 큐비트 선(wire)에 양자 게이트와 측정을 배치해 계산을 표현하는 모델이다. 회로는 초기 상태 준비, unitary gate sequence, 측정으로 구성된다.
+양자 회로는 큐비트 선(wire)에 게이트와 측정을 배치해 계산을 표현하는 모델이다. **초기 상태 준비 → unitary 게이트 열 → 측정** 으로 구성되며, 양자 복잡도 이론의 표준 계산 모델이다.
 
 ## 직관 (Intuition)
 
-고전 회로가 비트에 논리 게이트를 적용하듯, 양자 회로는 큐비트에 양자 게이트를 순서대로 적용한다. 차이는 중첩, 위상, 얽힘이 계산 중간에 유지되고, 마지막 측정에서 확률적 결과가 나온다는 점이다.
+고전 회로가 비트에 논리 게이트를 적용하듯, 양자 회로는 큐비트에 게이트를 순서대로 적용한다. 차이는 **중첩·위상·얽힘이 중간에 유지**되고, 알고리즘이 정답 진폭을 키우고 오답을 상쇄(간섭)시킨 뒤, **마지막 측정에서 확률적 결과**가 나온다는 점.
 
 ## 이론 (Theory)
 
-회로의 중요한 척도는 다음과 같다.
+### 1. 회로 척도
 
-- width: 사용하는 큐비트 수
-- depth: 의존성을 고려한 게이트 층 수
-- gate count: 전체 게이트 수
-- measurement: 고전 결과를 얻는 단계
+| 척도 | 의미 |
+|---|---|
+| width | 큐비트 수 |
+| depth | 의존성을 고려한 게이트 **층** 수(병렬 적용 가능 게이트는 같은 층) |
+| gate count | 전체 게이트 수 |
+| measurement | 고전 결과 추출 |
 
-양자 알고리즘은 좋은 회로를 설계해 원하는 답의 진폭을 키우고, 틀린 답의 진폭을 상쇄시키는 방식으로 작동한다. 실제 하드웨어에서는 qubit connectivity와 noise 때문에 논리 회로를 native gate로 변환하는 transpilation이 필요하다.
+depth가 핵심 — 노이즈 하드웨어에선 **depth가 깊을수록 성공 확률이 떨어진다**(decoherence 누적).
+
+### 2. transpilation
+
+논리 회로를 하드웨어의 **native gate set + qubit connectivity** 에 맞게 변환(분해·SWAP 삽입). 연결 안 된 큐비트 간 2-게이트는 SWAP으로 옮겨야 해 depth가 늘어난다.
+
+### 3. Gottesman-Knill
+
+**Clifford 게이트(H, S, CNOT)만의 회로는 고전적으로 효율 시뮬레이션 가능** — 양자 우위에는 비-Clifford(T 게이트)가 필요하다는 중요한 경계.
 
 ## 구현 (Implementation)
 
-간단한 Bell 회로는 텍스트로도 표현할 수 있다.
-
 ```text
-q0: |0> ──H──●──M
-             │
-q1: |0> ─────X──M
+q0: |0> ──H──●──M        # depth 분석:
+             │           #  층1: H(q0)
+q1: |0> ─────X──M        #  층2: CNOT(q0,q1)
+                         #  층3: 측정
+                         # width=2, depth=2(게이트), gate count=2
 ```
 
-이 회로는 두 큐비트를 얽힌 상태로 만든 뒤 측정한다.
+이 벨 회로는 두 큐비트를 얽힌 상태 $\frac{|00\rangle+|11\rangle}{\sqrt2}$ 로 만든 뒤 측정 → 결과는 항상 `00` 또는 `11`(상관).
 
 ## 복잡도 (Complexity)
 
-회로 복잡도는 게이트 수와 depth로 측정한다. 오류가 있는 하드웨어에서는 depth가 깊을수록 성공 확률이 낮아질 수 있다. 고전 시뮬레이션은 일반적으로 큐비트 수에 지수적으로 어려워진다.
+| 항목 | 특성 |
+|---|---|
+| 회로 비용 | gate count·depth |
+| 노이즈 하드웨어 | depth↑ → 성공 확률↓ |
+| 고전 시뮬레이션 | 일반적으로 큐비트 수에 **지수** (Clifford는 예외) |
 
 ## 응용 (Applications)
 
-- 양자 알고리즘 표현
-- 하드웨어 실행 계획
-- 오류정정 회로 설계
-- 양자 복잡도 이론의 계산 모델
+- 양자 알고리즘 표현, 하드웨어 실행 계획.
+- [오류정정](Quantum-Error-Correction.md) 회로 설계, 양자 복잡도 모델([BQP](Quantum-Complexity.md)).
 
 ## 흔한 오해 (Common Misunderstandings)
 
-- 회로 그림의 선은 값이 흐르는 복사본이 아니라 같은 큐비트의 시간 진행이다.
-- 중간 측정은 상태를 바꾸므로 unitary gate와 다르다.
-- 깊은 회로가 항상 더 강한 것은 아니다. 노이즈와 비용이 있다.
-- 고전 회로처럼 fan-out으로 임의 양자 상태를 복사할 수 없다.
+- **회로의 선은 값의 복사본이 아니라** 같은 큐비트의 시간 진행이다.
+- **중간 측정은 상태를 바꾼다** — unitary 게이트와 다르다(deferred measurement 정리로 끝으로 미룰 수 있음).
+- **깊은 회로가 항상 강하지 않다** — 노이즈·비용.
+- **fan-out으로 임의 양자 상태 복사 불가**(no-cloning).
 
 ## TMI
 
-- NISQ 시대에는 얕은 변분 회로가 많이 연구되었다.
-- 회로 동치 변환은 게이트 수와 depth를 줄이는 데 중요하다.
-- Clifford 회로는 특정 조건에서 고전적으로 효율적으로 시뮬레이션될 수 있다.
+- NISQ 시대엔 노이즈를 견디려 **얕은 변분 회로**(VQE·QAOA)가 많이 연구됐다.
+- 회로 동치 변환(게이트 재작성)으로 depth·gate count를 줄이는 게 컴파일의 핵심.
+- "deferred measurement" 정리: 중간 측정을 회로 끝으로 미뤄도 결과가 같다(이론 분석에 유용).
 
 ## 연습 / 확인 문제 (Exercises)
 
-- Bell 회로의 width와 depth를 추정하라.
-- 회로 depth와 noise의 관계를 설명하라.
-- 측정이 회로 중간에 들어가면 어떤 점이 달라지는지 설명하라.
+- 위 벨 회로의 width·depth·gate count를 구하라.
+- 회로 depth와 노이즈(성공 확률)의 관계를 설명하라.
+- 연결 안 된 큐비트 간 CNOT에 SWAP이 왜 필요한지(transpilation) 설명하라.
+- Clifford 회로가 왜 고전 시뮬 가능한지(Gottesman-Knill) 의미를 적어라.
 
 ## 이어서 읽기 (Reading Path)
 
 - 이전: [얽힘](Entanglement.md)
-- 다음: [Grover 알고리즘](Grover.md), [Shor 알고리즘](Shor.md)
+- 다음: [Grover 알고리즘](Grover.md)
+- 관련: [양자 복잡도](Quantum-Complexity.md)
 
 ## 참조 (References)
 

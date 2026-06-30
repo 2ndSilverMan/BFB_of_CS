@@ -4,6 +4,7 @@
 - Prerequisites: [GD-Convergence.md](GD-Convergence.md), [Math/Optimization/Convex-Optimization.md](../../Math/Optimization/Convex-Optimization.md), [AI/Reinforcement-Learning/MDP.md](../Reinforcement-Learning/MDP.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -41,6 +42,26 @@ $$
 
 형태의 보장을 준다.
 
+### Regret의 기준점
+
+외부 후회는 사후 최선의 고정 행동과 비교한다. 이는 매 라운드 최선 행동을 안다는 더 강한 기준과 다르다. 환경이 계속 바뀌면 최선 고정 행동과의 비교는 달성 가능하지만, 매 시점 최선과의 비교는 불가능하거나 너무 강할 수 있다.
+
+Internal regret이나 swap regret은 더 강한 균형 개념과 연결된다. 어떤 기준점을 선택하는지가 알고리즘과 보장 의미를 바꾼다.
+
+### Stochastic과 adversarial
+
+Stochastic setting에서는 손실이 고정 분포에서 생성된다고 보고, adversarial setting에서는 손실 sequence가 매우 적대적일 수 있다고 본다. Adversarial regret bound는 더 강하지만 보수적이고, stochastic 구조를 활용하면 더 빠른 rate나 gap-dependent bound가 가능하다.
+
+### OCO 관점
+
+Online convex optimization에서는 매 라운드 $x_t$를 고르고 convex loss $f_t$를 받은 뒤 gradient를 이용해 다음 결정을 조정한다. Projection은 feasible set constraint를 유지한다.
+
+이 프레임워크는 online learning, adaptive optimization, game dynamics를 하나의 언어로 묶는다.
+
+### 평균 후회의 의미
+
+$Regret_T=o(T)$이면 평균 후회가 0으로 간다. 즉 장기적으로는 최선 고정 행동과 라운드당 손실 차이가 사라진다. 하지만 초기 몇 라운드의 큰 손실이나 fairness constraint는 별도 관리가 필요하다.
+
 ## 구현 (Implementation)
 
 Hedge 알고리즘의 핵심은 손실이 작은 전문가의 가중치를 지수적으로 덜 깎는 것이다.
@@ -74,6 +95,13 @@ print(hedge(losses, eta=0.8))
 ```
 
 실제 알고리즘은 가중치 분포에서 행동을 샘플링하거나 기대 손실을 최소화하는 방식으로 사용된다.
+
+```python
+def average_regret(total_regret, rounds):
+    return total_regret / rounds
+```
+
+Regret bound는 누적량으로 쓰지만, 장기 성능 해석은 평균 후회가 줄어드는지를 본다.
 
 ## 복잡도 (Complexity)
 

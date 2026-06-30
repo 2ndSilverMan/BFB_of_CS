@@ -4,6 +4,7 @@
 - Prerequisites: [NER.md](NER.md), [BERT.md](BERT.md), [AI/PGMs/CRF.md](../PGMs/CRF.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -25,6 +26,26 @@ NER이 문장 속 명사를 형광펜으로 표시하는 일이라면, 관계 �
 
 입력 표현은 entity marker를 삽입하거나, entity span representation을 pooling해 pair classifier에 넣는다. Negative pair가 많아 class imbalance가 심한 경우가 흔하다.
 
+```mermaid
+flowchart LR
+    Text["document"] --> Entities["entity spans"]
+    Entities --> Pairs["candidate pairs"]
+    Pairs --> Classifier["relation classifier"]
+    Classifier --> Triples["relation triples"]
+```
+
+### Candidate pruning
+
+모든 entity pair를 보면 후보가 빠르게 폭증한다. type constraint, 문장 거리, dependency path, section 정보, retrieval score로 후보를 줄인다. 다만 너무 강한 pruning은 recall을 낮춰 downstream 지식 그래프가 비게 된다.
+
+### Evidence와 문서 수준 관계
+
+관계 근거가 한 문장 안에 없을 수 있다. coreference, 약어, 표, 이전 문단의 정의를 사용해야 하는 document-level RE에서는 evidence sentence를 함께 예측하거나 저장하는 것이 중요하다. triple만 남기면 나중에 오류 검수가 어렵다.
+
+### Negative class와 평가
+
+대부분의 entity pair는 관계가 없으므로 `no_relation`이 압도적으로 많다. micro F1만 보면 no_relation 처리에 묻힐 수 있어 relation별 precision/recall과 evidence quality를 함께 본다.
+
 ## 구현 (Implementation)
 
 Entity pair 후보 생성은 단순히 문장 내 모든 entity 쌍을 만들 수 있다.
@@ -40,6 +61,11 @@ def candidate_pairs(entities):
 ```
 
 실무에서는 type constraint, distance limit, dependency path, retrieval로 후보 수를 줄인다.
+
+```python
+def type_allowed(e1, e2, allowed):
+    return (e1["type"], e2["type"]) in allowed
+```
 
 ## 복잡도 (Complexity)
 

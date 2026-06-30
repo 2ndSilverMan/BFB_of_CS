@@ -4,6 +4,7 @@
 - Prerequisites: [Systems/Operating-Systems/](../Operating-Systems/)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 

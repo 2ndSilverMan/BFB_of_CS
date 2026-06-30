@@ -4,6 +4,7 @@
 - Prerequisites: [Engineering/Performance/Benchmarking-Basics.md](Benchmarking-Basics.md), [Systems/Computer-Architecture/CPU-and-ISA.md](../../Systems/Computer-Architecture/CPU-and-ISA.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -18,6 +19,12 @@ JIT(Just-In-Time) 컴파일은 프로그램 실행 중 hot code를 기계어로 
 ## 이론 (Theory)
 
 JIT runtime은 interpreter, baseline compiler, optimizing compiler를 계층적으로 사용한다. Inline cache, type feedback, escape analysis, devirtualization, inlining으로 hot path를 빠르게 만든다. 가정이 깨지면 deoptimization이 발생한다. Warmup 전 benchmark는 steady-state 성능을 대표하지 않는다.
+
+### Warmup과 deoptimization
+
+JIT 런타임은 실행 중 수집한 profile로 hot path를 최적화한다. 그래서 초기 warmup 구간과 steady state 성능이 다를 수 있다. 벤치마크는 warmup을 분리하고, tiered compilation과 GC 영향을 함께 본다.
+
+동적 타입 변화, reflection, 예외 경로, megamorphic call site는 최적화를 깨뜨리거나 deoptimization을 유발할 수 있다. 프로파일러에서 deopt reason을 확인하면 원인 추적이 쉬워진다.
 
 ## 구현 (Implementation)
 
@@ -72,4 +79,3 @@ for (let i = 0; i < 1_000_000; i++) {
 
 - [Engineering/Performance/Benchmarking-Basics.md](Benchmarking-Basics.md)
 - [Systems/Computer-Architecture/CPU-and-ISA.md](../../Systems/Computer-Architecture/CPU-and-ISA.md)
-

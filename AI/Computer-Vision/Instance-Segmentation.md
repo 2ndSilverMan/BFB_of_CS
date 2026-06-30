@@ -4,6 +4,7 @@
 - Prerequisites: [AI/Computer-Vision/Object-Detection.md](Object-Detection.md), [AI/Computer-Vision/Semantic-Segmentation.md](Semantic-Segmentation.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -21,6 +22,26 @@ Top-down 방식은 먼저 객체 후보나 box를 찾고 각 후보에 mask head
 
 평가는 mask IoU 기반 AP를 사용한다. Crowded scene에서는 overlap, occlusion, small object가 어렵고, mask quality와 box quality가 함께 결과를 좌우한다.
 
+```mermaid
+flowchart LR
+    Image["image"] --> Detector["detect instances"]
+    Detector --> MaskHead["mask head"]
+    MaskHead --> Masks["instance masks"]
+    Masks --> AP["mask AP"]
+```
+
+### Top-down과 bottom-up
+
+top-down은 먼저 객체 후보를 찾고 각 후보 안에서 mask를 예측한다. 객체 단위 scoring과 class 예측이 쉽지만 detection 오류가 mask 단계로 전파된다. bottom-up은 pixel embedding이나 center를 예측한 뒤 grouping하므로 crowded scene에서 장점이 있을 수 있지만 grouping 후처리가 중요하다.
+
+### Annotation format
+
+mask는 polygon, RLE, bitmap으로 저장할 수 있다. polygon은 저장이 작고 편집이 쉽지만 복잡한 경계에 약하고, bitmap은 정확하지만 크다. format 변환 중 해상도와 좌표계가 바뀌면 AP가 달라질 수 있다.
+
+### Panoptic segmentation과의 차이
+
+panoptic segmentation은 thing class는 instance로, stuff class는 semantic region으로 함께 예측한다. instance segmentation만으로는 하늘·도로 같은 amorphous stuff 영역을 완전히 표현하지 않는다.
+
 ## 구현 (Implementation)
 
 ```python
@@ -33,6 +54,11 @@ prediction = {
 ```
 
 후처리는 score threshold, mask resize, NMS 또는 mask-aware 중복 제거를 포함한다.
+
+```python
+def instance_count(predictions, score_threshold=0.5):
+    return sum(1 for p in predictions if p["score"] >= score_threshold)
+```
 
 ## 복잡도 (Complexity)
 

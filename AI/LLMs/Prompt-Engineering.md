@@ -4,6 +4,7 @@
 - Prerequisites: [AI/NLP/GPT.md](../NLP/GPT.md), [AI/NLP/Language-Model-Basics.md](../NLP/Language-Model-Basics.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -24,6 +25,36 @@ prompt engineering은 모델 가중치를 바꾸지 않고, 입력 텍스트(pro
 
 이 방법들은 모델의 조건부 분포를 좋은 영역으로 옮기는 "조건화"로 볼 수 있다. 능력 자체를 늘리지는 못하지만, 같은 모델에서 더 나은 출력을 끌어낸다.
 
+```mermaid
+flowchart LR
+    Goal["task goal"] --> Context["context"]
+    Context --> Instruction["instruction"]
+    Instruction --> Examples["examples"]
+    Examples --> Schema["output schema"]
+    Schema --> Eval["evaluation"]
+```
+
+### Prompt의 구성 요소
+
+| 요소 | 역할 | 실패 징후 |
+| --- | --- | --- |
+| 역할과 범위 | 모델의 관점과 책임 제한 | 과도한 추측, 스타일 불일치 |
+| 입력 맥락 | 필요한 근거 제공 | hallucination, 오래된 정보 사용 |
+| 지시 | 해야 할 작업 정의 | 요구사항 누락 |
+| 예시 | 형식과 판단 기준 제시 | 예시 편향, label mapping 혼동 |
+| 출력 스키마 | 후처리 가능성 확보 | JSON 깨짐, 필드 누락 |
+| 금지 조건 | 하지 말아야 할 행동 지정 | 정책 위반, 보안 취약점 |
+
+좋은 prompt는 길기만 한 prompt가 아니라, 모델이 다음 행동을 결정하는 데 필요한 정보를 충돌 없이 제공하는 prompt다. 서로 다른 우선순위의 지시가 섞이면 모델은 표면적으로 가까운 문장을 따르거나 평균적인 답을 내기 쉽다.
+
+### 평가 가능한 prompt 만들기
+
+프롬프트는 코드처럼 회귀 테스트가 필요하다. 대표 입력 세트, 기대 출력 조건, 실패 유형을 정해 두고 모델 버전·temperature·retrieval 결과가 바뀔 때 비교한다. "좋아 보인다"는 감각 평가만으로는 작은 문구 변경이 정확도나 안전성을 얼마나 바꿨는지 알기 어렵다.
+
+### Prompt injection 방어
+
+외부 문서, 웹페이지, 사용자 업로드 파일을 prompt에 넣는 순간 그 텍스트가 지시처럼 작동할 수 있다. 방어의 기본은 외부 텍스트를 명확히 데이터로 구분하고, 시스템 지시·도구 권한·비밀 값을 모델 출력으로 노출하지 않으며, 도구 실행 전 검증 단계를 두는 것이다.
+
 ## 구현 (Implementation)
 
 ```text
@@ -38,6 +69,12 @@ prompt engineering은 모델 가중치를 바꾸지 않고, 입력 텍스트(pro
 [실제]
 문제: (5 + 1) × 3 = ?
 풀이:
+```
+
+```text
+출력은 JSON만 허용한다.
+필수 필드: "label", "confidence", "evidence".
+입력에 없는 사실은 evidence에 쓰지 말라.
 ```
 
 ## 복잡도 (Complexity)

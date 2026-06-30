@@ -4,6 +4,7 @@
 - Prerequisites: [Programming/Variables-and-Types.md](Variables-and-Types.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -18,6 +19,18 @@
 - 조건문: "비밀번호가 맞으면 로그인한다."
 - 반복문: "목록에 있는 모든 점수를 더한다."
 - 조기 종료: "원하는 값을 찾으면 더 찾지 않는다."
+
+```mermaid
+flowchart TD
+    START["시작"] --> CHECK{"조건?"}
+    CHECK -- 참 --> THEN["then 분기"]
+    CHECK -- 거짓 --> ELSE["else 분기"]
+    THEN --> LOOP{"반복 조건?"}
+    ELSE --> LOOP
+    LOOP -- 참 --> BODY["본문 실행 + 상태 갱신"]
+    BODY --> LOOP
+    LOOP -- 거짓 --> END["종료"]
+```
 
 ## 이론 (Theory)
 
@@ -38,6 +51,15 @@ else:
 | while 반복문 | 조건이 참인 동안 계속 반복 |
 
 반복문에는 종료 조건이 있어야 한다. 종료 조건이 없거나 갱신이 잘못되면 무한 루프가 된다.
+
+### 불변식과 종료 조건
+
+반복문을 깊게 이해하려면 두 질문을 한다.
+
+- **반복 불변식(loop invariant)**: 매 반복 시작 시 항상 참이어야 하는 사실은 무엇인가.
+- **종료 측도(variant)**: 반복이 진행될수록 줄어들어 결국 종료를 보장하는 값은 무엇인가.
+
+예를 들어 최댓값 찾기에서 `best`는 "지금까지 본 값 중 최댓값"이라는 불변식을 갖는다. 인덱스 `i`는 매번 증가하고 배열 길이에 도달하면 종료한다.
 
 ## 구현 (Implementation)
 
@@ -82,6 +104,21 @@ while n > 1:
 print(steps)
 ```
 
+워크드 예제:
+
+```python
+values = [3, 1, 9, 2]
+best = values[0]
+
+for i in range(1, len(values)):
+    if values[i] > best:
+        best = values[i]
+
+print(best)  # 9
+```
+
+반복 시작 시점마다 `best`는 `values[0:i]`의 최댓값이다. `i=1`이면 `[3]`의 최댓값 3, `i=3`이면 `[3,1,9]`의 최댓값 9다. 이 불변식이 끝까지 유지되므로 반복 종료 뒤 `best`는 전체 배열의 최댓값이다.
+
 ## 복잡도 (Complexity)
 
 | 구조 | 시간 | 공간 |
@@ -91,6 +128,8 @@ print(steps)
 | 이중 반복문으로 n x n 순회 | O(n^2) | O(1) |
 
 반복문 개수만 세는 것보다 각 반복문이 몇 번 실행되는지를 계산하는 것이 중요하다.
+
+예를 들어 `while n > 1: n //= 2`는 반복마다 `n`이 절반으로 줄어 `O(log n)`이다. 반면 `while n > 1: n -= 1`은 `O(n)`이다. 코드 모양보다 **상태가 어떻게 변하는지**가 복잡도를 결정한다.
 
 ## 응용 (Applications)
 

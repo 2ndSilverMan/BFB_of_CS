@@ -11,6 +11,7 @@ from urllib.parse import unquote, urlparse
 
 VALID_STATUSES = {"Planned", "Stub", "Draft", "Review", "Complete"}
 VALID_LEVELS = {"Beginner", "Intermediate", "Advanced"}
+VALID_DEPTHS = {"Standard", "Deep-dive"}
 REVIEW_FIELD = "Reviewed-by"
 TOPIC_METADATA_FIELDS = ("Level", "Prerequisites", "Status", REVIEW_FIELD)
 REVIEW_PLACEHOLDERS = {"", "-", "없음"}
@@ -402,6 +403,15 @@ def metadata_block(lines: list[str]) -> dict[str, str]:
     return metadata
 
 
+def depth_tier(value: str) -> str:
+    """Normalize a Depth metadata value to its tier keyword, dropping any trailing note.
+
+    'Deep-dive (자기완결)' -> 'Deep-dive'. Depth is an optional axis (see CONTRIBUTING);
+    an absent or empty value means the default Standard tier.
+    """
+    return value.split("(", 1)[0].strip()
+
+
 def topic_table_rows(path: Path, root: Path, lines: list[str]) -> list[tuple[int, str, str]]:
     if path.relative_to(root).parts[0] in NON_TOPIC_DIRS:
         return []
@@ -614,6 +624,12 @@ def check_topic_metadata(path: Path, root: Path, lines: list[str]) -> list[Issue
     level = metadata.get("Level")
     if level and level not in VALID_LEVELS:
         issues.append(Issue("BadMetadataLevel", rel, 1, f"Invalid metadata level: {level}"))
+
+    depth = metadata.get("Depth")
+    if depth is not None:
+        tier = depth_tier(depth)
+        if tier and tier not in VALID_DEPTHS:
+            issues.append(Issue("BadMetadataDepth", rel, 1, f"Invalid metadata depth: {depth}"))
 
     prerequisites = metadata.get("Prerequisites", "")
     if status in {"Draft", "Review", "Complete"} and not prerequisites.strip():

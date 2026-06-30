@@ -4,6 +4,7 @@
 - Prerequisites: [AI/Reinforcement-Learning/MDP.md](MDP.md), [AI/Reinforcement-Learning/Value-Functions.md](Value-Functions.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -27,6 +28,26 @@ $$\pi^\*(s)=\arg\max_a Q^\*(s,a)$$
 
 탐험을 위해 결정적 greedy 대신 $\epsilon$-greedy나 softmax 정책을 쓴다. 정책이 미분 가능한 파라미터 $\theta$로 주어지면($\pi_\theta$) 가치를 직접 경사상승으로 올릴 수 있는데, 이는 policy gradient의 출발점이다.
 
+### Deterministic과 stochastic policy
+
+완전 관측 유한 MDP에서는 결정적 최적 정책이 존재한다. 하지만 학습 중에는 확률적 정책이 중요하다. 탐험을 유지하고, 부분 관측에서 정보 수집 행동을 섞고, multi-agent 환경에서 예측 가능성을 줄일 수 있기 때문이다.
+
+확률적 정책은 $\pi(a\mid s)$로 표현하며, entropy가 높을수록 행동 분포가 넓다. SAC 같은 알고리즘은 높은 보상뿐 아니라 충분한 entropy도 목표에 넣는다.
+
+### Behavior policy와 target policy
+
+Behavior policy는 데이터를 수집하는 정책이고, target policy는 평가하거나 개선하려는 정책이다. 두 정책이 같으면 on-policy, 다르면 off-policy다.
+
+Off-policy 학습은 예전 데이터나 탐험 정책 데이터를 재사용할 수 있어 sample efficiency가 좋지만, distribution mismatch와 importance sampling variance, function approximation 불안정성을 관리해야 한다.
+
+### Policy improvement의 조건
+
+Greedy improvement가 안전하게 작동하려면 가치 추정이 충분히 정확해야 한다. 근사 오차가 큰 상황에서 무리하게 greedy해지면 잘못된 Q값을 과신한다. 그래서 실제 알고리즘은 $\epsilon$-greedy, trust region, entropy regularization, conservative update를 사용한다.
+
+### 정책 제약
+
+현실 문제에서 정책은 reward만으로 정하지 않는다. 안전 constraint, action mask, budget, fairness, latency, human approval 같은 제약이 있다. 이 제약은 환경 밖 후처리로만 두면 학습 정책과 실제 배포 정책이 달라질 수 있으므로, 가능한 한 training/evaluation에도 반영해야 한다.
+
 ## 구현 (Implementation)
 
 ```python
@@ -44,6 +65,17 @@ def policy_iteration(states, actions, P, R, gamma):
         if stable:
             return pi                        # 더 못 바꾸면 최적
 ```
+
+```python
+def epsilon_greedy(q_values, epsilon):
+    n = len(q_values)
+    best = max(range(n), key=lambda i: q_values[i])
+    probs = [epsilon / n] * n
+    probs[best] += 1.0 - epsilon
+    return probs
+```
+
+정책은 단순 argmax가 아니라 탐험, 제약, 불확실성을 함께 담는 의사결정 규칙이다.
 
 ## 복잡도 (Complexity)
 

@@ -4,6 +4,7 @@
 - Prerequisites: [AI/Reinforcement-Learning/Policy.md](Policy.md), [Math/Optimization/SGD.md](../../Math/Optimization/SGD.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -27,6 +28,36 @@ $$\nabla_\theta J=\mathbb{E}\!\left[\sum_t \nabla_\theta\log\pi_\theta(a_t\mid s
 
 baseline으로 $V(s)$를 쓰면 $G_t-V(s_t)$는 advantage 추정이 되고, 이를 학습된 가치와 결합한 것이 actor-critic이다. REINFORCE는 episode가 끝난 뒤 실제 return으로 갱신하는 Monte Carlo 방식이라 불편향이지만 분산이 크다.
 
+### Log-derivative trick
+
+Policy gradient는 trajectory 확률을 직접 미분하기 어렵기 때문에 다음 항등식을 사용한다.
+
+$$
+\nabla_\theta p_\theta(x)=p_\theta(x)\nabla_\theta\log p_\theta(x)
+$$
+
+이를 score function estimator라고도 한다. 핵심 장점은 환경 전이확률을 몰라도 정책 로그확률의 경사만으로 policy parameter를 업데이트할 수 있다는 점이다.
+
+### Baseline이 편향을 만들지 않는 이유
+
+상태에만 의존하는 baseline $b(s)$는 행동 선택과 독립이므로 다음 기댓값이 0이 된다.
+
+$$
+E_{a\sim\pi}[\nabla_\theta \log \pi_\theta(a\mid s)b(s)]=0
+$$
+
+따라서 baseline은 기대 경사를 바꾸지 않고 분산만 줄인다. 좋은 baseline은 return의 공통 부분을 제거해 "이 행동이 평균보다 얼마나 좋았는가"에 집중하게 한다.
+
+### Advantage와 credit assignment
+
+Return $G_t$는 episode 전체의 결과를 한 행동에 나눠 주는 거친 신호다. Advantage $A(s,a)=Q(s,a)-V(s)$는 같은 상태에서 평균 행동보다 해당 행동이 얼마나 나은지 본다. 이 차이가 policy update의 credit assignment를 더 날카롭게 만든다.
+
+실전에서는 Monte Carlo advantage, TD error, GAE처럼 여러 추정량이 쓰이며, 모두 bias-variance tradeoff가 다르다.
+
+### On-policy 제약
+
+기본 policy gradient는 현재 정책에서 나온 샘플의 로그확률을 사용한다. 정책이 업데이트되면 이전 trajectory는 더 이상 같은 분포에서 온 데이터가 아니다. Importance sampling으로 보정할 수 있지만 분산이 커져, PPO처럼 정책 변화 폭을 제한하는 방법이 등장했다.
+
 ## 구현 (Implementation)
 
 ```python
@@ -41,6 +72,16 @@ def reinforce_update(trajectory, policy, optim, gamma):
         loss = loss - log(policy(a, s)) * (G - baseline)  # 경사상승 → 손실 부호 반전
     optim.minimize(loss)
 ```
+
+```python
+def normalize_advantages(advantages):
+    mean_value = sum(advantages) / len(advantages)
+    variance = sum((a - mean_value) ** 2 for a in advantages) / len(advantages)
+    scale = variance ** 0.5 + 1e-8
+    return [(a - mean_value) / scale for a in advantages]
+```
+
+Advantage normalization은 구현 세부사항처럼 보이지만 policy gradient 안정성에 큰 영향을 준다.
 
 ## 복잡도 (Complexity)
 

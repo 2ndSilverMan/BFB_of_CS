@@ -4,6 +4,7 @@
 - Prerequisites: [Engineering/DevOps/Git/Git-Branches-Merging-Rebasing.md](../Git/Git-Branches-Merging-Rebasing.md), [Engineering/DevOps/GitHub/GitHub-Issues-and-Pull-Requests.md](GitHub-Issues-and-Pull-Requests.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -18,6 +19,12 @@ GitHub Flow는 main을 항상 배포 가능한 상태로 유지하고, 짧은 fe
 ## 이론 (Theory)
 
 흐름은 branch 생성, commit, PR, review, automated check, merge, deploy로 이어진다. Trunk-based 개발과 마찬가지로 branch 수명을 짧게 유지하는 것이 핵심이다. 아직 사용자에게 노출하면 안 되는 코드는 feature flag로 감춘다. Git Flow처럼 장기 develop/release branch를 두는 방식보다 단순하지만, 배포 자동화와 test 신뢰도가 중요하다.
+
+### Flow와 배포 능력
+
+GitHub Flow는 main이 항상 배포 가능하다는 전제를 가진다. 이 전제가 없으면 작은 PR과 빠른 merge가 오히려 불안정해진다. CI gate, preview environment, feature flag, rollback이 함께 있어야 flow가 작동한다.
+
+Long-lived branch가 필요한 경우도 있지만, branch가 오래 살수록 merge risk와 feedback delay가 커진다. 가능한 한 작은 변경으로 자주 통합한다.
 
 ## 구현 (Implementation)
 
@@ -69,4 +76,3 @@ main
 
 - [Engineering/DevOps/Git/Git-Branches-Merging-Rebasing.md](../Git/Git-Branches-Merging-Rebasing.md)
 - [Engineering/Debugging/Canary-Feature-Flags.md](../../Debugging/Canary-Feature-Flags.md)
-

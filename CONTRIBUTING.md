@@ -98,6 +98,20 @@ BFB_of_CS/
 
 - 검토하지 않은 문서에는 배지를 넣지 않는다. 배지와 `Reviewed-by`가 어긋나면 검증에서 막힌다.
 
+## 문서 깊이(Depth) tier
+
+같은 주제라도 다루는 깊이를 두 tier로 구분한다. `Depth`는 `Status`(성숙도), `Level`(학습 경로상 위치/전제), `Reviewed-by`(사람 검토)와 **독립된 축**이다.
+
+| tier | 의미 | 분량 감각 | 템플릿 |
+|---|---|---|---|
+| Standard | 잘 정리된 개념 지도/강의노트. 절대다수의 기본값 | 섹션당 1~3문장 | [Topic-Template.md](Templates/Topic-Template.md) |
+| Deep-dive | 선언한 선수지식 위에서 자기완결적인 심화 | 메커니즘·워크드 예제까지 | [Deep-Dive-Template.md](Templates/Deep-Dive-Template.md) |
+
+- `Depth`는 **선택 필드**다. 없으면 Standard로 본다. 값은 `Standard` 또는 `Deep-dive`이며, 뒤에 괄호 메모를 붙일 수 있다(예: `- Depth: Deep-dive (자기완결)`). 허용 값 밖이면 검증에서 막힌다(`BadMetadataDepth`).
+- **Deep-dive 품질 바** (Draft 이상으로 올리기 전 자가 점검): ① 선수지식 위에서 자기완결 ② 이론·구현·복잡도가 "왜·어떻게"(메커니즘)를 담음 ③ 워크드 예제(수치/구체) 최소 1개 ④ 실행 가능한 명령·코드·설정 ⑤ 실전 실패 모드 ⑥ 구조는 Mermaid ⑦ 비자명한 주장엔 참조.
+- **운영 원칙**: deep-dive는 전 문서로 확대하지 않는다. roadmap의 핵심·길목 주제 등 **소수에만 선별 적용**한다. 깊어질수록 검증할 사실이 늘어 사람 검토 부담이 커지므로, `Complete` 승격 시 검토를 특히 꼼꼼히 한다(`Complete`는 tier와 무관하게 사람 검토 필수).
+- 어떤 문서를 deep-dive 후보로 삼을지는 [Documentation-Depth-Plan.md](Maintainers/Documentation-Depth-Plan.md)의 선정 루브릭과 작업 순서를 따른다.
+
 ## 수식과 다이어그램 표기
 
 - **수식**: 하이브리드. 의미 있는 수식은 GitHub LaTeX로 쓴다. 인라인은 `$ ... $`, 블록은 `$$ ... $$`. 복잡도 표기(`O(n log n)`)와 코드 식별자는 백틱을 유지한다.
@@ -158,6 +172,7 @@ BFB_of_CS/
 - 수식은 의미 단위로 LaTeX(`$ ... $` / `$$ ... $$`)를 쓰고, 다이어그램은 Mermaid를 우선했는가
 - `Status` 값이 `Planned`, `Stub`, `Draft`, `Review`, `Complete` 중 하나인가
 - 주제 문서의 `Level` 값이 `Beginner`, `Intermediate`, `Advanced` 중 하나인가
+- `Depth` 필드가 있다면 값이 `Standard` 또는 `Deep-dive`인가
 - `Draft` 이상 주제 문서의 `Prerequisites`가 비어 있지 않은가
 - 주제 문서에 `Reviewed-by`가 있으며, 검토 전이면 `-`, 검토 후이면 `이름 (YYYY-MM-DD)` 형식인가
 - `Complete` 문서에는 검토 표식이 있는가

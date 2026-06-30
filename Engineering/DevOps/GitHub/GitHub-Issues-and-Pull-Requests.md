@@ -4,6 +4,7 @@
 - Prerequisites: [Engineering/DevOps/GitHub/GitHub-Repositories.md](GitHub-Repositories.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -18,6 +19,12 @@ Issue는 “무엇을 왜 할 것인가”를 잡고, PR은 “어떻게 바꿨�
 ## 이론 (Theory)
 
 좋은 issue는 문제, 기대 결과, 재현 방법, 완료 조건을 담는다. 좋은 PR은 작은 범위, 명확한 설명, 관련 issue, 테스트 결과를 포함한다. Review는 correctness, design, maintainability, security, test coverage를 확인한다. Merge 방식은 merge commit, squash merge, rebase merge 중 팀 이력 정책에 맞춘다.
+
+### Issue와 PR의 연결
+
+Issue는 문제 정의와 결정 기록이고, PR은 해결 구현과 검증 증거다. 좋은 issue에는 배경, 기대 결과, 범위 밖, acceptance criteria가 있고, 좋은 PR에는 변경 요약, 테스트, 위험, rollout/rollback 메모가 있다.
+
+템플릿은 팀의 사고 방식을 고정하는 장치다. 너무 길면 무시되고, 너무 짧으면 중요한 운영 정보가 빠진다.
 
 ## 구현 (Implementation)
 
@@ -73,4 +80,3 @@ PR 크기가 커질수록 review latency와 누락 위험이 증가한다. 작�
 
 - [Engineering/Testing/](../../Testing/)
 - [Engineering/Debugging/Minimal-Reproducible-Example.md](../../Debugging/Minimal-Reproducible-Example.md)
-

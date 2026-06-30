@@ -4,6 +4,7 @@
 - Prerequisites: [AI/Machine-Learning/Bias-Variance.md](../Machine-Learning/Bias-Variance.md), [AI/MLOps/Data-Validation.md](Data-Validation.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -21,6 +22,34 @@
 
 Inter-annotator agreement는 품질 신호지만, 높은 합의가 반드시 올바른 label을 뜻하지는 않는다. Label noise는 irreducible error처럼 작동할 수 있고, systematic bias는 특정 segment 성능을 무너뜨린다.
 
+```mermaid
+flowchart LR
+    Sample["sample selection"] --> Guide["guideline"]
+    Guide --> Label["annotation"]
+    Label --> Review["overlap + review"]
+    Review --> Version["label version"]
+    Version --> Train["training/eval set"]
+```
+
+### Guideline이 정답을 만든다
+
+레이블링 기준서는 class 정의뿐 아니라 경계 사례, 제외 조건, 예시, 금지된 추론, 개인정보 처리, 불확실할 때의 선택지를 포함해야 한다. guideline이 바뀌면 같은 sample도 다른 label을 가질 수 있으므로 guideline version은 label version의 일부다.
+
+### 품질 측정
+
+| 품질 신호 | 의미 | 한계 |
+| --- | --- | --- |
+| Agreement | annotator 간 일치도 | 모두 같은 편향을 가질 수 있음 |
+| Gold accuracy | 정답 샘플 정확도 | gold set 품질에 의존 |
+| Review overturn rate | 검토에서 뒤집힌 비율 | reviewer 기준 편향 |
+| Segment error | 특정 집단의 오류 | segment 정의 필요 |
+
+합의가 낮은 샘플은 버릴 대상이 아니라 문제 정의가 모호하거나 모델이 어려워할 영역이라는 신호일 수 있다.
+
+### Sampling 전략
+
+무작위 표본은 전체 분포를 대표하지만 희귀 실패를 놓치기 쉽다. Active learning은 불확실한 샘플을 우선 수집해 효율적이지만 모델의 현재 편향에 끌려갈 수 있다. 운영 데이터에서는 random, stratified, high-uncertainty, high-impact segment를 섞는 것이 안전하다.
+
 ## 구현 (Implementation)
 
 ```python
@@ -34,6 +63,11 @@ label_task = {
 ```
 
 Guideline version과 label version을 dataset version에 포함해 학습 결과를 재현할 수 있게 한다.
+
+```python
+def label_version(guideline_version, batch_id, review_round):
+    return f"{guideline_version}:{batch_id}:r{review_round}"
+```
 
 ## 복잡도 (Complexity)
 

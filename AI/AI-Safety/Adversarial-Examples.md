@@ -4,6 +4,7 @@
 - Prerequisites: [AI/Deep-Learning/Loss-Functions.md](../Deep-Learning/Loss-Functions.md), [AI/Deep-Learning/Backpropagation.md](../Deep-Learning/Backpropagation.md), [Sparse-Autoencoder.md](Sparse-Autoencoder.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -27,6 +28,43 @@ $$
 
 방어 연구에서는 adversarial training, certified robustness, 입력 전처리, detection 등이 사용되지만, adaptive attack에 대해 검증하지 않은 방어는 쉽게 과대평가될 수 있다.
 
+### Threat model의 구성
+
+적대적 강건성 주장은 threat model 없이는 의미가 약하다. 최소한 다음을 명시해야 한다.
+
+- 공격자가 모델 구조와 파라미터를 아는지
+- 입력을 어느 norm과 반경 안에서 바꿀 수 있는지
+- 의미 보존이나 물리적 실현 가능성 제약이 있는지
+- 공격 성공 기준이 misclassification인지 targeted class인지
+- 방어가 공격자에게 공개되어 adaptive attack이 가능한지
+
+같은 방어도 white-box, black-box, physical-world threat model에서 전혀 다르게 평가될 수 있다.
+
+### Gradient masking
+
+방어가 gradient를 불안정하게 만들면 gradient 기반 공격이 실패해 강건해 보일 수 있다. 그러나 이는 실제 decision boundary가 안전하다는 뜻이 아니다. 더 강한 optimizer, expectation over transformation, black-box transfer attack, gradient-free attack을 쓰면 쉽게 깨질 수 있다.
+
+Gradient masking 의심 신호는 다음과 같다.
+
+- 반복 공격보다 단일 공격이 더 강하게 보인다.
+- 공격 step 수를 늘려도 성공률이 늘지 않는다.
+- Black-box attack이 white-box attack보다 강하다.
+- 방어 전처리를 제거하면 성능 패턴이 크게 달라진다.
+
+### Adversarial training
+
+Adversarial training은 학습 중 적대적 예제를 만들어 모델이 그 주변에서도 정답을 유지하도록 훈련한다. 직관적으로는 각 샘플 주변의 worst-case loss를 낮추는 min-max 문제다.
+
+$$
+\min_\theta E_{(x,y)}\left[\max_{\|\delta\|\le \epsilon} L(\theta, x+\delta, y)\right]
+$$
+
+이 방식은 계산 비용이 크고, 특정 norm과 epsilon에 맞춘 강건성만 주는 경우가 많다. Clean accuracy와 robust accuracy 사이 tradeoff도 고려해야 한다.
+
+### 텍스트와 LLM의 특수성
+
+텍스트에서는 작은 perturbation이 연속 공간의 작은 변화가 아니라 토큰·문장·의미 변화로 나타난다. 철자 변경, paraphrase, instruction conflict, jailbreak prompt는 모두 "작은 변화"의 정의가 다르다. 따라서 이미지식 norm만으로 LLM robustness를 설명하기 어렵고, 정책 위반률·instruction hierarchy 준수·semantic equivalence를 함께 평가해야 한다.
+
 ## 구현 (Implementation)
 
 아래는 실제 공격 절차가 아니라 gradient 기반 perturbation의 수학적 형태를 보여주는 장난감 코드다.
@@ -46,6 +84,18 @@ print(fgsm_like_step(x, grad_x, epsilon=0.03))
 ```
 
 실제 보안 평가는 허가된 모델과 데이터에서, 명확한 threat model과 방어 검증 목적 아래 수행해야 한다.
+
+```python
+robust_eval = {
+    "attack": "iterative_gradient",
+    "norm": "linf",
+    "epsilon": 0.03,
+    "adaptive_to_defense": True,
+    "reported_metrics": ["clean_accuracy", "robust_accuracy"],
+}
+```
+
+강건성 보고서는 공격 이름보다 threat model과 attack strength를 더 중요하게 기록해야 한다.
 
 ## 복잡도 (Complexity)
 

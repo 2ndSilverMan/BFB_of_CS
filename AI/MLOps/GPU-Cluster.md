@@ -4,6 +4,7 @@
 - Prerequisites: [AI/MLOps/Distributed-Training.md](Distributed-Training.md), [Engineering/DevOps/Kubernetes-Basics.md](../../Engineering/DevOps/Kubernetes-Basics.md), [Engineering/DevOps/Metrics-Alerts.md](../../Engineering/DevOps/Metrics-Alerts.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -21,6 +22,33 @@ GPU는 비싼 계산기라서 "비어 있는가"만 보면 부족하다. 어떤 
 
 학습 job은 긴 시간 자원을 점유하므로 checkpoint와 resume이 중요하다. 추론 workload는 latency와 autoscaling이 중요해 학습 workload와 분리하거나 priority를 다르게 둔다.
 
+```mermaid
+flowchart LR
+    Queue["job queue"] --> Scheduler["scheduler"]
+    Scheduler --> Node["GPU node"]
+    Node --> Metrics["utilization / memory / network"]
+    Metrics --> Policy["quota / preemption / autoscale"]
+```
+
+### Scheduling 요구사항
+
+| workload | 중요한 것 | 정책 |
+| --- | --- | --- |
+| 대규모 학습 | gang scheduling, topology | 같은 node/rack 배치 |
+| 작은 실험 | queue time, fairness | quota와 preemption |
+| online inference | latency, availability | priority와 autoscaling |
+| batch generation | throughput, cost | spot/preemptible 활용 |
+
+분산 학습은 필요한 GPU가 모두 동시에 할당되지 않으면 시작할 수 없으므로 gang scheduling이 중요하다. 반면 inference는 일부 replica만 살아도 degraded serving이 가능할 수 있다.
+
+### 관측해야 할 metric
+
+GPU utilization, memory allocated/reserved, HBM bandwidth, PCIe/NVLink traffic, network throughput, data loader latency, job queue time, preemption count, checkpoint duration, failure reason을 함께 본다. GPU 사용률 하나로는 병목을 찾기 어렵다.
+
+### 자원 단편화
+
+큰 GPU에 작은 job이 흩어져 있으면 나중에 큰 job이 들어와도 연속 자원을 못 잡는다. GPU type, memory size, MIG partition, node affinity, priority class를 정책적으로 관리해야 한다.
+
 ## 구현 (Implementation)
 
 ```yaml
@@ -32,6 +60,14 @@ nodeSelector:
 ```
 
 실제 운영에서는 driver version, CUDA/runtime compatibility, image size, dataset locality, shared filesystem, job queue policy를 함께 관리한다.
+
+```yaml
+metadata:
+  labels:
+    workload: training
+spec:
+  priorityClassName: research-batch
+```
 
 ## 복잡도 (Complexity)
 

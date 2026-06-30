@@ -4,6 +4,7 @@
 - Prerequisites: [CS-Theory/Programming-Languages/Syntax-and-Semantics.md](Syntax-and-Semantics.md), [CS-Theory/Programming-Languages/Lambda-Calculus.md](Lambda-Calculus.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -14,6 +15,15 @@
 ## 직관 (Intuition)
 
 타입은 값에 붙인 라벨이라기보다 값의 사용 계약이다. `int`라는 계약은 덧셈 같은 연산을 허용하고, `A -> B`라는 함수 타입은 `A`를 받아 `B`를 돌려준다고 약속한다. 타입 검사기는 프로그램을 실행하지 않고도 이 계약들이 서로 맞물리는지 확인한다.
+
+```mermaid
+flowchart LR
+    AST["AST"] --> RULES["타입 규칙"]
+    ENV["환경 Γ"] --> RULES
+    RULES --> OK["타입 있음"]
+    RULES --> ERR["타입 오류"]
+    OK --> TOOLS["IDE/최적화/안전성"]
+```
 
 ## 이론 (Theory)
 
@@ -37,6 +47,10 @@ $$
 | 명시적 / 추론 | Java 타입 표기 / ML 추론 | 가시성 / 간결성 |
 | 명목적 / 구조적 | Java 클래스 / TypeScript 객체 | 선언된 정체성 / 모양 기반 호환 |
 | 단형 / 다형 | 한 타입 / 제네릭 | 단순성 / 재사용성 |
+
+### 작은 타입 유도
+
+환경 $\Gamma=\{x:Int\}$에서 `x + 1`의 타입을 유도하면, `x:Int`, `1:Int`, 덧셈 규칙 `Int + Int -> Int`가 합쳐져 전체 식은 `Int`가 된다. 반대로 `x + true`는 오른쪽이 `Bool`이라 덧셈 규칙을 적용할 수 없다.
 
 ## 구현 (Implementation)
 
@@ -68,9 +82,20 @@ print(type_of(("add", ("integer", 1), ("integer", 2))))  # Int
 
 이 검사는 AST를 재귀적으로 순회하며 각 구문 규칙에 대응하는 타입 규칙을 적용한다.
 
+실패 trace:
+
+```python
+bad = ("add", ("integer", 1), ("boolean", True))
+print(type_of(bad))  # TypeError: addition requires two Int values
+```
+
+타입 검사기는 프로그램을 실행해 `1 + true`를 계산해 보는 것이 아니라, AST 모양과 하위 식의 타입만으로 거부한다.
+
 ## 복잡도 (Complexity)
 
 위처럼 지역 규칙만 있는 AST 타입 검사는 노드 수 $n$에 대해 시간 `O(n)`, 재귀 스택 `O(h)`다. 실제 언어의 서브타이핑, 오버로딩, 제네릭 제약 해결은 더 비쌀 수 있으며, 충분히 강한 타입 시스템에서는 타입 검사나 추론 자체가 결정 불가능해질 수도 있다.
+
+워크드 예제: `("if", cond, then, else)` 노드는 조건식, then, else 세 하위 노드를 각각 한 번 검사한다. AST에 공유가 없다면 전체 타입 검사 비용은 모든 노드를 한 번 방문하는 `O(n)`이다.
 
 ## 응용 (Applications)
 

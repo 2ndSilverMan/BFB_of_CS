@@ -4,6 +4,7 @@
 - Prerequisites: 없음(필요한 이진수 직관은 본문에서 함께 다룸)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 

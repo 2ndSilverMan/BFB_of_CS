@@ -4,6 +4,7 @@
 - Prerequisites: [Math/Probability-Statistics/Distributions.md](../../Math/Probability-Statistics/Distributions.md), [AI/MLOps/Data-Versioning.md](Data-Versioning.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -21,6 +22,34 @@
 
 Reference window와 current window의 시간 범위·seasonality를 맞추고 data quality 오류와 실제 population shift를 구분한다. Concept drift는 label이 늦게 도착하므로 proxy와 delayed evaluation이 필요하다.
 
+```mermaid
+flowchart LR
+    Ref["reference window"] --> Compare["distribution comparison"]
+    Cur["current window"] --> Compare
+    Compare --> Alert["drift alert"]
+    Alert --> Triage["quality vs population vs concept"]
+    Triage --> Action["monitor / retrain / rollback"]
+```
+
+### Drift 유형별 대응
+
+| 유형 | 변한 것 | label 없이 탐지 | 대표 대응 |
+| --- | --- | --- | --- |
+| Covariate drift | 입력 $P(X)$ | 가능 | segment 분석, retraining 후보 |
+| Label drift | label 비율 $P(Y)$ | 직접은 어려움 | delayed label, proxy |
+| Concept drift | 관계 $P(Y \mid X)$ | 어려움 | 성능 모니터링, 재라벨링 |
+| Prediction drift | 모델 출력 분포 | 가능 | behavior 변화 조사 |
+
+input drift가 있어도 모델이 쓰지 않는 feature라면 영향이 작을 수 있고, input drift가 없어도 label rule이 바뀌면 concept drift가 생길 수 있다.
+
+### 검정과 effect size
+
+KS test, PSI, Jensen-Shannon divergence, Wasserstein distance, classifier two-sample test는 서로 민감한 변화가 다르다. 표본 수가 매우 크면 사소한 차이도 통계적으로 유의할 수 있으므로 effect size와 business metric을 함께 봐야 한다.
+
+### Alert runbook
+
+drift alert가 뜨면 먼저 schema break, missing spike, upstream 배포, 계절 이벤트를 확인한다. 그다음 segment별 prediction drift와 delayed label 성능을 본다. 자동 재학습은 마지막 단계이며, 새 데이터가 품질 검증과 평가 gate를 통과해야 한다.
+
 ## 구현 (Implementation)
 
 ```python
@@ -33,6 +62,15 @@ print(population_stability_index([0.5, 0.5], [0.7, 0.3]))
 ```
 
 Bucket 정의는 reference에서 고정하고 missing·unknown을 별도 범주로 다룬다.
+
+```python
+def drift_alert(score, warn=0.1, block=0.25):
+    if score >= block:
+        return "investigate-immediately"
+    if score >= warn:
+        return "watch"
+    return "ok"
+```
 
 ## 복잡도 (Complexity)
 

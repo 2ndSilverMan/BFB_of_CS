@@ -4,6 +4,7 @@
 - Prerequisites: [TD-Learning.md](TD-Learning.md), [Function-Approximation.md](Function-Approximation.md), [AI/Deep-Learning/MLP.md](../Deep-Learning/MLP.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -31,6 +32,30 @@ $$
 
 를 줄인다. Replay buffer는 연속 샘플의 상관을 줄이고, target network는 bootstrapping target의 급격한 변화를 줄인다.
 
+### Replay buffer의 역할
+
+환경에서 연속으로 얻은 transition은 강하게 상관되어 있다. 같은 장면의 비슷한 상태만 계속 학습하면 신경망 업데이트가 한쪽 분포에 치우친다. Replay buffer는 과거 transition을 섞어 mini-batch를 만들고, off-policy Q-learning 특성을 이용해 데이터를 재사용한다.
+
+하지만 replay buffer도 완전한 해결책은 아니다. 너무 오래된 데이터는 현재 정책과 멀어질 수 있고, buffer가 최근 분포를 너무 많이 담으면 다시 상관이 커진다. Buffer size와 sampling strategy가 성능에 영향을 준다.
+
+### Target network와 moving target
+
+Q-learning target은 현재 추정값을 포함한다. 같은 네트워크로 prediction과 target을 동시에 만들면 target이 매 업데이트마다 움직여 학습이 불안정해진다. Target network는 느리게 업데이트되는 별도 파라미터 $\theta^-$로 target을 만들어 변화 속도를 줄인다.
+
+Target update는 일정 step마다 hard copy하거나, Polyak averaging으로 조금씩 섞을 수 있다.
+
+### Overestimation과 Double DQN
+
+Max 연산은 noisy Q 추정에서 과대평가 bias를 만들 수 있다. DQN target의 $\max_{a'}Q(s',a')$는 추정 오차가 큰 행동을 고를 가능성이 있다. Double DQN은 action selection과 action evaluation을 분리해 이 bias를 줄인다.
+
+$$
+y=r+\gamma Q_{\theta^-}(s', \arg\max_{a'}Q_\theta(s',a'))
+$$
+
+### 탐험과 평가의 분리
+
+DQN은 보통 $\epsilon$-greedy로 데이터를 수집하지만, 평가 시에는 greedy policy를 사용한다. 학습 curve를 해석할 때 exploration reward와 evaluation reward를 분리해야 한다. $\epsilon$ schedule이 너무 빨리 줄면 충분히 탐험하지 못하고, 너무 늦게 줄면 수렴이 느려진다.
+
 ## 구현 (Implementation)
 
 핵심 TD target 계산은 다음처럼 표현할 수 있다.
@@ -46,6 +71,16 @@ print(dqn_target(1.0, False, [0.2, 0.7, 0.4], 0.99))
 ```
 
 실제 구현에는 replay sampling, epsilon-greedy exploration, target network sync, gradient clipping 등이 포함된다.
+
+```python
+def double_dqn_target(reward, done, online_next_q, target_next_q, gamma):
+    if done:
+        return reward
+    best_action = max(range(len(online_next_q)), key=lambda i: online_next_q[i])
+    return reward + gamma * target_next_q[best_action]
+```
+
+Double DQN은 어떤 행동을 고를지는 online network가, 그 행동의 가치를 평가하는 것은 target network가 맡는다.
 
 ## 복잡도 (Complexity)
 

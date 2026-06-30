@@ -4,6 +4,7 @@
 - Prerequisites: [Systems/Computer-Architecture/Memory-Hierarchy.md](../../Systems/Computer-Architecture/Memory-Hierarchy.md), [Systems/Operating-Systems/Synchronization.md](../../Systems/Operating-Systems/Synchronization.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -18,6 +19,12 @@ False sharing은 서로 다른 thread가 다른 변수를 갱신하지만 그 �
 ## 이론 (Theory)
 
 CPU cache coherence protocol은 cache line 단위로 ownership을 관리한다. 한 core가 line을 write하면 다른 core의 line copy가 invalidation된다. 같은 line 안의 독립 counter를 여러 core가 자주 쓰면 line bouncing이 발생한다. Padding, per-thread shard, batching으로 줄일 수 있다.
+
+### 진짜 공유와 가짜 공유
+
+False sharing은 논리적으로 다른 변수를 여러 스레드가 갱신하지만, 물리적으로 같은 cache line에 있어 coherence traffic이 발생하는 현상이다. 코드상 lock이 없어도 성능이 급락할 수 있다.
+
+진단은 thread별 counter, cache miss/coherence metric, padding 실험으로 한다. 해결은 padding, sharding, thread-local accumulation, batch merge처럼 쓰기 충돌을 줄이는 방향이다.
 
 ## 구현 (Implementation)
 
@@ -67,4 +74,3 @@ good: counter[0] padding ... counter[1] padding ... # line 분리
 
 - [Systems/Computer-Architecture/Memory-Hierarchy.md](../../Systems/Computer-Architecture/Memory-Hierarchy.md)
 - [Systems/Parallel-Computing/Multithreading.md](../../Systems/Parallel-Computing/Multithreading.md)
-

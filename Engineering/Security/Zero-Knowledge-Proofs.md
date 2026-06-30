@@ -4,6 +4,7 @@
 - Prerequisites: [Hash-Functions.md](Hash-Functions.md), [Digital-Signatures.md](Digital-Signatures.md), [Math/Discrete/Number-Theory-Basics.md](../../Math/Discrete/Number-Theory-Basics.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -24,6 +25,18 @@
 - Zero-knowledge: 검증자는 명제의 참/거짓 외에 추가 지식을 얻지 못한다.
 
 상호작용형 ZKP는 여러 라운드의 challenge-response로 구성될 수 있고, 비상호작용형 NIZK는 공통 참조 문자열이나 Fiat-Shamir transform 같은 도구로 한 번의 증명으로 만든다. zk-SNARK, zk-STARK는 간결한 증명과 검증을 목표로 하는 현대적 계열이다.
+
+### Statement, witness, circuit
+
+ZKP 시스템에서는 공개로 증명할 명제를 statement, 숨겨진 비밀을 witness라고 부른다. 실제 구현에서는 이 명제를 arithmetic circuit이나 constraint system으로 컴파일한다. 좋은 설계는 "무엇을 공개하고 무엇을 숨기는가"를 먼저 정한 뒤 회로로 옮긴다.
+
+### Soundness와 trusted setup
+
+Trusted setup이 필요한 계열에서는 setup 비밀이 유출되거나 폐기되지 않으면 거짓 증명을 만들 수 있는 위험이 생긴다. 따라서 multi-party ceremony, transcript 검증, toxic waste 폐기, setup 범위가 보안 가정의 일부다.
+
+### 메타데이터 프라이버시
+
+증명 자체가 영지식이어도 트랜잭션 시간, 금액 범위, 네트워크 주소, 반복 사용 identifier 같은 메타데이터가 정보를 새게 할 수 있다. 시스템 프라이버시는 증명 프로토콜뿐 아니라 데이터 모델과 운영 환경까지 포함한다.
 
 ## 구현 (Implementation)
 

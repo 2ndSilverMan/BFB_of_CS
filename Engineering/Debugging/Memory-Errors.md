@@ -4,6 +4,7 @@
 - Prerequisites: [Programming/Languages/C/C-Pointers-and-Memory.md](../../Programming/Languages/C/C-Pointers-and-Memory.md), [Programming/Languages/Cpp/Cpp-Memory-and-Smart-Pointers.md](../../Programming/Languages/Cpp/Cpp-Memory-and-Smart-Pointers.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -18,6 +19,12 @@
 ## 이론 (Theory)
 
 C/C++ 같은 언어는 메모리 수명과 범위 검사를 프로그래머가 많이 책임진다. Undefined behavior는 컴파일러 최적화와 결합해 예측 불가능한 결과를 낼 수 있다.
+
+### 오류 유형 분리
+
+메모리 오류는 use-after-free, double free, out-of-bounds, uninitialized read, leak, stack overflow처럼 원인이 다르다. 증상은 모두 crash나 corruption으로 보일 수 있으므로 allocator log, sanitizer report, core dump, repro input을 함께 본다.
+
+메모리 corruption은 원인 지점과 crash 지점이 멀 수 있다. 최초 잘못된 write를 잡기 위해 ASan, guard page, heap poisoning, deterministic allocator 설정을 사용한다.
 
 ## 구현 (Implementation)
 

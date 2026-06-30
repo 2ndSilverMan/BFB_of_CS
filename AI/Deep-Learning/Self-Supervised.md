@@ -4,6 +4,7 @@
 - Prerequisites: [AI/Deep-Learning/Transformer.md](Transformer.md), [AI/Deep-Learning/CNN.md](CNN.md), [AI/Machine-Learning/Dimensionality-Reduction.md](../Machine-Learning/Dimensionality-Reduction.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -25,6 +26,36 @@
 
 학습된 encoder $f_\theta(x)$는 downstream task에서 linear probing, fine-tuning, retrieval, generation 등에 사용된다. 좋은 pretext task는 downstream에 필요한 불변성과 정보를 표현에 남겨야 한다.
 
+```mermaid
+flowchart LR
+    X["unlabeled data"] --> P["pretext task"]
+    P --> E["encoder representation"]
+    E --> L["linear probing"]
+    E --> F["fine-tuning"]
+    E --> R["retrieval / generation"]
+```
+
+### 방법별 학습 신호
+
+| 계열 | positive 신호 | 실패 모드 | 대표 방지 장치 |
+| --- | --- | --- | --- |
+| Masked/predictive | 가린 token 또는 미래 token | 쉬운 shortcut 학습 | mask 설계, context 제한 |
+| Contrastive | 같은 instance의 다른 view | false negative, batch 의존 | 큰 batch, memory bank, temperature |
+| Non-contrastive | teacher/student 일치 | representation collapse | stop-gradient, predictor, EMA teacher |
+| Generative | 입력 복원 또는 likelihood | 픽셀 수준 세부에 치우침 | bottleneck, semantic augmentation |
+
+### Augmentation은 가정이다
+
+contrastive SSL에서 augmentation은 "이 변환 뒤에도 의미가 같아야 한다"는 불변성 가정이다. 이미지 분류에서는 crop과 color jitter가 도움이 되지만 의료영상이나 위성영상에서는 작은 변화가 label 의미를 바꿀 수 있다. 텍스트에서도 단어 삭제나 paraphrase가 항상 의미 보존인 것은 아니다.
+
+### 평가 프로토콜
+
+linear probing은 encoder를 고정하고 작은 linear head만 학습해 representation 자체의 선형 분리성을 본다. fine-tuning은 encoder까지 갱신하므로 downstream 적응력까지 포함한다. 두 결과를 함께 보면 "표현이 이미 좋은가"와 "조정하면 좋아지는가"를 분리할 수 있다.
+
+### 누출과 중복
+
+대규모 unlabeled data를 쓰면 downstream benchmark와 중복된 샘플이 들어갈 수 있다. SSL에서는 label leakage가 없어 보여도 동일 이미지, 같은 문서, 거의 같은 문장이 사전학습에 들어가면 평가가 부풀 수 있다. deduplication과 시간 기준 split은 대규모 표현 학습에서 중요한 실험 조건이다.
+
 ## 구현 (Implementation)
 
 contrastive 학습의 장난감 목적은 positive similarity를 negative보다 크게 만드는 것이다.
@@ -34,7 +65,8 @@ import math
 
 
 def softmax(xs):
-    exps = [math.exp(x) for x in xs]
+    m = max(xs)
+    exps = [math.exp(x - m) for x in xs]
     z = sum(exps)
     return [e / z for e in exps]
 

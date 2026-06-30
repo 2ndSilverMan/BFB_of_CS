@@ -4,6 +4,7 @@
 - Prerequisites: [Math/Optimization/Convex-Optimization.md](../../Math/Optimization/Convex-Optimization.md), [GD-Convergence.md](GD-Convergence.md), [AI/Machine-Learning/Logistic-Regression.md](../Machine-Learning/Logistic-Regression.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -26,6 +27,26 @@ $$
 손실 $\ell$과 정규화 $R$이 볼록이면 전체 목적 함수도 볼록이다. 로지스틱 회귀, SVM hinge loss, ridge/lasso regression은 대표적인 볼록 학습 문제다.
 
 볼록성은 최적화 보장을 준다. $L$-smooth convex 함수에서는 gradient descent가 $O(1/T)$의 function gap 수렴률을 갖고, strong convexity가 있으면 선형 수렴이 가능하다. 통계적으로는 stability, Rademacher complexity, regularization path 분석이 상대적으로 잘 정리된다.
+
+### Convex surrogate
+
+0-1 loss는 분류 오류를 직접 측정하지만 비볼록이고 불연속이라 최적화하기 어렵다. 그래서 hinge loss, logistic loss, exponential loss 같은 convex surrogate를 사용한다. Surrogate를 최소화하면 원래 classification risk도 줄어들기를 기대한다.
+
+중요한 질문은 calibration이다. Surrogate risk를 잘 줄이면 원래 task risk도 줄어드는가? 모든 convex loss가 모든 평가 지표에 좋은 대리 손실은 아니다.
+
+### Smoothness와 strong convexity
+
+Smoothness는 gradient가 너무 급격히 변하지 않는다는 조건이고, strong convexity는 목적 함수가 충분히 휘어 있어 최적해가 안정적으로 정해진다는 조건이다. 두 조건이 있으면 조건수 $L/\mu$가 수렴 속도를 좌우한다.
+
+정규화는 통계적 일반화뿐 아니라 최적화에도 영향을 준다. L2 정규화는 많은 문제에서 strong convexity를 추가해 수렴과 안정성을 개선한다.
+
+### ERM과 regularized ERM
+
+볼록 학습에서 ERM은 계산 가능하고 전역 최적해를 찾을 수 있다는 장점이 있다. 그러나 regularization이 없으면 high-dimensional setting에서 해가 불안정할 수 있다. Regularized ERM은 경험 위험과 복잡도 제어를 한 목적 함수에 결합한다.
+
+### Online convex optimization
+
+볼록성은 offline ERM뿐 아니라 online learning에서도 핵심이다. 매 라운드 볼록 손실을 받고 gradient step과 projection을 수행하면 regret bound를 얻을 수 있다. 이 연결이 convex learning과 regret minimization을 잇는다.
 
 ## 구현 (Implementation)
 
@@ -51,6 +72,13 @@ print(logistic_grad(w, x, y, l2=0.01))
 ```
 
 문제는 볼록이어도 feature scaling, 조건수, 학습률 선택은 여전히 중요하다.
+
+```python
+def regularized_objective(empirical_loss, norm_sq, lam):
+    return empirical_loss + lam * norm_sq
+```
+
+볼록성은 최적화 지형을 단순하게 만들지만, 어떤 surrogate와 regularizer를 쓰는지는 여전히 모델링 선택이다.
 
 ## 복잡도 (Complexity)
 

@@ -4,6 +4,7 @@
 - Prerequisites: [AI/Machine-Learning/Overfitting.md](../Machine-Learning/Overfitting.md), [Math/Probability-Statistics/Probability-Basics.md](../../Math/Probability-Statistics/Probability-Basics.md), [Math/Real-Analysis/Real-Numbers.md](../../Math/Real-Analysis/Real-Numbers.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -39,6 +40,26 @@ $$
 
 핵심은 훈련 오차가 작다는 사실만으로는 부족하고, 가설 공간의 크기나 복잡도를 함께 제어해야 한다는 점이다. 무한 가설 공간에서는 단순한 $|H|$ 대신 [VC 차원](VC-Dimension.md), Rademacher 복잡도 같은 도구를 사용한다.
 
+### Realizable과 agnostic
+
+Realizable PAC는 정답 개념이 가설 클래스 안에 있고 라벨 noise가 없다고 가정한다. 이때 훈련 오차 0인 일관 가설을 찾는 것이 핵심이다. Agnostic PAC는 목표가 $H$ 안에 없거나 noise가 있을 수 있다고 보고, 최적 가설의 위험에 가깝게 가는 것을 목표로 한다.
+
+$$
+R(\hat h) \le \inf_{h\in H}R(h)+\epsilon
+$$
+
+Agnostic 설정은 더 현실적이지만 표본 복잡도가 보통 더 크고, 경험 위험 최소화와 uniform convergence 분석이 중요해진다.
+
+### Distribution-free 보장의 의미
+
+PAC 보장은 흔히 모든 분포 $D$에 대해 성립하는 distribution-free 보장이다. 이는 강력하지만 최악 경우 보장이라 실제 문제에서는 느슨할 수 있다. 특정 분포 구조를 알면 더 작은 표본으로도 학습할 수 있지만, 그 경우 보장은 분포 의존적이다.
+
+No-Free-Lunch 관점에서 PAC는 아무 구조도 없는 세상에서 학습을 주장하지 않는다. $H$를 제한하거나 VC 차원이 유한하다는 inductive bias를 명시한다.
+
+### 표본 복잡도와 계산 복잡도
+
+PAC 학습 가능성은 표본 수와 계산 가능성을 모두 봐야 한다. 어떤 클래스는 적은 표본으로 식별 가능해도 ERM을 계산하는 것이 어려울 수 있다. 반대로 SGD로 쉽게 학습되는 모델이라도 일반화 보장이 약할 수 있다.
+
 ## 구현 (Implementation)
 
 아주 작은 유한 가설 집합에서는 경험 위험 최소화(ERM)를 그대로 구현할 수 있다.
@@ -62,6 +83,14 @@ print([best(x) for x, _ in sample])
 ```
 
 실제 연구에서는 ERM 구현 자체보다 “이 ERM이 어떤 표본 수에서 일반화되는가”를 분석하는 쪽이 PAC 프레임워크의 역할이다.
+
+```python
+def finite_realizable_sample_bound(num_hypotheses, epsilon, delta):
+    import math
+    return math.ceil((math.log(num_hypotheses) + math.log(1 / delta)) / epsilon)
+```
+
+이 계산은 상수와 정밀한 로그항을 생략한 직관용이다.
 
 ## 복잡도 (Complexity)
 

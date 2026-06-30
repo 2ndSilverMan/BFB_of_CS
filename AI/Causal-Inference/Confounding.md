@@ -4,6 +4,7 @@
 - Prerequisites: [AI/Causal-Inference/Correlation-vs-Causation.md](Correlation-vs-Causation.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -25,6 +26,25 @@ $$P(Y\mid do(X=x))=\sum_z P(Y\mid X=x,Z=z)P(Z=z)$$
 
 중요한 점은 mediator나 collider를 함부로 조정하면 오히려 bias가 생길 수 있다는 것이다.
 
+```mermaid
+flowchart LR
+    Z["confounder Z"] --> X["treatment X"]
+    Z --> Y["outcome Y"]
+    X --> Y
+```
+
+### Confounder 판정 체크
+
+confounder는 treatment 이전에 존재하고, treatment 배정과 관련 있으며, outcome의 원인이어야 한다. treatment의 결과인 변수는 confounder가 아니라 mediator 또는 post-treatment variable일 수 있다.
+
+### Positivity
+
+조정하려면 각 confounder strata에서 treatment와 control이 모두 존재해야 한다. 어떤 $X=x$ 조합에서 항상 treatment만 받거나 control만 받으면 비교할 counterfactual support가 없다. propensity score가 0이나 1에 가까운 영역은 추정이 불안정하다.
+
+### 잔여 교란
+
+관측되지 않은 confounder는 조정으로 제거할 수 없다. negative control, sensitivity analysis, instrumental variable, natural experiment, RCT를 고려한다. "많은 변수"보다 "올바른 변수"가 중요하다.
+
 ## 구현 (Implementation)
 
 ```python
@@ -33,6 +53,11 @@ def adjusted_mean(p_z, mean_y_xz, x):
 ```
 
 조정 변수는 데이터에 있는 모든 column이 아니라 인과 그래프와 연구 질문으로 선택한다.
+
+```python
+def overlap(propensity, eps=0.05):
+    return eps < propensity < 1 - eps
+```
 
 ## 복잡도 (Complexity)
 

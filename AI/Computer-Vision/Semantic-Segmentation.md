@@ -4,6 +4,7 @@
 - Prerequisites: [AI/Computer-Vision/CNN-Deep-Dive.md](CNN-Deep-Dive.md), [AI/Computer-Vision/Image-Classification.md](Image-Classification.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -21,6 +22,26 @@ Fully convolutional network는 dense feature map에서 픽셀별 logit을 만든
 
 Loss는 pixel-wise cross entropy, Dice loss, focal loss 등을 사용한다. 평가는 class별 IoU와 평균 mIoU가 대표적이다. Class imbalance와 boundary ambiguity가 핵심 난점이다.
 
+```mermaid
+flowchart LR
+    Image["image"] --> Encoder["encoder"]
+    Encoder --> Decoder["decoder / upsampling"]
+    Decoder --> Logits["pixel logits"]
+    Logits --> Mask["semantic mask"]
+```
+
+### mIoU와 class imbalance
+
+배경이 대부분인 데이터에서는 pixel accuracy가 높아도 작은 class를 전혀 못 맞힐 수 있다. IoU는 예측과 정답의 교집합/합집합을 보므로 class별 실패를 더 잘 드러낸다. rare class에는 class weight, focal loss, Dice loss, balanced crop sampling이 도움이 된다.
+
+### Boundary와 annotation noise
+
+픽셀 경계는 annotator마다 달라질 수 있다. 특히 흐릿한 의료영상, 위성영상, 투명 물체에서는 "정답" 자체가 불확실하다. boundary tolerance나 ignore region을 둘지 데이터셋 정책으로 정해야 한다.
+
+### 큰 이미지 inference
+
+고해상도 이미지는 한 번에 GPU에 올리기 어렵다. sliding window inference를 쓰면 tile 경계 artifact가 생길 수 있어 overlap과 blending이 필요하다. train crop 크기와 test crop 전략도 성능에 영향을 준다.
+
 ## 구현 (Implementation)
 
 ```python
@@ -31,6 +52,11 @@ def pixel_accuracy(pred_mask, true_mask):
 ```
 
 실제 구현은 2D mask를 flatten해 계산하거나 class별 confusion matrix에서 IoU를 구한다.
+
+```python
+def iou_from_counts(intersection, union):
+    return intersection / union if union else 0.0
+```
 
 ## 복잡도 (Complexity)
 

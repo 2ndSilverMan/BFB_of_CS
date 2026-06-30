@@ -4,6 +4,7 @@
 - Prerequisites: [AI/Causal-Inference/Intervention.md](Intervention.md), [AI/Machine-Learning/Linear-Regression.md](../Machine-Learning/Linear-Regression.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -21,14 +22,63 @@ Running variable $R$와 cutoff $c$가 있고, treatment가 $R\ge c$에서 바뀐
 
 핵심 가정은 cutoff 근처에서 잠재 결과가 연속이라는 것이다. Manipulation이나 sorting이 있으면 cutoff 주변 비교가 깨진다. Bandwidth, polynomial order, kernel 선택이 추정에 영향을 준다.
 
+### Sharp RDD의 추정 대상
+
+Sharp RDD에서 treatment는 $D=\mathbf{1}(R\ge c)$처럼 cutoff가 완전히 결정한다. 추정 대상은 cutoff 바로 오른쪽과 왼쪽의 조건부 평균 차이다.
+
+$$
+\tau_{SRD}
+= \lim_{r\downarrow c} E[Y\mid R=r]
+- \lim_{r\uparrow c} E[Y\mid R=r]
+$$
+
+이 값은 전체 population ATE가 아니라 cutoff 주변 unit에 대한 local treatment effect다. 따라서 "80점 이상 장학금" 사례에서 95점 학생에게도 같은 효과가 있다고 바로 일반화하면 안 된다.
+
+### Fuzzy RDD와 first stage
+
+Fuzzy RDD에서는 cutoff가 treatment 확률을 바꿀 뿐 treatment를 완전히 결정하지 않는다. 이때 outcome jump를 treatment probability jump로 나누는 Wald/IV 형태의 estimand를 사용한다.
+
+$$
+\tau_{FRD}
+=
+\frac{
+\lim_{r\downarrow c} E[Y\mid R=r]
+- \lim_{r\uparrow c} E[Y\mid R=r]
+}{
+\lim_{r\downarrow c} E[D\mid R=r]
+- \lim_{r\uparrow c} E[D\mid R=r]
+}
+$$
+
+분모가 작으면 weak first stage 문제가 생긴다. 또한 해석은 cutoff 때문에 treatment 상태가 바뀐 complier 근처의 local effect에 가깝다.
+
+### Bandwidth, kernel, local linear
+
+Bandwidth는 cutoff 주변을 얼마나 좁게 볼지 정한다. 좁히면 설계가 더 국소적이어서 bias가 줄 수 있지만 표본 수가 줄어 variance가 커진다. 넓히면 variance는 줄 수 있지만 cutoff에서 멀리 떨어진 관측치가 들어와 함수 형태 가정에 더 의존한다.
+
+실무에서는 양쪽에서 local linear regression을 자주 사용한다. 경계점 근처에서는 높은 차수 polynomial보다 local linear가 안정적인 경우가 많고, triangular kernel처럼 cutoff에 가까운 관측치에 더 큰 가중치를 주는 방식이 널리 쓰인다.
+
+### 진단과 위협
+
+RDD의 핵심 질문은 "cutoff 바로 주변 unit이 treatment만 다르고 다른 면에서는 연속적인가"다. 이를 위해 다음을 점검한다.
+
+- Running variable density가 cutoff에서 튀지 않는지 확인한다.
+- Treatment 이전 covariate가 cutoff에서 jump하지 않는지 본다.
+- 다른 가짜 cutoff(placebo cutoff)에서도 jump가 생기는지 검사한다.
+- Cutoff 바로 근처 조작 가능성이 있으면 donut RDD로 민감도를 본다.
+
 ## 구현 (Implementation)
 
 ```python
-near_cutoff = abs(score - cutoff) <= bandwidth
-effect = mean(outcome[near_cutoff & (score >= cutoff)]) - mean(outcome[near_cutoff & (score < cutoff)])
+def simple_rdd(outcome, running, cutoff, bandwidth):
+    centered = running - cutoff
+    near = abs(centered) <= bandwidth
+    right = near & (centered >= 0)
+    left = near & (centered < 0)
+    return outcome[right].mean() - outcome[left].mean()
 ```
 
-실제 분석은 cutoff 양쪽 local regression과 robust confidence interval을 사용한다.
+이 코드는 직관용 차이 계산이다. 실제 분석은 cutoff 양쪽에서 centered running variable을 사용한 local regression을 적합하고, bandwidth 민감도와 robust confidence interval을 함께 보고한다.
 
 ## 복잡도 (Complexity)
 

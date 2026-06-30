@@ -4,6 +4,7 @@
 - Prerequisites: [Engineering/Testing/Integration-Test-Strategy.md](Integration-Test-Strategy.md), [Engineering/System-Design/Microservices.md](../System-Design/Microservices.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -18,6 +19,12 @@
 ## 이론 (Theory)
 
 Consumer-driven contract는 consumer가 기대하는 요청과 응답 예시를 계약으로 만들고 provider가 이를 만족하는지 검증한다. Schema validation은 구조를 확인하지만 의미 있는 사례까지 포함해야 안전하다.
+
+### Consumer와 provider의 책임
+
+Contract test는 consumer가 실제로 의존하는 요청/응답 형태를 명시하고 provider가 그 contract를 깨지 않는지 검증한다. OpenAPI schema validation만으로 충분하지 않을 수 있다. 상태 전이, 에러 코드, optional field 의미, backward compatibility도 contract에 포함된다.
+
+Versioning 정책은 contract test와 함께 설계해야 한다. Provider는 새 필드를 추가할 수 있어도 기존 필드 의미를 바꾸면 consumer를 깨뜨릴 수 있다. Consumer-driven contract는 이 위험을 PR 단계에서 발견하게 해 준다.
 
 ## 구현 (Implementation)
 

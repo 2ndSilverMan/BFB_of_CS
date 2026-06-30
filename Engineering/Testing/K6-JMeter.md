@@ -4,6 +4,7 @@
 - Prerequisites: [Engineering/Testing/Load-Stress-Soak-Testing.md](Load-Stress-Soak-Testing.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -18,6 +19,12 @@ k6와 JMeter는 HTTP/API 부하 테스트 시나리오를 작성하고 실행하
 ## 이론 (Theory)
 
 부하 테스트 도구는 virtual user, arrival rate, ramp-up, duration, assertion, threshold를 정의한다. 테스트 스크립트는 인증, 데이터 준비, think time, correlation ID, cleanup을 포함할 수 있다.
+
+### 스크립트 모델의 차이
+
+k6는 코드 중심 스크립팅과 CI 친화성이 강하고, JMeter는 GUI 기반 시나리오 구성과 다양한 프로토콜 플러그인이 강점이다. 선택 기준은 팀의 자동화 방식, protocol mix, 결과 분석 도구, 운영 환경과의 통합이다.
+
+부하 도구는 트래픽을 만드는 장치일 뿐이다. 의미 있는 테스트가 되려면 workload model, think time, 데이터 분포, 인증 토큰 처리, ramp-up, 실패 기준, 관측 지표가 함께 정의되어야 한다.
 
 ## 구현 (Implementation)
 

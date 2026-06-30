@@ -4,6 +4,7 @@
 - Prerequisites: [Systems/Databases/Transactions-and-ACID.md](Transactions-and-ACID.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 

@@ -4,6 +4,7 @@
 - Prerequisites: [AI/Generative-Models/Conditional-GAN.md](Conditional-GAN.md), [AI/Computer-Vision/Image-Generation.md](../Computer-Vision/Image-Generation.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -21,6 +22,28 @@ CycleGAN은 paired data 없이 두 domain 사이의 image translation을 학습�
 
 Identity loss를 추가하면 색상이나 구조 보존을 도울 수 있다. 그러나 cycle consistency만으로 의미 보존이 완전히 보장되지는 않는다.
 
+```mermaid
+flowchart LR
+    A["domain A"] --> G["G: A to B"]
+    G --> Bhat["fake B"]
+    Bhat --> F["F: B to A"]
+    F --> Arec["reconstructed A"]
+    B["domain B"] --> F
+    F --> Ahat["fake A"]
+```
+
+### Cycle consistency의 한계
+
+cycle loss는 원본으로 되돌릴 수 있음을 강제하지만, 변환 중 사람이 중요하게 보는 의미가 보존된다는 보장은 아니다. 모델이 눈에 보이지 않는 고주파 신호에 정보를 숨겨 되돌리는 steganography식 실패도 가능하다.
+
+### Domain coverage
+
+두 domain의 데이터 다양성이 다르면 translation이 한쪽 mode로 치우칠 수 있다. 여름↔겨울처럼 구조가 비슷한 domain은 잘 맞지만, 고양이↔자동차처럼 구조가 크게 다른 domain은 왜곡이 심해질 수 있다.
+
+### 안전한 사용처
+
+의료영상, 결함검사, 원격탐사처럼 생성된 이미지가 downstream 판단에 쓰이는 경우에는 hallucination과 label 보존을 강하게 검증해야 한다. style transfer처럼 시각 효과가 목적일 때와 data augmentation이 목적일 때의 기준은 다르다.
+
 ## 구현 (Implementation)
 
 ```python
@@ -29,6 +52,11 @@ loss_total = loss_gan_a + loss_gan_b + lambda_cycle * loss_cycle
 ```
 
 Translation 품질은 domain coverage와 구조 차이에 크게 좌우된다.
+
+```python
+def cycle_loss(x, reconstructed, distance):
+    return distance(reconstructed, x)
+```
 
 ## 복잡도 (Complexity)
 

@@ -4,6 +4,7 @@
 - Prerequisites: [AI/LLMs/Instruction-Tuning.md](Instruction-Tuning.md), [AI/Reinforcement-Learning/PPO.md](../Reinforcement-Learning/PPO.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -21,6 +22,27 @@ RLHF는 사람의 선호 비교나 평가를 보상 모델로 학습하고, 언�
 
 Reward model은 사람 선호의 proxy이며 진짜 목표가 아니다. 따라서 reward hacking, overoptimization, labeler bias, policy drift가 주요 위험이다.
 
+```mermaid
+flowchart LR
+    SFT["SFT policy"] --> Gen["sample responses"]
+    Gen --> Label["human preference labels"]
+    Label --> RM["reward model"]
+    RM --> PPO["KL-regularized PPO"]
+    PPO --> Eval["human and automated eval"]
+```
+
+### Preference data 수집
+
+비교 데이터는 prompt 분포와 label guideline에 민감하다. labeler가 "정확성", "친절함", "간결함", "안전성" 중 무엇을 우선해야 하는지 명확하지 않으면 reward model이 일관되지 않은 신호를 배운다. chosen/rejected 쌍은 난이도가 너무 쉽지 않아야 하며, 둘 다 나쁜 응답인 경우에는 별도 품질 필터가 필요하다.
+
+### Reward model의 한계
+
+reward model은 사람 선호를 압축한 모델이므로 분포 밖 응답에 취약하다. policy optimization이 진행되면 policy가 reward model이 잘못 높게 평가하는 패턴을 찾아낼 수 있다. 그래서 reward score 상승만 보지 말고 holdout preference win rate, safety eval, diversity, length bias를 함께 본다.
+
+### PPO 운영 관점
+
+RLHF의 PPO는 일반 RL보다 action space가 매우 크고 episode가 token sequence다. KL coefficient, reward normalization, sampling temperature, response length penalty가 모두 결과에 영향을 준다. reference policy와 너무 멀어지면 언어 품질이 무너지고, 너무 묶으면 선호 개선이 약하다.
+
 ## 구현 (Implementation)
 
 ```python
@@ -31,6 +53,15 @@ objective = {
 ```
 
 운영에서는 data quality, label guideline, rejection sampling, safety evaluation을 함께 관리한다.
+
+```python
+preference_record = {
+    "prompt": "...",
+    "chosen": "...",
+    "rejected": "...",
+    "label_reason": "더 정확하고 정책을 잘 따름",
+}
+```
 
 ## 복잡도 (Complexity)
 

@@ -4,6 +4,7 @@
 - Prerequisites: [MDP.md](MDP.md), [Policy.md](Policy.md), [AI/Theoretical-ML/Regret-Minimization.md](../Theoretical-ML/Regret-Minimization.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -27,6 +28,28 @@
 
 중요한 설계 축은 centralized training with decentralized execution(CTDE), communication, credit assignment, equilibrium, opponent modeling이다.
 
+### Non-stationarity
+
+단일 에이전트 RL에서는 환경 전이가 고정되어 있다고 가정한다. MARL에서는 다른 에이전트의 정책이 계속 변하므로, 한 에이전트 입장에서는 환경이 학습 중 바뀐다. Replay buffer에 저장된 과거 transition도 "예전 상대 정책"에서 나온 데이터가 된다.
+
+이를 완화하려면 opponent policy version을 기록하거나, centralized critic으로 joint state/action을 보거나, self-play population을 유지한다.
+
+### CTDE
+
+Centralized training with decentralized execution은 학습 중에는 전체 상태나 다른 에이전트 행동을 critic이 볼 수 있게 하고, 배포 시에는 각 에이전트가 자기 관측만으로 행동하게 하는 방식이다. 협력 과제에서 credit assignment와 안정성을 개선할 수 있다.
+
+하지만 실행 시 사용할 수 없는 정보를 actor가 직접 의존하면 안 된다. Training과 execution 정보 경계를 명확히 해야 한다.
+
+### Credit assignment
+
+공동 보상 환경에서는 어떤 에이전트의 어떤 행동이 성공에 기여했는지 알기 어렵다. Difference reward, counterfactual baseline, value decomposition은 공동 보상을 agent별 학습 신호로 나누려는 접근이다.
+
+Credit assignment가 나쁘면 모든 에이전트가 같은 보상을 받지만 누가 무엇을 고쳐야 하는지 모른다.
+
+### 경쟁과 equilibrium
+
+경쟁 환경에서는 "최적 정책"이 상대 집합에 의존한다. 특정 상대에게 강한 정책이 다른 상대에게 취약할 수 있다. Self-play, population-based training, exploitability evaluation은 이런 문제를 다룬다.
+
 ## 구현 (Implementation)
 
 공동 보상 환경에서는 여러 에이전트 행동을 모아 한 step을 진행한다.
@@ -41,6 +64,16 @@ def joint_step(env, policies, observations):
 ```
 
 실제 구현은 agent별 replay, shared policy, parameter sharing, centralized critic 여부를 결정해야 한다.
+
+```python
+def joint_action_space_size(action_counts):
+    total = 1
+    for count in action_counts:
+        total *= count
+    return total
+```
+
+에이전트가 늘수록 joint action space가 빠르게 커지므로, factorization과 parameter sharing이 중요해진다.
 
 ## 복잡도 (Complexity)
 

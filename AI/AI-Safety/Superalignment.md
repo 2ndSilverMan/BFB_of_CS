@@ -4,6 +4,7 @@
 - Prerequisites: [AI/AI-Safety/Alignment-Overview.md](Alignment-Overview.md), [AI/AI-Safety/Scalable-Oversight.md](Scalable-Oversight.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -21,6 +22,37 @@
 
 슈퍼정렬은 단일 알고리즘보다 평가, 해석, 훈련, 배포 제한, 거버넌스가 결합된 시스템 문제다.
 
+### 감독 격차의 구조
+
+슈퍼정렬의 어려움은 모델이 단순히 더 빠르거나 더 많은 지식을 갖는다는 데서 끝나지 않는다. 강한 모델은 사람이 직접 확인하기 어려운 계획, 코드, 과학적 주장, 사회적 영향 경로를 만들 수 있다. 이때 인간 피드백은 세 가지 병목에 걸린다.
+
+- 평가자가 정답을 모른다.
+- 평가자가 전체 추론 과정을 볼 시간이 없다.
+- 평가자가 모델의 숨은 의도나 장기 전략을 알 수 없다.
+
+따라서 supervision은 "사람이 최종 답을 고른다"에서 "사람이 보조 도구와 절차를 사용해 평가 가능성을 높인다"로 확장된다.
+
+### Weak-to-strong generalization
+
+Weak-to-strong 실험은 약한 감독자가 강한 모델의 좋은 일반화를 유도할 수 있는지 보는 축소판이다. 예를 들어 작은 모델이 만든 noisy label로 큰 모델을 학습시킨 뒤, 큰 모델이 약한 라벨의 오류를 넘어서는지 측정한다.
+
+핵심 질문은 다음과 같다.
+
+- 강한 모델이 약한 라벨의 패턴만 모방하는가?
+- 약한 감독 신호에서 latent truth를 끌어낼 수 있는가?
+- 어느 task family에서 실패가 먼저 나타나는가?
+- 강한 모델이 자신의 오류를 드러내는 방향으로 훈련되는가?
+
+### Eliciting latent knowledge
+
+모델이 내부적으로는 사실을 알고 있지만 외부 행동에서는 숨기거나 왜곡할 수 있다는 우려가 있다. Eliciting latent knowledge는 모델 내부 표현이나 보조 질의 절차를 통해 실제로 알고 있는 정보를 끌어낼 수 있는지 묻는다.
+
+이 문제는 해석 가능성과 연결된다. Activation probing, mechanistic interpretability, consistency check, adversarial questioning은 모두 "모델이 무엇을 알고 있고 무엇을 말하고 있는가"의 차이를 줄이는 도구가 될 수 있다.
+
+### 배포 제한과 연구 윤리
+
+슈퍼정렬 연구는 강한 capability를 실험 대상으로 삼기 때문에, 연구 자체도 위험 관리가 필요하다. 고위험 도구 접근, autonomous replication, cyber/biology misuse 가능성이 있는 실험은 sandbox, approval, logging, staged release가 필요하다.
+
 ## 구현 (Implementation)
 
 ```python
@@ -33,6 +65,18 @@ research_program = [
 ```
 
 현실의 연구는 toy setting에서 실패 모드를 분리해 측정하는 것부터 시작한다.
+
+```python
+def weak_to_strong_eval(weak_score, strong_score, oracle_score):
+    imitation_gap = strong_score - weak_score
+    remaining_gap = oracle_score - strong_score
+    return {
+        "improves_over_weak": imitation_gap > 0,
+        "distance_to_oracle": remaining_gap,
+    }
+```
+
+축소 실험은 실제 슈퍼정렬의 충분한 증거가 아니지만, 감독 격차를 분해해 측정하는 출발점이 된다.
 
 ## 복잡도 (Complexity)
 

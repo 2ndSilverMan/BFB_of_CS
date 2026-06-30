@@ -4,6 +4,7 @@
 - Prerequisites: [Engineering/Debugging/Scientific-Debugging.md](Scientific-Debugging.md), [Engineering/DevOps/Metrics-Alerts.md](../DevOps/Metrics-Alerts.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -20,6 +21,12 @@
 Log event에는 안정적인 event name, severity, timestamp, service/version, correlation ID, outcome과 필요한 context를 둔다. High-cardinality field는 log에는 가능하지만 metric label로 직접 변환하지 않는다.
 
 비밀번호, token, session, 원문 개인정보는 allowlist·redaction으로 차단한다. Error log에는 stack과 retryability를 남기고 같은 failure를 여러 layer에서 중복 log하지 않는다. Sampling·retention은 비용과 조사 가능성을 교환한다.
+
+### 필드 설계
+
+구조화 로그의 가치는 검색 가능한 필드에 있다. `request_id`, `user_id`, `tenant_id`, `operation`, `resource_id`, `status`, `duration_ms`, `error_code`처럼 질문에 답할 수 있는 필드를 표준화한다. 메시지 문자열에만 정보를 넣으면 집계와 알림이 어려워진다.
+
+민감정보는 필드 설계 단계에서 제외하거나 tokenization한다. 로그는 디버깅 도구이면서 보안·개인정보 위험 자산이다.
 
 ## 구현 (Implementation)
 

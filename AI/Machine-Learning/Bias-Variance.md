@@ -4,6 +4,7 @@
 - Prerequisites: [Math/Probability-Statistics/Expectation.md](../../Math/Probability-Statistics/Expectation.md), [AI/Machine-Learning/Linear-Regression.md](Linear-Regression.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -15,6 +16,15 @@
 
 너무 단순한 모델은 데이터의 규칙을 놓쳐 늘 비슷하게 틀린다. 너무 복잡한 모델은 훈련 표본의 우연한 잡음까지 따라가 데이터가 조금만 바뀌어도 예측이 크게 달라진다.
 
+```mermaid
+flowchart LR
+    COMPLEX["모델 복잡도 증가"] --> BIAS["편향 감소 경향"]
+    COMPLEX --> VAR["분산 증가 경향"]
+    BIAS --> TEST["검증 오차"]
+    VAR --> TEST
+    NOISE["irreducible noise"] --> TEST
+```
+
 ## 이론 (Theory)
 
 회귀에서 $y=f(x)+\varepsilon$, $E[\varepsilon]=0$, $Var(\varepsilon)=\sigma^2$라 하면 한 점의 기대 제곱오차는
@@ -25,6 +35,29 @@ E[(y-\hat f(x))^2]
 $$
 
 로 분해된다. 마지막 항은 데이터의 irreducible noise다. 복잡도를 키우면 흔히 편향은 줄고 분산은 커지지만 모든 알고리즘에서 단조 법칙처럼 적용되는 것은 아니다.
+
+### 분해식의 의미
+
+기대는 가능한 훈련 데이터셋을 다시 뽑아 모델을 다시 학습하는 과정을 상상한 평균이다.
+
+| 항 | 의미 | 흔한 신호 |
+|---|---|---|
+| Bias² | 평균 모델이 참 함수를 놓치는 정도 | train/valid 모두 나쁨 |
+| Variance | 학습 데이터가 바뀔 때 예측이 흔들림 | train은 좋고 valid가 나쁨 |
+| Noise | 관측 자체의 무작위성 | 어떤 모델도 제거 불가 |
+
+실제 문제에서는 참 함수와 데이터 생성 분포를 모르기 때문에 이 항들을 직접 관측하기보다 learning curve와 재표집으로 간접 진단한다.
+
+### 처방은 원인에 따라 다르다
+
+| 진단 | 가능한 처방 |
+|---|---|
+| 높은 편향 | 더 표현력 큰 모델, feature 추가, 규제 완화, 더 오래 학습 |
+| 높은 분산 | 데이터 추가, 규제 강화, 모델 단순화, bagging, early stopping |
+| 높은 noise | 라벨 품질 개선, 더 좋은 target 정의, 측정 프로세스 개선 |
+| 데이터 누출 | split/pipeline 수정, 중복 제거, 시간·그룹 기준 재평가 |
+
+validation gap만 보고 바로 규제를 넣기보다, split 설계와 baseline을 먼저 확인해야 한다.
 
 ## 구현 (Implementation)
 
@@ -41,6 +74,18 @@ print(diagnose(0.03, 0.25))
 ```
 
 임계값은 예시일 뿐이며 실제 판단은 learning curve, baseline, 불확실성과 함께 한다.
+
+간단한 learning curve 해석 도우미:
+
+```python
+def learning_curve_hint(train_errors, valid_errors):
+    train_last, valid_last = train_errors[-1], valid_errors[-1]
+    if train_last > 0.2 and valid_last > 0.2:
+        return "underfitting/high-bias 가능성"
+    if valid_last - train_last > 0.1:
+        return "overfitting/high-variance 가능성"
+    return "baseline, noise, metric, split을 추가 점검"
+```
 
 ## 복잡도 (Complexity)
 
@@ -59,6 +104,8 @@ print(diagnose(0.03, 0.25))
 - irreducible noise는 어떤 모델도 완전히 제거할 수 없다.
 - 편향은 사회적·통계적 bias와 문맥이 다를 수 있다.
 - 더 큰 모델이 항상 분산만 키우는 단순한 그림은 현대 overparameterized 모델을 완전히 설명하지 못한다.
+- 데이터가 분포 밖으로 이동하면 bias-variance 진단보다 distribution shift 진단이 먼저다.
+- 검증셋이 작으면 fold 변동 자체가 커서 gap 추정이 불안정할 수 있다.
 
 ## TMI
 
@@ -71,6 +118,8 @@ print(diagnose(0.03, 0.25))
 - 다항식 차수를 바꾸며 훈련·검증 오차를 그려라.
 - 데이터 수가 늘 때 고분산 모델의 learning curve가 어떻게 변하는지 설명하라.
 - 규제가 편향과 분산에 미치는 일반적 영향을 설명하라.
+- 같은 모델을 bootstrap 표본 여러 개에 학습시켜 한 점의 예측 분산을 추정하라.
+- 라벨 노이즈를 인위적으로 늘렸을 때 train/validation error 바닥이 어떻게 변하는지 관찰하라.
 
 ## 이어서 읽기 (Reading Path)
 

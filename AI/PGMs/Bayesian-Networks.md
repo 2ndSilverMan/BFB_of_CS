@@ -4,6 +4,7 @@
 - Prerequisites: [Math/Probability-Statistics/Probability-Basics.md](../../Math/Probability-Statistics/Probability-Basics.md), [Math/Discrete/Graph-Theory.md](../../Math/Discrete/Graph-Theory.md), [Math/Probability-Statistics/Bayes-Theorem.md](../../Math/Probability-Statistics/Bayes-Theorem.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -28,6 +29,26 @@ $$
 그래프 구조는 독립성 가정을 담고, 파라미터는 각 노드의 조건부 확률표 또는 조건부 밀도 모델에 들어간다. 이산 변수라면 CPD는 테이블이고, 연속 변수라면 선형 Gaussian CPD나 neural conditional distribution을 사용할 수 있다.
 
 중요한 주의점은 베이지안 네트워크의 방향 간선이 항상 인과를 뜻하지 않는다는 것이다. 관측분포를 효율적으로 표현하기 위한 방향일 수도 있고, 인과 해석을 하려면 추가 가정이 필요하다.
+
+```mermaid
+flowchart LR
+    Structure["DAG structure"] --> CPD["local CPDs"]
+    CPD --> Joint["joint distribution"]
+    Evidence["evidence"] --> Inference["posterior inference"]
+    Joint --> Inference
+```
+
+### CPD 크기와 부모 수
+
+이산 변수 $X$가 $r$개 값을 갖고 부모들이 만드는 조합 수가 $q$라면 CPD의 자유 파라미터 수는 $q(r-1)$이다. 부모가 하나 늘 때마다 CPD가 지수적으로 커질 수 있으므로, 그래프 구조는 통계적 가정이자 파라미터 절약 장치다.
+
+### Markov blanket
+
+한 노드의 Markov blanket은 부모, 자식, 자식의 다른 부모들이다. 이 집합을 알면 해당 노드는 네트워크의 나머지 변수와 조건부 독립이다. Gibbs sampling과 feature selection 직관에서 자주 쓰인다.
+
+### 관측, 개입, 인과
+
+베이지안 네트워크에서 $P(Y\mid X=x)$를 계산하는 것은 $X$를 관측한 조건부 분포다. 인과 개입 $P(Y\mid do(X=x))$와 같으려면 그래프가 인과 DAG이고 필요한 조정 조건이 만족되어야 한다.
 
 ## 구현 (Implementation)
 

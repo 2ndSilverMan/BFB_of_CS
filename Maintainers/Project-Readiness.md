@@ -28,11 +28,12 @@
 1. [Content-Backlog.md](Content-Backlog.md)에서 다음 작성 대상을 고른다.
 2. 해당 주제가 로드맵 필수라면 [Coverage-Matrix.md](Coverage-Matrix.md)를 확인한다.
 3. 핵심 경로 밖의 주제라면 [Topic-Classification.md](Topic-Classification.md)에서 분류를 확인한다.
-4. [Topic-Template.md](../Templates/Topic-Template.md)를 복사해 본문을 작성한다.
-5. 문서 상단 `Reviewed-by`는 검토 전 `-`로 둔다.
-6. 상위 README에서 파일 링크와 `Status`를 갱신한다.
-7. 필요하면 [Reference/](../Reference/)와 [Reference-Coverage.md](Reference-Coverage.md)를 함께 갱신한다.
-8. 아래 검증 명령을 모두 통과시킨다.
+4. 기존 문서를 깊게 만들거나 `Depth: Deep-dive` 후보를 고른다면 [Documentation-Depth-Plan.md](Documentation-Depth-Plan.md)를 확인한다.
+5. Standard 문서는 [Topic-Template.md](../Templates/Topic-Template.md), deep-dive 문서는 [Deep-Dive-Template.md](../Templates/Deep-Dive-Template.md)를 기준으로 본문을 작성한다.
+6. 문서 상단 `Reviewed-by`는 검토 전 `-`로 둔다.
+7. 상위 README에서 파일 링크와 `Status`를 갱신한다.
+8. 필요하면 [Reference/](../Reference/)와 [Reference-Coverage.md](Reference-Coverage.md)를 함께 갱신한다.
+9. 아래 검증 명령을 모두 통과시킨다.
 
 ## 검증 명령
 

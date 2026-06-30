@@ -4,6 +4,7 @@
 - Prerequisites: [Engineering/DevOps/Git/Git-Basics.md](Git-Basics.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -18,6 +19,12 @@
 ## 이론 (Theory)
 
 Merge commit은 두 부모를 가진 새 커밋으로 이력의 분기와 합류를 보존한다. Fast-forward merge는 대상 브랜치가 단순히 앞으로 이동한다. Rebase는 새 커밋 ID를 만들기 때문에 이미 공유한 커밋에 무심코 적용하면 협업자가 혼란을 겪는다.
+
+### 히스토리 정책
+
+Merge는 분기 이력을 보존하고, rebase는 커밋을 새 base 위에 다시 쓰며 히스토리를 선형으로 만든다. 공유된 branch를 rebase하면 다른 사람의 ref와 충돌할 수 있으므로 팀 정책이 필요하다.
+
+좋은 기준은 public history는 보존하고, 개인 작업 branch는 리뷰 전 정리해도 된다는 식이다. 어떤 방식을 쓰든 CI 결과와 리뷰 context가 끊기지 않게 한다.
 
 ## 구현 (Implementation)
 
@@ -75,4 +82,3 @@ git rebase origin/main
 
 - [GitHub Flow](../GitHub/GitHub-Flow.md)
 - [Engineering/Software-Design/Refactoring.md](../../Software-Design/Refactoring.md)
-

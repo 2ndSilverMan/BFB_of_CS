@@ -4,6 +4,7 @@
 - Prerequisites: [AI/Deep-Learning/CNN.md](../Deep-Learning/CNN.md), [AI/Computer-Vision/Image-Basics.md](Image-Basics.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -30,6 +31,26 @@ $$\text{cost} = H\cdot W\cdot C_{in}\cdot C_{out}\cdot k^2$$
 
 이 외에 batch normalization, global average pooling, 데이터 증강이 일반화를 돕는다.
 
+```mermaid
+flowchart LR
+    Stem["stem conv"] --> Stage1["low-level stage"]
+    Stage1 --> Stage2["downsample + more channels"]
+    Stage2 --> Stage3["deep semantic stage"]
+    Stage3 --> Head["task head"]
+```
+
+### Effective receptive field
+
+이론적 receptive field는 층을 쌓으면 커지지만, 실제 gradient가 강하게 기여하는 effective receptive field는 중앙에 더 집중되는 경향이 있다. 그래서 dilation, multi-scale feature, feature pyramid가 작은 객체와 큰 문맥을 함께 다루는 데 쓰인다.
+
+### Downsampling schedule
+
+초반에 너무 빨리 해상도를 줄이면 작은 객체 정보가 사라지고, 너무 늦게 줄이면 연산량이 커진다. 분류 backbone은 보통 점진적으로 해상도를 줄이며 channel을 늘리지만, segmentation/detection에서는 고해상도 feature를 보존하거나 FPN으로 되살린다.
+
+### FLOPs와 실제 latency
+
+FLOPs가 적어도 memory access, kernel launch, tensor layout, hardware 최적화가 나쁘면 느릴 수 있다. depthwise convolution은 이론상 싸지만 작은 batch나 특정 하드웨어에서는 표준 convolution만큼 효율이 나오지 않을 수 있다.
+
 ## 구현 (Implementation)
 
 ```python
@@ -37,6 +58,11 @@ def residual_block(x, conv1, conv2, norm1, norm2, relu):
     out = relu(norm1(conv1(x)))
     out = norm2(conv2(out))
     return relu(out + x)        # 항등 경로(skip connection)
+```
+
+```python
+def conv2d_flops(h, w, cin, cout, kernel):
+    return h * w * cin * cout * kernel * kernel
 ```
 
 ## 복잡도 (Complexity)

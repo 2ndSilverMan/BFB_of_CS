@@ -4,6 +4,7 @@
 - Prerequisites: [AI/Theoretical-ML/Generalization-Bounds.md](../Theoretical-ML/Generalization-Bounds.md), [AI/Causal-Inference/Causal-Representation.md](../Causal-Inference/Causal-Representation.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -21,6 +22,34 @@ Distribution shift는 covariate shift, label shift, concept shift, domain shift�
 
 OOD 성능은 training IID validation만으로 예측하기 어렵다. Stress test, subgroup evaluation, synthetic shift, temporal split, adversarial evaluation이 필요하다.
 
+### Shift 유형
+
+분포 이동은 원인이 다르면 대응도 다르다.
+
+- Covariate shift: $P(X)$가 바뀌지만 $P(Y\mid X)$는 비교적 유지된다.
+- Label shift: class prior $P(Y)$가 바뀐다.
+- Concept shift: $P(Y\mid X)$ 자체가 바뀐다.
+- Domain shift: 환경, 센서, 언어, 사용자 집단이 바뀐다.
+- Temporal shift: 시간에 따라 데이터 생성 과정이 바뀐다.
+
+Concept shift는 특히 어렵다. 예전에는 안전했던 패턴이 새로운 정책, 사용자 행동, 외부 사건으로 더 이상 같은 의미가 아닐 수 있다.
+
+### Worst-group performance
+
+평균 정확도는 취약 subgroup 실패를 숨길 수 있다. 안전 관점에서는 worst-group performance, tail risk, calibration by subgroup을 함께 본다. 전체 성능이 좋아도 특정 언어, 지역, 피부색, 의료 subgroup에서 성능이 급락하면 배포 위험이 크다.
+
+Worst-group 평가에는 충분한 표본 수가 필요하다. 작은 subgroup의 추정값은 variance가 크므로 confidence interval과 함께 보고한다.
+
+### OOD detection과 abstention
+
+OOD detection은 입력이 학습 분포와 다르다는 신호를 감지하는 문제이고, OOD generalization은 그 상황에서도 잘 작동하는 문제다. 둘은 다르다. 감지가 가능하면 abstain, route-to-human, tool restriction, fallback model 같은 운영 정책을 붙일 수 있다.
+
+불확실성 점수는 유용하지만 완전하지 않다. 모델은 자신 있게 틀릴 수 있으므로, high confidence failure 사례를 별도로 수집해야 한다.
+
+### 평가셋 설계
+
+OOD 평가셋은 실제 배포 리스크에서 출발해야 한다. 가능한 모든 shift를 커버할 수 없으므로, 영향이 큰 사용자·환경·시간·공격 시나리오를 우선순위화한다. Temporal split과 geography split은 leakage를 줄이는 데 도움이 된다.
+
 ## 구현 (Implementation)
 
 ```python
@@ -32,6 +61,13 @@ eval_splits = {
 ```
 
 평가는 평균 성능뿐 아니라 worst-group performance와 calibration을 함께 본다.
+
+```python
+def worst_group_score(group_metrics):
+    return min(group_metrics.values())
+```
+
+보고서에는 평균 성능과 worst-group 성능을 동시에 적어야 "잘하는 곳"과 "위험한 곳"을 분리할 수 있다.
 
 ## 복잡도 (Complexity)
 

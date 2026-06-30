@@ -4,6 +4,7 @@
 - Prerequisites: [Engineering/Software-Design/Clean-Code.md](Clean-Code.md), [Engineering/Testing/Unit-Test-Principles.md](../Testing/Unit-Test-Principles.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 

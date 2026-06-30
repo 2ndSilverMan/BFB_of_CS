@@ -4,6 +4,7 @@
 - Prerequisites: [Engineering/Debugging/Structured-Logging.md](Structured-Logging.md), [Engineering/System-Design/Microservices.md](../System-Design/Microservices.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -18,6 +19,12 @@
 ## 이론 (Theory)
 
 Trace는 전체 요청 흐름이고, span은 그 안의 개별 작업 구간이다. Context propagation은 HTTP header나 message metadata로 trace 정보를 다음 서비스에 전달한다.
+
+### Correlation과 causation
+
+Trace ID는 같은 요청 흐름의 이벤트를 묶고, span은 각 서비스의 작업 구간을 나타낸다. Correlation ID가 같다고 모든 지연의 원인이 같은 것은 아니므로, parent-child 관계, timestamp, duration, retry 정보를 함께 봐야 한다.
+
+Queue, batch job, async event에서는 원 요청의 trace context를 명시적으로 전달해야 한다. 그렇지 않으면 장애 분석에서 synchronous call graph만 보이고 실제 원인 event가 사라진다.
 
 ## 구현 (Implementation)
 

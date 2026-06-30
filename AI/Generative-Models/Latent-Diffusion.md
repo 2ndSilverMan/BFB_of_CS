@@ -4,6 +4,7 @@
 - Prerequisites: [AI/Generative-Models/DDPM.md](DDPM.md), [AI/Generative-Models/Autoencoders.md](Autoencoders.md), [AI/Computer-Vision/Image-Generation.md](../Computer-Vision/Image-Generation.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -21,6 +22,29 @@ Latent Diffusion은 pixel space 대신 autoencoder가 만든 압축 latent space
 
 Text conditioning은 text encoder embedding을 cross-attention으로 denoising network에 주입하는 방식이 흔하다. Latent compression이 너무 강하면 세부 정보가 사라지고, 너무 약하면 비용 이점이 줄어든다.
 
+```mermaid
+flowchart LR
+    Image["image"] --> Enc["autoencoder encoder"]
+    Enc --> Z["latent z"]
+    Text["text condition"] --> Cross["cross-attention"]
+    Z --> Denoise["latent denoising U-Net"]
+    Cross --> Denoise
+    Denoise --> Dec["decoder"]
+    Dec --> Out["image"]
+```
+
+### Autoencoder 병목
+
+latent diffusion의 품질은 diffusion model뿐 아니라 autoencoder의 reconstruction 품질에 묶인다. decoder가 texture를 흐리게 만들거나 색을 바꾸면 diffusion이 잘 작동해도 최종 이미지에 artifact가 남는다. 따라서 autoencoder reconstruction metric과 생성 metric을 분리해 본다.
+
+### Conditioning과 guidance
+
+text encoder, tokenizer, cross-attention layer는 prompt alignment를 결정한다. classifier-free guidance는 조건 준수를 높이지만 과도하면 oversaturation과 diversity 감소를 만든다. negative prompt는 unconditional 방향을 조정하는 사용자 인터페이스로 볼 수 있지만 만능 제어 장치는 아니다.
+
+### Editing pipeline
+
+image-to-image와 inpainting은 원본 이미지를 latent로 encode한 뒤 noise 강도와 mask를 조정한다. noise strength가 낮으면 원본 보존이 강하고, 높으면 변경 자유도가 커진다. mask 경계에서는 decoder artifact와 denoising artifact를 구분해야 한다.
+
 ## 구현 (Implementation)
 
 ```python
@@ -31,6 +55,11 @@ image_sample = decoder(denoised_latent)
 ```
 
 실제 pipeline은 tokenizer, text encoder, denoiser, scheduler, decoder, safety filter 같은 구성요소를 분리해 관리한다.
+
+```python
+def latent_shape(height, width, downsample=8, channels=4):
+    return (channels, height // downsample, width // downsample)
+```
 
 ## 복잡도 (Complexity)
 

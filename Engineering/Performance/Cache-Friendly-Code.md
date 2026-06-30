@@ -4,6 +4,7 @@
 - Prerequisites: [Systems/Computer-Architecture/CPU-and-ISA.md](../../Systems/Computer-Architecture/CPU-and-ISA.md), [Data-Structures/Array.md](../../Data-Structures/Array.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -18,6 +19,12 @@
 ## 이론 (Theory)
 
 Row-major 행렬은 행을 연속 순회할 때 cache line을 잘 활용한다. Working set이 cache보다 크면 capacity miss, 나쁜 mapping은 conflict miss가 난다. Blocking은 큰 문제를 cache에 맞는 tile로 나눈다. Pointer-heavy structure는 locality와 prefetch가 불리하다.
+
+### Locality의 종류
+
+Temporal locality는 같은 데이터를 곧 다시 쓰는 성질이고, spatial locality는 가까운 주소의 데이터를 함께 쓰는 성질이다. CPU cache는 이 두 성질을 기대하므로 연속 배열 순회, loop tiling, 데이터 압축이 성능에 큰 영향을 줄 수 있다.
+
+Cache-friendly 최적화는 알고리즘을 복잡하게 만들 수 있으므로 hot path에만 적용한다. 데이터 구조 변경은 correctness와 동시성 영향도 함께 검토한다.
 
 ## 구현 (Implementation)
 

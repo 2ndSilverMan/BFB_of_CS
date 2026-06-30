@@ -4,6 +4,7 @@
 - Prerequisites: [Generalization-Bounds.md](Generalization-Bounds.md), [AI/Machine-Learning/Bias-Variance.md](../Machine-Learning/Bias-Variance.md), [AI/Machine-Learning/Regularization.md](../Machine-Learning/Regularization.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -22,6 +23,26 @@ Double descent는 모델 복잡도가 증가할 때 테스트 오차가 한 번 
 선형 회귀의 minimum-norm interpolator, kernel ridgeless regression, 일부 random feature 모델에서는 double descent가 비교적 명확히 분석된다. 일반화는 단순히 파라미터 수가 아니라 데이터 구조, 노이즈, feature spectrum, 최적화 알고리즘의 implicit bias, regularization에 좌우된다.
 
 현대 딥러닝에서 double descent는 모델 크기뿐 아니라 학습 epoch 수, 데이터 크기, regularization 강도에 대해서도 관찰될 수 있다. 다만 모든 문제에서 뚜렷하게 나타나는 법칙은 아니며, 실험 조건에 민감하다.
+
+### 보간 임계점
+
+보간 임계점은 모델이 훈련 데이터를 거의 완벽하게 맞출 수 있게 되는 경계다. 이 근처에서는 해가 훈련 데이터 noise에 민감해지고, 작은 데이터 변화가 큰 함수 변화로 이어질 수 있다. 그래서 test error peak가 나타날 수 있다.
+
+임계점을 지나면 훈련 오차 0인 해가 많아진다. 이때 optimizer가 어떤 해를 고르는지가 일반화를 좌우한다.
+
+### Benign overfitting
+
+Benign overfitting은 모델이 훈련 데이터를 완전히 보간하면서도 테스트 성능이 좋은 조건을 연구한다. Noise가 주로 낮은 신호 방향이 아니라 많은 약한 방향으로 퍼지고, minimum-norm 해가 신호 방향을 잘 보존하면 보간이 해롭지 않을 수 있다.
+
+이 관점은 overparameterization 자체가 문제가 아니라 데이터 spectrum, noise, 해 선택 bias가 함께 중요하다는 것을 보여 준다.
+
+### Regularization의 역할
+
+Double descent가 regularization이 필요 없다는 뜻은 아니다. Ridge penalty, early stopping, data augmentation, label smoothing은 peak를 낮추거나 위치를 바꿀 수 있다. Regularization은 과매개변수 영역에서도 해 선택을 안정화한다.
+
+### 스케일링 실험 해석
+
+모델 크기를 sweep할 때 dataset size, training compute, optimizer, regularization을 함께 고정하거나 명시해야 한다. 큰 모델이 더 오래 학습되거나 더 좋은 hyperparameter를 받으면 double descent가 아니라 실험 설계 차이를 볼 수 있다.
 
 ## 구현 (Implementation)
 
@@ -49,6 +70,13 @@ for degree in [1, 3, 8, 20, 35]:
 ```
 
 수치적으로 고차 다항식은 불안정할 수 있으므로 실제 분석에서는 정규화, orthogonal basis, 반복 평균을 함께 사용한다.
+
+```python
+def interpolation_ratio(num_parameters, num_samples):
+    return num_parameters / num_samples
+```
+
+이 비율이 1 근처일 때 보간 임계점 후보가 되지만, 실제 peak 위치는 feature rank와 regularization에 따라 달라진다.
 
 ## 복잡도 (Complexity)
 

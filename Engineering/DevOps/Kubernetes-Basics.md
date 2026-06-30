@@ -4,6 +4,7 @@
 - Prerequisites: [Engineering/DevOps/Docker-Basics.md](Docker-Basics.md), [Systems/Distributed-Systems/System-Models.md](../../Systems/Distributed-Systems/System-Models.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -15,11 +16,27 @@ Kubernetes는 containerized workload의 desired state를 선언하면 controller
 
 운영자가 "이 버전 pod 3개"를 선언하면 controller가 죽은 pod를 다시 만들고 rolling update한다. 직접 서버를 하나씩 조작하기보다 상태와 reconciliation loop를 관리한다.
 
+```mermaid
+flowchart LR
+    USER["kubectl apply"] --> API["API Server"]
+    API --> ETCD["etcd desired state"]
+    CTRL["Controller"] --> API
+    SCHED["Scheduler"] --> API
+    KUBELET["kubelet"] --> NODE["Node runtime"]
+    ETCD --> CTRL
+    API --> SCHED
+    API --> KUBELET
+```
+
 ## 이론 (Theory)
 
 Pod는 scheduling·network의 최소 단위, Deployment는 stateless replica와 rollout, Service는 변하는 pod 집합에 stable virtual endpoint를 제공한다. Scheduler는 node를 선택하고 kubelet이 pod를 실행한다. Readiness probe는 traffic 수신 가능, liveness probe는 restart 필요 여부를 나타낸다.
 
 Request는 scheduling 기준, limit는 runtime resource 경계를 제공한다. ConfigMap과 Secret은 설정을 분리하지만 Secret object가 자동으로 완전한 secret management를 제공하는 것은 아니다.
+
+### reconciliation loop
+
+Kubernetes controller는 "현재 상태"와 "원하는 상태"를 계속 비교한다. Deployment가 replicas=3인데 실제 Pod가 2개면 하나를 만든다. 이미지가 바뀌면 새 ReplicaSet을 만들고 점진적으로 traffic을 옮긴다. 이 모델에서는 일회성 명령보다 선언된 상태와 controller의 수렴을 이해해야 한다.
 
 ## 구현 (Implementation)
 
@@ -40,11 +57,32 @@ spec:
         - name: web
           image: example/web@sha256:REPLACE_WITH_DIGEST
           ports: [{containerPort: 8080}]
+          readinessProbe:
+            httpGet: {path: /ready, port: 8080}
+          resources:
+            requests: {cpu: "100m", memory: "128Mi"}
+            limits: {memory: "256Mi"}
+```
+
+Service와 연결하려면 label selector가 맞아야 한다.
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: web
+spec:
+  selector: {app: web}
+  ports:
+    - port: 80
+      targetPort: 8080
 ```
 
 ## 복잡도 (Complexity)
 
 사용자는 reconciliation의 eventual convergence를 다룬다. 운영 비용은 object·node·watch event 수, scheduling, image pull과 control-plane 규모에 좌우된다.
+
+워크드 예제: replicas=3이고 readiness probe가 실패한 Pod가 1개 있으면 Service endpoint에는 준비된 2개만 들어간다. liveness가 실패하면 kubelet이 컨테이너를 재시작한다. readiness는 "트래픽 받을 수 있나", liveness는 "죽어서 다시 띄워야 하나"를 묻는다.
 
 ## 응용 (Applications)
 

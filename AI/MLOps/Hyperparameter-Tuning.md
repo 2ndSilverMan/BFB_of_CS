@@ -4,6 +4,7 @@
 - Prerequisites: [AI/Machine-Learning/Cross-Validation.md](../Machine-Learning/Cross-Validation.md), [AI/MLOps/Experiment-Tracking.md](Experiment-Tracking.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -23,6 +24,34 @@ Multi-fidelity 방법은 작은 data, 적은 epoch, 낮은 resolution 같은 저
 
 검증 점수는 noise가 있으므로 seed, split, metric variance를 같이 기록해야 한다. Test set은 최종 확인용이고 반복 튜닝의 목적 함수가 되면 leakage가 생긴다.
 
+```mermaid
+flowchart LR
+    Space["search space"] --> Sampler["sampler"]
+    Sampler --> Train["train/eval"]
+    Train --> Tracker["experiment tracker"]
+    Tracker --> Sampler
+    Tracker --> Select["model selection"]
+```
+
+### 탐색 방법 선택
+
+| 방법 | 좋은 경우 | 조심할 점 |
+| --- | --- | --- |
+| Grid search | 축이 적고 후보가 명확함 | 차원 증가에 약함 |
+| Random search | 넓은 공간의 빠른 baseline | 중요한 조건부 구조를 놓칠 수 있음 |
+| Bayesian optimization | 실험 비용이 큼 | noisy metric과 병렬화에 민감 |
+| Hyperband/ASHA | epoch 같은 fidelity 축 존재 | 초반 성능이 최종 성능을 잘 대표해야 함 |
+
+탐색 공간은 알고리즘보다 중요할 때가 많다. learning rate처럼 log scale이 자연스러운 값은 log-uniform으로 잡고, batch size와 learning rate처럼 상호작용하는 값은 함께 설계한다.
+
+### Multi-objective tuning
+
+운영 모델은 validation loss 하나만으로 선택하지 않는다. latency, memory, fairness, calibration, model size 같은 제약이 함께 있다. 이때는 hard constraint를 먼저 두고 남은 후보에서 품질을 비교하거나, Pareto frontier를 본다.
+
+### 튜닝 과적합
+
+수백 번 validation을 보면 validation set에도 과적합될 수 있다. 최종 후보는 holdout test 또는 시간상 더 뒤의 데이터에서 한 번만 확인하고, test 결과가 마음에 들지 않는다고 다시 search space를 고치면 이미 test leakage가 시작된다.
+
 ## 구현 (Implementation)
 
 ```python
@@ -38,6 +67,13 @@ for config in sample_configs(search_space, budget=20):
 ```
 
 각 run은 [Experiment-Tracking.md](Experiment-Tracking.md)에 남기고 code, data, seed, environment를 함께 고정한다.
+
+```python
+def objective(metric, latency_ms, max_latency_ms):
+    if latency_ms > max_latency_ms:
+        return float("-inf")
+    return metric
+```
 
 ## 복잡도 (Complexity)
 

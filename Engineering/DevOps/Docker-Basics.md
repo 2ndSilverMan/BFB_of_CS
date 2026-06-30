@@ -4,6 +4,7 @@
 - Prerequisites: [Systems/Operating-Systems/Processes-and-Threads.md](../../Systems/Operating-Systems/Processes-and-Threads.md), [Systems/Operating-Systems/File-Systems.md](../../Systems/Operating-Systems/File-Systems.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -20,6 +21,12 @@ Docker는 application과 dependency를 image로 묶고 격리된 container proce
 Linux container는 namespace로 resource view를 격리하고 cgroup으로 CPU·memory를 제한한다. Dockerfile instruction은 layer와 build cache를 만들며 registry가 image를 배포한다. Volume은 container lifecycle과 독립적인 data를, bind mount는 host path를 연결한다.
 
 Image digest로 immutable artifact를 식별하고, minimal base·non-root user·secret 미포함·multi-stage build를 기본으로 삼는다.
+
+### 이미지 보안과 재현성
+
+좋은 컨테이너 이미지는 작고 재현 가능하며 실행 권한이 제한되어 있다. Base image digest pinning, multi-stage build, non-root user, read-only filesystem, dependency scan, SBOM을 함께 고려한다. Build context에는 secret과 불필요한 파일이 들어가지 않게 `.dockerignore`를 관리한다.
+
+Runtime에서는 CPU/memory limit, health check, signal handling, log stdout/stderr 원칙을 지킨다.
 
 ## 구현 (Implementation)
 

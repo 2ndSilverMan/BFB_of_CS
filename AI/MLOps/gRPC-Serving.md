@@ -4,6 +4,7 @@
 - Prerequisites: [AI/MLOps/REST-Serving.md](REST-Serving.md), [Systems/Networks/TCP-UDP.md](../../Systems/Networks/TCP-UDP.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -21,6 +22,26 @@ Protocol schema는 request·response type, optional field, versioning 규칙을 
 
 Unary RPC는 일반 요청/응답에 쓰고, streaming RPC는 긴 입력, incremental output, bidirectional interaction에 쓴다. Deadline과 cancellation은 overload와 stale request를 줄이는 핵심이다.
 
+```mermaid
+flowchart LR
+    Proto["proto schema"] --> Client["generated client"]
+    Proto --> Server["generated server"]
+    Client --> RPC["deadline + metadata + payload"]
+    RPC --> Server
+```
+
+### Schema evolution
+
+protobuf field number는 한 번 배포되면 오래 남는다. 새 필드는 optional로 추가하고, 기존 field number를 다른 의미로 재사용하지 않는다. 제거된 필드는 reserved로 남겨 구버전 payload가 잘못 해석되는 것을 막는다.
+
+### Deadline, retry, idempotency
+
+gRPC에서는 deadline을 명시하고 downstream으로 전파해야 한다. client retry는 read-only 또는 idempotent 요청에만 안전하다. prediction 요청이 logging, quota 차감, feature refresh 같은 side effect를 동반한다면 retry policy가 중복 효과를 만들 수 있다.
+
+### Streaming inference
+
+server streaming은 긴 생성 결과를 token/chunk 단위로 보내는 데 맞고, client streaming은 긴 입력을 나눠 보낼 때 유용하다. bidirectional streaming은 상호작용이 강하지만 backpressure와 cancellation 처리가 더 중요하다.
+
 ## 구현 (Implementation)
 
 ```proto
@@ -35,6 +56,14 @@ message PredictRequest {
 ```
 
 서버 구현은 validation, preprocessing, batching, auth, observability를 REST 서빙과 동일하게 고려한다.
+
+```proto
+message PredictResponse {
+  string model_version = 1;
+  repeated float scores = 2;
+  string request_id = 3;
+}
+```
 
 ## 복잡도 (Complexity)
 

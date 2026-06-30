@@ -4,6 +4,7 @@
 - Prerequisites: [Engineering/Debugging/Breakpoints-and-Stepping.md](Breakpoints-and-Stepping.md), [Engineering/Debugging/Structured-Logging.md](Structured-Logging.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -18,6 +19,12 @@
 ## 이론 (Theory)
 
 조건식은 디버거가 평가하므로 부작용이 없는 표현식을 써야 한다. Logpoint는 production-like 환경에서 코드 변경 없이 관찰을 늘릴 때 유용하지만 성능과 민감정보 노출을 조심한다.
+
+### 조건의 품질
+
+조건부 중단점은 "언제 실패하는가"를 코드로 표현한 가설이다. 조건이 너무 넓으면 너무 자주 멈추고, 너무 좁으면 실패 순간을 놓친다. user id, request id, sequence number, boundary value처럼 재현 조건과 직접 연결된 값을 사용한다.
+
+Logpoint는 production-like 환경에서 상태를 관찰할 때 유용하지만 민감정보와 성능 비용을 조심해야 한다. 임시 관찰 코드는 이슈가 끝나면 제거하거나 정식 구조화 로그로 승격한다.
 
 ## 구현 (Implementation)
 

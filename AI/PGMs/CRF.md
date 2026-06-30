@@ -4,6 +4,7 @@
 - Prerequisites: [MRF.md](MRF.md), [HMM.md](HMM.md), [Cliques.md](Cliques.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -28,6 +29,25 @@ $f_k$는 feature function이고, $Z(x)$는 입력 $x$에 대한 정규화 상수
 
 추론은 forward-backward와 Viterbi의 변형으로 수행한다. 학습은 조건부 로그우도를 최대화하며, gradient는 관측 feature count와 모델 기대 feature count의 차이로 나타난다.
 
+```mermaid
+flowchart LR
+    X["input sequence x"] --> Scores["emission + transition scores"]
+    Scores --> DP["forward / Viterbi"]
+    DP --> Y["label sequence y"]
+```
+
+### HMM과 CRF의 핵심 차이
+
+HMM은 $P(X,Y)$를 모델링하는 생성 모델이고, CRF는 $P(Y\mid X)$를 직접 모델링하는 판별 모델이다. 그래서 CRF는 겹치는 feature, 전체 문맥 feature, neural emission score를 자유롭게 쓸 수 있지만 입력 $X$의 생성 확률을 제공하지 않는다.
+
+### Label bias 문제
+
+locally normalized sequence model은 특정 상태에서 나가는 transition 수나 local normalization 때문에 전역 evidence를 충분히 반영하지 못할 수 있다. CRF는 sequence 전체를 global normalization해 이런 label bias를 줄인다.
+
+### Neural CRF layer
+
+현대 NER에서는 Transformer나 BiLSTM이 token emission score를 만들고 CRF가 label transition 제약을 추가한다. `I-PER`가 `B-LOC` 뒤에 오는 식의 불가능하거나 드문 전이를 학습적으로 억제할 수 있다.
+
 ## 구현 (Implementation)
 
 선형 체인 CRF의 local score는 transition score와 emission feature score를 더한 값으로 생각할 수 있다.
@@ -49,6 +69,13 @@ print(local_score("NOUN", "VERB", "runs", weights))
 ```
 
 실제 CRF는 dynamic programming으로 모든 라벨 시퀀스의 점수를 합산하거나 최적 시퀀스를 찾는다.
+
+```python
+def transition_allowed(prev_tag, tag):
+    if tag.startswith("I-") and prev_tag == "O":
+        return False
+    return True
+```
 
 ## 복잡도 (Complexity)
 

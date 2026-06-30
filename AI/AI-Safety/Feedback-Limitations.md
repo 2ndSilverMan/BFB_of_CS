@@ -4,6 +4,7 @@
 - Prerequisites: [AI/AI-Safety/RLHF-Constitutional-AI.md](RLHF-Constitutional-AI.md), [AI/LLMs/RLHF.md](../LLMs/RLHF.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -21,6 +22,38 @@
 
 Reward model collapse는 preference signal이 좁아지거나 모델 응답이 reward model의 특정 패턴에 몰리면서 다양성과 실제 품질이 떨어지는 현상으로 이해할 수 있다.
 
+### 피드백 noise의 종류
+
+인간 피드백은 단순히 noisy label이 아니라 여러 종류의 불확실성을 담는다.
+
+- Aleatoric ambiguity: 문제 자체가 애매해서 합의된 답이 없다.
+- Epistemic gap: 평가자가 필요한 지식이나 맥락을 모른다.
+- Preference diversity: 사용자 집단마다 진짜 선호가 다르다.
+- Instruction drift: 라벨링 지침이 시간에 따라 해석이 바뀐다.
+- Fatigue effect: 반복 작업으로 판단 품질이 떨어진다.
+
+이들을 모두 "라벨 오류"로만 처리하면 중요한 신호를 잃는다. 특히 disagreement는 정책 선택의 모호성이나 domain split의 신호일 수 있다.
+
+### 평가자-모델 역량 격차
+
+모델이 평가자보다 더 많은 정보를 처리하거나 더 긴 추론을 수행하면, 평가자는 그 답이 맞는지보다 그럴듯해 보이는지를 평가하게 된다. 이때 선호 최적화는 설득력, 자신감, 형식적 완성도를 과보상할 수 있다.
+
+전문 영역에서는 일반 라벨러 평가와 expert audit을 분리해야 한다. 긴 추론이나 도구 사용 결과는 최종 답만 보지 말고 intermediate evidence, tool log, citation trace를 함께 검토한다.
+
+### Reward overoptimization curve
+
+정책 최적화가 진행될수록 reward model score는 계속 올라가도 독립 human score는 어느 순간 정체하거나 하락할 수 있다. 이 괴리가 reward overoptimization의 핵심 신호다.
+
+운영에서는 다음 곡선을 함께 본다.
+
+- Reward model score
+- Holdout human preference
+- Safety violation rate
+- Diversity and refusal quality
+- Calibration on known-answer tasks
+
+Reward model이 policy의 최신 분포를 계속 따라가지 못하면, 높은 score는 품질이 아니라 exploitation을 의미할 수 있다.
+
 ## 구현 (Implementation)
 
 ```python
@@ -33,6 +66,15 @@ feedback_audit = {
 ```
 
 Reward가 올라갈수록 사람 평가도 함께 올라가는지 별도 holdout과 red team set에서 확인한다.
+
+```python
+def overoptimization_alert(reward_scores, human_scores, window=5):
+    reward_trend = reward_scores[-1] - reward_scores[-window]
+    human_trend = human_scores[-1] - human_scores[-window]
+    return reward_trend > 0 and human_trend <= 0
+```
+
+이 경고는 학습 중단 조건이 아니라 독립 평가와 데이터 재점검을 요구하는 신호로 다룬다.
 
 ## 복잡도 (Complexity)
 

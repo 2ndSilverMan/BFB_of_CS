@@ -4,6 +4,7 @@
 - Prerequisites: [Math/Probability-Statistics/Probability-Basics.md](Probability-Basics.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -14,6 +15,15 @@
 ## 직관 (Intuition)
 
 동전을 열 번 던졌을 때 앞면의 개수는 0부터 10까지인 이산 확률 변수다. 사람의 키는 구간 안의 연속적인 값을 갖는 연속 확률 변수로 모델링할 수 있다. 분포는 가능한 값의 목록뿐 아니라 값마다 확률이 어떻게 퍼져 있는지를 함께 말한다.
+
+```mermaid
+flowchart TD
+    RV["확률 변수 X"] --> DISC["이산형<br/>PMF: P(X=x)"]
+    RV --> CONT["연속형<br/>PDF: f(x)"]
+    DISC --> CDF["CDF: P(X <= x)"]
+    CONT --> CDF
+    CDF --> Q["Quantile<br/>F^{-1}(q)"]
+```
 
 ## 이론 (Theory)
 
@@ -34,6 +44,24 @@ $$
 
 PDF 값은 확률 자체가 아니며 1보다 클 수도 있다. 연속 변수에서 한 점의 확률은 0이고, 구간 아래 면적이 확률이다.
 
+### CDF와 quantile
+
+누적분포함수 $F(x)=P(X\le x)$는 이산·연속 모두에 쓸 수 있는 공통 표현이다. 분포 비교, 분위수, 임계값 계산은 보통 CDF를 통해 이루어진다. $q$-quantile은 $F(x)\ge q$가 되는 가장 작은 $x$로 생각할 수 있고, 중앙값은 $q=0.5$인 분위수다.
+
+예를 들어 모델 점수의 95번째 분위수는 "정상 데이터의 95%가 이 값 이하"라는 임계값으로 쓸 수 있다. 단, 꼬리가 두꺼운 분포에서는 평균과 표준편차보다 분위수가 더 안정적인 요약일 수 있다.
+
+### 어떤 분포를 고를까
+
+| 데이터 형태 | 자연스러운 후보 | 점검할 질문 |
+|---|---|---|
+| 성공/실패 | Bernoulli, Binomial | 시행이 독립이고 성공확률이 일정한가? |
+| 단위 시간 사건 횟수 | Poisson | 사건 발생률이 대략 일정한가? |
+| 대기시간 | Exponential, Gamma | memoryless 가정이 맞는가? |
+| 측정 오차 | Normal, Student-t | 꼬리가 두껍거나 이상치가 많은가? |
+| 양수 크기 | Log-normal, Gamma | 로그를 취하면 더 대칭적인가? |
+
+분포는 "데이터 모양에 맞는 곡선"이 아니라 데이터 생성 과정에 대한 가정이다. 같은 히스토그램도 여러 분포로 근사할 수 있으므로, 도메인 의미와 예측 목적을 함께 봐야 한다.
+
 ## 구현 (Implementation)
 
 ```python
@@ -51,9 +79,22 @@ print(sum(samples) / len(samples))  # Binomial(10, 0.3)의 평균 약 3
 print(normal_pdf(0.0))
 ```
 
+경험적 CDF는 표본에서 분위수를 직접 추정하는 간단한 방법이다.
+
+```python
+def empirical_quantile(samples, q):
+    xs = sorted(samples)
+    idx = min(len(xs) - 1, int(q * len(xs)))
+    return xs[idx]
+
+print(empirical_quantile(samples, 0.95))
+```
+
 ## 복잡도 (Complexity)
 
 닫힌 형태의 PMF/PDF 한 점 평가는 보통 `O(1)`이다. 표본 $N$개 생성과 통계량 계산은 `O(N)`이다. 고차원 결합분포는 가능한 조합 수나 적분 비용이 차원에 따라 급격히 커질 수 있다.
+
+경험적 분위수를 정렬로 구하면 `O(N log N)`이고, 선택 알고리즘을 쓰면 특정 분위수 하나는 평균 `O(N)`에 구할 수 있다. 스트리밍 데이터에서는 reservoir sampling이나 online quantile sketch가 필요할 수 있다.
 
 ## 응용 (Applications)
 
@@ -68,6 +109,8 @@ print(normal_pdf(0.0))
 - 데이터가 종 모양이라고 자동으로 정규분포인 것은 아니다.
 - 같은 평균과 분산을 가진 분포도 꼬리와 모양은 다를 수 있다.
 - 독립이고 같은 분포를 따른다는 i.i.d. 가정은 편리하지만 실제 데이터에서는 확인이 필요하다.
+- 분포의 매개변수 표기는 책과 라이브러리마다 다를 수 있다. 특히 Exponential/Gamma의 rate와 scale을 혼동하기 쉽다.
+- 주변분포가 정규분포처럼 보여도 결합분포의 의존 구조가 단순하다는 뜻은 아니다.
 
 ## TMI
 
@@ -80,6 +123,8 @@ print(normal_pdf(0.0))
 - Bernoulli와 Binomial 분포의 차이를 예로 설명하라.
 - 표준정규 PDF 아래 전체 면적이 1인 이유를 조사하라.
 - 평균이 같은 Poisson 표본과 Normal 표본을 생성해 히스토그램 모양을 비교하라.
+- 같은 평균·분산을 가진 두 분포를 골라 꼬리 확률이 얼마나 다른지 비교하라.
+- 표본 크기를 바꾸며 경험적 95% 분위수 추정값의 흔들림을 관찰하라.
 
 ## 이어서 읽기 (Reading Path)
 

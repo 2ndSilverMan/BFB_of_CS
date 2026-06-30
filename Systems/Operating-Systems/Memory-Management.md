@@ -4,6 +4,7 @@
 - Prerequisites: [Systems/Operating-Systems/Processes-and-Threads.md](Processes-and-Threads.md), [Systems/Computer-Architecture/Data-Representation.md](../Computer-Architecture/Data-Representation.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 

@@ -4,6 +4,7 @@
 - Prerequisites: [AI/MLOps/Model-Monitoring.md](Model-Monitoring.md), [AI/MLOps/Data-Drift.md](Data-Drift.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -21,6 +22,37 @@
 
 Feedback data에는 selection bias가 자주 들어간다. 모델이 보여 준 item에 대해서만 click label을 얻는 추천 시스템이 대표적이다. Exploration, randomized holdout, counterfactual logging이 bias 추정에 도움을 준다.
 
+```mermaid
+flowchart LR
+    Predict["prediction"] --> Action["product action"]
+    Action --> Outcome["user/outcome feedback"]
+    Outcome --> Monitor["monitoring"]
+    Monitor --> Trigger["retraining trigger"]
+    Trigger --> Pipeline["training pipeline"]
+    Pipeline --> Deploy["gated deployment"]
+    Deploy --> Predict
+```
+
+### Trigger는 결정이 아니라 후보 신호다
+
+재학습 trigger가 켜졌다는 것은 새 모델을 만들 후보가 생겼다는 뜻이지, 자동 배포를 해도 된다는 뜻이 아니다. 새 데이터의 label 품질, coverage, drift 원인, upstream incident 여부, business calendar, offline regression gate를 확인해야 한다.
+
+| Trigger | 장점 | 위험 |
+| --- | --- | --- |
+| Time-based | 단순하고 예측 가능 | 필요 없는 재학습 |
+| Volume-based | 충분한 새 label 확보 | 분포 변화는 놓칠 수 있음 |
+| Drift-based | 변화에 민감 | 성능 영향 없는 drift에도 반응 |
+| Performance-based | 목표와 직접 연결 | label delay |
+| Event-based | 정책/제품 변경 대응 | 수동 판단 의존 |
+
+### Selection bias 완화
+
+운영 로그는 모델이 선택한 행동의 결과만 많이 담는다. 추천에서 노출되지 않은 item의 click 여부는 알 수 없고, fraud 모델이 차단한 거래의 실제 결과도 관찰이 편향된다. 무작위 탐색 traffic, holdout policy, propensity logging, counterfactual evaluation이 필요하다.
+
+### 자동화의 정지 조건
+
+재학습 pipeline은 data validation fail, metric regression, segment degradation, calibration 악화, latency 초과, label coverage 부족, experiment guardrail 실패 시 멈춰야 한다. 자동화는 "끝까지 자동 배포"가 아니라 위험한 구간에서 정확히 멈추는 능력이다.
+
 ## 구현 (Implementation)
 
 ```python
@@ -36,6 +68,13 @@ if should_retrain(metrics, trigger):
 ```
 
 재학습 후에는 offline evaluation, shadow/canary, rollback plan을 통과해야 production alias로 승격한다.
+
+```python
+def retraining_candidate(metrics, trigger):
+    return (metrics["new_labels"] >= trigger["min_new_labels"]
+            or metrics["model_age_days"] >= trigger["max_model_age_days"]
+            or metrics["drift_level"] in {"warning", "critical"})
+```
 
 ## 복잡도 (Complexity)
 

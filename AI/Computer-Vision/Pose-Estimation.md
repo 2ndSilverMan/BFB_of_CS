@@ -4,6 +4,7 @@
 - Prerequisites: [AI/Computer-Vision/Object-Detection.md](Object-Detection.md), [AI/Computer-Vision/Semantic-Segmentation.md](Semantic-Segmentation.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -21,6 +22,26 @@ Top-down 방식은 먼저 사람을 탐지하고 각 crop에서 keypoint를 추�
 
 평가는 keypoint distance, PCK, OKS 기반 AP 등을 사용한다. Occlusion, truncation, motion blur, crowded scene이 주요 난점이다.
 
+```mermaid
+flowchart LR
+    Image["image"] --> Person["person detection"]
+    Person --> Heatmap["keypoint heatmaps"]
+    Heatmap --> Decode["coordinate decoding"]
+    Decode --> Skeleton["skeleton + confidence"]
+```
+
+### Annotation 정책
+
+keypoint는 visible, occluded, not-labeled 상태를 구분해야 한다. 가려졌지만 위치를 추정할 수 있는 관절과 이미지 밖으로 잘린 관절은 학습 신호가 다르다. skeleton edge 정의도 dataset마다 다르므로 모델 출력 순서와 평가 스크립트를 고정한다.
+
+### Heatmap과 coordinate regression
+
+heatmap 방식은 각 관절의 위치 확률 지도를 예측해 안정적이지만 출력 해상도와 decoding 방식이 정확도에 영향을 준다. coordinate regression은 직접 좌표를 내지만 multi-modal uncertainty를 표현하기 어렵다. sub-pixel refinement와 flip test가 성능을 올릴 수 있다.
+
+### Video pose
+
+영상에서는 프레임별 예측이 흔들리는 jitter가 문제다. temporal smoothing, tracking, optical flow, temporal transformer를 사용할 수 있지만 빠른 동작을 과도하게 부드럽게 만들지 않도록 latency와 정확도 tradeoff를 본다.
+
 ## 구현 (Implementation)
 
 ```python
@@ -32,6 +53,11 @@ keypoints = {
 ```
 
 좌표와 confidence를 함께 저장하고, missing·occluded keypoint의 annotation 규칙을 명확히 둔다.
+
+```python
+def visible_keypoints(keypoints, threshold=0.5):
+    return {name: xy for name, (*xy, score) in keypoints.items() if score >= threshold}
+```
 
 ## 복잡도 (Complexity)
 

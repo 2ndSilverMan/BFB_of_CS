@@ -4,6 +4,7 @@
 - Prerequisites: [TD-Learning.md](TD-Learning.md), [AI/Machine-Learning/Linear-Regression.md](../Machine-Learning/Linear-Regression.md), [AI/Deep-Learning/MLP.md](../Deep-Learning/MLP.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -33,6 +34,30 @@ $$
 
 비선형 신경망 근사는 표현력이 크지만 안정성이 어려워진다. bootstrapping, off-policy learning, function approximation이 함께 있을 때 발산할 수 있는 “deadly triad”가 유명하다.
 
+### Generalization과 extrapolation
+
+함수 근사의 장점은 본 적 없는 상태에도 값을 예측한다는 것이다. 하지만 이 일반화는 항상 좋은 방향이 아니다. 학습 데이터가 거의 없는 상태-행동 영역에서는 모델이 임의로 extrapolation할 수 있고, Q값이 과대평가되면 정책이 그 영역으로 끌려간다.
+
+RL에서는 데이터 분포가 정책에 의해 바뀐다. 모델이 어떤 행동을 좋게 평가하면 그 행동을 더 자주 하게 되고, 그 결과 새로운 데이터 분포가 생긴다. 이 feedback loop 때문에 supervised learning보다 안정성이 어렵다.
+
+### Projected Bellman error
+
+Tabular setting에서는 Bellman backup 결과를 정확히 저장할 수 있다. 함수 근사에서는 backup된 값을 함수 class 안에 완전히 표현하지 못할 수 있다. 그래서 실제 업데이트는 Bellman backup을 함수 공간에 투영하는 과정이 된다.
+
+이때 function class, feature, optimizer, sampling distribution이 모두 학습 결과에 영향을 준다. 같은 Bellman equation을 목표로 해도 어떤 상태를 자주 샘플링하느냐에 따라 approximation error가 다르게 나타난다.
+
+### 안정화 장치
+
+딥 RL에서 흔한 안정화 장치는 다음과 같다.
+
+- Replay buffer: 연속 transition의 상관을 줄이고 데이터를 재사용한다.
+- Target network: bootstrapping target이 너무 빨리 움직이지 않게 한다.
+- Gradient clipping: 큰 TD error가 업데이트를 폭주시킬 위험을 줄인다.
+- Reward scaling: target 크기를 optimizer가 다루기 쉬운 범위로 맞춘다.
+- Normalization: observation과 return scale 변화에 덜 민감하게 한다.
+
+이 장치들은 수렴 보장을 완성하는 마법이 아니라, 움직이는 target과 correlated data가 만드는 실무 불안정성을 줄이는 engineering pattern이다.
+
 ## 구현 (Implementation)
 
 선형 TD(0) 업데이트는 다음처럼 쓸 수 있다.
@@ -51,6 +76,14 @@ print(td_linear_update([0.1, 0.2], [1, 0], 1.0, [0, 1], 0.9, 0.01))
 ```
 
 신경망을 쓰면 loss를 만들고 backpropagation으로 파라미터를 갱신한다.
+
+```python
+def mse_td_loss(predicted_values, targets):
+    errors = [pred - target for pred, target in zip(predicted_values, targets)]
+    return sum(error ** 2 for error in errors) / len(errors)
+```
+
+함수 근사에서는 target 계산 방식과 샘플링 분포가 loss 자체만큼 중요하다.
 
 ## 복잡도 (Complexity)
 

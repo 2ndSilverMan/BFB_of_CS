@@ -4,93 +4,103 @@
 - Prerequisites: [Programming/Functions-and-Recursion.md](../../Functions-and-Recursion.md), [Python 컬렉션](Python-Collections.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
 ## 개념 (Concept)
 
-함수는 재사용 가능한 코드 조각이고, 모듈은 Python 파일 단위로 코드를 묶는 방법이다. 함수를 작게 나누고 모듈로 정리하면 프로그램을 읽고 테스트하기 쉬워진다.
+함수는 재사용 가능한 코드 단위, 모듈은 파일 단위 코드 묶음이다. 핵심 메커니즘은 **LEGB 이름 탐색**과 **함수가 일급 객체**라는 점, 그리고 **모듈이 `sys.modules` 에 캐시되는 싱글턴**이라는 점이다.
 
 ## 직관 (Intuition)
 
-함수는 이름 붙은 조리법이고, 모듈은 관련 조리법을 모아 둔 공책이다. 같은 일을 여러 번 복붙하지 않고 이름으로 호출한다.
+함수는 이름 붙은 조리법, 모듈은 조리법 공책. 같은 일을 복붙하지 않고 이름으로 호출한다. Python에서 함수는 **값**이라 변수에 담고 인자로 넘기고 반환할 수 있어, 데코레이터·콜백·고차 함수가 자연스럽다.
 
 ## 핵심 문법 (Core Syntax)
 
 ```python
 def greet(name, excited=False):
-    suffix = "!" if excited else "."
-    return f"Hello, {name}{suffix}"
-
+    return f"Hello, {name}{'!' if excited else '.'}"
 
 print(greet("Ada"))
 print(greet("Linus", excited=True))
-```
 
-다른 파일의 함수는 `import`로 가져온다.
-
-```python
 import math
-
-print(math.sqrt(9))
+from math import sqrt as root            # 별칭
+print(math.pi, root(9))
 ```
 
 ## 이론 (Theory)
 
-Python 이름 탐색은 지역(local), 둘러싼 함수(enclosing), 전역(global), 내장(builtins) 순서로 일어난다. 기본 인자는 함수 정의 시점에 한 번 만들어지므로 mutable default는 피한다.
+### 1. LEGB 이름 탐색
+
+이름은 **Local → Enclosing → Global → Builtins** 순으로 찾는다. 함수 안에서 전역을 *바꾸려면* `global`, 둘러싼 함수 변수를 바꾸려면 `nonlocal` 이 필요하다(읽기는 자동).
+
+### 2. 클로저와 late binding 함정
+
+중첩 함수는 둘러싼 변수를 **참조로 캡처**한다(값 복사 아님). 그래서 루프에서 만든 클로저들은 **루프가 끝난 뒤의 최종 값**을 공유한다 — 기본 인자(`x=i`)로 그 시점 값을 고정해야 한다.
+
+### 3. 가변 기본 인자
+
+기본값은 **함수 정의 시 한 번** 평가된다. `def f(acc=[])` 의 `[]` 는 호출 간 공유돼 누적된다 → `None` 센티넬 패턴.
+
+### 4. 모듈 = 캐시된 싱글턴
+
+`import m` 은 처음 한 번 `m.py` 를 실행해 모듈 객체를 만들고 `sys.modules` 에 캐시한다. 이후 import는 캐시를 돌려준다 — 그래서 **top-level 부작용(side effect)** 은 import 시점에 한 번 일어난다.
 
 ## 구현 (Implementation)
 
-함수는 하나의 책임과 명확한 인자·반환값을 갖게 작성하고, module은 import side effect가 없도록 구성한다. 실행용 코드는 `main()`과 module guard 아래에 두어 import와 실행을 분리한다.
-
 ```python
-def greet(name, excited=False):
-    return f"Hello, {name}{'!' if excited else '.'}"
+# late binding 함정과 해결
+funcs = [lambda: i for i in range(3)]
+print([f() for f in funcs])              # [2, 2, 2]  ← 모두 최종 i 공유
+funcs = [lambda i=i: i for i in range(3)]
+print([f() for f in funcs])              # [0, 1, 2]  ← 기본 인자로 고정
 
-
-def main():
-    print(greet("Ada"))
-    print(greet("Linus", excited=True))
-
-
-if __name__ == "__main__":   # import와 실행을 분리
-    main()
+def append_to(x, acc=None):              # 가변 기본 인자 회피
+    acc = [] if acc is None else acc
+    acc.append(x); return acc
 ```
 
 ## 복잡도 (Complexity)
 
-함수 호출은 Python에서 작지 않은 상수 비용이 있으므로 아주 작은 연산을 과도하게 쪼개면 hot path에서 부담이 될 수 있다. Module import는 한 번 cache되지만 초기 import 시점의 I/O와 top-level 실행 비용은 남는다.
+| 항목 | 특성 |
+|---|---|
+| 함수 호출 | 프레임 생성 등 작지 않은 상수 — hot path 과분할 주의 |
+| 모듈 import | 첫 회만 실행·캐시, 이후 $O(1)$ 조회 |
+| `*args`/`**kwargs` | 튜플·딕트 생성 비용 |
 
 ## 응용 (Applications)
 
-- 반복 코드 제거
-- 테스트 가능한 단위 구성
-- 표준 라이브러리와 외부 패키지 사용
-- 프로젝트 구조화
+- 반복 제거·테스트 가능한 단위, 고차 함수·데코레이터.
+- 표준 라이브러리·외부 패키지 사용, 패키지로 프로젝트 구조화.
 
 ## 흔한 오해 (Common Misunderstandings)
 
-- `return`이 없으면 함수는 `None`을 반환한다.
-- Mutable default argument는 호출 사이에 상태를 공유할 수 있다.
-- `from module import *`는 이름 충돌을 만들기 쉬워 피하는 편이 좋다.
-- 모듈 import는 파일 실행이기도 하므로 top-level side effect를 조심한다.
+- **`return` 없으면 `None` 반환**.
+- **가변 기본 인자는 호출 간 상태를 공유** — `None` 센티넬.
+- **루프 클로저는 late binding** — 변수를 참조로 캡처.
+- **`from m import *` 는 이름 충돌** — 피한다.
+- **모듈 import는 파일 실행** — top-level 부작용 주의.
 
 ## TMI
 
-- 함수도 객체라 변수에 담거나 인자로 넘길 수 있다.
-- `*args`, `**kwargs`는 가변 인자를 받을 때 쓴다.
-- 패키지는 여러 모듈을 디렉터리로 묶은 구조다.
+- 함수도 객체라 `f.__name__`, `f.__doc__`, 속성 부여가 가능하다(데코레이터가 이를 활용).
+- `*args`/`**kwargs` 로 임의 인자를 받고 전달(forwarding)한다.
+- 순환 import는 `sys.modules` 에 부분 완성 모듈이 들어가 `AttributeError` 를 낸다 — 구조로 푼다.
 
 ## 연습 / 확인 문제 (Exercises)
 
-- 리스트 평균을 계산하는 함수를 작성하라.
-- Mutable default argument 문제를 재현하고 고쳐라.
-- 직접 만든 모듈을 다른 파일에서 import해 보라.
+- 루프에서 클로저 리스트를 만들어 late binding을 재현하고 고쳐라.
+- 가변 기본 인자 버그를 재현하고 센티넬로 고쳐라.
+- `nonlocal` 로 카운터 클로저를 만들어라.
+- 직접 만든 모듈을 import하고 top-level `print` 가 언제 실행되는지 확인하라.
 
 ## 이어서 읽기 (Reading Path)
 
 - 이전: [Python 컬렉션](Python-Collections.md)
-- 다음: [Python 파일과 예외](Python-Files-and-Errors.md), [Python OOP](Python-OOP.md)
+- 다음: [Python 파일과 예외](Python-Files-and-Errors.md)
+- 관련: [Python OOP](Python-OOP.md), [함수와 재귀](../../Functions-and-Recursion.md)
 
 ## 참조 (References)
 

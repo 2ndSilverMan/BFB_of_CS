@@ -4,6 +4,7 @@
 - Prerequisites: [Systems/Databases/Relational-Model-and-SQL.md](Relational-Model-and-SQL.md), [Data-Structures/Binary-Tree.md](../../Data-Structures/Binary-Tree.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 

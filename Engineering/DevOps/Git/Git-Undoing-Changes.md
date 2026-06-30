@@ -4,6 +4,7 @@
 - Prerequisites: [Engineering/DevOps/Git/Git-Basics.md](Git-Basics.md), [Engineering/DevOps/Git/Git-Remotes.md](Git-Remotes.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -18,6 +19,12 @@ Git에서 변경 되돌리기는 working tree, staging area, commit history 중 
 ## 이론 (Theory)
 
 `git restore`는 파일 내용을 이전 상태로 되돌리거나 staged 변경을 내린다. `git revert`는 기존 commit의 반대 변경을 새 commit으로 만들어 공유 이력에 안전하다. `git reset`은 branch pointer와 index/working tree를 이동하며, 특히 `--hard`는 작업 내용을 잃게 할 수 있다.
+
+### 되돌리기의 위험도
+
+Undo 명령은 어떤 영역을 바꾸는지에 따라 위험도가 다르다. Working tree만 되돌리는지, index를 바꾸는지, commit history를 이동하는지 구분한다. 공유된 commit을 없애는 방식보다 새 revert commit을 만드는 방식이 협업에서는 안전하다.
+
+작업 전 `status`와 diff를 확인하고, 애매하면 임시 commit이나 stash로 현재 상태를 보존한다. Reflog는 마지막 안전망이지만 의도한 백업 절차는 아니다.
 
 ## 구현 (Implementation)
 
@@ -69,4 +76,3 @@ git reset --soft HEAD~1
 
 - [Engineering/Debugging/Bisect-Debugging.md](../../Debugging/Bisect-Debugging.md)
 - [Engineering/DevOps/GitHub/](../GitHub/)
-

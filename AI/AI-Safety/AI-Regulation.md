@@ -4,6 +4,7 @@
 - Prerequisites: [AI/AI-Safety/AI-Risk-Classification.md](AI-Risk-Classification.md), [AI/AI-Safety/Fairness-Bias.md](Fairness-Bias.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -17,9 +18,48 @@ AI 규제 프레임워크는 AI 시스템의 위험을 줄이고 책임, 투명�
 
 ## 이론 (Theory)
 
-2026-06-23에 확인한 공식 자료 기준, EU AI Act는 위험 기반 접근을 사용하며 unacceptable, high, transparency/limited, minimal/no risk 같은 층위를 둔다. EU 집행위 설명에 따르면 AI Act는 2024-08-01 발효되었고, 금지 관행과 AI literacy 의무는 2025-02-02부터, 거버넌스 규칙과 GPAI 모델 의무는 2025-08-02부터 적용되었다. 전체 적용 기준일은 2026-08-02이지만, high-risk 시스템 중 일부는 전환 기간이 더 길다. 2026-06 기준 집행위 안내는 특정 high-risk 영역은 2027-12-02, 제품에 통합된 high-risk 시스템은 2028-08-02 적용을 안내한다.
+2026-06-30에 확인한 공식 자료 기준, EU AI Act는 위험 기반 접근을 사용하며 unacceptable, high, transparency/limited, minimal/no risk 같은 층위를 둔다. EU 집행위 설명에 따르면 AI Act는 2024-08-01 발효되었고, 금지 관행과 AI literacy 의무는 2025-02-02부터, 거버넌스 규칙과 GPAI 모델 의무는 2025-08-02부터 적용되었다. 전체 적용 기준일은 2026-08-02이지만, high-risk 시스템 중 일부는 전환 기간이 더 길다. 2026-06 기준 집행위 안내는 특정 high-risk 영역은 2027-12-02, 제품에 통합된 high-risk 시스템은 2028-08-02 적용을 안내한다.
 
 NIST AI RMF는 자발적 프레임워크로 AI 위험을 조직의 설계, 개발, 사용, 평가 과정에 통합하도록 돕는다. OECD AI Principles는 인권, 민주적 가치, 투명성, 강건성, 책임성을 trustworthy AI의 핵심 원칙으로 둔다.
+
+### 기술자가 읽어야 하는 규제 요소
+
+규제 문서를 기술 프로세스로 번역하려면 조항 이름보다 evidence requirement를 먼저 본다.
+
+- Risk management: 어떤 위험을 어떻게 식별·측정·완화했는가
+- Data governance: 데이터 출처, 품질, 대표성, 편향 검토가 남아 있는가
+- Technical documentation: 모델 목적, 한계, 평가, 변경 이력이 문서화되는가
+- Logging: 사후 감사에 필요한 입력·출력·의사결정 기록이 있는가
+- Human oversight: 사람이 실제로 개입할 권한과 시간이 있는가
+- Post-market monitoring: 배포 후 사고와 drift를 감시하는가
+
+이 항목들은 법률 문구가 달라도 AI governance의 공통 운영 단위로 자주 나타난다.
+
+### Compliance mapping
+
+규제 준수는 "체크리스트를 만들었다"가 아니라 제품 요구사항, MLOps gate, 운영 로그로 연결되어야 한다. 예를 들어 high-risk use case라면 데이터 변경, 모델 변경, prompt 변경, tool permission 변경이 모두 review trigger가 될 수 있다.
+
+좋은 compliance map은 다음 관계를 가진다.
+
+- Regulatory requirement -> internal control
+- Internal control -> owner
+- Owner -> evidence artifact
+- Evidence artifact -> review cadence
+- Review finding -> remediation ticket
+
+이 연결이 없으면 감사 시 문서는 있어도 실제 통제가 작동했는지 보이기 어렵다.
+
+### Human oversight의 실질성
+
+Human-in-the-loop는 사람이 화면에 있다는 뜻이 아니다. 사람이 모델 결정을 이해할 수 있고, 필요한 정보를 보고, 결정을 뒤집을 권한이 있으며, 시간 압박 때문에 자동 승인만 하지 않는 구조여야 한다.
+
+실질적 감독에는 override 권한, escalation path, explanation, uncertainty signal, audit log, 교육된 reviewer가 필요하다. 고위험 도메인에서는 reviewer의 전문성과 이해상충도 관리해야 한다.
+
+### Vendor와 downstream 책임
+
+범용 모델, 외부 API, 오픈소스 모델을 사용하는 경우에도 deployer 책임이 사라지지 않는다. Provider documentation, model card, data statement, safety eval을 받아도, 실제 사용 맥락의 위험 평가는 배포자가 수행해야 한다.
+
+계약과 운영 문서에는 모델 업데이트 통지, incident reporting, data retention, audit support, fallback plan이 포함되어야 한다.
 
 ## 구현 (Implementation)
 
@@ -33,6 +73,18 @@ compliance_map = {
 ```
 
 실제 적용은 관할권, 산업, 제품 책임, 개인정보, 고용·의료·금융 등 분야별 법과 함께 검토해야 한다.
+
+```python
+def compliance_artifacts(use_case):
+    artifacts = ["system_card", "risk_assessment", "eval_report"]
+    if use_case["risk_tier"] == "high":
+        artifacts += ["human_oversight_plan", "post_market_monitoring", "incident_process"]
+    if use_case.get("uses_vendor_model"):
+        artifacts += ["vendor_documentation", "model_update_policy"]
+    return artifacts
+```
+
+이 함수는 법률 판단이 아니라 엔지니어링 evidence checklist의 예시다. 실제 요구사항은 관할권과 제품 맥락에 따라 별도로 검토해야 한다.
 
 ## 복잡도 (Complexity)
 

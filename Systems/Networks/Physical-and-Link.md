@@ -4,6 +4,7 @@
 - Prerequisites: [Systems/Networks/Network-Models.md](Network-Models.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 

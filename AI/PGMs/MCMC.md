@@ -4,6 +4,7 @@
 - Prerequisites: [Belief-Propagation.md](Belief-Propagation.md), [Math/Probability-Statistics/Distributions.md](../../Math/Probability-Statistics/Distributions.md), [Math/Probability-Statistics/Expectation.md](../../Math/Probability-Statistics/Expectation.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -28,6 +29,26 @@ $$
 이 전이 규칙이 detailed balance를 만족하면 $\pi$가 체인의 정상분포가 된다. Gibbs sampling은 각 변수의 조건부분포 $P(X_i\mid X_{-i})$에서 차례로 샘플링하는 특수한 MCMC다.
 
 실제 사용에서는 burn-in, mixing time, autocorrelation, effective sample size가 중요하다. 샘플이 많아도 서로 강하게 상관되어 있으면 독립 표본 수는 적다.
+
+```mermaid
+flowchart LR
+    Current["current state"] --> Proposal["proposal"]
+    Proposal --> Accept["accept / reject"]
+    Accept --> Chain["Markov chain samples"]
+    Chain --> Diagnostics["ESS / trace / R-hat"]
+```
+
+### 진단 지표
+
+trace plot, autocorrelation, effective sample size, multiple-chain R-hat, posterior predictive check를 함께 본다. 한 체인이 오래 움직인 것만으로 수렴을 믿으면 안 된다. 여러 초기값에서 출발한 체인이 같은 영역을 탐색하는지 확인한다.
+
+### Proposal tuning
+
+random-walk proposal이 너무 작으면 acceptance는 높지만 탐색이 느리고, 너무 크면 거절이 많다. 고차원 연속 posterior에서는 gradient를 쓰는 HMC/NUTS가 훨씬 효율적일 수 있다. 이산 모델에서는 Gibbs나 blocked Gibbs가 적합할 수 있다.
+
+### Burn-in과 thinning
+
+burn-in은 초기 상태 영향 제거에 도움을 주지만 mixing 문제를 해결하지 않는다. thinning은 저장 공간을 줄일 수 있지만 ESS를 자동으로 늘리는 것은 아니다. 가능하면 chain 자체를 더 잘 섞이게 하는 proposal이 우선이다.
 
 ## 구현 (Implementation)
 
@@ -59,6 +80,11 @@ print(round(sum(samples[1000:]) / len(samples[1000:]), 3))
 ```
 
 고차원 모델에서는 proposal 설계가 성능을 좌우한다. 너무 작은 proposal은 천천히 움직이고, 너무 큰 proposal은 거절이 많아진다.
+
+```python
+def acceptance_rate(accepted, total):
+    return accepted / total if total else 0.0
+```
 
 ## 복잡도 (Complexity)
 

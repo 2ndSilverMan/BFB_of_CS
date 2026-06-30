@@ -4,6 +4,7 @@
 - Prerequisites: [Engineering/DevOps/Docker-Basics.md](Docker-Basics.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -18,6 +19,12 @@ Docker Compose는 여러 container service, network, volume, environment를 하�
 ## 이론 (Theory)
 
 Compose file은 service별 image/build, port, environment, volume, depends_on, network를 정의한다. 기본 network 안에서 service 이름이 DNS 이름처럼 동작한다. Compose는 local development와 integration test에 특히 유용하지만, production orchestration은 Kubernetes 같은 별도 플랫폼이 담당하는 경우가 많다.
+
+### 로컬 오케스트레이션의 경계
+
+Docker Compose는 개발·통합 테스트 환경을 빠르게 구성하는 데 좋지만 production orchestrator를 완전히 대체하지 않는다. Healthcheck, dependency readiness, volume lifecycle, network alias, environment override를 명확히 해야 팀 간 재현성이 생긴다.
+
+Compose 파일에는 개발 편의 설정과 production 보안 설정이 섞이지 않게 profile이나 별도 override를 둔다.
 
 ## 구현 (Implementation)
 
@@ -77,4 +84,3 @@ volumes:
 
 - [Engineering/DevOps/Docker-Basics.md](Docker-Basics.md)
 - [Systems/Networks/DNS.md](../../Systems/Networks/DNS.md)
-

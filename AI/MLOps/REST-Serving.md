@@ -4,6 +4,7 @@
 - Prerequisites: [Engineering/DevOps/Docker-Basics.md](../../Engineering/DevOps/Docker-Basics.md), [Engineering/Security/Auth.md](../../Engineering/Security/Auth.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -19,6 +20,36 @@ REST 모델 서빙은 HTTP API로 validation, preprocessing, inference, postproc
 
 API는 explicit schema와 model version을 두고 idempotency, error semantics, size limit를 정의한다. CPU-bound inference는 async만으로 빨라지지 않으며 worker·batch·accelerator를 조절한다. Readiness는 model load 완료 후 성공해야 한다.
 
+```mermaid
+flowchart LR
+    Req["HTTP request"] --> Auth["auth + quota"]
+    Auth --> Valid["schema validation"]
+    Valid --> Prep["preprocess"]
+    Prep --> Infer["model inference"]
+    Infer --> Post["postprocess"]
+    Post --> Resp["response + telemetry"]
+```
+
+### Serving contract
+
+REST endpoint는 URL보다 계약이 중요하다. request schema, response schema, model version, preprocessing version, timeout, error code, size limit, auth scope, rate limit, logging policy를 함께 정의해야 한다.
+
+| 항목 | 예 |
+| --- | --- |
+| Schema | 필수 필드, 타입, 범위 |
+| Version | model, feature, transformer |
+| Error | validation error, timeout, overload |
+| Security | auth, quota, PII redaction |
+| Observability | request id, latency, model version |
+
+### Overload와 fallback
+
+모델 API는 느려질 때 더 많은 요청을 쌓아 두면 tail latency가 폭발한다. queue limit, timeout, circuit breaker, backpressure, fallback response를 정해야 한다. fallback은 cached score, rule-based response, degraded model, retry-after 중 서비스 성격에 맞게 선택한다.
+
+### 배포 패턴
+
+새 모델은 shadow로 먼저 runtime behavior를 보고, canary로 작은 실제 traffic에 적용한 뒤, A/B test나 progressive rollout로 확대한다. readiness/liveness check는 서버 생존과 모델 로드 상태를 구분해야 한다.
+
 ## 구현 (Implementation)
 
 ```python
@@ -30,6 +61,11 @@ def predict_endpoint(payload, model, transformer):
 ```
 
 실제 endpoint는 auth, timeout, request ID, logging redaction을 추가한다.
+
+```python
+def error_response(code, message, request_id):
+    return {"error": {"code": code, "message": message}, "request_id": request_id}
+```
 
 ## 복잡도 (Complexity)
 

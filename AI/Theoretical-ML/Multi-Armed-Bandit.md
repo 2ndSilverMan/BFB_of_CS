@@ -4,6 +4,7 @@
 - Prerequisites: [Regret-Minimization.md](Regret-Minimization.md), [Expert-Algorithms.md](Expert-Algorithms.md), [Math/Probability-Statistics/Distributions.md](../../Math/Probability-Statistics/Distributions.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -31,6 +32,28 @@ $$
 
 Thompson sampling은 각 arm의 posterior에서 샘플을 뽑고 가장 좋아 보이는 arm을 선택한다. stochastic bandit에서는 gap-dependent logarithmic regret 경계가 가능하고, adversarial bandit에서는 EXP3 같은 알고리즘이 쓰인다.
 
+### Feedback 구조
+
+Bandit은 선택한 arm의 보상만 관측한다. 선택하지 않은 arm이 그 라운드에 어떤 보상을 줬을지는 모른다. 이 partial feedback이 full-information 전문가 문제보다 어렵게 만든다.
+
+따라서 bandit 알고리즘은 좋은 arm을 찾기 위한 exploration과, 현재 좋아 보이는 arm을 선택하는 exploitation을 동시에 설계해야 한다.
+
+### UCB의 optimism
+
+UCB는 불확실한 arm을 낙관적으로 평가한다. 경험 평균이 낮아도 시도 횟수가 적으면 confidence bonus가 크므로 다시 선택될 수 있다. 시간이 지나며 $N_i(t)$가 늘면 bonus가 줄어들어 평균 추정이 안정된다.
+
+이 전략은 "불확실하면 시도해 볼 가치가 있다"는 원리를 수식화한다.
+
+### Thompson sampling
+
+Thompson sampling은 각 arm의 보상 평균에 대한 posterior를 유지하고, posterior sample에서 가장 좋아 보이는 arm을 선택한다. 불확실성이 큰 arm은 sample에서 높게 뽑힐 가능성이 있어 자연스럽게 탐험된다.
+
+Bayesian 구현이 직관적이지만, frequentist regret 관점에서도 분석된다.
+
+### Contextual과 offline 평가
+
+Contextual bandit은 사용자나 상황 feature를 보고 arm을 고른다. 이때 단순 arm 평균이 아니라 policy class와 supervised learning이 결합된다. Offline log로 새 bandit policy를 평가하려면 logging policy의 propensity가 필요하고, support가 없으면 평가가 불가능하다.
+
 ## 구현 (Implementation)
 
 UCB 선택 규칙의 핵심은 적게 시도한 arm에 보너스를 주는 것이다.
@@ -54,6 +77,15 @@ print(choose_ucb([10, 3, 0], [0.4, 0.6, 0.0], t=14))
 ```
 
 실제 업데이트에서는 선택한 arm의 표본 평균과 count만 갱신한다.
+
+```python
+def update_running_mean(old_mean, count, reward):
+    count += 1
+    new_mean = old_mean + (reward - old_mean) / count
+    return new_mean, count
+```
+
+Bandit 학습은 선택한 arm의 통계만 업데이트된다는 점이 full-information online learning과 다르다.
 
 ## 복잡도 (Complexity)
 

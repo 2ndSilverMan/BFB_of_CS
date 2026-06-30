@@ -4,6 +4,7 @@
 - Prerequisites: [AI/Machine-Learning/Cross-Validation.md](../Machine-Learning/Cross-Validation.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -19,6 +20,36 @@
 
 Run identity는 immutable input과 output을 연결해야 한다. 최소 기록은 git commit, data version, environment, seed, hyperparameter, metric definition, model artifact다. Metric 이름이 같아도 split·aggregation이 다르면 비교 불가능하다. Parent-child run과 tag로 탐색 구조를 만든다.
 
+```mermaid
+flowchart LR
+    Config["config"] --> Run["run"]
+    Data["data version"] --> Run
+    Code["code commit"] --> Run
+    Run --> Metrics["metrics"]
+    Run --> Artifacts["artifacts"]
+    Run --> Registry["model registry"]
+```
+
+### 비교 가능한 run의 조건
+
+두 run을 나란히 비교하려면 적어도 data split, metric definition, preprocessing, code lineage, random seed policy, evaluation environment가 같거나 차이가 명시되어야 한다. validation F1이라는 이름이 같아도 threshold, averaging 방식, excluded segment가 다르면 다른 metric이다.
+
+| 기록 항목 | 없을 때 생기는 문제 |
+| --- | --- |
+| Dataset/split version | data leakage와 split 차이 구분 불가 |
+| Metric schema | 같은 이름의 다른 계산 혼동 |
+| Environment | dependency 차이 재현 불가 |
+| Artifact digest | 어떤 모델이 평가됐는지 모호 |
+| Parent run | sweep과 ablation 구조 추적 어려움 |
+
+### Artifact와 sample logging
+
+confusion matrix, prediction sample, calibration plot, feature importance, failed cases는 숫자 metric보다 원인 분석에 더 좋다. 다만 원문 데이터나 개인정보를 그대로 저장하면 안 되므로 sample logging은 마스킹, 해시, 접근 제어, retention 정책을 거쳐야 한다.
+
+### 실패한 run의 가치
+
+OOM, NaN, timeout, data validation fail 같은 실패 run도 탐색 공간을 좁히는 정보다. 실패 이유와 마지막 정상 metric을 기록하면 HPO나 분산 학습에서 같은 실패를 반복하지 않는다.
+
 ## 구현 (Implementation)
 
 ```python
@@ -32,6 +63,12 @@ run = {
 ```
 
 Secret·개인정보·원본 민감 데이터를 log하지 않는다.
+
+```python
+def comparable(a, b):
+    keys = ["data_version", "split_version", "metric_schema", "code_family"]
+    return all(a.get(k) == b.get(k) for k in keys)
+```
 
 ## 복잡도 (Complexity)
 

@@ -4,6 +4,7 @@
 - Prerequisites: [Algorithms/Complexity.md](../../Algorithms/Complexity.md), [Engineering/Performance/Benchmarking-Basics.md](Benchmarking-Basics.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -18,6 +19,12 @@
 ## 이론 (Theory)
 
 Asymptotic complexity는 큰 입력에서 증가율을 설명하지만, production에서는 특정 입력 분포와 한정된 범위가 중요하다. Constant factor, memory hierarchy, vectorization, parallelism, algorithm stability, worst-case guardrail을 함께 검토한다. 성능 선택은 benchmark와 correctness risk를 같이 비교해야 한다.
+
+### 비용 모델 만들기
+
+실전 복잡도는 Big-O 식에 실제 비용 계층을 붙이는 작업이다. CPU 연산, cache miss, allocation, lock, syscall, network round trip, disk I/O는 같은 "한 번"이 아니다. 병목이 어디인지 모르면 알고리즘 교체가 효과 없을 수 있다.
+
+Threshold 기반 전략은 telemetry로 검증해야 한다. 작은 입력 최적화가 큰 입력 path를 망치거나, 평균 case를 개선하면서 worst-case guardrail을 없애지 않는지 확인한다.
 
 ## 구현 (Implementation)
 
@@ -71,4 +78,3 @@ def choose_strategy(n: int) -> str:
 
 - [Algorithms/Complexity.md](../../Algorithms/Complexity.md)
 - [Data-Structures/Hash-Table.md](../../Data-Structures/Hash-Table.md)
-

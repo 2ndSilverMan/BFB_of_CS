@@ -4,6 +4,7 @@
 - Prerequisites: [Math/Probability-Statistics/Hypothesis-Testing.md](../../Math/Probability-Statistics/Hypothesis-Testing.md), [AI/MLOps/Experiment-Tracking.md](Experiment-Tracking.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -19,6 +20,35 @@ Offline metric이 좋아도 실제 사용자 행동·latency·failure가 나빠�
 
 Randomization unit은 user·session·request 중 interference와 carryover를 고려해 정한다. Primary metric, guardrail, sample size, duration, stopping rule을 사전에 정한다. SRM(sample ratio mismatch), novelty, seasonality를 점검한다.
 
+```mermaid
+flowchart LR
+    Users["eligible traffic"] --> Assign["random assignment"]
+    Assign --> Control["control"]
+    Assign --> Treat["treatment"]
+    Control --> Metrics["metrics"]
+    Treat --> Metrics
+    Metrics --> Decision["ship / rollback / continue"]
+```
+
+### 배포 실험 패턴
+
+| 패턴 | 사용자 영향 | 목적 |
+| --- | --- | --- |
+| Shadow | 없음 | runtime, latency, prediction diff 관찰 |
+| Canary | 일부 있음 | 안전한 초기 노출 |
+| A/B test | 있음 | 인과 효과 추정 |
+| Interleaving | 있음 | ranking 선호 빠른 비교 |
+
+shadow는 label 기반 사용자 효과를 직접 측정할 수 없지만, schema break, latency, prediction distribution 변화는 미리 볼 수 있다. A/B는 실제 효과를 보지만 사용자 위험과 표본 비용이 있다.
+
+### 실험 설계 체크리스트
+
+실험 시작 전에 hypothesis, primary metric, guardrail metric, randomization unit, eligibility, sample size, duration, exclusion rule, stopping rule, owner를 고정한다. 실험 중간에 metric을 바꾸면 해석이 어려워진다.
+
+### SRM과 조기 중단
+
+sample ratio mismatch는 배정이나 로깅 버그의 강한 신호다. 먼저 실험 결과를 해석하지 말고 assignment, eligibility, bot filtering, logging loss를 조사한다. 매일 p-value를 보고 임의로 멈추는 방식은 false positive를 늘릴 수 있으므로 sequential test나 사전 정의된 중간 분석 규칙을 쓴다.
+
 ## 구현 (Implementation)
 
 ```python
@@ -29,6 +59,12 @@ def assign(user_id, experiment):
     key = f"{experiment}:{user_id}".encode()
     bucket = int(hashlib.sha256(key).hexdigest()[:8], 16) % 100
     return "treatment" if bucket < 50 else "control"
+```
+
+```python
+def sample_ratio(control, treatment):
+    total = control + treatment
+    return control / total, treatment / total
 ```
 
 ## 복잡도 (Complexity)

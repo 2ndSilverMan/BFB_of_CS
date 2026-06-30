@@ -4,6 +4,7 @@
 - Prerequisites: [Math/Linear-Algebra/PCA.md](../../Math/Linear-Algebra/PCA.md), [AI/Machine-Learning/K-Means.md](K-Means.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -14,6 +15,15 @@
 ## 직관 (Intuition)
 
 말린 종이 위의 점은 3차원에 있지만 종이 표면을 펼치면 2차원 좌표로 충분할 수 있다. 차원 축소는 데이터가 실제로 놓인 더 낮은 차원의 구조를 찾아 압축하거나 시각화한다.
+
+```mermaid
+flowchart LR
+    HIGH["고차원 X"] --> FIT["train에서 변환 fit"]
+    FIT --> LOW["저차원 Z"]
+    LOW --> VIS["시각화"]
+    LOW --> MODEL["모델 입력"]
+    HIGH --> WARN["거리/군집 해석 주의"]
+```
 
 ## 이론 (Theory)
 
@@ -27,6 +37,26 @@ PCA는 선형 투영의 분산을 최대화한다. t-SNE는 이웃 확률을 저
 | UMAP | 빠른 manifold 시각화 | hyperparameter와 seed 영향 |
 
 시각화에서 떨어진 군집처럼 보여도 원공간의 명확한 군집을 증명하지 않는다. 변환은 훈련 데이터에 fit하고 검증 데이터에는 transform만 해야 한다.
+
+### 목적별 선택
+
+| 목적 | 더 맞는 선택 |
+|---|---|
+| 선형 압축과 노이즈 제거 | PCA, SVD |
+| sparse text matrix | Truncated SVD |
+| 탐색 시각화 | t-SNE, UMAP |
+| 지도학습 전처리 | CV 안에서 PCA/feature selection |
+| 해석 가능한 feature 유지 | feature selection |
+
+차원 축소는 downstream 목표와 함께 평가해야 한다. 2D plot이 예뻐도 분류·검색·군집 품질이 좋아진다는 보장은 없다.
+
+### 누출과 재현성
+
+PCA 평균, scaling, components는 train split에서만 fit한다. t-SNE/UMAP은 seed, 이웃 수, 거리 metric, 초기화에 민감하므로 그림을 보고 강한 결론을 내리기 전에 여러 seed와 파라미터를 비교한다.
+
+### 거리 보존의 한계
+
+저차원으로 많은 점을 내리면 모든 pairwise distance를 보존할 수 없다. t-SNE는 국소 이웃 보존에 강하고 전역 거리 해석에는 약하다. UMAP도 manifold 가정과 hyperparameter에 따라 구조가 달라진다.
 
 ## 구현 (Implementation)
 
@@ -47,6 +77,13 @@ Z, mean, components = pca_transform(X, 2)
 print(Z.shape)
 ```
 
+새 데이터에는 저장한 평균과 component만 사용한다.
+
+```python
+def pca_apply(X_new, mean, components):
+    return (X_new - mean) @ components
+```
+
 ## 복잡도 (Complexity)
 
 PCA 전체 SVD는 $n\ge d$에서 대략 `O(nd^2)`다. t-SNE와 UMAP은 구현·근사법·이웃 그래프 구성에 따라 달라지며 대규모 데이터에서는 sampling과 근사 최근접 탐색을 사용한다.
@@ -64,6 +101,8 @@ PCA 전체 SVD는 $n\ge d$에서 대략 `O(nd^2)`다. t-SNE와 UMAP은 구현·�
 - 차원이 줄면 항상 모델 성능이 좋아지는 것은 아니다.
 - PCA는 비선형 manifold를 펼치지 못한다.
 - 전처리를 전체 데이터에 fit하면 데이터 누출이다.
+- 비지도 차원 축소도 validation/test 정보를 누출할 수 있다. label을 안 써도 분포 정보를 쓴다.
+- t-SNE/UMAP 그림의 cluster 크기는 원공간 밀도나 개체 수를 그대로 의미하지 않을 수 있다.
 
 ## TMI
 
@@ -76,6 +115,8 @@ PCA 전체 SVD는 $n\ge d$에서 대략 `O(nd^2)`다. t-SNE와 UMAP은 구현·�
 - PCA의 $k$를 바꾸며 재구성 오차를 비교하라.
 - 같은 데이터에서 seed를 바꾼 비선형 시각화가 얼마나 달라지는지 확인하라.
 - feature selection과 feature extraction 예를 각각 들어라.
+- train/test split 이전에 PCA를 fit했을 때와 pipeline 안에서 fit했을 때 평가 차이를 비교하라.
+- 같은 데이터에 PCA와 UMAP을 적용하고 어떤 거리는 보존되고 어떤 해석은 위험한지 설명하라.
 
 ## 이어서 읽기 (Reading Path)
 

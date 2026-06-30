@@ -4,6 +4,7 @@
 - Prerequisites: [Systems/Computer-Architecture/Memory-Hierarchy.md](Memory-Hierarchy.md), [Systems/Computer-Architecture/Pipelining.md](Pipelining.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 

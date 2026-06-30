@@ -4,6 +4,7 @@
 - Prerequisites: [Engineering/Testing/E2E-Testing.md](E2E-Testing.md), [Programming/Languages/JavaScript/JavaScript-DOM-and-Events.md](../../Programming/Languages/JavaScript/JavaScript-DOM-and-Events.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -18,6 +19,12 @@ UI 테스트 도구는 브라우저를 자동화해 사용자의 클릭, 입력,
 ## 이론 (Theory)
 
 좋은 UI 테스트는 사용자 관점의 stable locator를 사용하고, 네트워크·애니메이션·비동기 렌더링을 명시적으로 기다린다. Page object나 screen object 패턴은 반복 조작을 캡슐화한다.
+
+### 도구 선택 기준
+
+Selenium은 브라우저 자동화의 표준성이 강하고, Playwright와 Cypress는 현대 웹 앱의 대기·디버깅 경험이 좋다. 도구 선택은 팀 언어, browser coverage, network mocking, parallel execution, trace viewer, CI 안정성에 따라 달라진다.
+
+좋은 UI 테스트는 selector 안정성이 중요하다. CSS 구조나 텍스트 전체에 과하게 의존하기보다 accessible role, label, test id를 의도적으로 설계한다. 사용자가 보는 의미와 가까운 selector일수록 리팩터링에 강하다.
 
 ## 구현 (Implementation)
 

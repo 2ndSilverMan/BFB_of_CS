@@ -4,6 +4,7 @@
 - Prerequisites: [Systems/Databases/Transactions-and-ACID.md](../Databases/Transactions-and-ACID.md), [Consensus.md](Consensus.md), [Replication.md](Replication.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 

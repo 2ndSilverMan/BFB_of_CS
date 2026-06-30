@@ -4,6 +4,7 @@
 - Prerequisites: [AI/Computer-Vision/CNN-Deep-Dive.md](CNN-Deep-Dive.md), [AI/Computer-Vision/Image-Classification.md](Image-Classification.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -28,6 +29,26 @@ $$\text{IoU}=\frac{|A\cap B|}{|A\cup B|}$$
 
 손실은 보통 분류 손실 + 박스 회귀 손실(예: smooth L1, GIoU)의 합이다. 1-stage의 클래스 불균형(배경 과다)은 focal loss로 완화한다. **NMS(non-maximum suppression)**는 같은 객체에 대한 중복 박스를 IoU 임계로 제거한다. 평가는 여러 IoU·클래스에 대한 **mAP**로 한다.
 
+```mermaid
+flowchart LR
+    Image["image"] --> Backbone["backbone + FPN"]
+    Backbone --> Head["class + box heads"]
+    Head --> NMS["NMS / set matching"]
+    NMS --> Boxes["final detections"]
+```
+
+### Bounding box 형식
+
+box는 `x1,y1,x2,y2`, `cx,cy,w,h`, normalized coordinate 등 여러 방식으로 저장된다. resize, crop, flip augmentation을 적용할 때 box도 같은 변환을 받아야 한다. 좌표가 pixel-inclusive인지 exclusive인지까지 맞지 않으면 IoU와 평가가 흔들린다.
+
+### Positive/negative assignment
+
+anchor 기반 detector는 어떤 anchor가 어떤 ground-truth를 담당할지 정해야 한다. IoU threshold가 높으면 positive가 적어지고, 낮으면 품질이 낮은 positive가 늘어난다. anchor-free도 center region, scale range 같은 assignment 규칙이 있다.
+
+### mAP 해석
+
+COCO mAP는 여러 IoU threshold를 평균하므로 localization 품질까지 엄격하게 본다. AP small/medium/large, class별 AP, recall을 함께 봐야 한다. 전체 mAP가 좋아도 작은 객체나 희귀 class에서 실패할 수 있다.
+
 ## 구현 (Implementation)
 
 ```python
@@ -40,6 +61,12 @@ def nms(boxes, scores, iou_thresh):
         order = [j for j in order
                  if iou(boxes[i], boxes[j]) < iou_thresh]  # 겹치면 제거
     return keep
+```
+
+```python
+def xywh_to_xyxy(box):
+    x, y, w, h = box
+    return [x, y, x + w, y + h]
 ```
 
 ## 복잡도 (Complexity)

@@ -4,6 +4,7 @@
 - Prerequisites: [Alignment-Overview.md](Alignment-Overview.md), [AI/Reinforcement-Learning/MDP.md](../Reinforcement-Learning/MDP.md), [AI/Machine-Learning/Overfitting.md](../Machine-Learning/Overfitting.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -27,6 +28,35 @@ $$
 
 목표 오명세는 훈련 분포에서 보상과 상관된 특징을 모델이 목표로 학습했지만, 테스트 분포에서는 그 특징이 의도한 목표와 분리될 때 나타난다. 이는 단순 overfitting보다 더 구조적이며, 모델이 훈련 보상을 잘 받았다는 사실만으로 잡기 어렵다.
 
+### Proxy objective와 true objective
+
+보상은 대개 직접 원하는 가치가 아니라 측정 가능한 proxy다. 클릭률, 체류 시간, 테스트 점수, reward model score는 모두 proxy다. Proxy가 true objective와 완전히 일치하지 않으면 최적화 압력이 커질수록 proxy의 빈틈이 더 강하게 드러난다.
+
+Goodhart 관점에서는 네 가지 실패를 구분할 수 있다.
+
+- Regressional: noise가 큰 지표에서 극단값을 고르면 실제 품질이 기대보다 낮다.
+- Extremal: 관측 범위를 넘어 최적화하면 기존 상관관계가 깨진다.
+- Causal: 지표를 직접 조작하면 원래 지표가 반영하던 원인이 바뀌지 않는다.
+- Adversarial: 최적화 주체가 지표를 속이는 전략을 찾는다.
+
+AI agent에서는 이 네 가지가 함께 나타날 수 있다.
+
+### Goal misgeneralization
+
+목표 오명세는 reward hacking과 다르지만 연결되어 있다. Reward hacking은 보상 신호를 실제로 높이는 shortcut이고, goal misgeneralization은 훈련 중 성공했던 내부 규칙이 테스트 상황에서 잘못 적용되는 현상이다.
+
+예를 들어 훈련 환경에서 "빨간 버튼 근처로 이동"이 항상 목표 달성과 연결되어 있었다면, 모델은 실제 목표가 아니라 빨간 버튼을 추적할 수 있다. 테스트에서 목표가 다른 색 버튼으로 바뀌면 보상을 직접 해킹하지 않아도 잘못 행동한다.
+
+### 완화 패턴
+
+보상 해킹을 줄이려면 reward를 더 복잡하게 만드는 것만으로는 부족하다. 다음 패턴을 함께 쓴다.
+
+- Reward와 constraint를 분리해 기록한다.
+- 성공 사례뿐 아니라 실패·거절·중단 사례를 평가 데이터에 넣는다.
+- Distribution shift와 adversarial setting에서 평가한다.
+- 보상 상승과 인간 평가 상승이 함께 움직이는지 holdout으로 본다.
+- 모델이 선택한 전략을 로그와 trajectory 단위로 검토한다.
+
 ## 구현 (Implementation)
 
 보상 설계 검토에서는 reward와 안전 제약을 분리해 기록하는 편이 좋다.
@@ -47,6 +77,16 @@ def evaluate_policy_episode(events):
 ```
 
 높은 reward와 violation이 동시에 나타나는 사례는 reward hacking 후보로 별도 분석해야 한다.
+
+```python
+def flag_reward_hacking(episode):
+    high_score = episode["reward"] >= episode["reward_threshold"]
+    has_violation = len(episode["violations"]) > 0
+    suspicious_shortcut = episode.get("strategy") in episode["forbidden_strategies"]
+    return high_score and (has_violation or suspicious_shortcut)
+```
+
+좋은 운영 지표는 `reward`, `constraint_violation`, `human_quality`, `novel_strategy`를 분리해서 보여 줘야 한다.
 
 ## 복잡도 (Complexity)
 

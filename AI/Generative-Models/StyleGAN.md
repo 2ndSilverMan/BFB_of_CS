@@ -4,6 +4,7 @@
 - Prerequisites: [AI/Generative-Models/DCGAN.md](DCGAN.md), [AI/Generative-Models/Conditional-GAN.md](Conditional-GAN.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -21,6 +22,27 @@ Mapping network는 $z$를 $w$ space로 바꿔 disentanglement에 유리한 표�
 
 Path length regularization, adaptive discriminator augmentation 등은 학습 안정성과 품질을 개선하는 데 쓰인다.
 
+```mermaid
+flowchart LR
+    Z["z"] --> Map["mapping network"]
+    Map --> W["w style space"]
+    W --> Mod["layer-wise modulation"]
+    Noise["stochastic noise"] --> Mod
+    Mod --> Image["generated image"]
+```
+
+### Layer별 제어
+
+낮은 resolution layer는 pose, layout, 얼굴형 같은 coarse structure에 더 강하게 관여하고, 높은 resolution layer는 texture, color, 미세 디테일에 더 관여한다. style mixing은 이 가정을 실험적으로 확인하고 latent editing 가능성을 탐색하는 방법이다.
+
+### Truncation trick
+
+latent를 평균 $w$에 가깝게 당기면 고품질·전형적 샘플이 늘지만 다양성이 줄어든다. 데이터셋의 minority mode나 특이한 샘플은 truncation에서 사라지기 쉽다. 품질 데모와 데이터 생성 목적의 설정은 다를 수 있다.
+
+### Inversion과 편집
+
+실제 이미지를 latent로 되돌리는 inversion은 편집의 시작점이다. inversion 오차가 크면 원본 identity나 세부 정보가 바뀐다. 편집 방향이 semantic하게 깨끗한지, 원치 않는 속성도 함께 변하는지 확인해야 한다.
+
 ## 구현 (Implementation)
 
 ```python
@@ -32,6 +54,11 @@ style_layers = {
 ```
 
 Style mixing은 서로 다른 latent의 style을 layer 범위별로 섞어 제어성을 관찰한다.
+
+```python
+def truncation(w, w_avg, psi):
+    return w_avg + psi * (w - w_avg)
+```
 
 ## 복잡도 (Complexity)
 

@@ -4,6 +4,7 @@
 - Prerequisites: [Engineering/Testing/Code-Coverage.md](Code-Coverage.md), [Engineering/Software-Design/Clean-Code.md](../Software-Design/Clean-Code.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -18,6 +19,12 @@
 ## 이론 (Theory)
 
 분석은 syntax tree, type information, data flow, control flow를 사용할 수 있다. 강한 분석일수록 더 많은 버그를 찾지만 false positive와 실행 시간이 늘 수 있다.
+
+### 정적 분석의 계층
+
+Lint는 style과 단순 bug pattern을 빠르게 잡고, type checker는 interface와 data shape 오류를 줄이며, SAST는 security-sensitive pattern을 탐지한다. 각 도구의 false positive 비용과 발견 가능한 결함 종류가 다르므로 같은 gate로 취급하지 않는다.
+
+좋은 정적 분석 운영은 baseline을 만들고 새 위반을 막는 방식으로 시작한다. 기존 legacy 전체를 한 번에 고치려 하면 도구가 꺼지기 쉽다. Rule은 팀의 실제 사고 사례와 코드베이스 특성에 맞춰 조정한다.
 
 ## 구현 (Implementation)
 

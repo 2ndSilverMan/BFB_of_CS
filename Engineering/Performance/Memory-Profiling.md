@@ -4,6 +4,7 @@
 - Prerequisites: [Systems/Operating-Systems/Memory-Management.md](../../Systems/Operating-Systems/Memory-Management.md), [Engineering/Performance/Benchmarking-Basics.md](Benchmarking-Basics.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -18,6 +19,12 @@ CPU 시간이 빠져나가는 곳을 찾듯이 메모리가 오래 붙잡히는 
 ## 이론 (Theory)
 
 Peak RSS, heap size, allocation rate, retained size, GC pause를 구분한다. Leak은 더 이상 필요하지 않은 object가 reference 때문에 해제되지 않는 상태이고, fragmentation은 빈 공간 총량은 충분하지만 연속 공간이 부족한 상태다. Snapshot 비교, allocation tracing, sampling heap profile을 함께 사용하면 누가 만들었고 누가 붙잡는지 추적할 수 있다.
+
+### Heap과 lifetime
+
+메모리 프로파일링은 allocation rate, retained size, object lifetime, reference path를 분리해 본다. 많은 allocation이 문제인지, 해제되지 않아 retained heap이 커지는지, GC pause가 문제인지에 따라 해결책이 다르다.
+
+Leak은 반드시 객체 수가 무한히 증가하는 형태만은 아니다. Cache key 증가, listener 미해제, thread-local, global registry, queue backlog처럼 의도한 참조가 lifetime을 과하게 늘릴 수 있다.
 
 ## 구현 (Implementation)
 
@@ -72,4 +79,3 @@ for stat in snapshot.statistics("lineno")[:5]:
 
 - [Systems/Operating-Systems/Memory-Management.md](../../Systems/Operating-Systems/Memory-Management.md)
 - [Systems/Computer-Architecture/Memory-Hierarchy.md](../../Systems/Computer-Architecture/Memory-Hierarchy.md)
-

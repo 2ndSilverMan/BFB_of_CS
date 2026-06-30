@@ -4,6 +4,7 @@
 - Prerequisites: [Math/Probability-Statistics/Probability-Basics.md](../../Math/Probability-Statistics/Probability-Basics.md), [Math/Probability-Statistics/Expectation.md](../../Math/Probability-Statistics/Expectation.md), [AI/MLOps/AB-Testing.md](../MLOps/AB-Testing.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -51,6 +52,34 @@ $$
 
 와 positivity $0<P(T=1\mid X=x)<1$를 가정한다.
 
+```mermaid
+flowchart LR
+    Unit["unit i"] --> Y1["Y_i(1)"]
+    Unit --> Y0["Y_i(0)"]
+    T["observed treatment"] --> Obs["observed Y"]
+    Y1 --> Obs
+    Y0 --> Obs
+```
+
+### Fundamental problem
+
+한 단위에서 $Y(1)$과 $Y(0)$을 동시에 볼 수 없다는 것이 인과추론의 근본 문제다. 모든 방법은 관측되지 않은 potential outcome을 어떤 가정으로 대체할지에 대한 답이다.
+
+### 주요 estimand
+
+| Estimand | 정의 | 질문 |
+| --- | --- | --- |
+| ATE | $E[Y(1)-Y(0)]$ | 전체 population 평균 효과 |
+| ATT | $E[Y(1)-Y(0)\mid T=1]$ | 처치받은 집단 효과 |
+| ATC | $E[Y(1)-Y(0)\mid T=0]$ | control 집단에 처치했다면 |
+| CATE | $E[Y(1)-Y(0)\mid X=x]$ | subgroup/개인화 효과 |
+
+estimand를 바꾸면 필요한 가정, weighting, 해석이 달라진다.
+
+### SUTVA와 interference
+
+SUTVA는 한 단위의 처치가 다른 단위의 결과에 영향을 주지 않고, 처치 버전이 하나로 잘 정의된다는 가정이다. 네트워크 효과, marketplace, vaccination, 추천 시스템에서는 interference가 쉽게 생긴다.
+
 ## 구현 (Implementation)
 
 무작위 실험 데이터라면 두 그룹 평균 차이가 ATE의 자연스러운 추정량이다.
@@ -73,6 +102,11 @@ print(difference_in_means(rows))
 ```
 
 관측 연구에서는 이 코드만으로 인과 효과를 말할 수 없고, 처치 배정 메커니즘에 대한 가정과 조정이 필요하다.
+
+```python
+def individual_effect(y1, y0):
+    return y1 - y0
+```
 
 ## 복잡도 (Complexity)
 

@@ -4,6 +4,7 @@
 - Prerequisites: [Systems/Operating-Systems/IO-and-Drivers.md](../../Systems/Operating-Systems/IO-and-Drivers.md), [Systems/Networks/Socket-Programming.md](../../Systems/Networks/Socket-Programming.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -18,6 +19,12 @@
 ## 이론 (Theory)
 
 Event loop는 readiness나 completion event를 받아 callback·coroutine을 실행한다. Non-blocking socket, epoll/kqueue/IOCP, io_uring 같은 OS primitive가 기반이다. Async는 I/O-bound concurrency에 강하지만 CPU-bound 작업이 event loop를 점유하면 전체 latency가 나빠진다. Cancellation과 timeout 전파가 중요하다.
+
+### Concurrency와 parallelism
+
+Async I/O는 대기 시간을 겹쳐 처리하는 concurrency 도구다. CPU-bound 작업을 자동으로 빠르게 만드는 parallelism 도구가 아니다. Event loop에서 긴 CPU 작업을 수행하면 다른 I/O callback이 지연된다.
+
+좋은 async 설계는 timeout, cancellation, backpressure, bounded concurrency를 포함한다. 무제한 task 생성은 대기를 숨기다가 memory와 downstream을 터뜨릴 수 있다.
 
 ## 구현 (Implementation)
 
@@ -74,4 +81,3 @@ asyncio.run(main())
 
 - [Systems/Operating-Systems/IO-and-Drivers.md](../../Systems/Operating-Systems/IO-and-Drivers.md)
 - [Systems/Networks/Socket-Programming.md](../../Systems/Networks/Socket-Programming.md)
-

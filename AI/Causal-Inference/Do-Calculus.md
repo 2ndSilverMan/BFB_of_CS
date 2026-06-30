@@ -4,6 +4,7 @@
 - Prerequisites: [SCM.md](SCM.md), [AI/PGMs/d-Separation.md](../PGMs/d-Separation.md), [Math/Probability-Statistics/Bayes-Theorem.md](../../Math/Probability-Statistics/Bayes-Theorem.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -38,6 +39,25 @@ do-calculus의 세 규칙은 그래프에서 특정 d-분리 조건이 성립할
 - 개입의 삽입/삭제: 어떤 개입이 결과 분포에 영향을 주지 않으면 제거할 수 있다.
 
 정확한 판정은 간선을 제거한 mutilated graph에서의 d-분리로 한다. 따라서 do-calculus는 단순한 공식 암기가 아니라 그래프 조작과 독립성 판정의 조합이다.
+
+```mermaid
+flowchart LR
+    Query["P(Y | do(X))"] --> Graph["mutilated graph checks"]
+    Graph --> Rules["do-calculus rules"]
+    Rules --> Estimand["observable estimand"]
+```
+
+### Backdoor와 frontdoor
+
+backdoor는 treatment로 들어오는 비인과 경로를 조정으로 막는 패턴이다. frontdoor는 treatment와 outcome 사이에 unobserved confounding이 있어도, treatment가 mediator를 통해서만 outcome에 영향을 주고 mediator-outcome confounding을 조정할 수 있으면 효과를 식별한다.
+
+### 식별과 추정 분리
+
+do-calculus가 관측분포의 함수로 표현해 주는 것은 식별이다. 실제 finite sample에서 그 식을 어떻게 추정할지는 별도 문제이며, positivity, model misspecification, variance가 남는다.
+
+### 그래프 가정의 민감도
+
+간선 하나의 존재 여부가 식별 여부를 바꿀 수 있다. 따라서 do-calculus 결과는 "그래프가 맞다면"이라는 조건부 결론이다. 대안 DAG에 대한 sensitivity analysis가 실무적으로 중요하다.
 
 ## 구현 (Implementation)
 

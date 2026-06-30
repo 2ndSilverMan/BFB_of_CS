@@ -4,6 +4,7 @@
 - Prerequisites: [Engineering/DevOps/Kubernetes-Basics.md](Kubernetes-Basics.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -20,6 +21,12 @@
 Counter는 누적 event, gauge는 현재값, histogram은 관측 분포 bucket을 기록한다. Rate는 counter 증가율을 계산한다. Label은 차원을 만들지만 user ID 같은 high-cardinality label은 저장·query 비용을 폭발시킨다.
 
 좋은 alert에는 증상, severity, owner, runbook, dashboard link가 있다. For-duration, grouping, inhibition으로 flapping·중복을 줄이고 warning과 paging을 구분한다.
+
+### Alert 품질
+
+좋은 알람은 사용자가 겪는 문제나 곧 문제로 이어질 포화 상태에 연결된다. CPU 80% 같은 증상 metric만으로는 noise가 많을 수 있다. Error budget burn, latency percentile, saturation, queue age처럼 행동 가능한 신호를 우선한다.
+
+알람에는 owner, severity, runbook, silence policy가 필요하다. 응답하지 않을 알람은 시스템을 더 안전하게 만들지 않는다.
 
 ## 구현 (Implementation)
 

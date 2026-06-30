@@ -4,6 +4,7 @@
 - Prerequisites: [Engineering/DevOps/GitHub/GitHub-Code-Review.md](GitHub-Code-Review.md), [Engineering/Testing/Static-Analysis-Linting.md](../../Testing/Static-Analysis-Linting.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -18,6 +19,12 @@ PR이 올라오면 사람이 매번 검사하지 않고, 정해 둔 로봇 작�
 ## 이론 (Theory)
 
 Workflow는 YAML 파일이며 event, job, step, action, runner로 구성된다. Job은 기본적으로 병렬 실행될 수 있고, `needs`로 의존성을 건다. Secret과 token 권한은 최소화해야 하며, 외부 action은 version pinning과 신뢰성 검토가 필요하다. Cache는 build 시간을 줄이지만 key 설계가 중요하다.
+
+### Workflow 보안
+
+GitHub Actions는 repo 권한과 secret에 접근할 수 있으므로 트리거별 신뢰 경계를 구분해야 한다. `pull_request`와 `pull_request_target`, fork PR, protected branch, environment secret의 차이를 이해하지 못하면 supply chain 위험이 생긴다.
+
+Action은 버전이나 SHA로 고정하고, token permission은 최소화한다. Cache와 artifact는 편리하지만 오염과 secret 노출 가능성을 함께 검토한다.
 
 ## 구현 (Implementation)
 
@@ -76,4 +83,3 @@ CI 시간은 dependency install, build, test 수, runner queue, cache hit에 좌
 
 - [Engineering/Testing/Static-Analysis-Linting.md](../../Testing/Static-Analysis-Linting.md)
 - [Engineering/DevOps/](../)
-

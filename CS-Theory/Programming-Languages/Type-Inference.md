@@ -4,81 +4,92 @@
 - Prerequisites: [Type-Systems.md](Type-Systems.md), [Lambda-Calculus.md](Lambda-Calculus.md), [CS-Theory/Compilers/Semantic-Analysis.md](../Compilers/Semantic-Analysis.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
 ## 개념 (Concept)
 
-타입 추론은 프로그래머가 모든 타입을 명시하지 않아도 컴파일러가 표현식과 변수의 타입을 자동으로 계산하는 과정이다. 정적 타입의 안전성과 코드 간결성을 함께 얻기 위한 핵심 기술이다.
+타입 추론은 프로그래머가 타입을 명시하지 않아도 컴파일러가 표현식·변수의 타입을 **자동 계산**하는 것이다. 정적 타입의 안전성과 동적 타입의 간결성을 함께 얻는 핵심 기술로, **Hindley-Milner(HM)** 가 ML·OCaml·Haskell의 토대다.
 
 ## 직관 (Intuition)
 
-`x = 1 + 2`라고 쓰면 `x`가 정수라는 것은 사람이 봐도 명확하다. 타입 추론은 이런 단서를 프로그램 전체의 제약식으로 모아, 가능한 타입을 계산한다.
+`x = 1 + 2` 면 사람도 `x:int` 임을 안다. 타입 추론은 이런 단서를 **프로그램 전체의 제약식**으로 모아 **unification(통일)** 으로 푼다. identity 함수 `fun x -> x` 는 "입력 타입 = 출력 타입"이라는 제약만 있어 가장 일반적인 타입 `'a -> 'a` 로 추론된다.
 
 ## 이론 (Theory)
 
-Hindley-Milner 스타일 타입 추론은 다음 흐름으로 설명할 수 있다.
+### 1. Algorithm W의 4단계
 
-1. 표현식에서 타입 변수를 생성한다.
-2. 연산과 함수 적용에서 타입 제약을 만든다.
-3. 제약을 unification으로 푼다.
-4. 일반화 가능한 타입 변수를 polymorphic type으로 만든다.
+1. 각 부분식에 **새 타입 변수** 부여.
+2. 연산·적용에서 **제약** 생성(예: `f a` → `f : τ_a → β`).
+3. 제약을 **unification** 으로 풀어 대입(substitution) 도출.
+4. let-바인딩에서 자유 타입 변수를 **일반화(generalize)** → 다형 타입.
 
-예를 들어 identity 함수 `fun x -> x`는 입력 타입과 출력 타입이 같다는 제약만 있으므로 `'a -> 'a`로 추론된다.
+### 2. unification과 occurs check
+
+두 타입을 맞춘다: 변수는 타입에 바인딩, 생성자는 인자끼리 재귀 통일. **occurs check** — 변수 `α` 를 `α → β` 같이 자기를 포함한 타입에 바인딩하면 **무한 타입**이라 실패(이게 `fun x -> x x` 가 HM에서 거부되는 이유).
+
+### 3. principal type와 let-다형성
+
+HM은 표현식마다 **가장 일반적인 타입(principal type)** 이 유일하게 존재함을 보장한다. `let id = fun x -> x` 는 `∀a. a→a` 로 일반화되어 `id 3` 과 `id "s"` 가 모두 통과(let-polymorphism).
 
 ## 구현 (Implementation)
 
-unification의 핵심은 타입 변수와 타입 구조를 일관되게 맞추는 것이다.
-
 ```python
-def bind(var, typ, subst):
-    if var == typ:
-        return subst
-    subst[var] = typ
-    return subst
-
-
-subst = {}
-bind("T", "Int", subst)
-print(subst)
+def unify(t1, t2, subst):
+    t1, t2 = resolve(t1, subst), resolve(t2, subst)
+    if t1 == t2: return subst
+    if is_var(t1): 
+        if occurs(t1, t2, subst): raise TypeError("infinite type")  # occurs check
+        subst[t1] = t2; return subst
+    if is_var(t2): return unify(t2, t1, subst)
+    if t1[0] == t2[0] == "->":                       # 함수: 인자·결과 재귀 통일
+        unify(t1[1], t2[1], subst); return unify(t1[2], t2[2], subst)
+    raise TypeError(f"cannot unify {t1} and {t2}")
 ```
 
-실제 구현은 occurs check, type constructor, polymorphic generalization을 포함한다.
+**워크드 예제(`map`).** `map : (a→b) → [a] → [b]`. `map (fun x -> x+1) [1,2]`: `x+1` 의 `+` 가 `x:int` 강제 → `a=int`, 결과 `int` → `b=int` → 전체 `[int]`. unification이 `a,b` 를 int로 풀어낸다.
 
 ## 복잡도 (Complexity)
 
-기본 Hindley-Milner 추론은 실용적으로 효율적이지만, 서브타이핑, typeclass, higher-rank polymorphism, dependent type이 들어가면 복잡도가 크게 증가한다. 오류 메시지도 어려워진다.
+| 항목 | 특성 |
+|---|---|
+| 기본 HM | 실용적으로 거의 선형(이론상 최악 지수 — 중첩 let) |
+| 서브타이핑·typeclass·higher-rank | 크게 증가 |
+| dependent type | 일반적으로 결정 불가능에 근접 |
+
+서브타이핑·조건부 타입이 들어가면 **오류 메시지가 어려워진다**(추론된 타입이 사람 직관과 멀어짐).
 
 ## 응용 (Applications)
 
-- ML, OCaml, Haskell류 언어
-- Rust, Swift, TypeScript의 지역 타입 추론
-- IDE type hint와 정적 분석
-- generic 함수 타입 계산
+- ML·OCaml·Haskell(전역 추론), Rust·Swift·TypeScript(지역 추론).
+- IDE 타입 힌트·정적 분석, generic 함수 타입 계산.
 
 ## 흔한 오해 (Common Misunderstandings)
 
-- 타입 추론은 동적 타입과 다르다. 타입은 컴파일 시간에 결정될 수 있다.
-- 모든 타입을 생략해도 항상 좋은 것은 아니다. API 경계에는 명시 타입이 문서가 된다.
-- 타입 추론이 강할수록 오류 메시지가 어려워질 수 있다.
-- 타입 추론은 타입 검사를 대체하는 것이 아니라 타입 검사의 일부다.
+- **타입 추론 ≠ 동적 타입** — 타입은 컴파일 시간에 결정된다.
+- **모든 타입 생략이 좋지 않다** — API 경계의 명시 타입은 문서·오류 국소화에 유리.
+- **추론이 강할수록 오류 메시지가 어려워질 수 있다**(원인이 먼 곳에서 드러남).
+- **타입 추론은 타입 검사의 일부**지 대체가 아니다.
 
 ## TMI
 
-- principal type은 표현식에 부여할 수 있는 가장 일반적인 타입이다.
-- occurs check는 무한 타입을 막기 위해 필요하다.
-- TypeScript는 구조적 타입과 복잡한 조건부 타입 때문에 추론이 매우 실용적이지만 복잡하다.
+- **principal type** 정리(Hindley·Milner·Damas)는 "가장 일반적인 타입이 유일하게 존재"를 보장 — 그래서 주석 없이도 일관된 추론이 가능하다.
+- occurs check가 무한 타입을 막는데, 일부 언어(OCaml `-rectypes`)는 이를 풀어 재귀 타입을 허용한다.
+- TypeScript의 구조적 타입 + 조건부 타입은 실용적이지만 추론이 비결정적으로 느려질 수 있다.
 
 ## 연습 / 확인 문제 (Exercises)
 
-- identity 함수의 타입이 왜 `'a -> 'a`인지 설명하라.
-- unification이 실패하는 예를 하나 들어라.
-- 타입 추론과 타입 명시의 trade-off를 API 설계 관점에서 설명하라.
+- `fun x -> x` 의 타입이 왜 `'a -> 'a` 인지 제약·통일로 보여라.
+- unification이 실패하는 예(`int` vs `bool`)와 occurs check 실패(`fun x -> x x`)를 각각 들어라.
+- `let id = fun x -> x in (id 3, id "a")` 가 왜 통과하는지 let-다형성으로 설명하라.
+- 타입 추론 vs 명시의 trade-off를 API 설계 관점에서 논하라.
 
 ## 이어서 읽기 (Reading Path)
 
 - 이전: [타입 시스템](Type-Systems.md)
 - 다음: [패러다임 비교](Paradigms.md)
+- 관련: [람다 대수](Lambda-Calculus.md), [의미 분석](../Compilers/Semantic-Analysis.md)
 
 ## 참조 (References)
 

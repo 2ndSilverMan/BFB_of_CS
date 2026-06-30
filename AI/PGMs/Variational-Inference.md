@@ -4,6 +4,7 @@
 - Prerequisites: [MCMC.md](MCMC.md), [Factorization.md](Factorization.md), [Math/Probability-Statistics/MLE.md](../../Math/Probability-Statistics/MLE.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -32,6 +33,25 @@ KL(q_\phi(z)\|p_\theta(z\mid x))
 $$
 
 를 줄이는 것과 연결된다. mean-field variational inference는 $q(z)=\prod_i q_i(z_i)$처럼 독립적인 factor로 posterior를 근사한다. 이 가정은 계산을 쉽게 하지만 posterior correlation을 놓칠 수 있다.
+
+```mermaid
+flowchart LR
+    Posterior["true posterior"] --> Family["choose variational family"]
+    Family --> ELBO["maximize ELBO"]
+    ELBO --> Approx["approximate posterior q"]
+```
+
+### KL 방향의 효과
+
+일반적인 VI는 $KL(q\|p)$를 줄여 mode-seeking 성향을 가진다. posterior가 여러 mode를 가지면 하나의 mode에 집중하고 불확실성을 과소평가할 수 있다. 반대로 $KL(p\|q)$ 계열은 mode-covering 성향이 있지만 계산이 달라진다.
+
+### Amortized inference
+
+VAE처럼 inference network가 데이터 $x$에서 variational parameter를 바로 예측하면 각 데이터마다 최적화를 반복하지 않아도 된다. 대신 amortization gap, 즉 inference network가 개별 최적 $q$를 완전히 따라가지 못하는 오차가 생긴다.
+
+### 수렴 진단
+
+ELBO 증가만 보지 말고 posterior predictive check, held-out likelihood, calibration, MCMC와의 작은 문제 비교를 함께 한다. 근사 family가 틀리면 ELBO가 잘 수렴해도 posterior uncertainty가 틀릴 수 있다.
 
 ## 구현 (Implementation)
 

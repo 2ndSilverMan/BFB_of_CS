@@ -4,6 +4,7 @@
 - Prerequisites: [Engineering/Testing/TDD.md](TDD.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -18,6 +19,12 @@ BDD는 시스템의 행동을 사용자와 비즈니스 언어로 표현하고, 
 ## 이론 (Theory)
 
 BDD는 요구사항 발견과 커뮤니케이션에 초점이 있다. Acceptance criteria를 명확히 하고, 예시를 통해 모호성을 줄인다. 자동화는 중요하지만, 시나리오가 너무 UI 세부사항에 묶이면 취약해진다.
+
+### Specification by example
+
+BDD는 테스트 문법보다 예제로 요구사항을 정렬하는 과정이 핵심이다. Given-When-Then은 비즈니스 조건, 사용자의 행동, 관찰 가능한 결과를 분리해 stakeholder가 읽을 수 있는 specification을 만든다.
+
+좋은 BDD 시나리오는 UI 클릭 절차가 아니라 domain behavior를 표현한다. 너무 많은 step을 재사용하려고 추상화하면 시나리오가 읽히지 않고, 너무 구체적인 UI selector를 넣으면 유지보수 비용이 커진다.
 
 ## 구현 (Implementation)
 

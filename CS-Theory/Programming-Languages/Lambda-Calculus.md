@@ -4,6 +4,7 @@
 - Prerequisites: [CS-Theory/Programming-Languages/Syntax-and-Semantics.md](Syntax-and-Semantics.md), [Programming/Functions-and-Recursion.md](../../Programming/Functions-and-Recursion.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 

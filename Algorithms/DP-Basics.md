@@ -4,16 +4,17 @@
 - Prerequisites: [Algorithms/Complexity.md](Complexity.md), [Programming/Functions-and-Recursion.md](../Programming/Functions-and-Recursion.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
 ## 개념 (Concept)
 
-동적 계획법(DP)은 큰 문제를 **겹치는 작은 부분 문제**로 나누고, 각 부분 문제의 답을 **한 번만 계산해 저장**해 재사용하는 기법이다. 같은 계산을 반복하는 재귀를 표(table)로 바꿔 지수 시간을 다항 시간으로 줄인다.
+동적 계획법(DP)은 문제를 **겹치는 부분 문제**로 나누고 각 답을 **한 번만 계산해 저장·재사용**한다. 같은 계산을 반복하는 재귀를 표로 바꿔 지수를 다항으로 줄인다. [분할 정복](Divide-and-Conquer.md)과 달리 부분 문제가 **겹치고**, [그리디](Greedy.md)와 달리 **모든 선택을 비교**한다.
 
 ## 직관 (Intuition)
 
-피보나치를 단순 재귀로 구하면 $F(n-1)$과 $F(n-2)$를 각각 다시 풀면서 같은 값을 수없이 재계산한다. "이미 구한 답을 적어두고 다시 묻지 않는다"는 한 가지 원칙만 적용해도 계산량이 급감한다. DP는 이 메모의 원칙을 체계화한 것이다.
+피보나치를 단순 재귀로 풀면 $F(3)$, $F(2)$ 를 수없이 다시 계산한다. "이미 구한 답은 적어두고 다시 묻지 않는다" 한 원칙으로 계산량이 급감한다. DP는 이 메모 원칙 + **부분 문제 DAG를 올바른 순서로 채우기**다.
 
 ```mermaid
 graph TD
@@ -22,109 +23,98 @@ graph TD
     F4 --> F3b["F(3)"]
     F4 --> F2a["F(2)"]
     F3a --> F2b["F(2)"]
-    F3a --> F1a["F(1)"]
 ```
-
-`F(3)`, `F(2)`가 여러 번 등장한다 — 이 중복을 제거하는 것이 DP다.
 
 ## 이론 (Theory)
 
-DP가 적용되려면 두 조건이 필요하다.
+### 1. 두 필요 조건
 
-- **겹치는 부분 문제(overlapping subproblems)**: 같은 부분 문제가 반복해서 나타난다.
-- **최적 부분 구조(optimal substructure)**: 큰 문제의 최적해가 부분 문제의 최적해로 구성된다.
+- **겹치는 부분 문제**: 같은 부분 문제가 반복 등장(없으면 그냥 분할 정복).
+- **최적 부분 구조**: 큰 문제 최적해가 부분 문제 최적해로 구성.
 
-구현 방식은 두 가지다.
+### 2. top-down vs bottom-up
 
-| 방식 | 설명 |
-|---|---|
-| 하향식(top-down, 메모이제이션) | 재귀로 풀되 계산한 값을 캐시에 저장 |
-| 상향식(bottom-up, 타뷸레이션) | 작은 부분 문제부터 표를 채워 올라감 |
+| 방식 | 설명 | 장단 |
+|---|---|---|
+| 하향식(메모이제이션) | 재귀 + 캐시 | 필요한 상태만 계산, 재귀 깊이 위험 |
+| 상향식(타뷸레이션) | 작은 것부터 표 채움 | 깊이 안전, rolling array로 공간 절약 |
 
-점화식(recurrence)을 세우는 것이 핵심이다. 피보나치는
+부분 문제들은 **DAG**를 이룬다. 타뷸레이션은 이 DAG의 위상 순서로 채우는 것 — 그래서 "어떤 순서로 채우나"가 중요하다.
 
-$$F(n) = F(n-1) + F(n-2), \qquad F(0)=0,\; F(1)=1$$
+### 3. 설계의 8할은 상태 정의
 
-계단 오르기(한 번에 1칸 또는 2칸)에서 $n$칸을 오르는 경우의 수도 같은 점화식 $W(n) = W(n-1) + W(n-2)$를 따른다. 동전 거스름돈처럼 최솟값을 구하는 문제는
+DP 시간 $=$ **(상태 수) × (전이 비용)**. 상태를 잘 잡으면 점화식·코드는 따라온다. 예:
 
-$$\text{dp}(x) = 1 + \min_{c \in \text{coins}} \text{dp}(x - c)$$
-
-같은 형태가 된다.
+$$\text{coin: } dp(x)=1+\min_{c\in C} dp(x-c),\quad dp(0)=0$$
+$$\text{LCS: } dp(i,j)=\begin{cases}dp(i{-}1,j{-}1)+1 & a_i=b_j\\ \max(dp(i{-}1,j),\,dp(i,j{-}1)) & \text{else}\end{cases}$$
 
 ## 구현 (Implementation)
 
 ```python
-# 1) 단순 재귀: O(2^n) — 같은 값을 반복 계산
-def fib_naive(n):
-    if n < 2:
-        return n
-    return fib_naive(n - 1) + fib_naive(n - 2)
-
-
-# 2) 하향식 메모이제이션: O(n)
+# 1) 단순 재귀 O(2^n)  2) 메모이제이션 O(n)  3) 타뷸레이션 O(n) 시간 O(1) 공간
 from functools import lru_cache
 
 @lru_cache(maxsize=None)
 def fib_memo(n):
-    if n < 2:
-        return n
-    return fib_memo(n - 1) + fib_memo(n - 2)
+    return n if n < 2 else fib_memo(n-1) + fib_memo(n-2)
 
-
-# 3) 상향식 타뷸레이션: O(n) 시간, O(1) 공간
 def fib_tab(n):
-    if n < 2:
-        return n
     prev, curr = 0, 1
-    for _ in range(2, n + 1):
-        prev, curr = curr, prev + curr
-    return curr
+    for _ in range(n):
+        prev, curr = curr, prev + curr     # rolling: O(1) 공간
+    return prev
 
-
-print(fib_tab(30))   # 832040
+def coin_min(coins, amount):               # 최소 동전 수
+    INF = float("inf")
+    dp = [0] + [INF] * amount
+    for x in range(1, amount + 1):
+        for c in coins:
+            if c <= x:
+                dp[x] = min(dp[x], 1 + dp[x - c])
+    return dp[amount] if dp[amount] < INF else -1
 ```
 
 ## 복잡도 (Complexity)
 
 | 방식 | 시간 | 공간 |
 |---|---|---|
-| 단순 재귀 | `O(2^n)` | `O(n)` (호출 스택) |
-| 메모이제이션 | `O(n)` | `O(n)` |
-| 타뷸레이션 | `O(n)` | `O(1)`~`O(n)` |
+| 단순 재귀 | $O(2^n)$ | $O(n)$ 스택 |
+| 메모이제이션 | $O(\text{상태})$ | $O(\text{상태})$ |
+| 타뷸레이션 | $O(\text{상태}\times\text{전이})$ | $O(\text{상태})$ → rolling로 절감 |
 
-일반적으로 DP의 시간은 `(부분 문제 수) × (한 부분 문제를 푸는 비용)`으로 추정한다.
+**워크드 예제(coin `[1,3,4]`, amount 6).** dp 채움: dp[1]=1,dp[2]=2,dp[3]=1,dp[4]=1,dp[5]=2(=1+dp[4]),dp[6]=2(=1+dp[3]). 답 2(`3+3`) — 그리디(`4+1+1`=3)보다 나음, DP가 모든 선택을 비교했기 때문.
 
 ## 응용 (Applications)
 
-- 최단 경로(벨만-포드, 플로이드-워셜)
-- 문자열: 편집 거리, 최장 공통 부분 수열(LCS)
-- 배낭 문제, 동전 거스름돈
-- 최장 증가 부분 수열(LIS), 구간 DP
+- 최단 경로(벨만-포드, [플로이드-워셜](Floyd-Warshall.md))는 DP다.
+- 문자열: 편집 거리, LCS, 회문 분할.
+- 배낭, 동전, 최장 증가 부분 수열(LIS, $O(n\log n)$ 변형), 구간 DP.
 
 ## 흔한 오해 (Common Misunderstandings)
 
-- DP는 "재귀 + 메모"만을 뜻하지 않는다. 핵심은 점화식과 최적 부분 구조를 찾는 것이고, 메모이제이션·타뷸레이션은 그 구현 수단이다.
-- 모든 재귀가 DP가 되는 것은 아니다. 부분 문제가 겹치지 않으면(예: 병합 정렬) 그냥 분할 정복이다.
-- 그리디와 혼동하기 쉽다. 그리디는 매 순간 국소 최적을 택하고, DP는 모든 선택을 부분 문제로 비교한다.
-- 메모이제이션과 타뷸레이션의 결과는 같지만, 재귀 깊이·공간 사용·캐시 비용이 달라 상황에 따라 선택이 갈린다.
+- **DP = "재귀 + 메모"가 아니다** — 핵심은 점화식·최적 부분 구조, 메모/타뷸레이션은 수단.
+- **모든 재귀가 DP는 아니다** — 부분 문제가 안 겹치면 분할 정복.
+- **그리디와 혼동** — 그리디는 국소 최적 한 번, DP는 모든 부분 문제를 비교.
+- **타뷸레이션 순서가 틀리면** 아직 안 채운 상태를 참조해 오답 — DAG 위상 순서를 지켜야 한다.
 
 ## TMI
 
-- "dynamic programming"이라는 이름은 1950년대 Richard Bellman이 붙였다. 그는 당시 연구 후원처에 "수학 연구"라는 인상을 피하려고, 멋지지만 반박하기 어려운 단어로 일부러 골랐다고 회고했다. 여기서 "programming"은 코딩이 아니라 "계획법"을 뜻한다.
-- 피보나치는 닫힌 공식(비네 공식)도 있지만, 부동소수점 오차 때문에 큰 `n`에서는 정수 DP가 더 안전하다.
-- 많은 DP 문제는 "상태를 무엇으로 잡을 것인가"가 8할이다. 상태 정의가 맞으면 점화식과 코드는 거의 따라온다.
+- "dynamic programming"은 1950년대 Richard Bellman이 후원처에 "수학 연구"라는 인상을 피하려 일부러 멋지고 반박 어려운 이름으로 골랐다 — "programming"은 코딩이 아니라 "계획법".
+- 피보나치는 비네 닫힌 공식이 있지만 부동소수점 오차로 큰 $n$ 엔 정수 DP가 안전하다.
+- LIS는 DP $O(n^2)$ 지만 "patience sorting + 이진 탐색"으로 $O(n\log n)$ 까지 — DP가 항상 최종 답은 아니다.
 
 ## 연습 / 확인 문제 (Exercises)
 
-- 계단 오르기(1칸 또는 2칸)에서 `n`칸을 오르는 경우의 수를 타뷸레이션으로 구하라.
-- 동전 `[1, 3, 4]`로 금액 `6`을 만드는 최소 동전 수를 DP로 구하라.
-- `fib_naive`와 `fib_memo`의 호출 횟수를 직접 세어 `O(2^n)`과 `O(n)` 차이를 확인하라.
+- 계단 오르기(1·2칸) 경우의 수를 타뷸레이션으로 구하라(점화식 $W(n)=W(n-1)+W(n-2)$).
+- 동전 `[1,3,4]`, 금액 6의 최소 동전 수를 DP로 구하고 그리디와 비교하라.
+- `fib_naive` 와 `fib_memo` 의 호출 횟수를 세어 $O(2^n)$ vs $O(n)$ 을 확인하라.
+- 두 문자열의 LCS 길이를 2D DP로 구하고 실제 부분 수열도 복원하라.
 
 ## 이어서 읽기 (Reading Path)
 
 - 이전: [BFS / DFS](BFS-DFS.md)
-- 다음: [그리디](Greedy.md), [분할 정복](Divide-and-Conquer.md)
-- 관련: [DP 최적화](DP-Optimization.md)
+- 다음: [DP 최적화](DP-Optimization.md)
+- 관련: [그리디](Greedy.md), [분할 정복](Divide-and-Conquer.md)
 
 ## 참조 (References)
 

@@ -4,6 +4,7 @@
 - Prerequisites: [Engineering/DevOps/GitHub/GitHub-Issues-and-Pull-Requests.md](GitHub-Issues-and-Pull-Requests.md), [Engineering/Testing/Unit-Test-Principles.md](../../Testing/Unit-Test-Principles.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -18,6 +19,12 @@
 ## 이론 (Theory)
 
 좋은 리뷰는 blocking issue와 suggestion을 구분한다. Correctness, edge case, backward compatibility, observability, test coverage, security를 우선 보고, style은 자동화 도구에 최대한 맡긴다. 큰 설계 논쟁은 PR comment보다 design note나 sync로 분리하는 편이 낫다.
+
+### 리뷰의 초점
+
+좋은 리뷰는 취향보다 위험에 집중한다. Correctness, security, data migration, observability, test coverage, rollback 가능성을 먼저 보고, 스타일은 자동화 도구에 맡긴다.
+
+리뷰어는 변경 의도와 테스트 증거를 요구하고, 작성자는 PR 크기와 설명을 리뷰 가능한 단위로 유지한다. 논쟁이 길어지면 원칙, benchmark, 작은 실험으로 수렴시킨다.
 
 ## 구현 (Implementation)
 
@@ -69,4 +76,3 @@ review checklist:
 
 - [Engineering/Testing/Unit-Test-Principles.md](../../Testing/Unit-Test-Principles.md)
 - [Engineering/Software-Design/Clean-Code.md](../../Software-Design/Clean-Code.md)
-

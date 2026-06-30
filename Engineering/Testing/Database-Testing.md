@@ -4,6 +4,7 @@
 - Prerequisites: [Engineering/Testing/Integration-Test-Strategy.md](Integration-Test-Strategy.md), [Systems/Databases/Transactions-and-ACID.md](../../Systems/Databases/Transactions-and-ACID.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -18,6 +19,12 @@ DB 코드는 mock으로만 검증하면 SQL 문법, index, constraint, transacti
 ## 이론 (Theory)
 
 테스트 격리는 transaction rollback, schema reset, fixture loading, containerized DB로 만든다. 각 테스트가 독립적이어야 순서 의존 flakiness가 줄어든다. Migration도 테스트 대상이다.
+
+### 데이터 상태와 격리
+
+DB 테스트의 어려움은 query correctness보다 상태 관리에 있다. 테스트 간 데이터가 섞이면 순서 의존성이 생기고, 실제 transaction isolation과 다른 fixture는 운영 버그를 숨긴다. 각 테스트는 독립 schema, transaction rollback, deterministic seed 중 하나로 격리한다.
+
+Migration, index, constraint, lock behavior는 mock DB로 잡기 어렵다. 중요한 query와 migration은 실제 DB engine에서 검증하고, production과 다른 SQLite 대체가 의미를 바꾸지 않는지 주의한다.
 
 ## 구현 (Implementation)
 

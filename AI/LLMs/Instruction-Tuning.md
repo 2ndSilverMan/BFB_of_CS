@@ -4,6 +4,7 @@
 - Prerequisites: [AI/LLMs/Pretraining.md](Pretraining.md), [AI/Deep-Learning/Fine-Tuning.md](../Deep-Learning/Fine-Tuning.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -25,6 +26,34 @@ $$\max_\theta\ \mathbb{E}_{x,\,y\sim\pi_\theta}\big[r_\phi(x,y)\big]-\beta\,\mat
 
 **DPO(direct preference optimization).** 별도 reward model과 RL 루프 없이, 선호쌍 $(y^+,y^-)$에서 직접 정책을 최적화하는 분류 형태의 손실을 쓴다. 구현이 단순하고 안정적이라 널리 쓰인다.
 
+```mermaid
+flowchart LR
+    Base["pretrained model"] --> SFT["SFT on instruction data"]
+    SFT --> Pref["preference data"]
+    Pref --> Align["RLHF or DPO"]
+    Align --> Eval["helpfulness / safety / task eval"]
+```
+
+### Instruction data 설계
+
+좋은 instruction dataset은 단순히 양이 많은 데이터가 아니라, 사용자가 실제로 요구할 과제 분포와 실패 경계를 잘 담은 데이터다.
+
+| 축 | 확인 질문 |
+| --- | --- |
+| 다양성 | 요약, 추출, 변환, 추론, 거절, 도구 사용이 포함되는가 |
+| 품질 | 응답이 사실적이고 형식이 일관적인가 |
+| 난이도 | 쉬운 예시만 반복하지 않는가 |
+| 안전 | 거절해야 할 요청과 허용 가능한 대안이 포함되는가 |
+| 도메인 | 실제 배포 도메인의 용어와 정책을 반영하는가 |
+
+### Response-only loss
+
+SFT에서는 prompt token까지 예측하도록 학습하면 모델이 사용자의 입력을 그대로 이어 쓰는 방향의 손실이 섞일 수 있다. 일반적으로 instruction과 context는 조건으로만 두고, assistant response token에만 loss를 주는 response-only masking을 쓴다.
+
+### 평가 분리
+
+instruction tuning 후에는 pretraining 지식 평가, 지시 수행 평가, 안전 평가, 형식 준수 평가를 분리해야 한다. 하나의 평균 점수로 합치면 모델이 더 친절해졌지만 사실성이 떨어졌는지, 안전성은 좋아졌지만 과도하게 거절하는지 알기 어렵다.
+
 ## 구현 (Implementation)
 
 ```python
@@ -35,6 +64,14 @@ def sft_loss(model, instruction, response):
     targets = ids[1:]
     mask = response_token_mask(instruction, response)  # 응답 부분만 학습
     return masked_cross_entropy(logits, targets, mask)
+```
+
+```python
+example = {
+    "instruction": "다음 문서를 세 줄로 요약하라.",
+    "input": "문서 본문...",
+    "response": "1. ...\n2. ...\n3. ...",
+}
 ```
 
 ## 복잡도 (Complexity)

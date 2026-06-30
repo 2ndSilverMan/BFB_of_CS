@@ -4,6 +4,7 @@
 - Prerequisites: [Programming/Arrays-and-Strings.md](../../Programming/Arrays-and-Strings.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -25,6 +26,27 @@ text preprocessing은 raw 텍스트를 모델이 다룰 수 있는 토큰(token)
 
 BPE(byte pair encoding)는 가장 빈번한 인접 토큰 쌍을 반복적으로 병합해 어휘를 키운다. 빈도 $f$가 높은 쌍부터 합치므로, 자주 등장하는 형태소·접사가 자연스럽게 하나의 토큰이 된다. 이후 각 토큰을 정수 ID로 매핑하고, 배치 처리를 위해 길이를 padding/truncation으로 맞춘다.
 
+```mermaid
+flowchart LR
+    Raw["raw text"] --> Norm["normalization"]
+    Norm --> Tok["tokenization"]
+    Tok --> IDs["token ids"]
+    IDs --> Batch["padding / truncation"]
+    Batch --> Model["model input"]
+```
+
+### 정규화는 과제 의존적이다
+
+소문자화, 악센트 제거, 구두점 삭제, 숫자 치환은 모두 정보를 잃을 수 있다. 감성 분석에서는 느낌표가 중요할 수 있고, 법률·의료 문서에서는 대소문자나 숫자가 의미를 바꿀 수 있다. 전처리는 "깨끗하게 만들기"가 아니라 downstream task에 필요한 구분을 남기는 설계다.
+
+### 토크나이저와 모델은 한 묶음이다
+
+같은 문장도 tokenizer가 다르면 token id가 달라진다. pretrained checkpoint와 다른 vocabulary를 쓰면 embedding row가 맞지 않거나 의미가 깨진다. 따라서 model version, tokenizer version, normalization rule은 함께 배포되어야 한다.
+
+### Padding과 truncation의 영향
+
+짧은 문장은 padding mask가 필요하고, 긴 문서는 truncation으로 중요한 정보가 잘릴 수 있다. 분류에서는 앞부분만 자르면 결론이 뒤에 있는 문서를 놓치고, QA에서는 답 span이 잘릴 수 있다. 긴 문서 task는 sliding window, retrieval, chunking 전략을 함께 설계한다.
+
 ## 구현 (Implementation)
 
 ```python
@@ -37,6 +59,11 @@ def bpe_merges(corpus_tokens, num_merges):
         corpus_tokens = merge_pair(corpus_tokens, pair)  # 가장 빈번한 쌍 병합
         vocab.append("".join(pair))
     return vocab
+```
+
+```python
+def pad_to_length(ids, length, pad_id=0):
+    return ids[:length] + [pad_id] * max(0, length - len(ids))
 ```
 
 ## 복잡도 (Complexity)

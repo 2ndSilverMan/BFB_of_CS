@@ -4,6 +4,7 @@
 - Prerequisites: [Math/Probability-Statistics/Probability-Basics.md](Probability-Basics.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -14,6 +15,14 @@
 ## 직관 (Intuition)
 
 주사위 한 번의 결과는 매번 다르지만, 수없이 던져 평균을 내면 $3.5$에 가까워진다. 이 $3.5$가 기댓값이다. 분산은 "결과가 평균 주위로 얼마나 흩어지는가"이고, 공분산은 "키가 큰 사람이 몸무게도 큰 경향이 있는가"처럼 두 양의 동행성을 본다.
+
+```mermaid
+flowchart LR
+    X["확률 변수 X"] --> MEAN["E[X]<br/>중심"]
+    X --> VAR["Var(X)<br/>퍼짐"]
+    X --> COV["Cov(X,Y)<br/>동행성"]
+    COV --> CORR["Corr(X,Y)<br/>단위 제거"]
+```
 
 ## 이론 (Theory)
 
@@ -33,6 +42,42 @@ $$\operatorname{Cov}(X, Y) = E[(X - \mu_X)(Y - \mu_Y)]$$
 
 상관계수는 공분산을 표준편차로 정규화한 $\rho = \dfrac{\operatorname{Cov}(X,Y)}{\sigma_X \sigma_Y} \in [-1, 1]$다.
 
+### LOTUS: 확률 변수 변환의 기댓값
+
+$Y=g(X)$의 기댓값을 구할 때 $Y$의 분포를 새로 만들 필요 없이
+
+$$
+E[g(X)] = \sum_x g(x)P(X=x)
+$$
+
+를 쓸 수 있다. 연속형에서는 $\int g(x)f(x)\,dx$다. 이를 LOTUS(Law of the Unconscious Statistician)라고 부르며, 분산 공식 $E[X^2]-(E[X])^2$도 이 관점으로 이해할 수 있다.
+
+### 표본 추정량과 Bessel 보정
+
+데이터 $x_1,\dots,x_n$에서 모평균을 추정할 때 표본평균은
+
+$$
+\bar{x}=\frac{1}{n}\sum_i x_i
+$$
+
+이다. 모분산을 표본으로 추정할 때는
+
+$$
+s^2=\frac{1}{n-1}\sum_i(x_i-\bar{x})^2
+$$
+
+처럼 $n-1$로 나누는 불편분산을 자주 쓴다. 평균을 데이터에서 이미 추정했기 때문에 자유도가 하나 줄어든다고 볼 수 있다.
+
+### 공분산 행렬
+
+벡터 확률 변수 $\mathbf{X}\in\mathbb{R}^d$의 공분산 행렬은
+
+$$
+\Sigma=E[(\mathbf{X}-\boldsymbol{\mu})(\mathbf{X}-\boldsymbol{\mu})^\top]
+$$
+
+이다. 대각 원소는 각 특징의 분산, 비대각 원소는 특징 쌍의 공분산이다. PCA는 이 공분산 행렬의 고유방향을 찾는 방법으로 볼 수 있다.
+
 ## 구현 (Implementation)
 
 ```python
@@ -49,12 +94,30 @@ print(expectation(faces, probs))        # 3.5
 print(round(variance(faces, probs), 3)) # 2.917
 ```
 
+표본 데이터에서는 수치 안정성이 좋은 online 알고리즘을 사용할 수 있다.
+
+```python
+def online_mean_variance(samples):
+    mean = 0.0
+    m2 = 0.0
+    for n, x in enumerate(samples, start=1):
+        delta = x - mean
+        mean += delta / n
+        m2 += delta * (x - mean)
+    variance_unbiased = m2 / (n - 1)
+    return mean, variance_unbiased
+
+print(online_mean_variance([1, 2, 3, 4, 5]))
+```
+
 ## 복잡도 (Complexity)
 
 | 대상 | 비용 |
 |---|---|
 | 이산 기댓값/분산 (결과 `k`개) | `O(k)` |
 | 표본 `n`개로부터 표본평균·표본분산 | `O(n)` |
+
+공분산 행렬을 직접 계산하려면 샘플 수 `n`, 차원 `d`에 대해 시간은 보통 `O(nd^2)`, 저장 공간은 `O(d^2)`다. 고차원에서는 공분산 행렬 자체가 병목이 된다.
 
 ## 응용 (Applications)
 
@@ -69,6 +132,8 @@ print(round(variance(faces, probs), 3)) # 2.917
 - 기댓값의 선형성은 독립이 아니어도 성립한다. 하지만 $E[XY] = E[X]E[Y]$는 일반적으로 독립일 때만 성립한다.
 - 공분산이 0이라고 항상 독립은 아니다. 공분산은 선형 관계만 포착한다.
 - 상관관계는 인과관계가 아니다.
+- 분산은 단위가 원래 값의 제곱이다. 원래 단위로 퍼짐을 보고 싶으면 표준편차를 사용한다.
+- 평균과 분산이 존재하지 않거나 매우 불안정한 heavy-tailed 분포도 있다. 이때는 중앙값과 분위수가 더 견고하다.
 
 ## TMI
 
@@ -80,6 +145,8 @@ print(round(variance(faces, probs), 3)) # 2.917
 - 동전 던지기에서 앞면이면 +1, 뒷면이면 -1인 확률 변수의 기댓값과 분산을 구하라.
 - $\operatorname{Var}(X) = E[X^2] - (E[X])^2$ 임을 정의로부터 유도하라.
 - 공분산이 0이지만 독립이 아닌 두 변수의 예를 만들어 보라.
+- 표본분산을 `n`과 `n-1`로 나누어 각각 계산하고, 작은 표본에서 차이를 비교하라.
+- 2차원 표본 데이터의 공분산 행렬을 직접 계산하고 PCA의 첫 방향과 비교하라.
 
 ## 이어서 읽기 (Reading Path)
 

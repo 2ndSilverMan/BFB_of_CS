@@ -4,6 +4,7 @@
 - Prerequisites: [AI/NLP/Transformer-NLP.md](../NLP/Transformer-NLP.md), [AI/NLP/Language-Model-Basics.md](../NLP/Language-Model-Basics.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -24,6 +25,34 @@ pretraining은 라벨 없는 대규모 텍스트에서 self-supervised 목표로
 - **span/denoising**: 구간을 가리거나 손상시켜 복원 — T5 계열.
 
 성능은 모델 크기 $N$, 데이터 $D$, 계산 $C$에 대해 매끄럽게 개선되는 경향이 있고, 이를 **scaling law**라 부른다. 대략 손실 $L$이 $N, D$의 거듭제곱 꼴로 줄어들며, 주어진 계산 예산에서 $N$과 $D$를 함께 키우는 것이 효율적이라는 결과(compute-optimal)가 알려져 있다. 데이터 품질·중복 제거·혼합 비율도 최종 성능에 크게 작용한다.
+
+```mermaid
+flowchart LR
+    Raw["raw corpus"] --> Clean["filter + dedup"]
+    Clean --> Mix["data mixture"]
+    Mix --> Tok["tokenization"]
+    Tok --> Train["distributed pretraining"]
+    Train --> Eval["loss + downstream eval"]
+```
+
+### 데이터가 모델을 만든다
+
+pretraining 품질은 architecture 못지않게 데이터 파이프라인에 좌우된다. 웹 텍스트, 코드, 논문, 대화, 다국어 데이터의 혼합 비율은 모델의 능력과 편향을 결정한다. deduplication은 memorization과 benchmark contamination을 줄이고, quality filtering은 토큰 예산을 더 유익한 샘플에 쓰게 한다.
+
+| 데이터 이슈 | 위험 | 확인 방법 |
+| --- | --- | --- |
+| 중복 | 암기와 평가 과대 | near-duplicate 제거 |
+| 벤치마크 오염 | 실제 일반화 착시 | test set overlap audit |
+| 도메인 편중 | 특정 스타일만 강함 | mixture별 eval |
+| PII/저작권/유해물 | 안전·법적 리스크 | 필터링과 정책 검토 |
+
+### 안정적 대규모 학습
+
+LLM pretraining은 긴 시간 동안 작은 불안정성이 누적된다. loss spike, gradient overflow, 데이터 shard 오류, tokenizer mismatch, checkpoint 손상이 모두 큰 비용으로 이어진다. 그래서 학습 전 작은 scale에서 loss curve와 throughput을 재현하고, 학습 중에는 gradient norm, learning rate, token throughput, validation loss, sample 품질을 함께 모니터링한다.
+
+### 평가와 오염 통제
+
+pretraining loss가 내려가는 것과 원하는 task 성능이 오르는 것은 관련 있지만 동일하지 않다. holdout corpus perplexity, downstream benchmark, human preference, safety eval을 분리해 보아야 한다. 특히 공개 benchmark가 학습 데이터에 섞이면 모델이 실제로 푼 것이 아니라 본 것을 재생할 수 있다.
 
 ## 구현 (Implementation)
 

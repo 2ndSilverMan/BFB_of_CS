@@ -4,6 +4,7 @@
 - Prerequisites: [Dynamic-Programming.md](Dynamic-Programming.md), [Function-Approximation.md](Function-Approximation.md), [AI/Deep-Learning/Transformer.md](../Deep-Learning/Transformer.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -27,6 +28,34 @@ MuZero는 명시적 관측 공간 dynamics 대신 latent state, reward, value, p
 
 모델 오류가 rollout에서 누적되는 compounding error가 핵심 위험이다.
 
+### 모델의 종류
+
+모델 기반 RL에서 "모델"은 여러 형태를 가질 수 있다.
+
+- Forward dynamics: 현재 상태와 행동에서 다음 상태를 예측한다.
+- Reward model: 상태-행동의 보상을 예측한다.
+- Termination model: episode 종료 여부를 예측한다.
+- Latent world model: 관측 대신 latent state에서 transition을 예측한다.
+- Value-equivalent model: 관측 예측보다 planning에 필요한 value/policy 정보를 잘 맞춘다.
+
+제어에 좋은 모델은 픽셀 단위 예측이 가장 좋은 모델과 다를 수 있다. 중요한 것은 policy improvement에 필요한 정보가 정확한가다.
+
+### Compounding model error
+
+한 step 예측 오류가 작아도 rollout을 길게 하면 오류가 누적된다. 정책은 모델이 잘못 예측하는 영역을 찾아 이용할 수 있고, 이를 model exploitation이라고 부른다. 모델 안에서는 좋아 보이는 정책이 실제 환경에서는 실패할 수 있다.
+
+완화 방법은 짧은 horizon planning, uncertainty penalty, ensemble dynamics, real data와 imagined data 혼합, model predictive control처럼 자주 재계획하는 방식이다.
+
+### Planning과 learning의 결합
+
+모델을 배운 뒤 사용할 수 있는 방식은 다양하다. Dyna는 모델이 만든 imagined transition으로 value function을 추가 학습한다. MPC는 매 step 짧은 horizon 계획을 세우고 첫 행동만 실행한다. MuZero류는 learned model과 tree search를 결합한다. Dreamer류는 latent imagination 안에서 actor-critic을 학습한다.
+
+이 선택은 환경 샘플 비용, 계산 비용, 모델 정확도, action space에 따라 달라진다.
+
+### 불확실성
+
+모델이 모르는 영역에서는 보수적으로 행동해야 한다. Ensemble disagreement, probabilistic dynamics, epistemic uncertainty는 모델이 데이터 밖으로 나가는지 감지하는 데 도움을 준다. 안전한 모델 기반 RL에서는 높은 uncertainty rollout에 penalty를 주거나 실제 데이터 수집을 우선한다.
+
 ## 구현 (Implementation)
 
 모델 기반 업데이트의 개념 흐름은 다음과 같다.
@@ -42,6 +71,13 @@ def imagined_rollout(model, policy, latent, horizon):
 ```
 
 실제 구현에서는 불확실성 추정, 짧은 rollout, real data와 imagined data의 혼합이 중요하다.
+
+```python
+def uncertainty_penalized_reward(predicted_reward, model_disagreement, penalty):
+    return predicted_reward - penalty * model_disagreement
+```
+
+모델 기반 planning은 높은 보상을 찾는 동시에 모델이 확신하지 못하는 영역을 조심해야 한다.
 
 ## 복잡도 (Complexity)
 

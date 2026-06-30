@@ -4,6 +4,7 @@
 - Prerequisites: [System-Models.md](System-Models.md), [Replication.md](Replication.md), [Consensus.md](Consensus.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 

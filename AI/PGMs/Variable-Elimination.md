@@ -4,6 +4,7 @@
 - Prerequisites: [Bayesian-Networks.md](Bayesian-Networks.md), [d-Separation.md](d-Separation.md), [Math/Probability-Statistics/Probability-Basics.md](../../Math/Probability-Statistics/Probability-Basics.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -29,6 +30,27 @@
 ```
 
 소거 순서는 매우 중요하다. 같은 그래프와 같은 질의라도 어떤 변수를 먼저 제거하느냐에 따라 중간 factor 크기가 크게 달라진다. 이 중간 factor의 최대 범위는 treewidth와 연결된다.
+
+```mermaid
+flowchart LR
+    Factors["initial factors"] --> Evidence["apply evidence"]
+    Evidence --> Pick["pick variable"]
+    Pick --> Multiply["multiply factors containing variable"]
+    Multiply --> SumOut["sum out variable"]
+    SumOut --> Done["normalize query"]
+```
+
+### 소거 순서 heuristic
+
+최적 순서를 찾는 것은 어렵기 때문에 min-degree, min-fill 같은 heuristic을 쓴다. min-fill은 변수를 제거할 때 새로 추가될 fill-in edge가 적은 변수를 우선한다. 좋은 순서는 중간 factor scope를 작게 유지한다.
+
+### Sum-product와 max-product
+
+주변확률은 hidden variable을 sum으로 제거한다. MAP/MPE는 일부 변수를 max로 제거한다. 하지만 sum과 max는 일반적으로 교환되지 않으므로 "무엇을 marginalize하고 무엇을 maximize할지" 순서가 중요하다.
+
+### Evidence의 효과
+
+증거를 먼저 반영하면 factor table의 일부 행이 사라져 계산량이 줄 수 있다. 그러나 증거가 collider를 여는 효과도 있으므로 독립성 관점의 영향은 별도로 생각해야 한다.
 
 ## 구현 (Implementation)
 

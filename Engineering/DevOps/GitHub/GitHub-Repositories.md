@@ -4,6 +4,7 @@
 - Prerequisites: [Engineering/DevOps/Git/Git-Remotes.md](../Git/Git-Remotes.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -18,6 +19,12 @@ Git이 이력 엔진이라면 GitHub 저장소는 팀이 그 이력을 검토하
 ## 이론 (Theory)
 
 Visibility는 public/private/internal로 접근 범위를 정한다. Collaborator, team, role은 누가 읽고 쓰고 관리할 수 있는지 제어한다. Branch protection은 main branch에 직접 push를 막고 PR review, status check, signed commit 같은 조건을 요구할 수 있다. CODEOWNERS는 특정 경로 review 책임자를 지정한다.
+
+### 저장소 거버넌스
+
+GitHub 저장소는 코드 저장소이면서 권한·감사·릴리스 경계다. Branch protection, required review, CODEOWNERS, secret scanning, dependency alerts, environment protection을 기본 운영 기준으로 둔다.
+
+권한은 org/team 단위로 관리하고, 개인 admin 권한은 최소화한다. Archive, transfer, visibility 변경은 보안·라이선스·CI secret 영향까지 검토한다.
 
 ## 구현 (Implementation)
 
@@ -69,4 +76,3 @@ recommended repository baseline:
 
 - [Engineering/DevOps/Git/](../Git/)
 - [Engineering/Security/Auth.md](../../Security/Auth.md)
-

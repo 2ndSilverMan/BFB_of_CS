@@ -4,6 +4,7 @@
 - Prerequisites: [Math/Probability-Statistics/Probability-Basics.md](Probability-Basics.md), [Math/Linear-Algebra/Matrices.md](../Linear-Algebra/Matrices.md)
 - Status: Draft
 - Reviewed-by: -
+- Depth: Deep-dive (자기완결)
 
 ---
 
@@ -15,6 +16,15 @@
 
 날씨가 "오늘이 맑으면 내일 맑을 확률 0.8"처럼 바로 직전 상태만으로 결정된다면, 전체 역사를 기억할 필요가 없다. 이 "기억 없음"이 마르코프 성질이다. 많은 스텝을 거치면 시작점을 잊고 일정한 분포로 수렴하는 경우가 많은데, 그 안정 상태가 정상 분포다.
 
+```mermaid
+stateDiagram-v2
+    [*] --> Sunny
+    Sunny --> Sunny: 0.8
+    Sunny --> Rainy: 0.2
+    Rainy --> Sunny: 0.4
+    Rainy --> Rainy: 0.6
+```
+
 ## 이론 (Theory)
 
 상태 집합 위 전이 행렬 $P$, $P_{ij}=\Pr(X_{t+1}=j\mid X_t=i)$, 각 행의 합은 1(확률 행렬). $n$스텝 전이는 $P^n$이다. 분포 $\pi$가
@@ -22,6 +32,38 @@
 $$\pi P=\pi,\qquad \sum_i \pi_i=1$$
 
 를 만족하면 **정상 분포**다. 체인이 기약적(irreducible)이고 비주기적(aperiodic)이면 유일한 정상 분포로 수렴한다(에르고딕 정리). 정상 분포는 전이 행렬의 고윳값 1에 대응하는 좌고유벡터다. 가역(detailed balance) 체인은 $\pi_i P_{ij}=\pi_j P_{ji}$를 만족한다.
+
+### 상태 분류
+
+| 개념 | 뜻 |
+|---|---|
+| 도달 가능 | 어떤 스텝 수 후 한 상태에서 다른 상태로 갈 확률이 양수 |
+| communicating class | 서로 도달 가능한 상태들의 묶음 |
+| 기약적 | 모든 상태가 하나의 communicating class |
+| 주기 | 어떤 상태로 되돌아올 수 있는 스텝 수들의 최대공약수 |
+| 흡수 상태 | 들어가면 빠져나오지 않는 상태 |
+
+정상 분포가 있어도 시작 분포에서 항상 그 분포로 수렴하는 것은 아니다. 예를 들어 두 상태가 매번 번갈아 바뀌는 체인은 정상 분포는 있지만 분포가 진동한다. 비주기성이 필요한 이유다.
+
+### 2상태 정상 분포 손계산
+
+전이 행렬
+
+$$
+P=\begin{pmatrix}0.8&0.2\\0.4&0.6\end{pmatrix}
+$$
+
+에 대해 $\pi=(a,1-a)$라 두면
+
+$$
+a=0.8a+0.4(1-a)
+$$
+
+이므로 $0.6a=0.4$, $a=2/3$이다. 따라서 정상 분포는 $(2/3,1/3)$이다. 첫 상태에서 둘째 상태로 나가는 확률 흐름 $(2/3)0.2$와 둘째에서 첫째로 들어오는 흐름 $(1/3)0.4$가 같아 균형을 이룬다.
+
+### 수렴 속도와 spectral gap
+
+유한 에르고딕 체인의 수렴 속도는 전이 행렬의 두 번째로 큰 고유값 크기와 관련된다. 가장 큰 고유값은 1이고, 그다음 고유값의 절댓값이 1에 가까울수록 시작 상태의 흔적이 오래 남는다. MCMC에서는 이 mixing time이 실제 표본 품질을 좌우한다.
 
 ## 구현 (Implementation)
 
@@ -38,6 +80,21 @@ def stationary(P, iters=1000):
 P = np.array([[0.8, 0.2],
               [0.4, 0.6]])
 print(stationary(P))           # πP = π 만족하는 분포
+print(stationary(P) @ P)
+```
+
+시뮬레이션으로 경험적 방문 비율을 확인할 수도 있다.
+
+```python
+def simulate(P, steps=10000, start=0):
+    state = start
+    counts = np.zeros(P.shape[0])
+    for _ in range(steps):
+        counts[state] += 1
+        state = np.random.choice(P.shape[0], p=P[state])
+    return counts / counts.sum()
+
+print(simulate(P))
 ```
 
 ## 복잡도 (Complexity)
@@ -57,6 +114,8 @@ print(stationary(P))           # πP = π 만족하는 분포
 - 정상 분포가 항상 유일하거나 존재하는 것은 아니다(기약·비주기 조건 필요).
 - 주기적 체인은 분포가 진동해 수렴하지 않을 수 있다.
 - 정상 분포는 시작 분포와 무관하지만, 수렴 속도는 영향을 받는다.
+- 전이 행렬을 행 확률로 둘지 열 확률로 둘지 관례가 다를 수 있다. 식이 $\pi P=\pi$인지 $P\pi=\pi$인지 확인해야 한다.
+- 정상 분포에 도달했다는 것과 독립 표본을 얻었다는 것은 다르다. 연속된 상태는 여전히 자기상관을 가질 수 있다.
 
 ## TMI
 
@@ -69,6 +128,8 @@ print(stationary(P))           # πP = π 만족하는 분포
 - 2상태 전이 행렬의 정상 분포를 $\pi P=\pi$로 직접 풀어라.
 - 주기적 체인의 예를 만들고 수렴하지 않음을 보여라.
 - detailed balance를 만족하는 체인이 그 $\pi$를 정상 분포로 가짐을 확인하라.
+- 흡수 상태를 가진 3상태 체인을 만들고 장기 분포가 시작 상태에 따라 어떻게 달라지는지 관찰하라.
+- 두 번째 고유값 크기가 다른 두 전이 행렬을 비교해 수렴 속도 차이를 시뮬레이션하라.
 
 ## 이어서 읽기 (Reading Path)
 
