@@ -2,17 +2,19 @@
 
 > 이 템플릿은 **개별 주제 문서**(`Linear-Regression.md`, `BFS-DFS.md` 등) 전용이다.
 > 섹션 허브 README와 주제 인덱스 README는 `Level`/`Status` 필드를 두지 않는다 ([CONTRIBUTING.md](../CONTRIBUTING.md) 문서 작성 규칙 참고).
+> 새 학습 주제는 원칙적으로 [Deep-Dive-Template.md](Deep-Dive-Template.md)를 쓴다. 이 템플릿은 가벼운 표준 문서나 운영상 예외가 필요할 때 쓴다.
 
 - Level: Beginner
 - Prerequisites: 없음
 - Status: Stub
 - Reviewed-by: -
+- Depth: Standard
 
 ---
 
 <!--
 사람이 문서 전체를 검토했다면:
-1) Status를 올린다. Complete는 사람 검토가 끝나야만 쓸 수 있다.
+1) Status를 Complete로 올린다. Complete는 사람 검토가 끝나야만 쓸 수 있다.
 2) Reviewed-by를 "이름 (YYYY-MM-DD)" 형식으로 채운다. 검토 전에는 "-"로 둔다.
 3) 아래 학습자용 배지 한 줄을 본문 맨 위에 추가한다(이름/날짜만 교체):
 > ✅ **사람 검토 완료** — 이름, YYYY-MM-DD
@@ -76,7 +78,15 @@
 
 ## 참조 (References)
 
-- 책/논문/강의 링크
+- 원 논문·공식 문서·저자/대학 자료의 직접 링크와 이 문서에서 뒷받침하는 주장·절. 책은 판본·장·절을 함께 적는다.
+
+## 재작성 메모 (Rewrite Notes)
+
+- 재사용할 재료: 새 원고에 사용할 설명·수식·예제와 해당 절.
+- 보충할 내용: 아직 없는 증명·실패 사례·실습·근거와 다음 조사 질문.
+- 확인 상태: 확인 날짜, 원문 확인 범위, 예제 실행 환경·방법·결과 또는 미실행 범위. 사람 검토는 현재 준비 작업에 포함하지 않는다.
+
+구체적인 기록 방법은 [Preparation-Guide.md](../Maintainers/Preparation-Guide.md)를 따른다. 위 안내 문구는 실제 확인한 내용으로 교체한다.
 
 ## 법적/저작권 확인 (Legal Check)
 

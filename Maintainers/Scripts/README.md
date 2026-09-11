@@ -72,4 +72,29 @@ python Maintainers/Scripts/sync_summary_counts.py --check   # 수정 없이 불�
 python Maintainers/Scripts/test_validate_docs.py
 ```
 
-CI(`.github/workflows/docs.yml`)는 매 PR과 push에서 `validate_docs.py`, `sync_summary_counts.py --check`, 이 테스트를 모두 실행한다.
+CI(`.github/workflows/docs.yml`)는 매 PR과 설정된 브랜치 push에서 기존 구조·요약 검사와 이 테스트, 아래 준비자료 목록 검사·테스트를 실행한다.
+
+## build_preparation_inventory.py
+
+전체 학습 주제를 스캔해 [Preparation-Inventory.md](../Preparation-Inventory.md)를 생성한다. 참조 섹션의 직접 HTTP(S) 출처 링크, 언어가 있는 구현 후보 블록, 재작성 메모 유무를 기록한다. 코드·주석 안의 링크와 예시용 예약 도메인은 출처 수에 넣지 않는다.
+
+```powershell
+python Maintainers/Scripts/build_preparation_inventory.py               # Markdown을 표준 출력으로 보기
+python Maintainers/Scripts/build_preparation_inventory.py --write       # 자동 목록 갱신
+python Maintainers/Scripts/build_preparation_inventory.py --check       # 누락/오래된 목록이면 실패
+python Maintainers/Scripts/build_preparation_inventory.py --format json # 이관·분류용 JSON 출력
+```
+
+`--format json`은 `--write`, `--check`와 함께 사용하지 않는다. 기본 루트는 스크립트가 있는 저장소이며, 테스트 자료 등에는 `--root`를 지정할 수 있다. Python 3.10 이상과 표준 라이브러리만 사용한다.
+
+JSON은 주제별 경로·내용 해시, 직접 출처 URL과 줄 번호, 코드 언어와 범위, 메모 위치를 포함한다. 목록에 날짜를 자동으로 넣지 않아 같은 내용에서는 같은 출력이 나온다. 실행 시 네트워크에 접근하거나 문서의 코드를 실행하지 않는다.
+
+링크 수는 근거의 충분성, 코드 블록 수는 실행 성공, 메모 존재는 재작성 완료를 뜻하지 않는다. 실제 확인 범위는 주제별 메모에 기록한다. Markdown `--check`는 표에 표시되는 관측값의 변경을 검사한다. 줄 위치와 내용 해시가 필요한 경우에는 JSON을 다시 내보내 최신 본문과 함께 사용한다.
+
+## test_preparation_inventory.py
+
+출처 파싱, 코드·주석의 가짜 링크 제외, 재작성 메모 탐지, 안정적인 출력, 파일 누락·변경 감지와 JSON CLI를 검사한다.
+
+```powershell
+python Maintainers/Scripts/test_preparation_inventory.py
+```

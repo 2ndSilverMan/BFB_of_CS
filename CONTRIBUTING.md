@@ -57,7 +57,9 @@ BFB_of_CS/
 
 ## 작성 우선순위
 
-새 주제를 추가하기보다 이미 예정된 핵심 경로를 먼저 본문으로 전환한다.
+현재는 별도 문서 프로젝트의 준비자료를 확보한다. [Preparation-Guide.md](Maintainers/Preparation-Guide.md)에 따라 직접 출처, 구체 예제, 추가 조사할 질문을 먼저 보강한다. [Preparation-Inventory.md](Maintainers/Preparation-Inventory.md)는 전체 주제에서 이 재료를 찾는 자동 목록이다.
+
+기존 핵심 경로와 아래 표는 재료를 보강할 순서를 정하는 데 사용한다.
 전체 작성 순서는 [Content-Backlog.md](Maintainers/Content-Backlog.md)를 따르고, 로드맵 완료 기준과 실제 문서의 연결은 [Coverage-Matrix.md](Maintainers/Coverage-Matrix.md)를 따른다. 핵심 경로 밖의 예정 주제는 [Topic-Classification.md](Maintainers/Topic-Classification.md)에서 `Optional` 또는 `Deferred`로 분류한다.
 
 | 우선순위 | 범위 | 기준 |
@@ -83,11 +85,13 @@ BFB_of_CS/
 | Stub | 제목과 골격만 있음 |
 | Draft | 주요 내용 초안 작성 중 |
 | Review | 내용 완성, 검토 필요 |
-| Complete | 완성 |
+| Complete | 사람이 전체 내용을 검토한 완성 |
 
 ## 사람 검토 표시 (Reviewed-by)
 
 초안은 상당수 AI가 작성하므로, 사람이 문서 전체를 직접 검토했는지는 내용 성숙도(`Status`)와 **별개의 축**으로 표시한다. 문서 상단 메타데이터에 `Reviewed-by`를 둔다.
+
+현재 준비자료 단계에서는 사람 검토와 `Complete` 승격을 작업 목표로 두지 않는다. 자동화 가능한 작성, 참조 보강, 로드맵/운영 문서 정리 중에는 `Reviewed-by: -`를 유지한다. 출처 확인과 예제 실행 결과는 재작성 메모에 기록하며, 실제로 읽지 않은 문서를 `Complete`로 올리지 않는다.
 
 - 검토 전: `- Reviewed-by: -`
 - 검토 후: `- Reviewed-by: 이름 (YYYY-MM-DD)`
@@ -102,15 +106,17 @@ BFB_of_CS/
 
 같은 주제라도 다루는 깊이를 두 tier로 구분한다. `Depth`는 `Status`(성숙도), `Level`(학습 경로상 위치/전제), `Reviewed-by`(사람 검토)와 **독립된 축**이다.
 
+현재 프로젝트 정책은 **학습 섹션의 개별 주제 문서를 원칙적으로 `Deep-dive` 품질로 운영**하는 것이다. README, Roadmaps, Reference, Maintainers, Templates 문서는 학습 주제 본문이 아니므로 별도 문서 종류별 기준을 따른다.
+
 | tier | 의미 | 분량 감각 | 템플릿 |
 |---|---|---|---|
-| Standard | 잘 정리된 개념 지도/강의노트. 절대다수의 기본값 | 섹션당 1~3문장 | [Topic-Template.md](Templates/Topic-Template.md) |
-| Deep-dive | 선언한 선수지식 위에서 자기완결적인 심화 | 메커니즘·워크드 예제까지 | [Deep-Dive-Template.md](Templates/Deep-Dive-Template.md) |
+| Standard | 가벼운 개념 지도/운영 예외 문서 | 섹션당 1~3문장 | [Topic-Template.md](Templates/Topic-Template.md) |
+| Deep-dive | 선언한 선수지식 위에서 자기완결적인 학습 주제 문서 | 메커니즘·워크드 예제까지 | [Deep-Dive-Template.md](Templates/Deep-Dive-Template.md) |
 
-- `Depth`는 **선택 필드**다. 없으면 Standard로 본다. 값은 `Standard` 또는 `Deep-dive`이며, 뒤에 괄호 메모를 붙일 수 있다(예: `- Depth: Deep-dive (자기완결)`). 허용 값 밖이면 검증에서 막힌다(`BadMetadataDepth`).
+- `Depth`는 검증기 관점에서는 **선택 필드**다. 없으면 Standard로 본다. 다만 새 학습 주제 문서는 `- Depth: Deep-dive (자기완결)`를 명시한다. 값은 `Standard` 또는 `Deep-dive`이며, 뒤에 괄호 메모를 붙일 수 있다. 허용 값 밖이면 검증에서 막힌다(`BadMetadataDepth`).
 - **Deep-dive 품질 바** (Draft 이상으로 올리기 전 자가 점검): ① 선수지식 위에서 자기완결 ② 이론·구현·복잡도가 "왜·어떻게"(메커니즘)를 담음 ③ 워크드 예제(수치/구체) 최소 1개 ④ 실행 가능한 명령·코드·설정 ⑤ 실전 실패 모드 ⑥ 구조는 Mermaid ⑦ 비자명한 주장엔 참조.
-- **운영 원칙**: deep-dive는 전 문서로 확대하지 않는다. roadmap의 핵심·길목 주제 등 **소수에만 선별 적용**한다. 깊어질수록 검증할 사실이 늘어 사람 검토 부담이 커지므로, `Complete` 승격 시 검토를 특히 꼼꼼히 한다(`Complete`는 tier와 무관하게 사람 검토 필수).
-- 어떤 문서를 deep-dive 후보로 삼을지는 [Documentation-Depth-Plan.md](Maintainers/Documentation-Depth-Plan.md)의 선정 루브릭과 작업 순서를 따른다.
+- **운영 원칙**: 학습 주제 문서는 deep-dive를 기본 품질 바로 삼는다. 준비자료 보강은 출처·예제·추가 조사 항목으로 확인한다. 사람 검토는 현재 작업 범위에 포함하지 않으며, 기존 `Complete`의 의미는 유지한다(`Complete`는 tier와 무관하게 사람 검토 필수).
+- deep-dive 품질 점검과 사람 검토 없이 처리할 다음 작업은 [Documentation-Depth-Plan.md](Maintainers/Documentation-Depth-Plan.md)의 루브릭과 작업 순서를 따른다.
 
 ## 수식과 다이어그램 표기
 
@@ -160,6 +166,7 @@ BFB_of_CS/
 
 - 저장소 루트에서 `python Maintainers/Scripts/validate_docs.py` 또는 `py -3 Maintainers/Scripts/validate_docs.py`로 링크, 표, 메타데이터, README-본문 상태 동기화를 검사했는가
 - 상태를 추가하거나 올렸다면 `python Maintainers/Scripts/sync_summary_counts.py`로 운영 문서의 요약 수치를 자동으로 맞췄는가
+- 주제를 작성하거나 보강했다면 직접 출처와 재작성 메모를 남기고 `python Maintainers/Scripts/build_preparation_inventory.py --write`로 전체 자료 목록을 갱신했는가
 - 구조 준비 완료 기준이 필요한 변경이라면 [Project-Readiness.md](Maintainers/Project-Readiness.md)에 어긋나지 않는가
 - Markdown 파일에 UTF-8 BOM이 없는가
 - 로드맵 필수 문서라면 [Coverage-Matrix.md](Maintainers/Coverage-Matrix.md)에 반영되어 있는가

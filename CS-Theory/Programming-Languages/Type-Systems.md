@@ -34,12 +34,14 @@ $$
      {\Gamma \vdash e_1\ e_2 : \tau_2}
 $$
 
+함수 입력 타입과 인자 타입이 맞아야 적용식의 결과 타입을 얻는다는 규칙이다. 이 규칙과 변수·람다 추상화 규칙을 함께 정리한 직접 출처는 [Software Foundations의 STLC, Typing](https://softwarefoundations.cis.upenn.edu/plf-current/Stlc.html)이다.
+
 좋은 타입 시스템이 보통 노리는 안전성은 두 정리로 나뉜다.
 
 - 진행(progress): 잘 타입된 닫힌 항은 값이거나 다음 계산 단계가 있다.
 - 보존(preservation): 잘 타입된 항이 한 단계 계산된 뒤에도 타입이 유지된다.
 
-둘을 합치면 잘 타입된 프로그램은 정의된 실행 규칙 안에서 "막히지 않는다"는 타입 안전성을 얻는다. 단, 배열 범위 오류, 0으로 나누기, 논리 버그까지 모두 막는다는 뜻은 아니다.
+둘을 합치면 잘 타입된 프로그램은 정의된 실행 규칙 안에서 "막히지 않는다"는 타입 안전성을 얻는다. 보장 범위는 언어의 타입·평가 규칙에 달려 있다. 실용 언어의 타입 안전성만으로 배열 범위 오류, 0으로 나누기, 논리 버그를 모두 막는다고 추론하면 안 된다. 진행·보존의 정확한 전제와 STLC 증명은 [Software Foundations의 Progress, Preservation, Type Soundness](https://softwarefoundations.cis.upenn.edu/plf-current/StlcProp.html)를 참고한다.
 
 | 구분 | 예 | 장단점 |
 |---|---|---|
@@ -54,7 +56,7 @@ $$
 
 ## 구현 (Implementation)
 
-작은 식 언어에 정수와 불리언 타입 검사를 붙여 보자.
+작은 식 언어에 정수와 불리언 타입 검사를 붙여 보자. 아래 코드는 문법 분석을 끝낸 AST를 입력으로 가정한다. `integer` 태그의 값은 정수, `boolean` 태그의 값은 불리언이며 각 튜플의 길이는 문법에 맞아야 한다. 임의의 Python 객체를 안전하게 파싱하는 입력 검증기는 아니다. 또한 여기서는 함수·변수·람다를 구현하지 않으므로 위 STLC 전체를 검사하는 코드도 아니다.
 
 ```python
 def type_of(expr):
@@ -86,10 +88,40 @@ print(type_of(("add", ("integer", 1), ("integer", 2))))  # Int
 
 ```python
 bad = ("add", ("integer", 1), ("boolean", True))
-print(type_of(bad))  # TypeError: addition requires two Int values
+try:
+    type_of(bad)
+except TypeError as exc:
+    assert str(exc) == "addition requires two Int values"
+    print(type(exc).__name__, str(exc))
+else:
+    raise AssertionError("mixed addition was accepted")
 ```
 
 타입 검사기는 프로그램을 실행해 `1 + true`를 계산해 보는 것이 아니라, AST 모양과 하위 식의 타입만으로 거부한다.
+
+조건식도 함께 확인하면 "조건은 Bool, 두 분기의 결과 타입은 동일"이라는 계약이 드러난다. 다음 코드는 앞의 `type_of` 정의 뒤에 이어서 실행한다.
+
+```python
+assert type_of(("integer", 0)) == "Int"
+assert type_of(("boolean", False)) == "Bool"
+assert type_of(("add", ("integer", 1), ("integer", 2))) == "Int"
+assert type_of(("if", ("boolean", True), ("integer", 1), ("integer", 2))) == "Int"
+
+invalid_conditionals = [
+    ("if", ("integer", 1), ("integer", 2), ("integer", 3)),
+    ("if", ("boolean", False), ("integer", 2), ("boolean", True)),
+]
+for expr in invalid_conditionals:
+    try:
+        type_of(expr)
+    except TypeError as exc:
+        assert str(exc) == "invalid conditional"
+    else:
+        raise AssertionError("an ill-typed conditional was accepted")
+print("4 accepted expressions and 3 rejection cases passed")
+```
+
+두 번째 거부 예제는 실행 시에는 `else` 분기만 선택하더라도 정적 검사에서 양쪽 결과 타입을 확인한다는 점을 보여 준다. 이는 이 작은 언어의 규칙이며 모든 언어가 같은 조건식 규칙을 쓰는 것은 아니다.
 
 ## 복잡도 (Complexity)
 
@@ -132,7 +164,15 @@ print(type_of(bad))  # TypeError: addition requires two Int values
 
 ## 참조 (References)
 
+- [Software Foundations — The Simply Typed Lambda-Calculus](https://softwarefoundations.cis.upenn.edu/plf-current/Stlc.html): 저자들이 공개한 `Typing` 절의 함수 적용·추상화·조건식 규칙. 본문의 타입 판단 수식과 작은 조건식 검사 규칙을 연결할 출처.
+- [Software Foundations — Properties of STLC](https://softwarefoundations.cis.upenn.edu/plf-current/StlcProp.html): `Progress`, `Preservation`, `Type Soundness` 절의 전제와 정리. 타입 안전성이 무엇을 보장하는지 재작성할 때의 직접 출처.
 - [CS-Theory/Programming-Languages/Syntax-and-Semantics.md](Syntax-and-Semantics.md)
 - [CS-Theory/Programming-Languages/Lambda-Calculus.md](Lambda-Calculus.md)
 - [Reference/Books.md](../../Reference/Books.md)
 - [Reference/Courses.md](../../Reference/Courses.md)
+
+## 재작성 메모 (Rewrite Notes)
+
+- 재사용할 재료: 함수 적용 판단식, `x + 1` 유도, 정수·불리언 AST 검사기, 덧셈 혼합 타입과 조건식의 두 실패 원인을 검사하는 예제.
+- 보충할 내용: 예제 언어의 평가 규칙을 정의하고 진행·보존을 증명하기, 변수 환경과 람다를 구현해 STLC와 연결하기, 타입 검사 이전의 AST 문법 검증 범위.
+- 확인 상태: 2026-09-11 Software Foundations 저자 공개본에서 함수 적용·조건식 규칙과 진행·보존의 전제를 대조했다. Python 3.12.10에서 본문 코드 블록을 순서대로 실행해 허용식 4개와 거부식 3개의 assert가 통과했다. 이 작은 언어 전체의 형식적 안전성을 증명한 것은 아니다.

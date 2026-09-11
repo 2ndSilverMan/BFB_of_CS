@@ -50,15 +50,15 @@ $$
 
 ### shape로 보는 축소 SVD
 
-$A$가 $m\times n$, 랭크가 $r$이면 축소 SVD는 다음 모양을 갖는다.
+$A$가 $m\times n$, $q=\min(m,n)$, 랭크가 $r$일 때 라이브러리의 축소형과 0이 아닌 성분만 남긴 compact 형태를 구분해야 한다.
 
-| 항 | 모양 | 의미 |
-|---|---|---|
-| $U_r$ | $m\times r$ | 출력 공간의 직교 축 |
-| $\Sigma_r$ | $r\times r$ | 0이 아닌 특이값 |
-| $V_r^\top$ | $r\times n$ | 입력 공간의 직교 축 |
+| 형태 | $U$의 모양 | $\Sigma$의 모양 | $V^\top$의 모양 |
+|---|---|---|---|
+| 전체 SVD | $m\times m$ | $m\times n$ | $n\times n$ |
+| 축소형(reduced), `full_matrices=False` | $m\times q$ | $q\times q$ | $q\times n$ |
+| compact, 0이 아닌 성분만 보존 | $m\times r$ | $r\times r$ | $r\times n$ |
 
-`full_matrices=False`는 보통 이 축소 형태를 반환한다. 실제 데이터 분석에서는 0이 아닌 특이값 전부가 아니라 상위 $k$개만 쓰는 경우가 많아 $U_k\Sigma_kV_k^\top$가 압축된 표현이 된다.
+NumPy는 `full_matrices=False`여도 특이값을 $q$개 반환하며, 랭크 부족으로 0에 가까운 특이값이 있어도 자동으로 $r$개로 줄이지 않는다. compact 형태는 별도의 임계값으로 유효 성분을 골라야 한다. 상위 $k\le r$개만 남긴 $U_k\Sigma_kV_k^\top$는 저랭크 근사다. 여기서 $\Sigma$는 설명용 대각 행렬이고, NumPy가 실제 반환하는 특이값은 1차원 배열이다. ([NumPy `svd`의 `full_matrices`와 반환 shape](https://numpy.org/doc/stable/reference/generated/numpy.linalg.svd.html))
 
 ### 특이값 간격과 해석
 
@@ -86,13 +86,26 @@ print(np.linalg.norm(A - A_rank1, ord="fro"))
 
 큰 희소 행렬에서 일부 특이값만 필요하면 전체 SVD 대신 truncated/randomized SVD를 사용한다.
 
-유사역행렬은 작은 특이값 처리 기준을 명시해야 안정적이다.
+유사역행렬은 작은 특이값 처리 기준을 명시해야 안정적이다. 아래는 최대 특이값에 대한 상대 임계값을 쓰며, 비교 대상 `np.linalg.pinv`에도 같은 `rcond`를 전달한다. 임계값 이하의 성분을 버리는 것은 수치 계산상의 선택이며, 모든 데이터에 적합한 하나의 임계값은 없다. ([NumPy `pinv`의 `rcond`](https://numpy.org/doc/stable/reference/generated/numpy.linalg.pinv.html))
 
 ```python
-tol = 1e-10
+rcond = 1e-10
+tol = rcond * singular_values[0]
 sigma_inv = np.array([1 / s if s > tol else 0.0 for s in singular_values])
 A_pinv = Vt.T @ np.diag(sigma_inv) @ U.T
-print(np.allclose(A_pinv, np.linalg.pinv(A)))
+assert np.allclose(A_pinv, np.linalg.pinv(A, rcond=rcond))
+assert np.allclose(A @ A_pinv @ A, A)
+```
+
+랭크가 부족한 입력에서는 반환 shape와 유효 랭크가 다르다는 것을 확인할 수 있다. 다음 예제의 입력은 $2\times3$, 랭크는 1이지만 축소형 특이값 배열의 길이는 2다.
+
+```python
+rank_one = np.array([[3.0, 0.0, 0.0], [0.0, 0.0, 0.0]])
+Ur, sr, Vtr = np.linalg.svd(rank_one, full_matrices=False)
+assert (Ur.shape, sr.shape, Vtr.shape) == ((2, 2), (2,), (2, 3))
+assert np.count_nonzero(sr > 1e-10) == 1
+assert np.allclose(Ur @ np.diag(sr) @ Vtr, rank_one)
+assert np.isinf(np.linalg.cond(np.diag([3.0, 0.0]), 2))
 ```
 
 ## 복잡도 (Complexity)
@@ -119,7 +132,7 @@ $m\ge n$인 조밀한 $m\times n$ 행렬의 전체 SVD는 대략 `O(mn^2)` 시�
 
 ## TMI
 
-- 2-norm 조건수는 가장 큰 특이값을 가장 작은 0이 아닌 특이값으로 나눈 값이다.
+- 가역 정사각 행렬의 2-norm 조건수는 $\kappa_2(A)=\sigma_{\max}/\sigma_{\min}$이다. 특이 정사각 행렬은 $\sigma_{\min}=0$이므로 조건수를 무한대로 본다. 0인 특이값을 제외한 비율은 유효 부분공간의 조건을 따로 볼 때 쓰며, 원래 행렬의 조건수와 구분한다. ([NumPy `cond`의 정의와 SVD 계산](https://numpy.org/doc/stable/reference/generated/numpy.linalg.cond.html))
 - Eckart–Young–Mirsky 정리가 truncated SVD의 최적 저랭크 근사를 보장한다.
 - 추천 시스템에서 사용자-아이템 행렬을 저랭크 요인으로 근사하는 생각도 SVD와 밀접하다.
 
@@ -139,7 +152,16 @@ $m\ge n$인 조밀한 $m\times n$ 행렬의 전체 SVD는 대략 `O(mn^2)` 시�
 
 ## 참조 (References)
 
+- [NumPy — `numpy.linalg.svd`](https://numpy.org/doc/stable/reference/generated/numpy.linalg.svd.html): `full_matrices=False`의 $q=\min(m,n)$ 반환 shape와 재구성 식을 확인할 직접 출처.
+- [NumPy — `numpy.linalg.pinv`](https://numpy.org/doc/stable/reference/generated/numpy.linalg.pinv.html): SVD 기반 유사역행렬과 `rcond * largest_singular_value` 임계값을 확인할 직접 출처.
+- [NumPy — `numpy.linalg.cond`](https://numpy.org/doc/stable/reference/generated/numpy.linalg.cond.html): 역행렬 노름으로 정의되는 조건수, SVD를 사용하는 2-norm 계산 및 무한대 반환 가능성을 확인할 직접 출처.
 - [Math/Linear-Algebra/Eigenvalues.md](Eigenvalues.md)
 - [Math/Linear-Algebra/Orthogonality.md](Orthogonality.md)
 - [Reference/Books.md](../../Reference/Books.md)
 - [Reference/Courses.md](../../Reference/Courses.md)
+
+## 재작성 메모 (Rewrite Notes)
+
+- 재사용할 재료: 축소형과 compact 형태 비교표, 대각 행렬 손계산, 랭크 1 근사 코드, 상대 임계값 유사역행렬 코드와 랭크 부족 입력의 shape 확인 예제.
+- 보충할 내용: Eckart–Young–Mirsky 정리의 가정과 증명 출처, 잡음 크기별 임계값 선택 실험, randomized SVD와 전체 분해의 시간·메모리 비교 자료.
+- 확인 상태: 2026-09-11 NumPy 공식 `svd`·`pinv`·`cond` 문서에서 위 참조에 명시한 API와 정의를 대조했다. Python 3.12.10에서 Python 코드 블록 3개의 문법 컴파일은 통과했다. 해당 환경에는 NumPy가 없어 수치 예제 실행 결과는 아직 확인하지 못했다.

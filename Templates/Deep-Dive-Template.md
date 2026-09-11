@@ -1,8 +1,8 @@
 # 주제명 (Topic Name)
 
 > 이 템플릿은 **deep-dive(자기완결 심화) 주제 문서** 전용이다.
-> 기본 주제 문서는 [Topic-Template.md](Topic-Template.md)를 쓴다. 두 tier의 차이와 운영 원칙은 [CONTRIBUTING.md](../CONTRIBUTING.md)의 "문서 깊이(Depth) tier"를 따른다.
-> deep-dive는 모든 문서가 아니라 **소수 핵심·길목 주제**에만 선별 적용한다(검토 비용 때문).
+> 새 학습 주제 문서는 원칙적으로 이 템플릿을 쓴다. 가벼운 표준 문서는 예외적으로 [Topic-Template.md](Topic-Template.md)를 쓴다.
+> 두 tier의 차이와 운영 원칙은 [CONTRIBUTING.md](../CONTRIBUTING.md)의 "문서 깊이(Depth) tier"를 따른다.
 
 - Level: Intermediate
 - Prerequisites: 없음
@@ -22,7 +22,7 @@ Depth: Deep-dive 의 품질 바 (Status를 Draft 이상으로 올리기 전 자�
 6) 구조나 흐름은 ```mermaid``` 다이어그램으로 보여 준다.
 7) 비자명한 사실 주장에는 참조가 붙는다.
 
-사람 검토를 마쳤다면 Status를 올리고, Reviewed-by를 "이름 (YYYY-MM-DD)"로 채운 뒤
+현재 준비자료 단계에서는 사람 검토를 작업 목표로 두지 않는다. 아래는 기존 Complete 상태 정의다. 실제로 전체 내용을 읽고 검토했다면 Status를 Complete로 올리고, Reviewed-by를 "이름 (YYYY-MM-DD)"로 채운 뒤
 본문 맨 위에 배지 한 줄을 추가한다(검토 안 했으면 넣지 않는다):
 > ✅ **사람 검토 완료** — 이름, YYYY-MM-DD
 deep-dive는 검증할 사실이 많으니 Complete 승격 전 검토를 특히 꼼꼼히 한다.
@@ -80,7 +80,15 @@ deep-dive의 본문. 메커니즘을 끝까지 설명한다.
 
 ## 참조 (References)
 
-- 책/논문/공식 문서/강의 링크. 본문의 비자명한 주장과 연결한다.
+- 원 논문·공식 문서·저자/대학 자료의 직접 링크와 이 문서에서 뒷받침하는 주장·절. 책은 판본·장·절을 함께 적는다.
+
+## 재작성 메모 (Rewrite Notes)
+
+- 재사용할 재료: 새 원고에 사용할 메커니즘 설명·계산 과정·실행 예제·실패 사례와 해당 절.
+- 보충할 내용: 아직 없는 증명·경계 조건·실습·근거와 다음 조사 질문.
+- 확인 상태: 확인 날짜, 원문 확인 범위, 예제 실행 환경·방법·결과 또는 미실행 범위. 사람 검토는 현재 준비 작업에 포함하지 않는다.
+
+구체적인 기록 방법은 [Preparation-Guide.md](../Maintainers/Preparation-Guide.md)를 따른다. 위 안내 문구는 실제 확인한 내용으로 교체한다.
 
 ## 법적/저작권 확인 (Legal Check)
 

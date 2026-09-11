@@ -1,6 +1,6 @@
 # 콘텐츠 작성 백로그 (Content Backlog)
 
-> 전체 프로젝트를 실제 지식 문서 작성 단계로 전환하기 위한 우선순위.
+> 새 프로젝트에서 사용할 재료를 보강할 때 참고하는 주제별 경로와 우선순위.
 
 ---
 
@@ -11,7 +11,7 @@
 
 전체 로드맵별 필수 문서 매핑은 [Coverage-Matrix.md](Coverage-Matrix.md)를 따른다.
 핵심 경로 밖의 `Optional`/`Deferred` 주제 분류는 [Topic-Classification.md](Topic-Classification.md)를 따른다.
-기존 문서를 더 깊게 만들거나 `Deep-dive` 후보를 고를 때는 [Documentation-Depth-Plan.md](Documentation-Depth-Plan.md)를 따른다.
+기존 문서의 deep-dive 품질을 점검하거나 사람 검토 없이 처리할 다음 운영 작업을 고를 때는 [Documentation-Depth-Plan.md](Documentation-Depth-Plan.md)를 따른다.
 
 | 영역 | 현재 Draft | Review | 남은 Planned | 우선 역할 |
 |---|---:|---:|---:|---|
@@ -30,7 +30,7 @@
 
 여기서 `P0`-`P7`은 장애 심각도가 아니라 **작성 백로그 우선순위**다. 숫자가 낮을수록 먼저 안정화할 학습 경로다.
 
-- `P0`: 이미 작성된 읽기 가능한 최소 경로. 새 주제 추가보다 먼저 정확성, 사람 검토, 참조를 안정화한다.
+- `P0`: 이미 작성된 읽기 가능한 최소 경로. 직접 출처, 구체 예제, 재작성 메모와 자동 검증을 우선 보강한다.
 - `P1`: 입문자 최종 완료 기준 중 비시스템 기초를 채우는 문서.
 - `P1.5`: 입문자 최종 완료 기준 중 시스템 맛보기를 채우는 최소 문서.
 - `P2`: CS Core로 들어가기 위한 시스템/이론 최소 문서.
@@ -40,7 +40,16 @@
 - `P6`: Systems Engineer와 ML Engineer 실무 흐름을 완성하는 문서.
 - `P7`: Researcher와 심화 이론 흐름을 완성하는 문서.
 
-현재 P0-P3의 대상 파일은 모두 본문이 열려 있다. 다음 신규 작성 작업은 P4/P5 이후에서 고르고, P0-P3은 정확성 검토와 참조 보강을 통해 `Review`로 승격한다.
+현재 P0-P7의 대상 파일은 모두 본문이 열려 있고, 남은 Planned 수는 0이다. [Preparation-Inventory.md](Preparation-Inventory.md)에서 직접 출처와 재작성 메모가 없는 주제를 찾고, 아래 경로의 공통 기초부터 보강한다. 사람 검토와 `Complete` 승격은 현재 준비 작업에 포함하지 않는다.
+
+## 현재 보강 순서
+
+1. 주제별 핵심 주장과 연결되는 직접 원문·공식 문서를 확보한다.
+2. 수치 계산, 실행 추적, 실패 사례처럼 새 문서에 재사용할 구체 재료를 추가한다.
+3. 문서의 재작성 메모에 아직 없는 증명·실습·근거와 다음 조사 질문을 남긴다.
+4. 자동 자료 목록을 갱신하고 구조 검증을 실행한다.
+
+메모 형식과 확인 범위 기록은 [Preparation-Guide.md](Preparation-Guide.md)를 따른다. 이 백로그의 `작성됨`은 본문 파일이 있다는 뜻이며, 위 재료가 모두 확보되었다는 뜻은 아니다.
 
 ---
 
@@ -155,10 +164,11 @@
 
 ## 승격 순서
 
-1. 이 백로그 또는 [Coverage-Matrix.md](Coverage-Matrix.md)에서 다음 작성 대상을 고른다.
-2. 상위 README의 `Planned` 행을 확인한다.
-3. 실제 파일을 만들고 `Status: Draft`를 둔다.
+1. 이 백로그 또는 [Project-Readiness.md](Project-Readiness.md)에서 다음 작성/운영 보강 대상을 고른다.
+2. 새 주제라면 상위 README의 `Planned` 행을 확인한다.
+3. 실제 파일을 만들고 `Status: Draft`, `Reviewed-by: -`, `Depth: Deep-dive (자기완결)`를 둔다.
 4. 상위 README의 해당 행을 `Draft`로 바꾼다.
 5. `python Maintainers/Scripts/sync_summary_counts.py`로 요약 수치를 맞춘 뒤 `python Maintainers/Scripts/validate_docs.py`를 실행한다.
 6. 개념, 직관, 이론, 구현/예시, 복잡도/한계, 응용, 흔한 오해, 연습 문제, 이어서 읽기, 참조가 충분하면 `Review`로 올린다.
 7. 핵심 경로 밖의 주제는 [Topic-Classification.md](Topic-Classification.md)의 `Optional` 또는 `Deferred` 분류를 확인한다.
+8. 사람이 직접 전체 내용을 검토하기 전에는 `Complete`, `Reviewed-by`, 검토 배지를 채우지 않는다.

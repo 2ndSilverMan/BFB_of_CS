@@ -26,3 +26,9 @@ jobs:
 
       - name: Run maintainer script unit tests
         run: python Maintainers/Scripts/test_validate_docs.py
+
+      - name: Check preparation inventory is in sync
+        run: python Maintainers/Scripts/build_preparation_inventory.py --check
+
+      - name: Run preparation inventory unit tests
+        run: python Maintainers/Scripts/test_preparation_inventory.py

@@ -82,6 +82,15 @@
 | BERT | Devlin et al. | 2018 | [AI/NLP](../AI/NLP/) | 언어 모델 사전 학습 |
 | Language Models are Few-Shot Learners (GPT-3) | Brown et al. | 2020 | [AI/LLMs](../AI/LLMs/) | LLM |
 
+### 검색 증강과 긴 문맥
+
+| 논문 | 저자 | 연도 | 섹션 | 키워드 | 원문 |
+|---|---|---|---|---|---|
+| Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks | Lewis et al. | 2020 | [AI/LLMs](../AI/LLMs/) | 검색기·생성기 결합, RAG-Sequence/Token | [arXiv](https://arxiv.org/abs/2005.11401) |
+| Lost in the Middle: How Language Models Use Long Contexts | Liu et al. | 2023 (preprint) | [AI/LLMs](../AI/LLMs/) | 근거 위치에 따른 성능 변화 | [arXiv](https://arxiv.org/abs/2307.03172) |
+
+이 두 자료를 사용하는 설명과 추가 조사할 범위는 [RAG 문서](../AI/LLMs/RAG.md)에 기록한다.
+
 ### 강화학습
 
 | 논문 | 저자 | 연도 | 섹션 | 키워드 |

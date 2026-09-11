@@ -4,12 +4,16 @@
 
 학습자는 보통 [Roadmaps/](../Roadmaps/)와 각 섹션 README만 보면 된다. 이 디렉토리는 문서를 새로 쓰거나, 상태를 올리거나, 전체 범위를 관리할 때 사용한다.
 
+현재 목적은 별도 문서 프로젝트를 위한 준비자료 확보다. [Preparation-Guide.md](Preparation-Guide.md)의 출처·예제·재작성 메모 기준을 우선하며, 사람 검토는 준비 작업의 완료 조건에 포함하지 않는다.
+
 ## 문서
 
 | 문서 | 용도 |
 |---|---|
+| [Preparation-Guide.md](Preparation-Guide.md) | 재사용할 재료, 직접 출처, 보충할 질문을 남기는 현재 작업 기준 |
+| [Preparation-Inventory.md](Preparation-Inventory.md) | 모든 주제의 직접 출처·구현 후보·재작성 메모 자동 목록 |
 | [Content-Backlog.md](Content-Backlog.md) | 전체 프로젝트의 본문 작성 우선순위 |
-| [Documentation-Depth-Plan.md](Documentation-Depth-Plan.md) | Draft 문서를 Review/Deep-dive로 심화하기 위한 선정 기준과 작업 순서 |
+| [Documentation-Depth-Plan.md](Documentation-Depth-Plan.md) | 전 주제 deep-dive 품질 유지와 비검토 작업 우선순위 |
 | [Coverage-Matrix.md](Coverage-Matrix.md) | 로드맵별 필수 문서와 완료 기준 연결 |
 | [Topic-Classification.md](Topic-Classification.md) | 모든 예정 주제의 Required/Optional/Deferred 분류 |
 | [Reference-Coverage.md](Reference-Coverage.md) | 책, 강의, 논문, 용어 사전의 분야별 보강 상태 |
@@ -25,7 +29,7 @@
 
 - 학습자는 루트 README, [Roadmaps/](../Roadmaps/), 각 섹션 README만으로 시작점과 다음 주제를 찾을 수 있다.
 - 모든 예정 주제는 섹션 README의 주제 표에 있고, 핵심 경로 또는 `Optional`/`Deferred` 분류에 포함된다.
-- 실제 파일이 있는 주제는 [Topic-Template.md](../Templates/Topic-Template.md)의 필수 섹션과 `Reviewed-by` 필드를 갖추고, 상위 README의 `Status`와 문서 상단 `Status`가 일치한다.
+- 실제 파일이 있는 주제는 [Deep-Dive-Template.md](../Templates/Deep-Dive-Template.md)의 품질 바, `Depth`, `Reviewed-by` 필드를 갖추고, 상위 README의 `Status`와 문서 상단 `Status`가 일치한다.
 - 로드맵 완료 기준에 필요한 문서는 [Coverage-Matrix.md](Coverage-Matrix.md)에 연결된다.
 - 본문 작성 우선순위는 [Content-Backlog.md](Content-Backlog.md)에서 결정하고, 참조 자료 보강은 [Reference-Coverage.md](Reference-Coverage.md)에 반영한다.
 - 구조 준비 완료 기준은 [Project-Readiness.md](Project-Readiness.md)로 확인한다.
@@ -34,11 +38,12 @@
 
 ## 작업 흐름
 
-1. [Content-Backlog.md](Content-Backlog.md)에서 다음 작성 대상을 고른다.
-2. 기존 문서를 깊게 만들거나 `Deep-dive` 후보를 고른다면 [Documentation-Depth-Plan.md](Documentation-Depth-Plan.md)를 확인한다.
+1. [Preparation-Inventory.md](Preparation-Inventory.md)에서 출처나 메모가 없는 주제를 찾고, [Content-Backlog.md](Content-Backlog.md)의 경로 우선순위와 함께 보강 대상을 고른다.
+2. deep-dive 품질 기준이나 사람 검토 없이 처리할 다음 작업을 고른다면 [Documentation-Depth-Plan.md](Documentation-Depth-Plan.md)를 확인한다.
 3. 해당 주제가 로드맵 필수 문서라면 [Coverage-Matrix.md](Coverage-Matrix.md)를 확인한다.
 4. 핵심 경로 밖의 주제라면 [Topic-Classification.md](Topic-Classification.md)의 분류를 확인한다.
 5. 참조 자료를 보강한다면 [Reference-Coverage.md](Reference-Coverage.md)를 함께 갱신한다.
 6. [Legal-and-Copyright-Policy.md](Legal-and-Copyright-Policy.md)에 맞게 저작권, 라이선스, 개인정보, 보안 리스크를 확인한다.
-7. 템플릿에 맞춰 주제 문서를 작성하고 상위 README의 `Status`를 갱신한다.
-8. [Project-Readiness.md](Project-Readiness.md)의 검증 명령으로 구조를 검수한다.
+7. 템플릿에 맞춰 주제 문서를 작성하고 재작성 메모를 남긴다. `Status`가 바뀌면 상위 README에도 반영한다.
+8. 사람 검토 전에는 `Reviewed-by: -`를 유지하고 `Complete`로 올리지 않는다.
+9. 자동 자료 목록을 갱신하고 [Project-Readiness.md](Project-Readiness.md)의 검증 명령으로 구조를 검수한다.

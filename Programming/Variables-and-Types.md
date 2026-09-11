@@ -57,11 +57,11 @@ flowchart LR
 
 ### 값, 이름, 바인딩
 
-정적 타입 언어에서는 보통 변수 선언이 "이 이름에는 이런 타입의 값만 들어온다"는 약속을 만든다. 동적 타입 언어에서는 이름보다 값이 타입을 가진다. Python에서 `x = 1` 뒤에 `x = "one"`이 가능한 이유는 `x`라는 이름이 새 문자열 객체를 다시 가리키기 때문이다. 반면 Java의 `int x = 1` 뒤에 `x = "one"`은 타입 규칙에 막힌다.
+정적 타입 언어에서는 보통 변수 선언이 "이 이름에는 이런 타입의 값만 들어온다"는 약속을 만든다. 동적 타입 언어에서는 이름보다 값이 타입을 가진다. Python에서 `x = 1` 뒤에 `x = "one"`이 가능한 이유는 `x`라는 이름이 새 문자열 객체를 다시 가리키기 때문이다. Python은 이름이 객체를 참조하고 대입 등이 이름을 바인딩한다고 정의한다. ([Python 실행 모델의 이름과 바인딩](https://docs.python.org/3/reference/executionmodel.html#binding-of-names)) 반면 Java의 `int x = 1` 뒤에 `x = "one"`은 타입 규칙에 막힌다.
 
 ### 변환과 파싱
 
-타입 변환은 두 종류를 구분해야 한다. `str(42)`처럼 표현만 바꾸는 변환과, `int("42")`처럼 외부 입력을 해석하는 파싱이다. 파싱은 실패할 수 있다. `"42"`는 정수가 되지만 `"4.2"`를 `int`로 바로 파싱하거나 `"forty"`를 숫자로 바꾸는 일은 별도 규칙 없이는 실패한다.
+타입 변환을 살펴볼 때는 값을 다른 표현으로 만드는 일과 문자열 입력을 해석하는 파싱을 구분하면 좋다. `str(42)`는 숫자의 문자열 표현을 만들고, `int("42")`는 정수를 나타내는 문자열을 해석한다. Python에서 `int(4.2)`는 0 방향으로 소수 부분을 버려 `4`가 되지만, `int("4.2")`는 정수 문자열 형식에 맞지 않아 실패한다. `int("forty")`도 실패한다. 문자열 파싱과 실수의 정수 변환은 서로 다른 규칙이다. ([Python `int`의 입력별 변환 규칙](https://docs.python.org/3/library/functions.html#int))
 
 ## 구현 (Implementation)
 
@@ -104,6 +104,45 @@ print(total)       # 3000
 
 이 예제의 핵심은 `raw_price`가 "숫자처럼 보이는 문자열"이라는 점이다. 입력 경계에서는 항상 실제 타입과 의미를 확인해야 한다.
 
+### 성공하는 변환과 실패하는 입력
+
+| 표현식 | 기대 결과 | 확인할 점 |
+|---|---|---|
+| `int("42")` | `42` | 정수 문자열 파싱 |
+| `int("0012")` | `12` | 식별자의 앞자리 0은 보존되지 않음 |
+| `int(4.2)` | `4` | 실수의 소수 부분을 0 방향으로 버림 |
+| `int("4.2")` | `ValueError` | 문자열에는 실수 변환 규칙을 적용하지 않음 |
+| `int("forty")` | `ValueError` | 숫자 문자열이 아님 |
+
+```python
+assert int("42") == 42
+assert int("0012") == 12
+assert int(4.2) == 4
+for raw in ("4.2", "forty"):
+    try:
+        int(raw)
+    except ValueError:
+        pass
+    else:
+        raise AssertionError("invalid integer text was accepted")
+print("3 conversions and 2 parsing failures passed")
+```
+
+바인딩과 객체 변경의 차이는 리스트 두 개를 비교하면 드러난다. `alias`는 같은 객체를 가리키고, `copied`는 바깥 리스트를 복사한 별도 객체다. 이 예제는 정수 원소만 쓰므로 얕은 복사와 중첩 객체의 문제는 다루지 않는다.
+
+```python
+original = [90, 85]
+alias = original
+copied = original.copy()
+alias.append(100)
+assert original == [90, 85, 100]
+assert alias is original
+assert copied == [90, 85] and copied is not original
+alias = [0]
+assert original == [90, 85, 100]  # 이름 재바인딩은 원래 객체를 바꾸지 않음
+print("alias, shallow copy, and rebinding checks passed")
+```
+
 ## 복잡도 (Complexity)
 
 | 연산 | 시간 | 공간 |
@@ -126,7 +165,7 @@ print(total)       # 3000
 ## 흔한 오해 (Common Misunderstandings)
 
 - 변수 이름이 짧을수록 좋은 것은 아니다. 의미가 드러나는 이름이 유지보수에 유리하다.
-- 실수 타입은 모든 소수를 정확히 표현하지 못한다. `0.1 + 0.2` 같은 계산은 언어에 따라 `0.3`과 정확히 같지 않을 수 있다.
+- 이진 부동소수점은 `0.1` 같은 일부 십진 소수를 정확히 표현하지 못한다. Python의 `0.1 + 0.2 == 0.3`은 `False`다. 이는 모든 언어·모든 숫자 타입에 같은 결과가 난다는 뜻은 아니다. ([Python 부동소수점 설명](https://docs.python.org/3/tutorial/floatingpoint.html))
 - 타입 변환은 값의 의미를 보장하지 않는다. `"0012"`를 정수로 바꾸면 앞의 0 정보는 사라진다.
 - 동적 타입 언어가 타입이 없는 언어라는 뜻은 아니다. 타입 검사를 실행 중에 할 뿐이다.
 
@@ -151,6 +190,15 @@ print(total)       # 3000
 
 ## 참조 (References)
 
+- [Python — Execution model, Binding of names](https://docs.python.org/3/reference/executionmodel.html#binding-of-names): 이름이 객체를 참조하고 대입이 이름을 바인딩한다는 규칙. 재바인딩과 객체 변경 설명의 직접 출처.
+- [Python — Built-in Functions, `int`](https://docs.python.org/3/library/functions.html#int): 정수 문자열 파싱과 실수의 0 방향 정수 변환 규칙. 입력·기대 결과 표의 API 근거.
+- [Python — Floating-Point Arithmetic: Issues and Limitations](https://docs.python.org/3/tutorial/floatingpoint.html): 이진 표현 오차와 근사 비교가 필요한 이유를 보충할 공식 설명.
 - [Programming/](./)
 - [Reference/Books.md](../Reference/Books.md)
 - [Reference/Courses.md](../Reference/Courses.md)
+
+## 재작성 메모 (Rewrite Notes)
+
+- 재사용할 재료: 가격 문자열 계산 예제, 파싱 성공·실패 입력표와 assert, 동일 객체 참조·얕은 복사·재바인딩을 비교하는 실행 예제.
+- 보충할 내용: Java·JavaScript의 동일 입력을 실행해 언어별 변환 규칙 비교하기, 중첩 리스트에서 얕은 복사가 공유를 남기는 사례, 숫자로 바꾸면 안 되는 우편번호·식별자 사례.
+- 확인 상태: 2026-09-11 Python 공식 문서에서 이름 바인딩, `int` 변환 규칙과 부동소수점 표현 한계를 대조했다. Python 3.12.10에서 본문 코드 블록을 순서대로 실행해 변환 성공 3개·파싱 실패 2개와 객체 공유·복사·재바인딩 assert가 통과했고, 기존 가격 예제는 `3000`을 출력했다. 다른 언어의 예시는 이번 실행 확인 범위에 포함하지 않았다.
