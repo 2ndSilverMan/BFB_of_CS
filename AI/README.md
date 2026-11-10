@@ -1,6 +1,6 @@
 # 인공지능 (Artificial Intelligence)
 
-> 데이터에서 패턴을 학습하고, 추론하고, 생성하는 시스템.
+> 탐색·지식표현·추론·계획·학습을 통해 지능적 과제를 해결하는 방법. 현재 자료는 ML·딥러닝 중심이다.
 
 **선수지식**: [Programming/](../Programming/), [Math/Linear-Algebra/](../Math/Linear-Algebra/), [Math/Probability-Statistics/](../Math/Probability-Statistics/), [Math/Calculus/](../Math/Calculus/), [Math/Optimization/](../Math/Optimization/)
 
@@ -8,7 +8,7 @@
 
 ## 현재 가용성
 
-현재 이 섹션은 AI/ML 전체 범위와 순서를 보여주는 주제 지도다. 개별 본문은 대부분 `Planned` 상태이므로, 각 하위 README에서 `Draft` 이상으로 열린 항목부터 읽는다.
+등록된 주제는 `Draft` 이상 본문이 있으며 각 하위 README에서 찾을 수 있다. 다만 고전 탐색·지식표현·계획·CSP·로보틱스 등의 체계적인 본문이 부족하므로 AI 전체 범위가 확보된 것은 아니다. 공백은 [전체 지식 범위](../Maintainers/Curriculum-Coverage.md), 직접 출처와 재작성 메모는 [전체 자료 목록](../Maintainers/Preparation-Inventory.md)에서 확인한다.
 
 ---
 

@@ -2,6 +2,8 @@
 
 > 목적별 로드맵의 완료 기준을 실제 작성해야 할 문서 단위로 연결한다.
 
+이 문서는 기존 선택 경로의 파일 매핑이며 전체 컴퓨터공학 범위의 완전성 판정이 아니다. 모든 영역의 목표·공백은 [Curriculum-Coverage.md](Curriculum-Coverage.md), 다양한 진입 경로는 [Domain-Paths.md](../Roadmaps/Domain-Paths.md)를 따른다. 이 표 밖의 분야를 부차적 내용으로 취급하지 않는다.
+
 ---
 
 ## 읽는 법
@@ -20,14 +22,19 @@
 
 | 영역 | Draft | Review | Planned | 역할 |
 |---|---:|---:|---:|---|
-| Programming | 31 | 2 | 0 | 모든 로드맵의 출발점 |
+| Programming | 31 | 2 | 0 | 구현을 다루는 경로의 공통 기반 |
 | Math | 52 | 0 | 0 | CS/AI 이론의 공통 기반 |
 | Data-Structures | 17 | 0 | 0 | 알고리즘과 시스템 구현 기반 |
 | Algorithms | 32 | 2 | 0 | CS 핵심과 코딩 문제 해결 기반 |
 | Systems | 54 | 0 | 0 | CS Core, Systems Engineer 기반 |
 | CS-Theory | 30 | 0 | 0 | 이론/컴파일러/보안 기반 |
-| AI | 191 | 0 | 0 | AI Core, ML Engineer, Researcher 기반 |
+| AI | 191 | 0 | 0 | AI/ML 학습과 연구의 기반 |
 | Engineering | 113 | 0 | 0 | 실무 운영, 설계, 품질 기반 |
+| Hardware-and-Embedded | 4 | 0 | 0 | 회로·디지털 설계·임베디드 |
+| Graphics-and-Interaction | 6 | 0 | 0 | 그래픽스와 HCI의 독립 학습 |
+| Computing-and-Society | 4 | 0 | 0 | 사회적 영향과 전문직 책임 |
+| Research-Practice | 4 | 0 | 0 | 분야 공통 연구 방법 |
+| Teaching-and-Academia | 3 | 0 | 0 | 교육·지도·학술 협업 |
 
 ---
 
@@ -47,7 +54,7 @@
 
 ## CS Core
 
-CS 핵심 로드맵은 전공 필수 흐름을 완성하는 기준이다.
+CS 핵심 로드맵은 시스템·이론 중심의 기초 경로다. 그래픽스·HCI·사회·특수 플랫폼까지 포괄하는 학부 전체 이수 기준은 아니다.
 
 | 단계 | 필수 문서 |
 |---|---|
@@ -113,7 +120,7 @@ ML 엔지니어 로드맵은 모델 학습, 실험 관리, 서빙, 배포를 하
 
 ## Researcher
 
-연구자 로드맵은 논문 독해와 이론적 분석을 위한 기준이다.
+아래는 [연구자 로드맵](../Roadmaps/Researcher.md)의 **AI 이론 선택 분기**에 대한 기존 파일 매핑이다. 모든 연구자의 필수 목록이 아니다. 공통 연구 방법의 예정 파일은 [분야 공백 백로그](Content-Backlog.md), 다른 분야의 연구 시작 자료는 로드맵의 분야별 표에서 관리한다.
 
 | 단계 | 필수 문서 |
 |---|---|

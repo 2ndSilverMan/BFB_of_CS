@@ -263,8 +263,11 @@ def summarize(topics: list[dict]) -> dict:
 
 def build_inventory(root: Path) -> dict:
     root = root.resolve()
+    # Path ordering differs between Windows and POSIX for mixed-case names.
+    # Sort portable relative strings so local generation matches Linux CI.
+    candidates = sorted(markdown_files(root), key=lambda path: path.relative_to(root).as_posix())
     topics = [
-        inspect_topic(path, root) for path in markdown_files(root)
+        inspect_topic(path, root) for path in candidates
         if path.relative_to(root).parts[0] in LEARNING_DIRS and is_topic_doc(path, root)
     ]
     return {
@@ -275,11 +278,15 @@ def build_inventory(root: Path) -> dict:
             "implementation_blocks": "Fences with a language other than unspecified, text/txt/plaintext/plain/none, mermaid, math/latex/tex; these are candidates, not verified executable examples.",
             "rewrite_notes": "Presence of H2 재작성 메모 (Rewrite Notes), not an assessment of its contents.",
             "content_sha256": "SHA-256 of UTF-8 source text with line endings normalized to LF.",
-            "scope": "Existing topic Markdown files in learning directories, following validate_docs.is_topic_doc; README and planned-but-absent files are excluded.",
+            "scope": "Existing topic Markdown files in learning directories, following validate_docs.is_topic_doc; README and planned-but-absent files are excluded. Existing learning directories without topic bodies remain visible as zero-count areas.",
             "limitations": "Focused Markdown scanner, not a full CommonMark parser; top-level ATX sections and fences with up to 3 leading spaces. No correctness, execution or human-review assessment.",
         },
         "summary": summarize(topics),
-        "areas": {area: summarize([topic for topic in topics if topic["area"] == area]) for area in sorted({topic["area"] for topic in topics})},
+        "areas": {
+            area: summarize([topic for topic in topics if topic["area"] == area])
+            for area in sorted(LEARNING_DIRS)
+            if (root / area).is_dir()
+        },
         "topics": topics,
     }
 
@@ -299,6 +306,8 @@ def render_markdown(inventory: dict) -> str:
         "## 집계 기준",
         "",
         "- 범위: 학습 영역의 실제 주제 Markdown 파일. README와 아직 파일이 없는 Planned 항목은 제외합니다.",
+        "- 본문이 없는 학습 영역도 0개로 표시합니다. 예정 주제 수는 Content Backlog, 학습 범위·부족분은 Curriculum Coverage에서 별도로 관리합니다.",
+        "- 구현 후보 0개가 곧 예제 부족을 뜻하지는 않습니다. 증명·사례 분석·설계·평가 과제의 충분성은 이 목록에서 자동 판정하지 않습니다.",
         "- 직접 출처: `## 참조`, `## 참조 (References)`, `## References` 아래에서 사용하는 명시적 HTTP(S) Markdown 링크의 서로 다른 URL 수입니다. 하위 섹션도 포함합니다.",
         "- 인라인·참조형·각괄호 자동링크를 인식합니다. 코드·HTML 주석·이미지·단독 URL·예약 예시 도메인·로컬 주소는 제외합니다. 같은 URL의 반복은 한 번만 세며, URL의 fragment/query가 다르면 별도로 셉니다.",
         "- 링크가 살아 있는지, 원문이 주장을 뒷받침하는지는 확인하지 않습니다. 본문에만 있는 외부 링크와 중앙 참고목록을 가리키는 상대링크는 직접 출처 수에 포함하지 않습니다.",

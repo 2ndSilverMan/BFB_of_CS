@@ -48,7 +48,7 @@
    - [네트워크 계층 모델](../Systems/Networks/Network-Models.md)
    - [관계형 모델과 SQL](../Systems/Databases/Relational-Model-and-SQL.md)
 
-방향을 고르기 위한 선택 트랙 목차는 다음과 같다. 아직 대부분 `Planned` 상태이므로, 본문 경로를 보조하는 지도처럼 사용한다.
+방향을 고르기 위한 선택 트랙은 다음과 같다. 등록된 주제는 모두 `Draft` 이상 본문이 있으며, 각 트랙의 README에서 자료를 찾아 공통 기초 경로와 함께 사용할 수 있다.
 
 - [언어별 학습 트랙](../Programming/Languages/)
 - [Linux 학습 트랙](../Systems/Operating-Systems/Linux/)

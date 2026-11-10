@@ -19,8 +19,15 @@
 | CS-Theory | 4 | 4/4 (4) | 3/4 (3) | 3/4 (5) |
 | AI | 12 | 10/12 (10) | 9/12 (10) | 7/12 (16) |
 | Engineering | 7 | 7/7 (10) | 3/7 (4) | 4/7 (6) |
+| Hardware-and-Embedded | 1 | 0/1 (0) | 0/1 (0) | 0/1 (0) |
+| Graphics-and-Interaction | 2 | 0/2 (0) | 0/2 (0) | 0/2 (0) |
+| Computing-and-Society | 1 | 0/1 (0) | 0/1 (0) | 0/1 (0) |
+| Research-Practice | 1 | 0/1 (0) | 0/1 (0) | 0/1 (0) |
+| Teaching-and-Academia | 1 | 0/1 (0) | 0/1 (0) | 0/1 (0) |
 
 ## 보강 우선순위
+
+2026-09-18에 추가한 다섯 영역은 중앙 도서·강의·논문 목록이 아직 없다. 위의 0을 숨기지 않고 분야별 입문 원전과 예제 출처를 확보한다. 영역의 README와 인접 본문 링크는 해당 영역의 참조 확보로 계산하지 않는다. 작업 순서는 [전체 지식 범위](Curriculum-Coverage.md)의 분야별 공백을 함께 고려한다.
 
 2026-09-11에 RAG와 긴 문맥 원 논문 두 항목을 추가했다. 이 표는 분야별 도서·강의·논문 목록의 범위를 나타낸다. 개별 주장의 직접 출처와 문서별 부족분은 [Preparation-Inventory.md](Preparation-Inventory.md), 기록 방법은 [Preparation-Guide.md](Preparation-Guide.md)에서 확인한다.
 

@@ -43,6 +43,11 @@ LEARNING_DIRS = {
     "CS-Theory",
     "AI",
     "Engineering",
+    "Hardware-and-Embedded",
+    "Graphics-and-Interaction",
+    "Computing-and-Society",
+    "Research-Practice",
+    "Teaching-and-Academia",
 }
 REQUIRED_MAINTAINER_DOCS = (
     "Maintainers/README.md",
@@ -52,6 +57,7 @@ REQUIRED_MAINTAINER_DOCS = (
     "Maintainers/Reference-Coverage.md",
     "Maintainers/Project-Readiness.md",
     "Maintainers/Legal-and-Copyright-Policy.md",
+    "Maintainers/Curriculum-Coverage.md",
 )
 REQUIRED_SUPPORT_FILES = (
     ".gitattributes",
@@ -62,6 +68,7 @@ REQUIRED_SUPPORT_FILES = (
     "README.md",
     "Reference/README.md",
     "Roadmaps/README.md",
+    "Roadmaps/Domain-Paths.md",
     "Maintainers/Scripts/README.md",
     "Maintainers/Scripts/validate_docs.py",
     "Maintainers/Scripts/sync_summary_counts.py",
@@ -104,6 +111,11 @@ REFERENCE_AREA_HEADINGS = {
     "CS 이론 (CS Theory)": "CS-Theory",
     "인공지능 (AI)": "AI",
     "엔지니어링 (Engineering)": "Engineering",
+    "하드웨어와 임베디드 (Hardware and Embedded)": "Hardware-and-Embedded",
+    "그래픽스와 상호작용 (Graphics and Interaction)": "Graphics-and-Interaction",
+    "컴퓨팅과 사회 (Computing and Society)": "Computing-and-Society",
+    "연구 방법과 실무 (Research Practice)": "Research-Practice",
+    "교육과 학술 활동 (Teaching and Academia)": "Teaching-and-Academia",
 }
 
 

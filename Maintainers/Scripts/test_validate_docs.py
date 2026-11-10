@@ -323,6 +323,55 @@ class RealRepoSmokeTest(unittest.TestCase):
         self.assertGreater(checked, 0)
 
 
+class ExpandedDomainTests(unittest.TestCase):
+    def test_learning_and_reference_domains_stay_aligned(self):
+        self.assertEqual(vd.LEARNING_DIRS, set(vd.REFERENCE_AREA_HEADINGS.values()))
+        self.assertIn("Maintainers/Curriculum-Coverage.md", vd.REQUIRED_MAINTAINER_DOCS)
+        self.assertIn("Roadmaps/Domain-Paths.md", vd.REQUIRED_SUPPORT_FILES)
+
+    def test_new_area_plans_are_counted_and_require_classification(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            area = root / "Hardware-and-Embedded"
+            area.mkdir()
+            (area / "README.md").write_text(
+                "# Hardware\n\nDraft bodies are readable; Planned bodies are absent.\n\n"
+                "| 주제 | 파일 | Status |\n|---|---|---|\n"
+                "| HDL | HDL-and-FPGA.md | Planned |\n", encoding="utf-8"
+            )
+            self.assertEqual(
+                vd.collect_status_counts_by_area(root),
+                {"Hardware-and-Embedded": {"Planned": 1}},
+            )
+            self.assertTrue(any(
+                issue.type == "UnclassifiedPlannedTopic"
+                for issue in vd.check_planning_doc_references(root)
+            ))
+            (root / "Maintainers").mkdir()
+            (root / "Maintainers/Content-Backlog.md").write_text(
+                "# Required\n\n`HDL-and-FPGA.md`\n", encoding="utf-8"
+            )
+            self.assertEqual(vd.check_planning_doc_references(root), [])
+            self.assertFalse((area / "HDL-and-FPGA.md").exists())
+
+    def test_new_subdomain_requires_readme_and_availability_guide(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            area = root / "Graphics-and-Interaction"
+            (area / "HCI").mkdir(parents=True)
+            issues = vd.check_learning_directory_readmes(root)
+            self.assertTrue(any(
+                issue.type == "MissingDirectoryReadme"
+                and issue.file == "Graphics-and-Interaction/HCI"
+                for issue in issues
+            ))
+            lines = ["# HCI", "| 주제 | 파일 | Status |", "|---|---|---|",
+                     "| HCI | HCI-Topic.md | Planned |"]
+            self.assertTrue(vd.check_learner_availability_guidance(
+                area / "HCI/README.md", root, lines
+            ))
+
+
 class ReviewFieldTests(unittest.TestCase):
     def setUp(self):
         self.root = Path("repo")

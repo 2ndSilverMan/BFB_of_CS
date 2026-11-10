@@ -16,6 +16,11 @@ BFB_of_CS/
 ├── CS-Theory/          CS 이론
 ├── AI/                 인공지능
 ├── Engineering/        엔지니어링 실무
+├── Hardware-and-Embedded/ 회로·디지털 설계·임베디드
+├── Graphics-and-Interaction/ 그래픽스·HCI·접근성
+├── Computing-and-Society/ 사회·윤리·전문직
+├── Research-Practice/   분야 공통 연구 방법
+├── Teaching-and-Academia/ 교육·지도·학술 활동
 ├── Roadmaps/           학습 로드맵
 ├── Reference/          참조 자료
 ├── Maintainers/        작성자용 운영 문서와 검수 도구
@@ -59,15 +64,16 @@ BFB_of_CS/
 
 현재는 별도 문서 프로젝트의 준비자료를 확보한다. [Preparation-Guide.md](Maintainers/Preparation-Guide.md)에 따라 직접 출처, 구체 예제, 추가 조사할 질문을 먼저 보강한다. [Preparation-Inventory.md](Maintainers/Preparation-Inventory.md)는 전체 주제에서 이 재료를 찾는 자동 목록이다.
 
-기존 핵심 경로와 아래 표는 재료를 보강할 순서를 정하는 데 사용한다.
-전체 작성 순서는 [Content-Backlog.md](Maintainers/Content-Backlog.md)를 따르고, 로드맵 완료 기준과 실제 문서의 연결은 [Coverage-Matrix.md](Maintainers/Coverage-Matrix.md)를 따른다. 핵심 경로 밖의 예정 주제는 [Topic-Classification.md](Maintainers/Topic-Classification.md)에서 `Optional` 또는 `Deferred`로 분류한다.
+전체 범위는 [Curriculum-Coverage.md](Maintainers/Curriculum-Coverage.md), 작업 묶음은 [Content-Backlog.md](Maintainers/Content-Backlog.md)를 따른다. 특정 경로를 끝낸 뒤 다른 분야를 시작하는 순서를 두지 않는다. 기존 경로의 파일 연결은 [Coverage-Matrix.md](Maintainers/Coverage-Matrix.md)가 관리한다. 분야 공백 보강도 Required가 될 수 있으며, 다른 분야라는 이유로 Optional/Deferred로 밀어내지 않는다.
 
-| 우선순위 | 범위 | 기준 |
+| 작업 축 | 범위 | 기준 |
 |---|---|---|
-| 1 | [입문자 로드맵](Roadmaps/Beginner.md) | 프로그래밍, 이산수학, 자료구조, 알고리즘 기초를 실제 학습 가능한 문서로 작성 |
-| 2 | [CS 핵심 로드맵](Roadmaps/CS-Core.md) | 시스템, 계산 이론, 보안 기초까지 전공 핵심 흐름 완성 |
-| 3 | [AI 핵심 로드맵](Roadmaps/AI-Core.md) | 수학, 머신러닝, 딥러닝의 최소 핵심 경로 완성 |
-| 4 | 심화/응용 섹션 | LLMs, AI Safety, MLOps, 고급 알고리즘 등은 핵심 경로 이후 확장 |
+| 정확성과 연결 | 모든 분야 | 위험한 오류와 끊어진 선수지식을 먼저 수정 |
+| 범위 공백 | 전용 본문 없는 분야 | 진입 설명·핵심 원리·확인 과제 확보 |
+| 깊이 공백 | 기존 본문 있는 분야 | 증명·사례·실습·해설·출처 부족분 보강 |
+| 공통 기반 | 여러 분야가 공유하는 개념 | canonical 본문 재사용과 분야별 응용 연결 |
+
+각 작업 묶음은 신규 영역의 진입 자료와 기존 영역의 깊이를 함께 고려한다. 분야별로 범위·진입점·깊이·학습 확인·근거·연결성을 점검하고 전체 문서 수를 완전성 점수로 쓰지 않는다.
 
 각 주제 문서는 다음 조건을 만족할 때 `Review` 이상으로 올린다.
 
@@ -114,7 +120,8 @@ BFB_of_CS/
 | Deep-dive | 선언한 선수지식 위에서 자기완결적인 학습 주제 문서 | 메커니즘·워크드 예제까지 | [Deep-Dive-Template.md](Templates/Deep-Dive-Template.md) |
 
 - `Depth`는 검증기 관점에서는 **선택 필드**다. 없으면 Standard로 본다. 다만 새 학습 주제 문서는 `- Depth: Deep-dive (자기완결)`를 명시한다. 값은 `Standard` 또는 `Deep-dive`이며, 뒤에 괄호 메모를 붙일 수 있다. 허용 값 밖이면 검증에서 막힌다(`BadMetadataDepth`).
-- **Deep-dive 품질 바** (Draft 이상으로 올리기 전 자가 점검): ① 선수지식 위에서 자기완결 ② 이론·구현·복잡도가 "왜·어떻게"(메커니즘)를 담음 ③ 워크드 예제(수치/구체) 최소 1개 ④ 실행 가능한 명령·코드·설정 ⑤ 실전 실패 모드 ⑥ 구조는 Mermaid ⑦ 비자명한 주장엔 참조.
+- **Deep-dive 품질 바** (Draft 이상으로 올리기 전 자가 점검): ① 선수지식 위에서 자기완결 ② 원리·절차·한계가 "왜·어떻게"를 담음 ③ 구체 예제 최소 1개 ④ 분야에 맞는 확인 가능한 산출물(실행 코드, 증명·반례, 설계·평가 사례 등) ⑤ 실패 조건 ⑥ 관계 설명에 도움이 될 때 다이어그램 ⑦ 비자명한 주장엔 참조와 연습 문제의 해설 또는 판단 기준.
+- **깊이의 구성**: 입문·핵심·심화·연구 연결을 주제별로 안내한다. 이는 기존 Level/Depth/Status와 별개이며 학부·대학원·교수별로 본문을 복제하지 않는다. 연구 연결이 아직 없으면 미확보로 기록한다.
 - **운영 원칙**: 학습 주제 문서는 deep-dive를 기본 품질 바로 삼는다. 준비자료 보강은 출처·예제·추가 조사 항목으로 확인한다. 사람 검토는 현재 작업 범위에 포함하지 않으며, 기존 `Complete`의 의미는 유지한다(`Complete`는 tier와 무관하게 사람 검토 필수).
 - deep-dive 품질 점검과 사람 검토 없이 처리할 다음 작업은 [Documentation-Depth-Plan.md](Maintainers/Documentation-Depth-Plan.md)의 루브릭과 작업 순서를 따른다.
 
@@ -170,7 +177,8 @@ BFB_of_CS/
 - 구조 준비 완료 기준이 필요한 변경이라면 [Project-Readiness.md](Maintainers/Project-Readiness.md)에 어긋나지 않는가
 - Markdown 파일에 UTF-8 BOM이 없는가
 - 로드맵 필수 문서라면 [Coverage-Matrix.md](Maintainers/Coverage-Matrix.md)에 반영되어 있는가
-- 핵심 경로 밖의 예정 문서라면 [Topic-Classification.md](Maintainers/Topic-Classification.md)에 반영되어 있는가
+- 예정 문서가 분야 공백 보강 백로그 또는 [Topic-Classification.md](Maintainers/Topic-Classification.md)에 반영되어 있는가
+- 새 영역·학습 목표가 [Curriculum-Coverage.md](Maintainers/Curriculum-Coverage.md)와 [분야별 경로](Roadmaps/Domain-Paths.md)에 연결되는가
 - [Legal-and-Copyright-Policy.md](Maintainers/Legal-and-Copyright-Policy.md)에 어긋나는 내용이 없는가
 - 외부 본문, 코드, 이미지, 표, 문제, 답안을 무단 복사하지 않았는가
 - API 키, 토큰, 비밀번호, 개인정보, 내부 URL이 포함되지 않았는가

@@ -12,7 +12,7 @@
 
 [Preparation-Inventory.md](Preparation-Inventory.md)는 모든 학습 주제에서 직접 출처, 구현 후보 블록, 재작성 메모를 찾아 모은 자동 목록이다. 다음 순서로 보강 대상을 고른다.
 
-1. 새 프로젝트에서 사용할 주제 또는 [Coverage-Matrix.md](Coverage-Matrix.md)의 공통 기초 경로를 고른다.
+1. [Curriculum-Coverage.md](Curriculum-Coverage.md)의 분야별 공백과 기존 본문의 부족분을 함께 보고 주제를 고른다. 경로 하나의 완성을 다른 분야 착수 조건으로 두지 않는다.
 2. 출처가 없는 문서에는 핵심 주장과 연결되는 원문을 추가한다.
 3. 설명 골격만 있는 문서에는 입력·과정·결과가 있는 예제를 추가한다.
 4. 재사용할 부분과 추가 조사할 질문을 문서 끝에 기록한다.
@@ -32,6 +32,8 @@
 출처 본문을 옮겨 적지 않고, 직접 쓴 설명과 필요한 링크를 보관한다. 출처가 삭제되어도 무엇을 확인하려 했는지 제목과 지원하는 주장이 남아야 한다.
 
 ## 예제를 남기는 방법
+
+모든 분야에 실행 코드를 강제하지 않는다. 이론은 증명·반례, 하드웨어는 회로·타이밍·테스트벤치, HCI는 설계·평가 계획, 사회·교육은 근거 있는 사례 분석·평가 기준이 재사용할 산출물이 될 수 있다. 본문의 구현·복잡도 절은 분야에 맞는 절차·비용·한계로 해석한다.
 
 재사용할 예제에는 입력, 가정, 처리 과정, 기대 결과가 있어야 한다. 계산·증명 예제는 중간 단계와 경계 조건을, 코드 예제는 실행 환경과 명령 또는 실행 방법을 기록한다.
 
@@ -57,8 +59,10 @@
 |---|---|
 | [변수와 타입](../Programming/Variables-and-Types.md) | 언어별 이름·값·타입 구분과 입력 변환 사례 |
 | [이진 탐색](../Algorithms/Binary-Search.md) | 불변식, 경계 입력, 기대 결과와 실행 확인 |
+| [해시 테이블](../Data-Structures/Hash-Table.md) | 부하율과 리해싱 경계, 충돌·갱신·검색 예제 |
 | [SVD](../Math/Linear-Algebra/SVD.md) | 축소형의 크기, 랭크, 수치 계산과 NumPy 예제 |
 | [타입 시스템](../CS-Theory/Programming-Languages/Type-Systems.md) | 타입 규칙과 작은 검사기, 성공·실패 입력 |
+| [가상 메모리](../Systems/Operating-Systems/Virtual-Memory.md) | 페이지 폴트의 처리 범위, LRU 실행 추적과 가정별 비용 계산 |
 | [RAG](../AI/LLMs/RAG.md) | 검색·생성 구분, 근거 선택 예제와 실패 지점 |
 | [확장성](../Engineering/System-Design/Scalability.md) | 가상 부하 조건에 따른 용량·병목 계산 |
 | [로드 밸런싱](../Engineering/System-Design/Load-Balancing.md) | 분산 정책과 장애 서버 제외 예제 |

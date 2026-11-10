@@ -54,7 +54,7 @@
                                              Data-Structures/
 ```
 
-언어별 트랙은 방향을 고르기 위한 목차이며, 아직 대부분 `Planned` 상태다. `포인터와 메모리`, `OOP`, `함수형 입문`은 후속 확장 주제다. 입문자 로드맵을 먼저 따라갈 때는 `배열과 문자열`까지 읽고, 특정 언어를 고르고 싶으면 [언어 선택 가이드](Language-Selection.md)를 거친 뒤 [Data-Structures/](../Data-Structures/)로 넘어가면 된다.
+언어별 트랙의 등록된 주제는 모두 `Draft` 이상 본문이 있다. `포인터와 메모리`, `OOP`, `함수형 입문`도 후속 확장 자료로 읽을 수 있다. 입문자 로드맵을 먼저 따라갈 때는 `배열과 문자열`까지 읽고, 특정 언어를 고르고 싶으면 [언어 선택 가이드](Language-Selection.md)를 거친 뒤 [Data-Structures/](../Data-Structures/)로 넘어가면 된다.
 
 ---
 

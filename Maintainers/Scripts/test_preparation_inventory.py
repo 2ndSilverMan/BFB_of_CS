@@ -8,6 +8,7 @@ import json
 from pathlib import Path
 import tempfile
 import unittest
+from unittest.mock import patch
 
 import build_preparation_inventory as inventory
 import validate_docs
@@ -218,21 +219,53 @@ class InventoryTests(unittest.TestCase):
         self.assertEqual(validate_docs.check_status_values(report_path, self.root, lines), [])
 
     def test_report_uses_sorted_topics_and_area_totals(self):
-        for name in ["Math/Z.md", "Algorithms/C.md", "Math/A.md"]:
+        names = ["Math/Z.md", "Algorithms/BFS.md", "Algorithms/Backtracking.md", "Math/A.md"]
+        for name in names:
             path = self.root / name
             path.parent.mkdir(parents=True, exist_ok=True)
             path.write_text("# A\n\n- Status: Draft\n", encoding="utf-8")
-        data = inventory.build_inventory(self.root)
-        self.assertEqual([topic["path"] for topic in data["topics"]], ["Algorithms/C.md", "Math/A.md", "Math/Z.md", "Programming/A.md"])
+        # Emulate Windows' case-insensitive Path ordering even on POSIX hosts.
+        windows_order = sorted(self.root.rglob("*.md"), key=lambda path: path.relative_to(self.root).as_posix().casefold())
+        with patch.object(inventory, "markdown_files", return_value=windows_order):
+            data = inventory.build_inventory(self.root)
+        self.assertEqual([topic["path"] for topic in data["topics"]], sorted([*names, "Programming/A.md"]))
         self.assertEqual(data["areas"]["Math"]["topic_count"], 2)
-        self.assertEqual(data["summary"]["without_direct_sources"], 4)
-        self.assertEqual(data["summary"]["without_rewrite_notes"], 4)
+        self.assertEqual(data["summary"]["without_direct_sources"], 5)
+        self.assertEqual(data["summary"]["without_rewrite_notes"], 5)
 
     def test_json_cannot_overwrite_markdown_report(self):
         with redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as raised:
             inventory.main(["--root", str(self.root), "--format", "json", "--write"])
         self.assertEqual(raised.exception.code, 2)
         self.assertFalse((self.root / inventory.REPORT_PATH).exists())
+
+    def test_planned_only_area_remains_visible_without_inflating_topics(self):
+        area = self.root / "Research-Practice"
+        area.mkdir()
+        (area / "README.md").write_text(
+            "# Research\n\n| 주제 | 파일 | Status |\n|---|---|---|\n"
+            "| Research | Research-Design.md | Planned |\n", encoding="utf-8"
+        )
+        data = inventory.build_inventory(self.root)
+        self.assertEqual(data["areas"]["Research-Practice"]["topic_count"], 0)
+        self.assertEqual(data["areas"]["Research-Practice"]["status_counts"], {})
+        self.assertEqual(data["summary"]["topic_count"], 1)
+        self.assertNotIn("Teaching-and-Academia", data["areas"])
+        self.assertIn("| Research-Practice | 0 |", inventory.render_markdown(data))
+
+    def test_new_domains_are_included_when_bodies_are_written(self):
+        areas = {
+            "Hardware-and-Embedded", "Graphics-and-Interaction",
+            "Computing-and-Society", "Research-Practice", "Teaching-and-Academia",
+        }
+        for area in areas:
+            path = self.root / area / "Topic.md"
+            path.parent.mkdir()
+            path.write_text("# Topic\n\n- Status: Draft\n", encoding="utf-8")
+        data = inventory.build_inventory(self.root)
+        self.assertEqual(data["summary"]["topic_count"], 6)
+        for area in areas:
+            self.assertEqual(data["areas"][area]["topic_count"], 1)
 
 
 if __name__ == "__main__":

@@ -32,3 +32,6 @@ jobs:
 
       - name: Run preparation inventory unit tests
         run: python Maintainers/Scripts/test_preparation_inventory.py
+
+      - name: Run authored new-domain Python examples
+        run: python Maintainers/Scripts/test_new_domain_examples.py

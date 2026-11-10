@@ -7,7 +7,7 @@
 ## 현재 범위
 
 아래 표는 현재 README 주제 표를 요약한 것이다.  
-이 문서는 예정 문서를 한 번에 모두 나열하기보다, 어떤 순서로 핵심 학습 경로를 열어야 하는지 관리한다.
+이 문서는 분야별 공백과 기존 자료의 보강 작업을 관리한다. 경로의 인기나 문서 수가 영역의 중요도를 결정하지 않는다. 전체 범위와 역량은 [Curriculum-Coverage.md](Curriculum-Coverage.md)를 따른다.
 
 전체 로드맵별 필수 문서 매핑은 [Coverage-Matrix.md](Coverage-Matrix.md)를 따른다.
 핵심 경로 밖의 `Optional`/`Deferred` 주제 분류는 [Topic-Classification.md](Topic-Classification.md)를 따른다.
@@ -15,20 +15,25 @@
 
 | 영역 | 현재 Draft | Review | 남은 Planned | 우선 역할 |
 |---|---:|---:|---:|---|
-| Programming | 31 | 2 | 0 | 모든 로드맵의 출발점 |
+| Programming | 31 | 2 | 0 | 구현을 다루는 경로의 공통 기반 |
 | Math | 52 | 0 | 0 | CS/AI 공통 기반 |
 | Data-Structures | 17 | 0 | 0 | 알고리즘과 시스템 구현 기반 |
 | Algorithms | 32 | 2 | 0 | 문제 해결과 전공 핵심 기반 |
 | Systems | 54 | 0 | 0 | CS Core, Systems Engineer 기반 |
 | CS-Theory | 30 | 0 | 0 | 계산 이론, PL, 컴파일러 기반 |
-| AI | 191 | 0 | 0 | AI Core, ML Engineer, Researcher 기반 |
+| AI | 191 | 0 | 0 | AI/ML 학습과 연구의 기반 |
 | Engineering | 113 | 0 | 0 | 실무 설계, 운영, 품질 기반 |
+| Hardware-and-Embedded | 4 | 0 | 0 | 회로·디지털 설계·임베디드 |
+| Graphics-and-Interaction | 6 | 0 | 0 | 그래픽스와 HCI의 독립 학습 |
+| Computing-and-Society | 4 | 0 | 0 | 사회적 영향과 전문직 책임 |
+| Research-Practice | 4 | 0 | 0 | 분야 공통 연구 방법 |
+| Teaching-and-Academia | 3 | 0 | 0 | 교육·지도·학술 협업 |
 
 ---
 
 ## 우선순위 기준
 
-여기서 `P0`-`P7`은 장애 심각도가 아니라 **작성 백로그 우선순위**다. 숫자가 낮을수록 먼저 안정화할 학습 경로다.
+아래 `P0`-`P7`은 기존 경로를 열 때 사용한 역사적 작업 묶음이다. 앞으로의 전역 작성 순서가 아니며 AI 경로를 마쳐야 다른 영역을 시작하는 구조도 아니다.
 
 - `P0`: 이미 작성된 읽기 가능한 최소 경로. 직접 출처, 구체 예제, 재작성 메모와 자동 검증을 우선 보강한다.
 - `P1`: 입문자 최종 완료 기준 중 비시스템 기초를 채우는 문서.
@@ -40,9 +45,11 @@
 - `P6`: Systems Engineer와 ML Engineer 실무 흐름을 완성하는 문서.
 - `P7`: Researcher와 심화 이론 흐름을 완성하는 문서.
 
-현재 P0-P7의 대상 파일은 모두 본문이 열려 있고, 남은 Planned 수는 0이다. [Preparation-Inventory.md](Preparation-Inventory.md)에서 직접 출처와 재작성 메모가 없는 주제를 찾고, 아래 경로의 공통 기초부터 보강한다. 사람 검토와 `Complete` 승격은 현재 준비 작업에 포함하지 않는다.
+기존 P0-P7의 대상 파일은 모두 본문이 있다. 새 영역에는 별도의 Planned 주제가 있으므로 이를 저장소 전체의 Planned 0으로 해석하지 않는다. [Preparation-Inventory.md](Preparation-Inventory.md)의 본문 부족분과 [Curriculum-Coverage.md](Curriculum-Coverage.md)의 분야 공백을 함께 고른다. 사람 검토와 `Complete` 승격은 현재 준비 작업에 포함하지 않는다.
 
 ## 현재 보강 순서
+
+먼저 위험한 오류와 끊어진 선수지식을 고친다. 이후 작업 묶음마다 전용 본문 없는 분야의 진입 자료, 기존 분야의 깊이 보강, 공통 선수지식 연결을 함께 다룬다. 아래는 선택한 주제를 보강하는 절차이지 영역 간 순위가 아니다.
 
 1. 주제별 핵심 주장과 연결되는 직접 원문·공식 문서를 확보한다.
 2. 수치 계산, 실행 추적, 실패 사례처럼 새 문서에 재사용할 구체 재료를 추가한다.
@@ -52,6 +59,21 @@
 메모 형식과 확인 범위 기록은 [Preparation-Guide.md](Preparation-Guide.md)를 따른다. 이 백로그의 `작성됨`은 본문 파일이 있다는 뜻이며, 위 재료가 모두 확보되었다는 뜻은 아니다.
 
 ---
+
+## 분야 공백 보강: Required / Planned
+
+다음 항목은 독립적으로 학습 가능한 진입 자료를 만들기 위한 초기 묶음이다. 빈 주제 파일은 만들지 않으며 모두 해당 README에만 등록한다. 여기의 Required는 저장소 범위 확보에 필요하다는 뜻이지 모든 독자의 필수 이수라는 뜻이 아니다.
+
+| 영역 | 예정 파일 | 확보 목표 |
+|---|---|---|
+| [하드웨어와 임베디드](../Hardware-and-Embedded/) | `Circuits-and-Electronics.md`, `HDL-and-FPGA.md`, `Microcontrollers-and-Interfaces.md`, `Embedded-Real-Time-Design.md` | 전용 학습 본문과 확인 과제 확보 |
+| [컴퓨터 그래픽스와 시각화](../Graphics-and-Interaction/Graphics/) | `Geometry-and-Cameras.md`, `Rendering-Fundamentals.md`, `Data-Visualization.md` | 전용 학습 본문과 확인 과제 확보 |
+| [인간과 컴퓨터의 상호작용](../Graphics-and-Interaction/HCI/) | `User-Research-and-Interaction.md`, `Usability-Evaluation.md`, `Accessible-Interaction.md` | 전용 학습 본문과 확인 과제 확보 |
+| [컴퓨팅과 사회·전문직](../Computing-and-Society/) | `Computing-Professional-Ethics.md`, `Privacy-and-Data-Governance.md`, `Intellectual-Property-and-Collaboration.md`, `Computing-Social-and-Environmental-Impact.md` | 전용 학습 본문과 확인 과제 확보 |
+| [연구 방법과 실무](../Research-Practice/) | `Literature-Review-and-Research-Questions.md`, `Research-Design-and-Validity.md`, `Research-Reproducibility.md`, `Scientific-Writing-and-Critique.md` | 전용 학습 본문과 확인 과제 확보 |
+| [교육과 학술 활동](../Teaching-and-Academia/) | `Learning-Objectives-and-Assessment.md`, `Academic-Mentoring.md`, `Academic-Collaboration-and-Management.md` | 전용 학습 본문과 확인 과제 확보 |
+
+기존 영역의 추가 공백(고전 AI, 정보검색, 요구공학, 형식 검증, 웹·모바일 플랫폼)은 [전체 범위표](Curriculum-Coverage.md)에 기록되어 있다. 아직 파일로 나누지 않은 범위이며, Planned 파일 수에 포함하지 않는다. 분야별 조사 후 기존 문서 보강인지 새 문서인지 결정한다.
 
 ## P0: 작성됨
 

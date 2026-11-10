@@ -12,6 +12,8 @@
 
 ## 현재 우선순위
 
+2026-09-18부터 [전체 지식 범위](Curriculum-Coverage.md)의 분야별 공백을 기준으로 작업을 고른다. 특정 경로의 완성을 다른 영역 착수의 선행 조건으로 두지 않는다. 아래는 선택한 작업의 재료 보강 절차다.
+
 | 순위 | 작업 | 이유 |
 |---|---|---|
 | 1 | 핵심 주장에 원문·공식 문서를 직접 연결한다 | 재작성 때 근거를 다시 찾는 시간을 줄인다 |
@@ -37,7 +39,7 @@
 
 ## 지식 문서 작성 절차
 
-1. [Preparation-Inventory.md](Preparation-Inventory.md)와 [Content-Backlog.md](Content-Backlog.md)에서 다음 자료 보강 대상을 고른다.
+1. [Curriculum-Coverage.md](Curriculum-Coverage.md)의 분야 공백과 [Preparation-Inventory.md](Preparation-Inventory.md)의 본문 부족분을 함께 보고, [Content-Backlog.md](Content-Backlog.md)에서 작업 묶음을 고른다.
 2. 해당 주제가 로드맵 필수라면 [Coverage-Matrix.md](Coverage-Matrix.md)를 확인한다.
 3. 핵심 경로 밖의 주제라면 [Topic-Classification.md](Topic-Classification.md)에서 분류를 확인한다.
 4. deep-dive 품질 기준이나 다음 비검토 작업 순서를 고른다면 [Documentation-Depth-Plan.md](Documentation-Depth-Plan.md)를 확인한다.
@@ -72,6 +74,7 @@ uv --cache-dir "$env:TEMP\uv-cache-bfb" run python Maintainers/Scripts/test_prep
 ## 완료와 미완료의 구분
 
 - **구조 준비 완료**: 위 운영 게이트와 검증 명령이 통과하는 상태.
+- **분야 범위 관리**: 주요 영역의 목표·재료·공백이 공개된 상태. 목차 등록과 자동 검증 통과는 해당 분야의 학습 자료 확보나 학문적 완전성을 뜻하지 않는다.
 - **개별 주제의 재작성 재료 확보**: 직접 출처와 그 사용 범위, 구체 예제, 추가 조사할 질문, 확인한 범위가 기록된 상태. 자동 목록의 숫자만으로 판정하지 않는다.
 - **deep-dive 운영 완료**: 학습 주제 문서가 `Depth: Deep-dive`와 필수 섹션을 갖추고, README와 운영 문서가 같은 정책을 말하는 상태.
 - **지식 경로 완료**: 특정 로드맵의 필수 문서가 `Review` 이상으로 작성되고, 로드맵이 산출물과 다음 학습 경로를 안내하는 상태.

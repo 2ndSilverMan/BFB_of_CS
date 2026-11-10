@@ -1,12 +1,14 @@
 # Big Book of Computer Science & AI
 
-> BFB_of_CS: CS & AI 공개 지식 저장고
+> BFB_of_CS: 여러 학습 경로를 구성할 수 있는 컴퓨터과학·컴퓨터공학 공개 지식 기반
 
 현재는 나중에 새 문서 프로젝트로 재구성할 준비자료를 모으는 단계다. 재작성할 재료와 보충할 내용을 찾으려면 [준비 가이드](Maintainers/Preparation-Guide.md)와 [전체 자료 목록](Maintainers/Preparation-Inventory.md)에서 시작한다. 사람 검토와 `Complete` 승격은 현재 준비 작업에 포함하지 않는다.
 
 ---
 
 ## 바로 시작하기
+
+관심 분야가 있다면 [분야별 진입과 연결](Roadmaps/Domain-Paths.md)에서 시작 조건·읽을 순서·확인 과제·현재 공백을 확인한다. 전체 지식 범위와 부족분은 [학습 역량 매핑](Maintainers/Curriculum-Coverage.md)에 공개한다. 본문은 분야별로 한 번 작성하고 여러 경로가 공유한다. 학부·대학원·교수라는 신분보다 필요한 선수지식과 깊이에 맞춰 읽는다.
 
 처음이라면 [입문자 로드맵](Roadmaps/Beginner.md)부터 읽는다. 현재 실제 본문이 있는 최소 경로는 다음 순서다.
 
@@ -23,7 +25,7 @@
 
 ## 현재 읽기 상태
 
-현재 주제 목록의 본문은 모두 `Draft` 이상으로 열려 있다. 각 문서의 출처·예제·추가 조사 항목을 보강하면서, 다음 경로를 따라 필요한 재료를 찾을 수 있다.
+기존 분야의 본문은 `Draft` 이상이며, 새로 추가한 영역의 주제는 `Planned`로 분리했다. 목차가 있다는 것과 공부할 본문이 있다는 것은 다르다. 다음은 선택 가능한 기존 경로의 예시이며 저장소의 범위를 한정하지 않는다.
 
 1. [입문자 로드맵](Roadmaps/Beginner.md)에 필요한 프로그래밍, 이산수학, 자료구조, 알고리즘 기초
 2. [CS 핵심 로드맵](Roadmaps/CS-Core.md)의 시스템, 계산 이론, 보안 기초
@@ -45,7 +47,7 @@
 
 ## 섹션 구성
 
-문서와 목차는 선수지식이 낮은 것에서 높은 것 순으로 배치한다. 학습 시작점은 [Roadmaps/](Roadmaps/)에서 관리한다.
+각 분야 내부의 목차는 선수지식 순서를 따른다. 아래 섹션 순서는 분야의 중요도나 모든 독자의 필수 이수 순서가 아니다. 학습 시작점은 [Roadmaps/](Roadmaps/)에서 관리한다.
 
 | 섹션 | 내용 |
 |---|---|
@@ -57,6 +59,11 @@
 | [CS-Theory/](CS-Theory/) | 계산 이론, 프로그래밍 언어론, 컴파일러, 양자 컴퓨팅 |
 | [AI/](AI/) | 머신러닝, 딥러닝, NLP, 비전, 강화학습, 생성 모델, LLM |
 | [Engineering/](Engineering/) | 소프트웨어 설계, 시스템 설계, 테스트, DevOps, 보안, 성능 |
+| [Hardware-and-Embedded/](Hardware-and-Embedded/) | 회로, HDL/FPGA, MCU, 실시간 설계 — 전용 본문 예정 |
+| [Graphics-and-Interaction/](Graphics-and-Interaction/) | 그래픽스·시각화와 HCI·접근성 — 전용 본문 예정 |
+| [Computing-and-Society/](Computing-and-Society/) | 전문직 책임, 프라이버시, 지식재산, 사회·환경 영향 — 본문 예정 |
+| [Research-Practice/](Research-Practice/) | 문헌 조사, 연구 설계, 재현성, 논문·비평 — 본문 예정 |
+| [Teaching-and-Academia/](Teaching-and-Academia/) | 교육·평가·지도, 연구 계획과 학술 협업 — 본문 예정 |
 
 ---
 
@@ -66,12 +73,13 @@
 
 | 로드맵 | 대상 |
 |---|---|
+| [분야별 진입과 연결](Roadmaps/Domain-Paths.md) | 모든 분야의 진입점·공백·확인 과제를 비교하고 경로를 조합하려는 사람 |
 | [입문자 (Beginner)](Roadmaps/Beginner.md) | 프로그래밍과 CS를 처음 시작하는 사람 |
 | [CS 핵심 (CS Core)](Roadmaps/CS-Core.md) | 컴퓨터공학 전공 핵심을 체계적으로 공부하려는 사람 |
 | [AI 핵심 (AI Core)](Roadmaps/AI-Core.md) | AI/ML 전공 지식을 순서대로 공부하려는 사람 |
 | [시스템 엔지니어](Roadmaps/Systems-Engineer.md) | OS, 네트워크, DB, 분산 시스템 중심 학습자 |
 | [ML 엔지니어](Roadmaps/ML-Engineer.md) | 모델 학습부터 배포까지 다루려는 학습자 |
-| [연구자 (Researcher)](Roadmaps/Researcher.md) | 논문과 이론 중심으로 깊게 들어가려는 학습자 |
+| [연구자 (Researcher)](Roadmaps/Researcher.md) | 분야별 연구 접근을 선택하려는 학습자; 기존 AI 이론 경로는 선택 분기 |
 
 ---
 

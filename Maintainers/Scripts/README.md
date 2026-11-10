@@ -38,10 +38,11 @@ py -3 Maintainers/Scripts/validate_docs.py
 - 루트 README가 `Planned`, `Stub`, `Draft`, `Review`, `Complete`의 학습자 관점 의미를 설명하는지
 - 로드맵 문서가 현재 읽을 수 있는 범위와 아직 예정인 범위를 설명하는지
 - 학습 영역 README가 `Draft` 이상 문서와 `Planned` 주제를 구분해서 안내하는지
-- 작성자용 운영 문서(`Maintainers/Content-Backlog.md`, `Maintainers/Coverage-Matrix.md`, `Maintainers/Topic-Classification.md`, `Maintainers/Reference-Coverage.md`, `Maintainers/Project-Readiness.md`)가 존재하는지
+- 작성자용 운영 문서(Content Backlog, Coverage Matrix, Curriculum Coverage, Topic Classification, Reference Coverage, Project Readiness)가 존재하는지
 - CI, 기여 가이드, 템플릿, 줄바꿈 설정 같은 필수 지원 파일이 존재하는지
 - 학습자 루트에 `Scripts/` 디렉토리가 다시 생기지 않았는지
 - 모든 학습 영역 디렉토리와 하위 디렉토리에 `README.md`가 있는지
+- 분야별 진입 안내가 존재하고, 새 영역도 README·예정 주제 분류·상태 요약·참조 요약 검사에 포함되는지
 - 작성자용 운영 문서의 `Draft`/`Planned` 요약 수치가 실제 README 주제 표와 일치하는지
 - 작성자용 운영 문서의 요약 표에 현재 최상위 섹션이 아닌 행이 남아 있지 않은지
 - `Reference/Books.md`, `Reference/Courses.md`, `Reference/Papers.md`의 커버리지 수치가 `Maintainers/Reference-Coverage.md`와 일치하는지
@@ -78,6 +79,8 @@ CI(`.github/workflows/docs.yml`)는 매 PR과 설정된 브랜치 push에서 기
 
 전체 학습 주제를 스캔해 [Preparation-Inventory.md](../Preparation-Inventory.md)를 생성한다. 참조 섹션의 직접 HTTP(S) 출처 링크, 언어가 있는 구현 후보 블록, 재작성 메모 유무를 기록한다. 코드·주석 안의 링크와 예시용 예약 도메인은 출처 수에 넣지 않는다.
 
+본문이 없는 학습 영역도 0개로 표시한다. Planned 항목과 README는 본문 수에 포함하지 않는다. 코드가 없는 증명·사례·설계·평가 자료의 충분성은 자동 판정하지 않는다. 이관용 JSON의 areas에도 존재하는 빈 학습 영역이 포함된다.
+
 ```powershell
 python Maintainers/Scripts/build_preparation_inventory.py               # Markdown을 표준 출력으로 보기
 python Maintainers/Scripts/build_preparation_inventory.py --write       # 자동 목록 갱신
@@ -93,7 +96,7 @@ JSON은 주제별 경로·내용 해시, 직접 출처 URL과 줄 번호, 코드
 
 ## test_preparation_inventory.py
 
-출처 파싱, 코드·주석의 가짜 링크 제외, 재작성 메모 탐지, 안정적인 출력, 파일 누락·변경 감지와 JSON CLI를 검사한다.
+출처 파싱, 코드·주석의 가짜 링크 제외, 재작성 메모 탐지, 안정적인 출력, 파일 누락·변경 감지와 JSON CLI를 검사한다. 새 영역의 본문 포함과 Planned만 있는 영역의 0개 표시도 검사한다.
 
 ```powershell
 python Maintainers/Scripts/test_preparation_inventory.py

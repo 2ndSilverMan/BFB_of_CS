@@ -10,6 +10,7 @@
 
 | 문서 | 용도 |
 |---|---|
+| [Curriculum-Coverage.md](Curriculum-Coverage.md) | 경로와 독립된 전체 지식 영역·학습 목표·현재 재료·공백 |
 | [Preparation-Guide.md](Preparation-Guide.md) | 재사용할 재료, 직접 출처, 보충할 질문을 남기는 현재 작업 기준 |
 | [Preparation-Inventory.md](Preparation-Inventory.md) | 모든 주제의 직접 출처·구현 후보·재작성 메모 자동 목록 |
 | [Content-Backlog.md](Content-Backlog.md) | 전체 프로젝트의 본문 작성 우선순위 |
@@ -31,14 +32,14 @@
 - 모든 예정 주제는 섹션 README의 주제 표에 있고, 핵심 경로 또는 `Optional`/`Deferred` 분류에 포함된다.
 - 실제 파일이 있는 주제는 [Deep-Dive-Template.md](../Templates/Deep-Dive-Template.md)의 품질 바, `Depth`, `Reviewed-by` 필드를 갖추고, 상위 README의 `Status`와 문서 상단 `Status`가 일치한다.
 - 로드맵 완료 기준에 필요한 문서는 [Coverage-Matrix.md](Coverage-Matrix.md)에 연결된다.
-- 본문 작성 우선순위는 [Content-Backlog.md](Content-Backlog.md)에서 결정하고, 참조 자료 보강은 [Reference-Coverage.md](Reference-Coverage.md)에 반영한다.
+- 분야별 공백은 [Curriculum-Coverage.md](Curriculum-Coverage.md), 작업 묶음은 [Content-Backlog.md](Content-Backlog.md)에서 관리하며, 참조 보강은 [Reference-Coverage.md](Reference-Coverage.md)에 반영한다.
 - 구조 준비 완료 기준은 [Project-Readiness.md](Project-Readiness.md)로 확인한다.
 - 모든 본문, 예제, 참조 링크는 [Legal-and-Copyright-Policy.md](Legal-and-Copyright-Policy.md)를 통과해야 한다.
 - 구조 변경 뒤에는 `python Maintainers/Scripts/validate_docs.py` 또는 `py -3 Maintainers/Scripts/validate_docs.py`가 통과해야 한다.
 
 ## 작업 흐름
 
-1. [Preparation-Inventory.md](Preparation-Inventory.md)에서 출처나 메모가 없는 주제를 찾고, [Content-Backlog.md](Content-Backlog.md)의 경로 우선순위와 함께 보강 대상을 고른다.
+1. [Curriculum-Coverage.md](Curriculum-Coverage.md)의 분야별 공백과 [Preparation-Inventory.md](Preparation-Inventory.md)의 본문 부족분을 함께 보고 보강 대상을 고른다. 모든 분야를 확인한 뒤 [Content-Backlog.md](Content-Backlog.md)에 작업 묶음을 남긴다.
 2. deep-dive 품질 기준이나 사람 검토 없이 처리할 다음 작업을 고른다면 [Documentation-Depth-Plan.md](Documentation-Depth-Plan.md)를 확인한다.
 3. 해당 주제가 로드맵 필수 문서라면 [Coverage-Matrix.md](Coverage-Matrix.md)를 확인한다.
 4. 핵심 경로 밖의 주제라면 [Topic-Classification.md](Topic-Classification.md)의 분류를 확인한다.

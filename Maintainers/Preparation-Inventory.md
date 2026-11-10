@@ -6,6 +6,8 @@
 ## 집계 기준
 
 - 범위: 학습 영역의 실제 주제 Markdown 파일. README와 아직 파일이 없는 Planned 항목은 제외합니다.
+- 본문이 없는 학습 영역도 0개로 표시합니다. 예정 주제 수는 Content Backlog, 학습 범위·부족분은 Curriculum Coverage에서 별도로 관리합니다.
+- 구현 후보 0개가 곧 예제 부족을 뜻하지는 않습니다. 증명·사례 분석·설계·평가 과제의 충분성은 이 목록에서 자동 판정하지 않습니다.
 - 직접 출처: `## 참조`, `## 참조 (References)`, `## References` 아래에서 사용하는 명시적 HTTP(S) Markdown 링크의 서로 다른 URL 수입니다. 하위 섹션도 포함합니다.
 - 인라인·참조형·각괄호 자동링크를 인식합니다. 코드·HTML 주석·이미지·단독 URL·예약 예시 도메인·로컬 주소는 제외합니다. 같은 URL의 반복은 한 번만 세며, URL의 fragment/query가 다르면 별도로 셉니다.
 - 링크가 살아 있는지, 원문이 주장을 뒷받침하는지는 확인하지 않습니다. 본문에만 있는 외부 링크와 중앙 참고목록을 가리키는 상대링크는 직접 출처 수에 포함하지 않습니다.
@@ -16,27 +18,32 @@
 
 ## 영역별 요약
 
-전체 주제 524개 중 직접 출처가 있는 문서는 20개, 재작성 메모가 있는 문서는 7개입니다.
+전체 주제 545개 중 직접 출처가 있는 문서는 43개, 재작성 메모가 있는 문서는 30개입니다.
 
 | 영역 | 주제 수 | 출처 있음 | 출처 없음 | 구현 후보 블록 | 메모 있음 | 메모 없음 |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
 | AI | 191 | 2 | 189 | 355 | 1 | 190 |
 | Algorithms | 34 | 1 | 33 | 35 | 1 | 33 |
 | CS-Theory | 30 | 1 | 29 | 30 | 1 | 29 |
-| Data-Structures | 17 | 0 | 17 | 26 | 0 | 17 |
+| Computing-and-Society | 4 | 4 | 0 | 1 | 4 | 0 |
+| Data-Structures | 17 | 1 | 16 | 27 | 1 | 16 |
 | Engineering | 113 | 12 | 101 | 83 | 2 | 111 |
+| Graphics-and-Interaction | 6 | 6 | 0 | 5 | 6 | 0 |
+| Hardware-and-Embedded | 4 | 4 | 0 | 8 | 4 | 0 |
 | Math | 52 | 2 | 50 | 100 | 1 | 51 |
 | Programming | 33 | 2 | 31 | 84 | 1 | 32 |
-| Systems | 54 | 0 | 54 | 55 | 0 | 54 |
+| Research-Practice | 4 | 4 | 0 | 2 | 4 | 0 |
+| Systems | 54 | 1 | 53 | 55 | 1 | 53 |
+| Teaching-and-Academia | 3 | 3 | 0 | 0 | 3 | 0 |
 
 ## 주제별 재료
 
 | 문서 | Status | 직접 출처 수 | 구현 후보 블록 | 재작성 메모 | 확인할 표시 |
 | --- | --- | ---: | ---: | --- | --- |
-| [AI/AI-Safety/Activation-Patching.md](../AI/AI-Safety/Activation-Patching.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
-| [AI/AI-Safety/Adversarial-Examples.md](../AI/AI-Safety/Adversarial-Examples.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
 | [AI/AI-Safety/AI-Regulation.md](../AI/AI-Safety/AI-Regulation.md) | Draft | 3 | 2 | 없음 | missing-notes |
 | [AI/AI-Safety/AI-Risk-Classification.md](../AI/AI-Safety/AI-Risk-Classification.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
+| [AI/AI-Safety/Activation-Patching.md](../AI/AI-Safety/Activation-Patching.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
+| [AI/AI-Safety/Adversarial-Examples.md](../AI/AI-Safety/Adversarial-Examples.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
 | [AI/AI-Safety/Alignment-Overview.md](../AI/AI-Safety/Alignment-Overview.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
 | [AI/AI-Safety/Attention-Visualization.md](../AI/AI-Safety/Attention-Visualization.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
 | [AI/AI-Safety/Capability-Evaluation.md](../AI/AI-Safety/Capability-Evaluation.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
@@ -48,9 +55,9 @@
 | [AI/AI-Safety/OOD-Generalization.md](../AI/AI-Safety/OOD-Generalization.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
 | [AI/AI-Safety/Poisoning-Attacks.md](../AI/AI-Safety/Poisoning-Attacks.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
 | [AI/AI-Safety/Probing-Classifiers.md](../AI/AI-Safety/Probing-Classifiers.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
+| [AI/AI-Safety/RLHF-Constitutional-AI.md](../AI/AI-Safety/RLHF-Constitutional-AI.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
 | [AI/AI-Safety/Red-Teaming.md](../AI/AI-Safety/Red-Teaming.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
 | [AI/AI-Safety/Reward-Hacking.md](../AI/AI-Safety/Reward-Hacking.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
-| [AI/AI-Safety/RLHF-Constitutional-AI.md](../AI/AI-Safety/RLHF-Constitutional-AI.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
 | [AI/AI-Safety/Scalable-Oversight.md](../AI/AI-Safety/Scalable-Oversight.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
 | [AI/AI-Safety/Sparse-Autoencoder.md](../AI/AI-Safety/Sparse-Autoencoder.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
 | [AI/AI-Safety/Superalignment.md](../AI/AI-Safety/Superalignment.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
@@ -71,8 +78,8 @@
 | [AI/Causal-Inference/RDD.md](../AI/Causal-Inference/RDD.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
 | [AI/Causal-Inference/SCM.md](../AI/Causal-Inference/SCM.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
 | [AI/Computer-Vision/3D-Vision.md](../AI/Computer-Vision/3D-Vision.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
-| [AI/Computer-Vision/Classical-Vision.md](../AI/Computer-Vision/Classical-Vision.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
 | [AI/Computer-Vision/CNN-Deep-Dive.md](../AI/Computer-Vision/CNN-Deep-Dive.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
+| [AI/Computer-Vision/Classical-Vision.md](../AI/Computer-Vision/Classical-Vision.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
 | [AI/Computer-Vision/Image-Basics.md](../AI/Computer-Vision/Image-Basics.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
 | [AI/Computer-Vision/Image-Classification.md](../AI/Computer-Vision/Image-Classification.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
 | [AI/Computer-Vision/Image-Generation.md](../AI/Computer-Vision/Image-Generation.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
@@ -114,8 +121,8 @@
 | [AI/Generative-Models/VAE.md](../AI/Generative-Models/VAE.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
 | [AI/LLMs/BERT-Family.md](../AI/LLMs/BERT-Family.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
 | [AI/LLMs/Chain-of-Thought.md](../AI/LLMs/Chain-of-Thought.md) | Draft | 0 | 0 | 없음 | missing-source, missing-notes |
-| [AI/LLMs/Distillation.md](../AI/LLMs/Distillation.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
 | [AI/LLMs/DPO.md](../AI/LLMs/DPO.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
+| [AI/LLMs/Distillation.md](../AI/LLMs/Distillation.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
 | [AI/LLMs/Efficient-Attention.md](../AI/LLMs/Efficient-Attention.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
 | [AI/LLMs/Encoder-Decoder.md](../AI/LLMs/Encoder-Decoder.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
 | [AI/LLMs/GPT-Family.md](../AI/LLMs/GPT-Family.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
@@ -130,6 +137,26 @@
 | [AI/LLMs/RAG.md](../AI/LLMs/RAG.md) | Draft | 3 | 2 | 있음 | - |
 | [AI/LLMs/RLHF.md](../AI/LLMs/RLHF.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
 | [AI/LLMs/Transformer-Advanced.md](../AI/LLMs/Transformer-Advanced.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
+| [AI/MLOps/AB-Testing.md](../AI/MLOps/AB-Testing.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
+| [AI/MLOps/Data-Drift.md](../AI/MLOps/Data-Drift.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
+| [AI/MLOps/Data-Labeling.md](../AI/MLOps/Data-Labeling.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
+| [AI/MLOps/Data-Validation.md](../AI/MLOps/Data-Validation.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
+| [AI/MLOps/Data-Versioning.md](../AI/MLOps/Data-Versioning.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
+| [AI/MLOps/Distributed-Training.md](../AI/MLOps/Distributed-Training.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
+| [AI/MLOps/Experiment-Tracking.md](../AI/MLOps/Experiment-Tracking.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
+| [AI/MLOps/Feature-Store.md](../AI/MLOps/Feature-Store.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
+| [AI/MLOps/Feedback-Loop.md](../AI/MLOps/Feedback-Loop.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
+| [AI/MLOps/GPU-Cluster.md](../AI/MLOps/GPU-Cluster.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
+| [AI/MLOps/Hyperparameter-Tuning.md](../AI/MLOps/Hyperparameter-Tuning.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
+| [AI/MLOps/ML-Pipeline.md](../AI/MLOps/ML-Pipeline.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
+| [AI/MLOps/Model-Monitoring.md](../AI/MLOps/Model-Monitoring.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
+| [AI/MLOps/Model-Optimization.md](../AI/MLOps/Model-Optimization.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
+| [AI/MLOps/Model-Registry.md](../AI/MLOps/Model-Registry.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
+| [AI/MLOps/Online-vs-Batch-Serving.md](../AI/MLOps/Online-vs-Batch-Serving.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
+| [AI/MLOps/REST-Serving.md](../AI/MLOps/REST-Serving.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
+| [AI/MLOps/Reproducibility.md](../AI/MLOps/Reproducibility.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
+| [AI/MLOps/Streaming-vs-Batch.md](../AI/MLOps/Streaming-vs-Batch.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
+| [AI/MLOps/gRPC-Serving.md](../AI/MLOps/gRPC-Serving.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
 | [AI/Machine-Learning/Bias-Variance.md](../AI/Machine-Learning/Bias-Variance.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
 | [AI/Machine-Learning/Cross-Validation.md](../AI/Machine-Learning/Cross-Validation.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
 | [AI/Machine-Learning/Decision-Trees.md](../AI/Machine-Learning/Decision-Trees.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
@@ -143,26 +170,6 @@
 | [AI/Machine-Learning/Overfitting.md](../AI/Machine-Learning/Overfitting.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
 | [AI/Machine-Learning/Regularization.md](../AI/Machine-Learning/Regularization.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
 | [AI/Machine-Learning/SVM.md](../AI/Machine-Learning/SVM.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
-| [AI/MLOps/AB-Testing.md](../AI/MLOps/AB-Testing.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
-| [AI/MLOps/Data-Drift.md](../AI/MLOps/Data-Drift.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
-| [AI/MLOps/Data-Labeling.md](../AI/MLOps/Data-Labeling.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
-| [AI/MLOps/Data-Validation.md](../AI/MLOps/Data-Validation.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
-| [AI/MLOps/Data-Versioning.md](../AI/MLOps/Data-Versioning.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
-| [AI/MLOps/Distributed-Training.md](../AI/MLOps/Distributed-Training.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
-| [AI/MLOps/Experiment-Tracking.md](../AI/MLOps/Experiment-Tracking.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
-| [AI/MLOps/Feature-Store.md](../AI/MLOps/Feature-Store.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
-| [AI/MLOps/Feedback-Loop.md](../AI/MLOps/Feedback-Loop.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
-| [AI/MLOps/GPU-Cluster.md](../AI/MLOps/GPU-Cluster.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
-| [AI/MLOps/gRPC-Serving.md](../AI/MLOps/gRPC-Serving.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
-| [AI/MLOps/Hyperparameter-Tuning.md](../AI/MLOps/Hyperparameter-Tuning.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
-| [AI/MLOps/ML-Pipeline.md](../AI/MLOps/ML-Pipeline.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
-| [AI/MLOps/Model-Monitoring.md](../AI/MLOps/Model-Monitoring.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
-| [AI/MLOps/Model-Optimization.md](../AI/MLOps/Model-Optimization.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
-| [AI/MLOps/Model-Registry.md](../AI/MLOps/Model-Registry.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
-| [AI/MLOps/Online-vs-Batch-Serving.md](../AI/MLOps/Online-vs-Batch-Serving.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
-| [AI/MLOps/Reproducibility.md](../AI/MLOps/Reproducibility.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
-| [AI/MLOps/REST-Serving.md](../AI/MLOps/REST-Serving.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
-| [AI/MLOps/Streaming-vs-Batch.md](../AI/MLOps/Streaming-vs-Batch.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
 | [AI/NLP/Attention-in-NLP.md](../AI/NLP/Attention-in-NLP.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
 | [AI/NLP/BERT.md](../AI/NLP/BERT.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
 | [AI/NLP/GPT.md](../AI/NLP/GPT.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
@@ -170,8 +177,8 @@
 | [AI/NLP/Machine-Translation.md](../AI/NLP/Machine-Translation.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
 | [AI/NLP/NER.md](../AI/NLP/NER.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
 | [AI/NLP/Question-Answering.md](../AI/NLP/Question-Answering.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
-| [AI/NLP/Relation-Extraction.md](../AI/NLP/Relation-Extraction.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
 | [AI/NLP/RNN-for-NLP.md](../AI/NLP/RNN-for-NLP.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
+| [AI/NLP/Relation-Extraction.md](../AI/NLP/Relation-Extraction.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
 | [AI/NLP/Summarization.md](../AI/NLP/Summarization.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
 | [AI/NLP/Text-Classification.md](../AI/NLP/Text-Classification.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
 | [AI/NLP/Text-Preprocessing.md](../AI/NLP/Text-Preprocessing.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
@@ -179,9 +186,8 @@
 | [AI/NLP/Word-Embeddings.md](../AI/NLP/Word-Embeddings.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
 | [AI/PGMs/Bayesian-Networks.md](../AI/PGMs/Bayesian-Networks.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
 | [AI/PGMs/Belief-Propagation.md](../AI/PGMs/Belief-Propagation.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
-| [AI/PGMs/Cliques.md](../AI/PGMs/Cliques.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
 | [AI/PGMs/CRF.md](../AI/PGMs/CRF.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
-| [AI/PGMs/d-Separation.md](../AI/PGMs/d-Separation.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
+| [AI/PGMs/Cliques.md](../AI/PGMs/Cliques.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
 | [AI/PGMs/EM-Algorithm.md](../AI/PGMs/EM-Algorithm.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
 | [AI/PGMs/Factorization.md](../AI/PGMs/Factorization.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
 | [AI/PGMs/Graph-Review.md](../AI/PGMs/Graph-Review.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
@@ -191,6 +197,7 @@
 | [AI/PGMs/Naive-Bayes.md](../AI/PGMs/Naive-Bayes.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
 | [AI/PGMs/Variable-Elimination.md](../AI/PGMs/Variable-Elimination.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
 | [AI/PGMs/Variational-Inference.md](../AI/PGMs/Variational-Inference.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
+| [AI/PGMs/d-Separation.md](../AI/PGMs/d-Separation.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
 | [AI/Reinforcement-Learning/Actor-Critic.md](../AI/Reinforcement-Learning/Actor-Critic.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
 | [AI/Reinforcement-Learning/DQN.md](../AI/Reinforcement-Learning/DQN.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
 | [AI/Reinforcement-Learning/Dynamic-Programming.md](../AI/Reinforcement-Learning/Dynamic-Programming.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
@@ -201,9 +208,9 @@
 | [AI/Reinforcement-Learning/Monte-Carlo.md](../AI/Reinforcement-Learning/Monte-Carlo.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
 | [AI/Reinforcement-Learning/Multi-Agent-RL.md](../AI/Reinforcement-Learning/Multi-Agent-RL.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
 | [AI/Reinforcement-Learning/Offline-RL.md](../AI/Reinforcement-Learning/Offline-RL.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
+| [AI/Reinforcement-Learning/PPO.md](../AI/Reinforcement-Learning/PPO.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
 | [AI/Reinforcement-Learning/Policy-Gradient.md](../AI/Reinforcement-Learning/Policy-Gradient.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
 | [AI/Reinforcement-Learning/Policy.md](../AI/Reinforcement-Learning/Policy.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
-| [AI/Reinforcement-Learning/PPO.md](../AI/Reinforcement-Learning/PPO.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
 | [AI/Reinforcement-Learning/SAC.md](../AI/Reinforcement-Learning/SAC.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
 | [AI/Reinforcement-Learning/TD-Learning.md](../AI/Reinforcement-Learning/TD-Learning.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
 | [AI/Reinforcement-Learning/Value-Functions.md](../AI/Reinforcement-Learning/Value-Functions.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
@@ -227,27 +234,27 @@
 | [Algorithms/Aho-Corasick.md](../Algorithms/Aho-Corasick.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
 | [Algorithms/Amortized-Analysis.md](../Algorithms/Amortized-Analysis.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
 | [Algorithms/Approximation-Algorithms.md](../Algorithms/Approximation-Algorithms.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
+| [Algorithms/BFS-DFS.md](../Algorithms/BFS-DFS.md) | Review | 0 | 1 | 없음 | missing-source, missing-notes |
 | [Algorithms/Backtracking.md](../Algorithms/Backtracking.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
 | [Algorithms/Bellman-Ford.md](../Algorithms/Bellman-Ford.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
-| [Algorithms/BFS-DFS.md](../Algorithms/BFS-DFS.md) | Review | 0 | 1 | 없음 | missing-source, missing-notes |
 | [Algorithms/Binary-Search.md](../Algorithms/Binary-Search.md) | Draft | 3 | 2 | 있음 | - |
 | [Algorithms/Bipartite-Matching.md](../Algorithms/Bipartite-Matching.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
 | [Algorithms/Bitmask-DP.md](../Algorithms/Bitmask-DP.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
 | [Algorithms/Complexity.md](../Algorithms/Complexity.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
 | [Algorithms/Computational-Geometry.md](../Algorithms/Computational-Geometry.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
+| [Algorithms/DP-Basics.md](../Algorithms/DP-Basics.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
+| [Algorithms/DP-Optimization.md](../Algorithms/DP-Optimization.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
 | [Algorithms/Dijkstra.md](../Algorithms/Dijkstra.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
 | [Algorithms/Dinic.md](../Algorithms/Dinic.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
 | [Algorithms/Divide-and-Conquer.md](../Algorithms/Divide-and-Conquer.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
-| [Algorithms/DP-Basics.md](../Algorithms/DP-Basics.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
-| [Algorithms/DP-Optimization.md](../Algorithms/DP-Optimization.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
-| [Algorithms/Fast-Exponentiation.md](../Algorithms/Fast-Exponentiation.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
 | [Algorithms/FFT.md](../Algorithms/FFT.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
+| [Algorithms/Fast-Exponentiation.md](../Algorithms/Fast-Exponentiation.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
 | [Algorithms/Floyd-Warshall.md](../Algorithms/Floyd-Warshall.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
 | [Algorithms/Greedy.md](../Algorithms/Greedy.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
 | [Algorithms/KMP.md](../Algorithms/KMP.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
-| [Algorithms/Max-Flow.md](../Algorithms/Max-Flow.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
 | [Algorithms/MCMF.md](../Algorithms/MCMF.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
 | [Algorithms/MST.md](../Algorithms/MST.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
+| [Algorithms/Max-Flow.md](../Algorithms/Max-Flow.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
 | [Algorithms/Number-Theory.md](../Algorithms/Number-Theory.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
 | [Algorithms/Parallel-Algorithms.md](../Algorithms/Parallel-Algorithms.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
 | [Algorithms/Rabin-Karp.md](../Algorithms/Rabin-Karp.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
@@ -288,15 +295,19 @@
 | [CS-Theory/Quantum-Computing/Quantum-Gates.md](../CS-Theory/Quantum-Computing/Quantum-Gates.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
 | [CS-Theory/Quantum-Computing/Qubits.md](../CS-Theory/Quantum-Computing/Qubits.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
 | [CS-Theory/Quantum-Computing/Shor.md](../CS-Theory/Quantum-Computing/Shor.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
-| [Data-Structures/Array.md](../Data-Structures/Array.md) | Draft | 0 | 3 | 없음 | missing-source, missing-notes |
+| [Computing-and-Society/Computing-Professional-Ethics.md](../Computing-and-Society/Computing-Professional-Ethics.md) | Draft | 2 | 0 | 있음 | - |
+| [Computing-and-Society/Computing-Social-and-Environmental-Impact.md](../Computing-and-Society/Computing-Social-and-Environmental-Impact.md) | Draft | 1 | 1 | 있음 | - |
+| [Computing-and-Society/Intellectual-Property-and-Collaboration.md](../Computing-and-Society/Intellectual-Property-and-Collaboration.md) | Draft | 2 | 0 | 있음 | - |
+| [Computing-and-Society/Privacy-and-Data-Governance.md](../Computing-and-Society/Privacy-and-Data-Governance.md) | Draft | 2 | 0 | 있음 | - |
 | [Data-Structures/AVL-Tree.md](../Data-Structures/AVL-Tree.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
-| [Data-Structures/Binary-Tree.md](../Data-Structures/Binary-Tree.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
+| [Data-Structures/Array.md](../Data-Structures/Array.md) | Draft | 0 | 3 | 없음 | missing-source, missing-notes |
 | [Data-Structures/BST.md](../Data-Structures/BST.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
+| [Data-Structures/Binary-Tree.md](../Data-Structures/Binary-Tree.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
 | [Data-Structures/Deque.md](../Data-Structures/Deque.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
 | [Data-Structures/Fenwick-Tree.md](../Data-Structures/Fenwick-Tree.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
 | [Data-Structures/Graph-Representation.md](../Data-Structures/Graph-Representation.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
 | [Data-Structures/Hash-Function.md](../Data-Structures/Hash-Function.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
-| [Data-Structures/Hash-Table.md](../Data-Structures/Hash-Table.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
+| [Data-Structures/Hash-Table.md](../Data-Structures/Hash-Table.md) | Draft | 5 | 2 | 있음 | - |
 | [Data-Structures/Heap.md](../Data-Structures/Heap.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
 | [Data-Structures/Linked-List.md](../Data-Structures/Linked-List.md) | Draft | 0 | 3 | 없음 | missing-source, missing-notes |
 | [Data-Structures/Queue.md](../Data-Structures/Queue.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
@@ -324,8 +335,8 @@
 | [Engineering/Debugging/Stack-Traces.md](../Engineering/Debugging/Stack-Traces.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
 | [Engineering/Debugging/Structured-Logging.md](../Engineering/Debugging/Structured-Logging.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
 | [Engineering/Debugging/Valgrind-AddressSanitizer.md](../Engineering/Debugging/Valgrind-AddressSanitizer.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
-| [Engineering/DevOps/Ansible.md](../Engineering/DevOps/Ansible.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
 | [Engineering/DevOps/AWS-Core-Services.md](../Engineering/DevOps/AWS-Core-Services.md) | Draft | 0 | 0 | 없음 | missing-source, missing-notes |
+| [Engineering/DevOps/Ansible.md](../Engineering/DevOps/Ansible.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
 | [Engineering/DevOps/CICD-Principles.md](../Engineering/DevOps/CICD-Principles.md) | Draft | 0 | 0 | 없음 | missing-source, missing-notes |
 | [Engineering/DevOps/Cloud-Computing.md](../Engineering/DevOps/Cloud-Computing.md) | Draft | 0 | 0 | 없음 | missing-source, missing-notes |
 | [Engineering/DevOps/Container-Networking-Volumes.md](../Engineering/DevOps/Container-Networking-Volumes.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
@@ -334,12 +345,12 @@
 | [Engineering/DevOps/Docker-Basics.md](../Engineering/DevOps/Docker-Basics.md) | Draft | 1 | 1 | 없음 | missing-notes |
 | [Engineering/DevOps/Docker-Compose.md](../Engineering/DevOps/Docker-Compose.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
 | [Engineering/DevOps/GCP-Azure-Overview.md](../Engineering/DevOps/GCP-Azure-Overview.md) | Draft | 0 | 0 | 없음 | missing-source, missing-notes |
+| [Engineering/DevOps/Git-Internals.md](../Engineering/DevOps/Git-Internals.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
 | [Engineering/DevOps/Git/Git-Basics.md](../Engineering/DevOps/Git/Git-Basics.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
 | [Engineering/DevOps/Git/Git-Branches-Merging-Rebasing.md](../Engineering/DevOps/Git/Git-Branches-Merging-Rebasing.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
 | [Engineering/DevOps/Git/Git-Conflict-Resolution.md](../Engineering/DevOps/Git/Git-Conflict-Resolution.md) | Draft | 0 | 0 | 없음 | missing-source, missing-notes |
 | [Engineering/DevOps/Git/Git-Remotes.md](../Engineering/DevOps/Git/Git-Remotes.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
 | [Engineering/DevOps/Git/Git-Undoing-Changes.md](../Engineering/DevOps/Git/Git-Undoing-Changes.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
-| [Engineering/DevOps/Git-Internals.md](../Engineering/DevOps/Git-Internals.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
 | [Engineering/DevOps/GitHub/GitHub-Actions.md](../Engineering/DevOps/GitHub/GitHub-Actions.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
 | [Engineering/DevOps/GitHub/GitHub-Code-Review.md](../Engineering/DevOps/GitHub/GitHub-Code-Review.md) | Draft | 0 | 0 | 없음 | missing-source, missing-notes |
 | [Engineering/DevOps/GitHub/GitHub-Flow.md](../Engineering/DevOps/GitHub/GitHub-Flow.md) | Draft | 0 | 0 | 없음 | missing-source, missing-notes |
@@ -351,16 +362,16 @@
 | [Engineering/DevOps/Kubernetes-Basics.md](../Engineering/DevOps/Kubernetes-Basics.md) | Draft | 1 | 2 | 없음 | missing-notes |
 | [Engineering/DevOps/Logging-Systems.md](../Engineering/DevOps/Logging-Systems.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
 | [Engineering/DevOps/Metrics-Alerts.md](../Engineering/DevOps/Metrics-Alerts.md) | Draft | 1 | 1 | 없음 | missing-notes |
+| [Engineering/DevOps/SLI-SLO-SLA.md](../Engineering/DevOps/SLI-SLO-SLA.md) | Draft | 0 | 0 | 없음 | missing-source, missing-notes |
 | [Engineering/DevOps/Server-Images-and-Snapshots.md](../Engineering/DevOps/Server-Images-and-Snapshots.md) | Draft | 0 | 3 | 없음 | missing-source, missing-notes |
 | [Engineering/DevOps/Serverless.md](../Engineering/DevOps/Serverless.md) | Draft | 0 | 0 | 없음 | missing-source, missing-notes |
-| [Engineering/DevOps/SLI-SLO-SLA.md](../Engineering/DevOps/SLI-SLO-SLA.md) | Draft | 0 | 0 | 없음 | missing-source, missing-notes |
 | [Engineering/DevOps/Terraform-Basics.md](../Engineering/DevOps/Terraform-Basics.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
 | [Engineering/Performance/Async-IO.md](../Engineering/Performance/Async-IO.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
 | [Engineering/Performance/Benchmarking-Basics.md](../Engineering/Performance/Benchmarking-Basics.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
 | [Engineering/Performance/Branch-Prediction.md](../Engineering/Performance/Branch-Prediction.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
-| [Engineering/Performance/Cache-Friendly-Code.md](../Engineering/Performance/Cache-Friendly-Code.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
 | [Engineering/Performance/CDN-Caching.md](../Engineering/Performance/CDN-Caching.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
 | [Engineering/Performance/CPU-Profiling.md](../Engineering/Performance/CPU-Profiling.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
+| [Engineering/Performance/Cache-Friendly-Code.md](../Engineering/Performance/Cache-Friendly-Code.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
 | [Engineering/Performance/Database-Query-Optimization.md](../Engineering/Performance/Database-Query-Optimization.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
 | [Engineering/Performance/False-Sharing.md](../Engineering/Performance/False-Sharing.md) | Draft | 0 | 0 | 없음 | missing-source, missing-notes |
 | [Engineering/Performance/Flame-Graphs.md](../Engineering/Performance/Flame-Graphs.md) | Draft | 0 | 0 | 없음 | missing-source, missing-notes |
@@ -392,8 +403,8 @@
 | [Engineering/Software-Design/SOLID.md](../Engineering/Software-Design/SOLID.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
 | [Engineering/Software-Design/Structural-Patterns.md](../Engineering/Software-Design/Structural-Patterns.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
 | [Engineering/System-Design/Approach.md](../Engineering/System-Design/Approach.md) | Draft | 0 | 0 | 없음 | missing-source, missing-notes |
-| [Engineering/System-Design/Caching.md](../Engineering/System-Design/Caching.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
 | [Engineering/System-Design/CDN.md](../Engineering/System-Design/CDN.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
+| [Engineering/System-Design/Caching.md](../Engineering/System-Design/Caching.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
 | [Engineering/System-Design/Database-Design.md](../Engineering/System-Design/Database-Design.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
 | [Engineering/System-Design/Load-Balancing.md](../Engineering/System-Design/Load-Balancing.md) | Draft | 3 | 1 | 있음 | - |
 | [Engineering/System-Design/Message-Queues.md](../Engineering/System-Design/Message-Queues.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
@@ -418,6 +429,16 @@
 | [Engineering/Testing/UI-Test-Tools.md](../Engineering/Testing/UI-Test-Tools.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
 | [Engineering/Testing/Unit-Test-Principles.md](../Engineering/Testing/Unit-Test-Principles.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
 | [Engineering/Testing/Visual-Regression-Testing.md](../Engineering/Testing/Visual-Regression-Testing.md) | Draft | 0 | 0 | 없음 | missing-source, missing-notes |
+| [Graphics-and-Interaction/Graphics/Data-Visualization.md](../Graphics-and-Interaction/Graphics/Data-Visualization.md) | Draft | 1 | 1 | 있음 | - |
+| [Graphics-and-Interaction/Graphics/Geometry-and-Cameras.md](../Graphics-and-Interaction/Graphics/Geometry-and-Cameras.md) | Draft | 1 | 1 | 있음 | - |
+| [Graphics-and-Interaction/Graphics/Rendering-Fundamentals.md](../Graphics-and-Interaction/Graphics/Rendering-Fundamentals.md) | Draft | 1 | 1 | 있음 | - |
+| [Graphics-and-Interaction/HCI/Accessible-Interaction.md](../Graphics-and-Interaction/HCI/Accessible-Interaction.md) | Draft | 1 | 1 | 있음 | - |
+| [Graphics-and-Interaction/HCI/Usability-Evaluation.md](../Graphics-and-Interaction/HCI/Usability-Evaluation.md) | Draft | 1 | 1 | 있음 | - |
+| [Graphics-and-Interaction/HCI/User-Research-and-Interaction.md](../Graphics-and-Interaction/HCI/User-Research-and-Interaction.md) | Draft | 1 | 0 | 있음 | - |
+| [Hardware-and-Embedded/Circuits-and-Electronics.md](../Hardware-and-Embedded/Circuits-and-Electronics.md) | Draft | 1 | 1 | 있음 | - |
+| [Hardware-and-Embedded/Embedded-Real-Time-Design.md](../Hardware-and-Embedded/Embedded-Real-Time-Design.md) | Draft | 1 | 1 | 있음 | - |
+| [Hardware-and-Embedded/HDL-and-FPGA.md](../Hardware-and-Embedded/HDL-and-FPGA.md) | Draft | 1 | 4 | 있음 | - |
+| [Hardware-and-Embedded/Microcontrollers-and-Interfaces.md](../Hardware-and-Embedded/Microcontrollers-and-Interfaces.md) | Draft | 1 | 2 | 있음 | - |
 | [Math/Calculus/Chain-Rule.md](../Math/Calculus/Chain-Rule.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
 | [Math/Calculus/Differentiation.md](../Math/Calculus/Differentiation.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
 | [Math/Calculus/Integration.md](../Math/Calculus/Integration.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
@@ -460,8 +481,8 @@
 | [Math/Probability-Statistics/Expectation.md](../Math/Probability-Statistics/Expectation.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
 | [Math/Probability-Statistics/Hypothesis-Testing.md](../Math/Probability-Statistics/Hypothesis-Testing.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
 | [Math/Probability-Statistics/Information-Theory.md](../Math/Probability-Statistics/Information-Theory.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
-| [Math/Probability-Statistics/Markov-Chains.md](../Math/Probability-Statistics/Markov-Chains.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
 | [Math/Probability-Statistics/MLE.md](../Math/Probability-Statistics/MLE.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
+| [Math/Probability-Statistics/Markov-Chains.md](../Math/Probability-Statistics/Markov-Chains.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
 | [Math/Probability-Statistics/Probability-Basics.md](../Math/Probability-Statistics/Probability-Basics.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
 | [Math/Real-Analysis/Continuity.md](../Math/Real-Analysis/Continuity.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
 | [Math/Real-Analysis/Function-Spaces.md](../Math/Real-Analysis/Function-Spaces.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
@@ -483,8 +504,8 @@
 | [Programming/Languages/Cpp/Cpp-Classes-and-Templates.md](../Programming/Languages/Cpp/Cpp-Classes-and-Templates.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
 | [Programming/Languages/Cpp/Cpp-Memory-and-Smart-Pointers.md](../Programming/Languages/Cpp/Cpp-Memory-and-Smart-Pointers.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
 | [Programming/Languages/Cpp/Cpp-References-and-RAII.md](../Programming/Languages/Cpp/Cpp-References-and-RAII.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
-| [Programming/Languages/Cpp/Cpp-Setup-and-Syntax.md](../Programming/Languages/Cpp/Cpp-Setup-and-Syntax.md) | Draft | 0 | 3 | 없음 | missing-source, missing-notes |
 | [Programming/Languages/Cpp/Cpp-STL.md](../Programming/Languages/Cpp/Cpp-STL.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
+| [Programming/Languages/Cpp/Cpp-Setup-and-Syntax.md](../Programming/Languages/Cpp/Cpp-Setup-and-Syntax.md) | Draft | 0 | 3 | 없음 | missing-source, missing-notes |
 | [Programming/Languages/Java/Java-Classes-and-Objects.md](../Programming/Languages/Java/Java-Classes-and-Objects.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
 | [Programming/Languages/Java/Java-Collections.md](../Programming/Languages/Java/Java-Collections.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
 | [Programming/Languages/Java/Java-Exceptions-and-Files.md](../Programming/Languages/Java/Java-Exceptions-and-Files.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
@@ -503,6 +524,10 @@
 | [Programming/OOP.md](../Programming/OOP.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
 | [Programming/Pointers-and-Memory.md](../Programming/Pointers-and-Memory.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
 | [Programming/Variables-and-Types.md](../Programming/Variables-and-Types.md) | Review | 3 | 5 | 있음 | - |
+| [Research-Practice/Literature-Review-and-Research-Questions.md](../Research-Practice/Literature-Review-and-Research-Questions.md) | Draft | 2 | 0 | 있음 | - |
+| [Research-Practice/Research-Design-and-Validity.md](../Research-Practice/Research-Design-and-Validity.md) | Draft | 1 | 1 | 있음 | - |
+| [Research-Practice/Research-Reproducibility.md](../Research-Practice/Research-Reproducibility.md) | Draft | 2 | 1 | 있음 | - |
+| [Research-Practice/Scientific-Writing-and-Critique.md](../Research-Practice/Scientific-Writing-and-Critique.md) | Draft | 2 | 0 | 있음 | - |
 | [Systems/Computer-Architecture/CPU-and-ISA.md](../Systems/Computer-Architecture/CPU-and-ISA.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
 | [Systems/Computer-Architecture/Data-Representation.md](../Systems/Computer-Architecture/Data-Representation.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
 | [Systems/Computer-Architecture/Digital-Logic.md](../Systems/Computer-Architecture/Digital-Logic.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
@@ -550,13 +575,16 @@
 | [Systems/Operating-Systems/Processes-and-Threads.md](../Systems/Operating-Systems/Processes-and-Threads.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
 | [Systems/Operating-Systems/Scheduling.md](../Systems/Operating-Systems/Scheduling.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
 | [Systems/Operating-Systems/Synchronization.md](../Systems/Operating-Systems/Synchronization.md) | Draft | 0 | 2 | 없음 | missing-source, missing-notes |
-| [Systems/Operating-Systems/Virtual-Memory.md](../Systems/Operating-Systems/Virtual-Memory.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
+| [Systems/Operating-Systems/Virtual-Memory.md](../Systems/Operating-Systems/Virtual-Memory.md) | Draft | 7 | 1 | 있음 | - |
 | [Systems/Parallel-Computing/GPU-and-CUDA.md](../Systems/Parallel-Computing/GPU-and-CUDA.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
 | [Systems/Parallel-Computing/Multithreading.md](../Systems/Parallel-Computing/Multithreading.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
 | [Systems/Parallel-Computing/OpenMP-MPI.md](../Systems/Parallel-Computing/OpenMP-MPI.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
 | [Systems/Parallel-Computing/Parallel-Models.md](../Systems/Parallel-Computing/Parallel-Models.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
 | [Systems/Parallel-Computing/Parallel-Scalability.md](../Systems/Parallel-Computing/Parallel-Scalability.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
 | [Systems/Parallel-Computing/SIMD.md](../Systems/Parallel-Computing/SIMD.md) | Draft | 0 | 1 | 없음 | missing-source, missing-notes |
+| [Teaching-and-Academia/Academic-Collaboration-and-Management.md](../Teaching-and-Academia/Academic-Collaboration-and-Management.md) | Draft | 2 | 0 | 있음 | - |
+| [Teaching-and-Academia/Academic-Mentoring.md](../Teaching-and-Academia/Academic-Mentoring.md) | Draft | 1 | 0 | 있음 | - |
+| [Teaching-and-Academia/Learning-Objectives-and-Assessment.md](../Teaching-and-Academia/Learning-Objectives-and-Assessment.md) | Draft | 1 | 0 | 있음 | - |
 
 ## 다시 생성하기
 
